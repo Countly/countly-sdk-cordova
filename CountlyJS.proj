@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>3f772f75-2ccc-4a12-a8d1-2484968efb72</ProjectGuid>
+    <ProjectTypeGuids>{070BCB52-5A75-4F8C-A973-144AF0EAFCC9}</ProjectTypeGuids>
+    <AppIdentifier>com.telerik.DeviceCheck</AppIdentifier>
+    <ProjectName>CountlyJS</ProjectName>
+    <IsRunnable>true</IsRunnable>
+    <TemplateAppName>Cordova220</TemplateAppName>
+    <AndroidPermissions>android.permission.CAMERA;android.permission.VIBRATE;android.permission.ACCESS_COARSE_LOCATION;android.permission.ACCESS_FINE_LOCATION;android.permission.ACCESS_LOCATION_EXTRA_COMMANDS;android.permission.READ_PHONE_STATE;android.permission.INTERNET;android.permission.RECEIVE_SMS;android.permission.RECORD_AUDIO;android.permission.MODIFY_AUDIO_SETTINGS;android.permission.READ_CONTACTS;android.permission.WRITE_CONTACTS;android.permission.WRITE_EXTERNAL_STORAGE;android.permission.ACCESS_NETWORK_STATE;android.permission.ACCOUNT_MANAGER;android.permission.GET_ACCOUNTS;android.permission.MANAGE_ACCOUNTS;android.permission.BROADCAST_STICKY</AndroidPermissions>
+    <DeviceOrientations>Portrait;Landscape</DeviceOrientations>
+    <iOSStatusBarStyle>Default</iOSStatusBarStyle>
+    <AndroidHardwareAcceleration>false</AndroidHardwareAcceleration>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="App_Resources" />
+    <Folder Include="App_Resources\iOS">
+      <Platform>iOS</Platform>
+    </Folder>
+    <Folder Include="App_Resources\Android">
+      <Platform>Android</Platform>
+    </Folder>
+    <Folder Include="App_Resources\Android\drawable-hdpi">
+      <Platform>Android</Platform>
+    </Folder>
+    <Folder Include="App_Resources\Android\drawable-mdpi">
+      <Platform>Android</Platform>
+    </Folder>
+    <Folder Include="App_Resources\Android\drawable-ldpi">
+      <Platform>Android</Platform>
+    </Folder>
+    <Folder Include="App_Resources\Android\drawable-nodpi">
+      <Platform>Android</Platform>
+    </Folder>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="App_Resources\iOS\icon.png" />
+    <Resource Include="App_Resources\iOS\icon@2x.png" />
+    <Resource Include="App_Resources\iOS\icon-72.png" />
+    <Resource Include="App_Resources\iOS\icon-72@2x.png" />
+    <Resource Include="App_Resources\iOS\Icon-Small.png" />
+    <Resource Include="App_Resources\iOS\Icon-Small@2x.png" />
+    <Resource Include="App_Resources\iOS\Icon-Small-50.png" />
+    <Resource Include="App_Resources\iOS\Icon-Small-50@2x.png" />
+    <Resource Include="App_Resources\iOS\Default.png" />
+    <Resource Include="App_Resources\iOS\Default@2x.png" />
+    <Resource Include="App_Resources\iOS\Default-568h@2x.png" />
+    <Resource Include="App_Resources\iOS\Default-Portrait.png" />
+    <Resource Include="App_Resources\iOS\Default-Landscape.png" />
+    <Resource Include="App_Resources\iOS\Default-Portrait@2x.png" />
+    <Resource Include="App_Resources\iOS\Default-Landscape@2x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="App_Resources\Android\drawable-hdpi\icon.png" />
+    <Resource Include="App_Resources\Android\drawable-mdpi\icon.png" />
+    <Resource Include="App_Resources\Android\drawable-ldpi\icon.png" />
+    <Resource Include="App_Resources\Android\drawable-nodpi\splashscreen.9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="index.html" />
+    <Content Include="css\index.css" />
+    <Content Include="js\countly.js" />
+    <Content Include="js\countly.min.js" />
+    <Content Include="js\index.js" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\cordova.png" />
+    <Content Include="cordova.ios.js">
+      <Platform>iOS</Platform>
+      <TargetName>cordova.js</TargetName>
+    </Content>
+    <Content Include="cordova.android.js">
+      <Platform>Android</Platform>
+      <TargetName>cordova.js</TargetName>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Telerik\ICE\Tools\Mobile\MobileTools.targets" />
+</Project>
