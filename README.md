@@ -14,10 +14,10 @@ Getting started
 Android 
 ==============
 Note : This repo contains only javascript file while native android code is maintained <a href="https://github.com/Countly/countly-sdk-android">here</a> <br/>
-Step 1 : Got to <a href="https://github.com/Countly/countly-sdk-android">this</a> repo and download it.<br/>
-Step 2 : Got to countly-sdk-android/src file, copy the src files and paste in your src folder in eclipse <br/>
+Step 1 : Go to <a href="https://github.com/Countly/countly-sdk-android">this</a> repo and download it.<br/>
+Step 2 : Go to countly-sdk-android/src file, copy the src files and paste in your src folder in eclipse <br/>
 Step 3 : Add ```<plugin name="Countly" value="ly.count.android.api.Countly"/>``` inside plugins tag in config.xml file.<br/>
-Step 4 : Paste below code inside the application tag in your Manifies.xml <br/>
+Step 4 : Paste below code inside the application tag in your `Manifiest.xml` <br/>
 
 ```xml
 	....

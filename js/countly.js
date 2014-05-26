@@ -328,21 +328,27 @@ var Countly = new function()
     this.Send = function(data, callback)
     {
         this.Log("call -> {0}".format(data));
-        $.ajax({
-            type: "POST",
-            url: "{0}/i?{1}".format(this.ServerURL, data),
-            //parameters: parameters,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function(data)
-            {
-                Countly.Log("Data send successfully.");
-            },
-            error: function(data)
-            {
-                Countly.ConnectionQueue.push(data);
-            }
-        });
+        if (typeof jQuery === 'undefined') {
+            // make a code for javascript performance
+        }
+        else{
+           $.ajax({
+                type: "POST",
+                url: "{0}/i?{1}".format(this.ServerURL, data),
+                //parameters: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data)
+                {
+                    Countly.Log("Data send successfully.");
+                },
+                error: function(data)
+                {
+                    Countly.ConnectionQueue.push(data);
+                }
+            }); 
+        }
+        
     }
 
     this.SeriliazeEvents = function(events)
