@@ -21,8 +21,8 @@ Step 4 : Add jquery.js, cordova.android.js, countly.js in your index.html file. 
 	```<script type="text/javascript" src="jquery.js"></script>```<br/>
 	```<script type="text/javascript" src="cordova.android.js"></script>```<br/>
     ```<script type="text/javascript" src="countly.js"></script>```<br/>
-Step 5 : Paste below scritping and replace your app key <br/>
-    ```<script type="text/javascript">
+Step 5 : Paste below scritping and paste in your script tag, also replace your app key <br/>
+    ```
         function SendDemoEvent()
         {
             var demoEvent = new CountlyEvent();
@@ -64,7 +64,8 @@ Step 5 : Paste below scritping and replace your app key <br/>
             }
             
         }
-    </script>```
+If you are facing any dificulty in implementing the above procedure there is also an sample code in the example folder <br/>
+
 iOS
 ==============
 Comming soon
