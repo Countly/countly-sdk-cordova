@@ -17,16 +17,16 @@ Note : This repo contains only javascript file while native android code is main
 Step 1 : Got to <a href="https://github.com/Countly/countly-sdk-android">this</a> repo and download it.<br/>
 Step 2 : Got to countly-sdk-android/src file, copy the src files and paste in your src folder in eclipse <br/>
 Step 3 : Add ```<plugin name="Countly" value="ly.count.android.api.Countly"/>``` inside plugins tag in config.xml file.<br/>
-Step 4 : Paste below code in the application tag in your Manifies.xml <br/>
+Step 4 : Paste below code inside the application tag in your Manifies.xml <br/>
 
-``` .... ```<br/>
-```<service android:name="org.openudid.OpenUDID_service"> ```<br/>
-	 ``` <intent-filter>```<br/>
-	       ``` <action android:name="org.openudid.GETUDID" />```<br/>
-	   ``` </intent-filter>```<br/>
-	```</service>```<br/>
-```</application>```<br/>
-
+```xml
+	<service android:name="org.openudid.OpenUDID_service"> 
+		<intent-filter>
+	       	<action android:name="org.openudid.GETUDID" />
+	    </intent-filter>
+	</service>
+</application>
+```
 
 Step 5 : Add jquery.js, cordova.android.js, countly.js in your index.html file. <br/>
 	```<script type="text/javascript" src="jquery.js"></script>```<br/>
