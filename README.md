@@ -27,6 +27,7 @@ Step 4 : Paste below code in the application tag in your Manifies.xml <br/>
 	```</service>```<br/>
 ```</application>```<br/>
 
+
 Step 5 : Add jquery.js, cordova.android.js, countly.js in your index.html file. <br/>
 	```<script type="text/javascript" src="jquery.js"></script>```<br/>
 	```<script type="text/javascript" src="cordova.android.js"></script>```<br/>
