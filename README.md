@@ -22,51 +22,51 @@ Step 4 : Add jquery.js, cordova.android.js, countly.js in your index.html file. 
 	```<script type="text/javascript" src="cordova.android.js"></script>```<br/>
     ```<script type="text/javascript" src="countly.js"></script>```<br/>
 Step 5 : Paste below scritping and replace your app key <br/>
-	```xml
-    <script type="text/javascript">
-        function SendDemoEvent()
-        {
-            var demoEvent = new CountlyEvent();
-            demoEvent.Key = "Test";
-            demoEvent.Count = 1;
-            demoEvent.UsingSegmentation = true;
-        
-            var demoSegmentation = new SegmentationObject();
-            demoSegmentation.Key = "Key";
-            demoSegmentation.Value = "Value";
-        
-            demoEvent.Segmentation.push(demoSegmentation);
-            
-            Countly.PostEvent(demoEvent);
-        }
-        
-        // Wait for PhoneGap to load
-        document.addEventListener("deviceready", onDeviceReady, false);
-        
-        // PhoneGap is ready
-        function onDeviceReady() 
-        {
-            alert("here")
-            Countly.Init("https://cloud.count.ly","Replace_Your_App_Key","0.0.1",device.uuid);
-            
-            document.addEventListener("pause", onPause, false);
-            document.addEventListener("resume", onResume, false);
-            
-            Countly.OnStart();
-            
-            function onPause() 
-            {
-                Countly.OnStop();
-            }
-            
-            function onResume() 
-            {
-                Countly.OnStart();
-            }
-            
-        }
-    </script>
-    ```<br/>
+	
+    ```<script type="text/javascript">```<br/>
+        ```function SendDemoEvent()```<br/>
+        ```{```<br/>
+        ```    var demoEvent = new CountlyEvent();```<br/>
+        ```    demoEvent.Key = "Test";```<br/>
+        ```    demoEvent.Count = 1;```<br/>
+        ```    demoEvent.UsingSegmentation = true;```<br/>
+        ``` ```<br/>
+        ```    var demoSegmentation = new SegmentationObject();```<br/>
+        ```    demoSegmentation.Key = "Key";```<br/>
+        ```    demoSegmentation.Value = "Value";```<br/>
+        ``` ```<br/>
+        ```    demoEvent.Segmentation.push(demoSegmentation);```<br/>
+        ```    ```<br/>
+        ```    Countly.PostEvent(demoEvent);```<br/>
+        ```}```<br/>
+        ``` ```<br/>
+        ```// Wait for PhoneGap to load```<br/>
+        ```document.addEventListener("deviceready", onDeviceReady, false);```<br/>
+        ``` ```<br/>
+        ```// PhoneGap is ready```<br/>
+        ```function onDeviceReady() ```<br/>
+        ```{```<br/>
+        ```    alert("here")```<br/>
+        ```    Countly.Init("https://cloud.count.ly","Replace_Your_App_Key","0.0.1",device.uuid);```<br/>
+        ```    ```<br/>
+        ```    document.addEventListener("pause", onPause, false);```<br/>
+        ```    document.addEventListener("resume", onResume, false);```<br/>
+        ```    ```<br/>
+        ```    Countly.OnStart();```<br/>
+        ```    ```<br/>
+        ```    function onPause() ```<br/>
+        ```    {```<br/>
+        ```        Countly.OnStop();```<br/>
+        ```    }```<br/>
+        ```    ```<br/>
+        ```    function onResume() ```<br/>
+        ```    {```<br/>
+        ```        Countly.OnStart();```<br/>
+       ```     }```<br/>
+        ```    ```<br/>
+        ```}```<br/>
+    ```</script>```<br/>
+
 iOS
 ==============
 Comming soon
