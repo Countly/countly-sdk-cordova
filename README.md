@@ -20,6 +20,7 @@ Step 3 : Add ```<plugin name="Countly" value="ly.count.android.api.Countly"/>```
 Step 4 : Paste below code inside the application tag in your Manifies.xml <br/>
 
 ```xml
+	....
 	<service android:name="org.openudid.OpenUDID_service"> 
 		<intent-filter>
 	       	<action android:name="org.openudid.GETUDID" />
