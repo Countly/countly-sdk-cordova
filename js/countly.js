@@ -330,6 +330,43 @@ var Countly = new function()
         this.Log("call -> {0}".format(data));
         if (typeof jQuery === 'undefined') {
             // make a code for javascript performance
+            function doAjax(url, callback,data) {
+                var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        callback(xmlhttp.responseText);
+                        console.log("Data send successfully.");
+                    }
+                    else{
+                        console.log("error");
+                        Countly.ConnectionQueue.push(data);
+                    }
+                }
+
+                xmlhttp.open("POST", url, true);
+                xmlhttp.send();
+            }
+            doAjax("{0}/i?{1}".format(this.ServerURL, data),true,data)
+            // var xmlhttp;
+            // if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            //     xmlhttp=new XMLHttpRequest();
+            // }
+            // else{// code for IE6, IE5
+            //     xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            // }
+            // xmlhttp.onreadystatechange=function(){
+            //     if (xmlhttp.readyState==4 && xmlhttp.status==200){
+            //         Countly.Log("Data send successfully.");
+            //         alert("Data send successfully.");
+            //     }
+            //     else{
+            //         alert(data);
+            //         Countly.ConnectionQueue.push(data);
+            //     }
+            // }
+            // xmlhttp.open("POST","{0}/i?{1}".format(this.ServerURL, data),true);
+            // xmlhttp.send();
         }
         else{
            $.ajax({
@@ -468,6 +505,18 @@ Countly.Log(jSONSeriliazation);
         this.Duration = 0;
         this.UpdateDuration();
         this.SendDataToServer();
+
+        // restoring from localstorage
+        var json = null;
+        
+        json = window.localStorage.getItem("countly");
+        if(json){
+            json = JSON.parse(json)
+            if(json.countly){
+                for(var i=0,il=json.countly.length;i<il;i++)
+                    this.ConnectionQueue.push(json.countly[i])
+            }            
+        }
     }
 
     /// <summary>
@@ -476,7 +525,12 @@ Countly.Log(jSONSeriliazation);
     this.OnStop = function()
     {
         if (!this.IsCountlyWorking) return;
-        
+        // store in localstorage
+        var json = {}
+        json.countly = this.ConnectionQueue;        
+        window.localStorage.setItem("countly",JSON.stringify(json));
+
+
         this.Log("Stopping...");
         this.IsCountlyWorking = false;
         this.EndSession();
