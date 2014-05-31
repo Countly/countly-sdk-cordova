@@ -149,6 +149,6 @@ Step 12 : Paste below scritping and paste in your script tag, also replace your 
         }
 If you are facing any dificulty in implementing the above procedure there is also an sample code in the example folder <br/>
 
-Comming soon 
+Custom Events
 ==============
-Custom events <br/>
+comming soon
