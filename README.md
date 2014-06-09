@@ -172,7 +172,9 @@ So how to use it?<br/>
     Countly.PostEvent(customEvent);<br/>
 
 A sample json for custom event <br/>
-'{
+
+```
+{
     "key": "in_app_purchase",
     "count": 1,
     "sum": 0.99,
@@ -181,6 +183,7 @@ A sample json for custom event <br/>
         "country": "Turkey",
         "item": "sword"
     }
-}'
+}
+`
 
 For more reference see <a href="https://count.ly/resources/reference/custom-events">here</a> 
