@@ -6,8 +6,8 @@ written and maintained by Panteon Technologies (ufuk@panteon.com.tr)
 
 Prerequisite requirement
 ==============
-You should have a basic "Hello World" Phonegap app for more information see <a href="http://docs.phonegap.com/en/edge/guide_platforms_index.md.html"> here </a> <br>
-Also <a href="https://count.ly/">'Countly Cloud Account' </a>
+1) You should have a basic "Hello World" Phonegap app for more information see <a href="http://docs.phonegap.com/en/edge/guide_platforms_index.md.html"> here </a> <br>
+2) Also <a href="https://count.ly/">'Countly Cloud Account' </a>
 
 Getting started 
 ==============
@@ -163,7 +163,11 @@ and 'count' is to count the number of occurance of that event.<br/>
 <br/>
 So how to use it?<br/>
 <br/>
-var customEvent = new CountlyEvent();<br/>
-customEvent.key = "click #loginButton";<br/>
-customEvent.count = 1;<br/>
-Countly.PostEvent(customEvent);<br/>
+    var customEvent = new CountlyEvent();<br/>
+    customEvent.key = "click #loginButton";<br/>
+    customEvent.count = 1;<br/>
+    customEvent.sum = 125;<br/>
+    customEvent.segmentation.push({"Country", "Turkey"});<br/>
+    customEvent.segmentation.push({"Age":"28"});<br/>
+    Countly.PostEvent(customEvent);<br/>
+
