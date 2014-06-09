@@ -6,7 +6,8 @@ written and maintained by Panteon Technologies (ufuk@panteon.com.tr)
 
 Prerequisite requirement
 ==============
-You should have a basic "Hello World" Phonegap app for more information see <a href="http://docs.phonegap.com/en/edge/guide_platforms_index.md.html"> here </a>
+You should have a basic "Hello World" Phonegap app for more information see <a href="http://docs.phonegap.com/en/edge/guide_platforms_index.md.html"> here </a> <br>
+Also <a href="https://count.ly/">'Countly Cloud Account' </a>
 
 Getting started 
 ==============
