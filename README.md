@@ -174,16 +174,17 @@ So how to use it?<br/>
 A sample json for custom event <br/>
 
 ```
-{
-    "key": "in_app_purchase",
-    "count": 1,
-    "sum": 0.99,
-    "segmentation": {
-        "app_version": "1.0",
-        "country": "Turkey",
-        "item": "sword"
+    {
+        "key": "in_app_purchase",
+        "count": 1,
+        "sum": 0.99,
+        "segmentation": {
+            "app_version": "1.0",
+            "country": "Turkey",
+            "item": "sword"
+        }
     }
-}
 `
+
 
 For more reference see <a href="https://count.ly/resources/reference/custom-events">here</a> 
