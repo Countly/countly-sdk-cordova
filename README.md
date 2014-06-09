@@ -171,6 +171,8 @@ So how to use it?<br/>
     customEvent.segmentation.push({"Age":"28"});<br/>
     Countly.PostEvent(customEvent);<br/>
 
+For more reference see <a href="https://count.ly/resources/reference/custom-events">here</a> 
+
 A sample json for custom event <br/>
 
 ```
@@ -186,5 +188,3 @@ A sample json for custom event <br/>
     }
 `
 
-
-For more reference see <a href="https://count.ly/resources/reference/custom-events">here</a> 
