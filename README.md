@@ -151,4 +151,18 @@ If you are facing any dificulty in implementing the above procedure there is als
 
 Custom Events
 ==============
-comming soon
+There are two constructor for Custom Events. 
+1. 'var customEvent = new CountlyEvent()'
+OR 'var customEvent = new CountlyEvent(key, count, usingSum, sum, usingSegmentation, segmentation)'
+where 'key' is for name of the event like click, hover, etc
+and 'count' is to count the number of occurance of that event.
+
+2. Once custom events are created, we can send them to count.ly by
+'Countly.PostEvent(customEvent)'
+
+So how to use it?
+
+var customEvent = new CountlyEvent();
+customEvent.key = "click #loginButton";
+customEvent.count = 1;
+Countly.PostEvent(customEvent);
