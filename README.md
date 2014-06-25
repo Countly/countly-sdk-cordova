@@ -188,3 +188,6 @@ A sample json for custom event <br/>
     }
 `
 
+Custom Events
+==============
+cordova 3.0 and command line support
