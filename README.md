@@ -21,20 +21,20 @@ Step 3 : Add ```<plugin name="Countly" value="ly.count.android.api.Countly"/>```
 Step 4 : Paste below code inside the application tag in your `Manifiest.xml` <br/>
 
 ```xml
-	....
-	<service android:name="org.openudid.OpenUDID_service"> 
-		<intent-filter>
-	       	<action android:name="org.openudid.GETUDID" />
-	    </intent-filter>
-	</service>
+    ....
+    <service android:name="org.openudid.OpenUDID_service"> 
+        <intent-filter>
+            <action android:name="org.openudid.GETUDID" />
+        </intent-filter>
+    </service>
 </application>
 ```
 
 Step 5 : Add jquery.js, cordova.android.js, countly.js in your index.html file. <br/>
 
 ```xml
-	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="cordova.android.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="cordova.android.js"></script>
     <script type="text/javascript" src="countly.js"></script>
 ```
 
@@ -163,6 +163,7 @@ and 'count' is to count the number of occurance of that event.<br/>
 <br/>
 So how to use it?<br/>
 <br/>
+
     var customEvent = new CountlyEvent();<br/>
     customEvent.key = "click #loginButton";<br/>
     customEvent.count = 1;<br/>
@@ -175,7 +176,7 @@ For more reference see <a href="https://count.ly/resources/reference/custom-even
 
 A sample json for custom event <br/>
 
-```
+
     {
         "key": "in_app_purchase",
         "count": 1,
@@ -186,8 +187,8 @@ A sample json for custom event <br/>
             "item": "sword"
         }
     }
-`
 
-Custom Events
+
+Coming soon
 ==============
 cordova 3.0 and command line support
