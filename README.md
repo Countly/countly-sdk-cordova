@@ -4,11 +4,12 @@ This repository includes the SDK for Phonegap and Icenium. You also need Countly
 
 ### Using SDK under Android
 
-Note : This repo contains only JS file while native android code is maintained <a href="https://github.com/Countly/countly-sdk-android">here</a> <br/>
-Step 1 : Go to <a href="https://github.com/Countly/countly-sdk-android">this</a> repo and download it.<br/>
-Step 2 : Go to countly-sdk-android/src file, copy the src files and paste in your src folder in eclipse <br/>
-Step 3 : Add ```<plugin name="Countly" value="ly.count.android.api.Countly"/>``` inside plugins tag in config.xml file.<br/>
-Step 4 : Paste below code inside the application tag in your `Manifiest.xml` <br/>
+Note : This repo contains only JS file while native android code is maintained <a href="https://github.com/Countly/countly-sdk-android">here</a>
+
+Step 1: Go to <a href="https://github.com/Countly/countly-sdk-android">this</a> repo and download it.<br/>
+Step 2: Go to countly-sdk-android/src file, copy the src files and paste in your src folder in eclipse <br/>
+Step 3: Add ```<plugin name="Countly" value="ly.count.android.api.Countly"/>``` inside plugins tag in config.xml file.<br/>
+Step 4: Paste below code inside the application tag in your `Manifest.xml` <br/>
 
 ```xml
 	....
@@ -20,15 +21,15 @@ Step 4 : Paste below code inside the application tag in your `Manifiest.xml` <br
 </application>
 ```
 
-Step 5 : Add jquery.js, cordova.android.js, countly.js in your index.html file. <br/>
+Step 5: Add jquery.js, cordova.android.js, countly.js in your index.html file. <br/>
 
-```xml
+<pre class="prettyprint">
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="cordova.android.js"></script>
         <script type="text/javascript" src="countly.js"></script>
-``` 
+</pre>
 
-Step 6 : Paste below scritping and paste in your script tag, also replace your app key:
+Step 6: Paste script below and paste in your script tag, also replace your app key:
 
 <pre class="prettyprint">
 function SendDemoEvent()
@@ -77,27 +78,28 @@ If you are facing any difficulty in implementing the above procedure there is al
 
 ### Using SDK under iOS
 
-Note : This repo contains only JS file while native iOS code is maintained <a href="https://github.com/Countly/countly-sdk-ios">here</a> 
-<br/>
-Step 1 : Go to <a href="https://github.com/Countly/countly-sdk-ios">this</a> repo and download it.<br/>
-Step 2 : Add these files to your project under Xcode: `Countly.h` `Countly.m` `Countly_OpenUDID.h` `Countly_OpenUDID.m` `CountlyDB.h` `CountlyDB.m` and `Countly.xcdatamodeld` (Note : Drag and drop these files into your 'plugins' folder and add them as reference files.) <br/>
-Step 3 : Select your project in the Project Navigator.<br/>
-Step 4 : Select the **Build Phases** tab. <br/>
-Step 5 : Open **Link Binaries With Libraries** expander <br/>
-Step 6 : Click the **+** button. <br/>
-Step 7 : Select CoreTelephony.framework, select **Optional** (instead of Required). <br/>
-Step 8 : Select CoreData.framework. <br/>
-Step 9 : *(optional)* Drag and drop the added framework to the **Frameworks** group. <br/>
-Step 10 : Add this line in config.xml `<plugin name="Countly" value="Countly"/>` <br/>
-Step 11 : Add jquery.js, cordova.ios.js, countly.js in your index.html file. <br/>
+Note: This repo contains only JS file while native iOS code is maintained <a href="https://github.com/Countly/countly-sdk-ios">here</a> 
 
-```xml
+Step 1: Go to <a href="https://github.com/Countly/countly-sdk-ios">this</a> repo and download it.<br/>
+Step 2: Add these files to your project under Xcode: `Countly.h` `Countly.m` `Countly_OpenUDID.h` `Countly_OpenUDID.m` `CountlyDB.h` `CountlyDB.m` and `Countly.xcdatamodeld` (Note : Drag and drop these files into your 'plugins' folder and add them as reference files.) <br/>
+Step 3: Select your project in the Project Navigator.<br/>
+Step 4: Select the **Build Phases** tab. <br/>
+Step 5: Open **Link Binaries With Libraries** expander <br/>
+Step 6: Click the **+** button. <br/>
+Step 7: Select CoreTelephony.framework, select **Optional** (instead of Required). <br/>
+Step 8: Select CoreData.framework. <br/>
+Step 9: *(optional)* Drag and drop the added framework to the **Frameworks** group. <br/>
+Step 10: Add this line in config.xml `<plugin name="Countly" value="Countly"/>` <br/>
+Step 11: Add jquery.js, cordova.ios.js, countly.js in your index.html file. <br/>
+
+<pre class="prettyprint">
+
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="cordova.ios.js"></script>
     <script type="text/javascript" src="countly.js"></script>
-```
+</pre>
 
-Step 12 : Paste the script below and paste in your script tag, also replace your app key you get from Countly dashboard (not API key)
+Step 12: Paste the script below and paste in your script tag, also replace your app key you get from Countly dashboard (not API key)
 
 
 <pre class="prettyprint">
