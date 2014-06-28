@@ -26,7 +26,7 @@ Step 5: Add jquery.js, cordova.android.js, countly.js in your index.html file. <
 ```
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="cordova.android.js"></script>
-        <script type="text/javascript" src="countly.js"></script>
+<script type="text/javascript" src="countly.js"></script>
 ```
 
 Step 6: Paste script below and paste in your script tag, also replace your app key:
@@ -92,12 +92,11 @@ Step 9: *(optional)* Drag and drop the added framework to the **Frameworks** gro
 Step 10: Add this line in config.xml `<plugin name="Countly" value="Countly"/>` <br/>
 Step 11: Add jquery.js, cordova.ios.js, countly.js in your index.html file. <br/>
 
-<pre class="prettyprint">
-
+```
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="cordova.ios.js"></script>
-    <script type="text/javascript" src="countly.js"></script>
-</pre>
+<script type="text/javascript" src="countly.js"></script>
+```
 
 Step 12: Paste the script below and paste in your script tag, also replace your app key you get from Countly dashboard (not API key)
 
