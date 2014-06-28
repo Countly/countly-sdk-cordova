@@ -23,11 +23,11 @@ Step 4: Paste below code inside the application tag in your `Manifest.xml` <br/>
 
 Step 5: Add jquery.js, cordova.android.js, countly.js in your index.html file. <br/>
 
-<pre class="prettyprint">
+```
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="cordova.android.js"></script>
         <script type="text/javascript" src="countly.js"></script>
-</pre>
+```
 
 Step 6: Paste script below and paste in your script tag, also replace your app key:
 
