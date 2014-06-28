@@ -2,7 +2,7 @@ Countly is an innovative, real-time, open source mobile analytics application. I
 
 This repository includes the SDK for Phonegap and Icenium. You also need Countly server (either hosted on cloud or installed on-premise as Community Edition or Enterprise Edition).
 
-=== Using SDK under Android ===
+### Using SDK under Android
 
 Note : This repo contains only JS file while native android code is maintained <a href="https://github.com/Countly/countly-sdk-android">here</a> <br/>
 Step 1 : Go to <a href="https://github.com/Countly/countly-sdk-android">this</a> repo and download it.<br/>
@@ -31,51 +31,51 @@ Step 5 : Add jquery.js, cordova.android.js, countly.js in your index.html file. 
 Step 6 : Paste below scritping and paste in your script tag, also replace your app key:
 
 <pre class="prettyprint">
-        function SendDemoEvent()
+function SendDemoEvent()
+{
+	var demoEvent = new CountlyEvent();
+        demoEvent.Key = "Test";
+        demoEvent.Count = 1;
+        demoEvent.UsingSegmentation = true;
+        
+        var demoSegmentation = new SegmentationObject();
+        demoSegmentation.Key = "Key";
+        demoSegmentation.Value = "Value";
+        
+        demoEvent.Segmentation.push(demoSegmentation);
+            
+        Countly.PostEvent(demoEvent);
+}
+        
+// Wait for PhoneGap to load
+document.addEventListener("deviceready", onDeviceReady, false);
+        
+// PhoneGap is ready
+function onDeviceReady() 
         {
-            var demoEvent = new CountlyEvent();
-            demoEvent.Key = "Test";
-            demoEvent.Count = 1;
-            demoEvent.UsingSegmentation = true;
-        
-            var demoSegmentation = new SegmentationObject();
-            demoSegmentation.Key = "Key";
-            demoSegmentation.Value = "Value";
-        
-            demoEvent.Segmentation.push(demoSegmentation);
+	Countly.Init("https://cloud.count.ly","Replace_Your_App_Key","0.0.1",device.uuid);
+   
+	document.addEventListener("pause", onPause, false);
+        document.addEventListener("resume", onResume, false);
             
-            Countly.PostEvent(demoEvent);
-        }
-        
-        // Wait for PhoneGap to load
-        document.addEventListener("deviceready", onDeviceReady, false);
-        
-        // PhoneGap is ready
-        function onDeviceReady() 
+        Countly.OnStart();
+            
+        function onPause() 
         {
-            Countly.Init("https://cloud.count.ly","Replace_Your_App_Key","0.0.1",device.uuid);
+        	Countly.OnStop();
+	}
             
-            document.addEventListener("pause", onPause, false);
-            document.addEventListener("resume", onResume, false);
-            
-            Countly.OnStart();
-            
-            function onPause() 
-            {
-                Countly.OnStop();
-            }
-            
-            function onResume() 
-            {
-                Countly.OnStart();
-            }
+        function onResume() 
+        {
+        	Countly.OnStart();
+	}
             
         }
 </pre>
 
 If you are facing any difficulty in implementing the above procedure there is also an sample code in the example folder.
 
-=== Using SDK under iOS ===
+### Using SDK under iOS
 
 Note : This repo contains only JS file while native iOS code is maintained <a href="https://github.com/Countly/countly-sdk-ios">here</a> 
 <br/>
@@ -101,21 +101,21 @@ Step 12 : Paste the script below and paste in your script tag, also replace your
 
 
 <pre class="prettyprint">
-        function SendDemoEvent()
-        {
-            var demoEvent = new CountlyEvent();
-            demoEvent.Key = "Test";
-            demoEvent.Count = 1;
-            demoEvent.UsingSegmentation = true;
+function SendDemoEvent()
+{
+	var demoEvent = new CountlyEvent();
+	demoEvent.Key = "Test";
+	demoEvent.Count = 1;
+	demoEvent.UsingSegmentation = true;
         
-            var demoSegmentation = new SegmentationObject();
-            demoSegmentation.Key = "Key";
-            demoSegmentation.Value = "Value";
+	var demoSegmentation = new SegmentationObject();
+	demoSegmentation.Key = "Key";
+	demoSegmentation.Value = "Value";
         
-            demoEvent.Segmentation.push(demoSegmentation);
+	demoEvent.Segmentation.push(demoSegmentation);
             
-            Countly.PostEvent(demoEvent);
-        }
+	Countly.PostEvent(demoEvent);
+}
         
         // Wait for PhoneGap to load
         document.addEventListener("deviceready", onDeviceReady, false);
@@ -144,7 +144,7 @@ Step 12 : Paste the script below and paste in your script tag, also replace your
 If you are facing any dificulty in implementing the above procedure there is also an sample code in the example folder
 </pre>
 
-=== Custom Events ===
+### Custom Events
 
 There are two constructors for custom events. <br/>
 
@@ -195,6 +195,6 @@ A sample Json for custom event:
     }
 </pre>
 
-=== Acknowledgements === 
+### Acknowledgements 
 
 This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr)
