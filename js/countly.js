@@ -369,6 +369,7 @@ var Countly = new function()
             // xmlhttp.send();
         }
         else{
+           var data = data;
            $.ajax({
                 type: "POST",
                 url: "{0}/i?{1}".format(this.ServerURL, data),
@@ -379,7 +380,7 @@ var Countly = new function()
                 {
                     Countly.Log("Data send successfully.");
                 },
-                error: function(data)
+                error: function(errorData)
                 {
                     Countly.ConnectionQueue.push(data);
                 }
