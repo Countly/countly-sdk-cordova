@@ -369,7 +369,6 @@ var Countly = new function()
             // xmlhttp.send();
         }
         else{
-           var data = data;
            $.ajax({
                 type: "POST",
                 url: "{0}/i?{1}".format(this.ServerURL, data),
