@@ -379,7 +379,7 @@ var Countly = new function()
                 {
                     Countly.Log("Data send successfully.");
                 },
-                error: function(data)
+                error: function(errorData)
                 {
                     Countly.ConnectionQueue.push(data);
                 }
