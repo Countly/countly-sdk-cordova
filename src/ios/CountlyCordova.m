@@ -40,12 +40,12 @@
 - (void)event:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
-    NSString* serverurl = [command.arguments objectAtIndex:0];
-    NSString* appkey = [command.arguments objectAtIndex:1];
-    NSString* myresult = @"ok";
-    
-    if (serverurl != nil && [serverurl length] > 0) {
-        [[Countly sharedInstance] start:appkey withHost:serverurl];
+    NSString* key = [command.arguments objectAtIndex:0];
+    NSString* countString = [command.arguments objectAtIndex:1];
+    int countInt = [countString intValue];
+    if (key != nil && [key length] > 0) {
+        
+        [[Countly sharedInstance] recordEvent:key count:countInt];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"ok"];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
