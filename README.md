@@ -48,10 +48,8 @@ function SendDemoEvent()
         Countly.PostEvent(demoEvent);
 }
         
-// Wait for PhoneGap to load
 document.addEventListener("deviceready", onDeviceReady, false);
         
-// PhoneGap is ready
 function onDeviceReady() 
         {
 	Countly.Init("https://cloud.count.ly","Replace_Your_App_Key","0.0.1",device.uuid);
@@ -118,10 +116,8 @@ function SendDemoEvent()
 	Countly.PostEvent(demoEvent);
 }
         
-        // Wait for PhoneGap to load
         document.addEventListener("deviceready", onDeviceReady, false);
         
-        // PhoneGap is ready
         function onDeviceReady() 
         {
             Countly.Init("https://cloud.count.ly","Replace_Your_App_Key","0.0.1",device.uuid);
@@ -142,7 +138,7 @@ function SendDemoEvent()
             }
             
         }
-If you are facing any dificulty in implementing the above procedure there is also an sample code in the example folder
+If you are facing any dificulty in implementing the above procedure there is also a sample code in the example folder
 </pre>
 
 ### Custom Events
