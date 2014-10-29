@@ -25,11 +25,10 @@
     CDVPluginResult* pluginResult = nil;
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
-    NSString* myresult = @"ok";
     
     if (serverurl != nil && [serverurl length] > 0) {
         [[Countly sharedInstance] start:appkey withHost:serverurl];
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:myresult];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"initialized!"];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
@@ -44,9 +43,16 @@
     NSString* countString = [command.arguments objectAtIndex:1];
     int countInt = [countString intValue];
     if (key != nil && [key length] > 0) {
+//        if([key length] == 3){
+//            NSString* sumString = [command.arguments objectAtIndex:2];
+//            float sumFloat = [sumString floatValue];
+//            [[Countly sharedInstance] recordEvent:key count:countInt sum:sumFloat];
+//        }
+//        else{
+            [[Countly sharedInstance] recordEvent:key count:countInt];
+//        }
         
-        [[Countly sharedInstance] recordEvent:key count:countInt];
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"ok"];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"event sent!"];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
