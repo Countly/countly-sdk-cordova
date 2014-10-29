@@ -9,16 +9,23 @@ CountlyCordova.init = function(serverUrl,appKey){
 }
 CountlyCordova.sendEvent = function(options){
 	var args = [];
-	args.push(options.eventName);
-	args.push(options.eventCount);
+	if(options.eventName)
+		args.push(options.eventName.toString());
+	if(options.eventCount)
+		args.push(options.eventCount.toString());
 	if(options.eventSum)
-		args.push(options.eventSum);
+		args.push(options.eventSum.toString());
 	cordova.exec(CountlyCordova.onSuccess,CountlyCordova.onError,"CountlyCordova","event",args);
+}
+CountlyCordova.start = function(){
+	cordova.exec(CountlyCordova.onSuccess,CountlyCordova.onError,"CountlyCordova","start",[]);
+}
+CountlyCordova.stop = function(){
+	cordova.exec(CountlyCordova.onSuccess,CountlyCordova.onError,"CountlyCordova","stop",[]);
 }
 CountlyCordova.deviceready = function(){
 	CountlyCordova.ready = true;
 	//testing
-	
 }
 
 CountlyCordova.onSuccess = function(result){
