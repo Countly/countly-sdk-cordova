@@ -1,9 +1,10 @@
 package ly.count.android.api;
 
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.api.CallbackContext;
-import org.apache.cordova.api.CordovaInterface;
-import org.apache.cordova.api.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -13,12 +14,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class CountlyCordova extends CordovaPlugin {
-
-
-
-	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-	    super.initialize(cordova, webView);
-	}
 	
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		Context context = this.cordova.getActivity().getApplicationContext();

@@ -59,15 +59,19 @@
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="CountlyCordova">
-        <param name="android-package" value="ly.count.api.CountlyCordova" />
+        <param name="android-package" value="ly.count.android.api.CountlyCordova" />
       </feature>
     </config-file>
 
     <config-file target="AndroidManifest.xml" parent="/manifest">
-      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+      <uses-permission android:name="android.permission.INTERNET"/>
     </config-file>
-
-    <source-file src="src/android/nl/xservices/plugins/CountlyCordova.java" target-dir="src/nl/xservices/plugins"/>
+    
+    <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/Countly.java" target-dir="src/ly/count/android/api"/>
+    
+    <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/OpenUDID/"/>
+    <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/OpenUDID/"/>
   </platform>
 
   <!-- wp8 -->
