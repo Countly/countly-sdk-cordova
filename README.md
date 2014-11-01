@@ -23,7 +23,8 @@ cordova build ios
 /*
 Open the project in xcode
 Go to /src/ios/sdk/Countly.xcdatamodeld 
-drag and drop Countly.xcdatamodeld in your plugin folder (because cordova plugin doesn't support folder, so has to be added manually.)
+drag and drop Countly.xcdatamodeld in your plugin folder.
+(because cordova plugin doesn't support folder, so has to be added manually.)
 */
 ```
 
