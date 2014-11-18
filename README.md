@@ -55,4 +55,5 @@ If you are facing any dificulty in implementing the above procedure there is als
 
 ### Acknowledgements 
 
-This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr)
+This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr). It's now maintained by Nicolson DSouza (NicolsonDsouza@gmail.com).
+
