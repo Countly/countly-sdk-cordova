@@ -39,14 +39,20 @@
         <script type="text/javascript">
             app = {};
             alert("here");
-            document.addEventlistener("deviceready",function(){
+            document.addEventListener("deviceready",function(){
                 alert("deviceready");
                 CountlyCordova.init("https://cloud.count.ly","71a31ea4da464cc63c359d22d0daec8ea1e19015");
             },false);
             app.event = function(){
                 alert("sending event");
-                var events = {"eventName":"countlyios":"eventCount":1};
+                var events = {"eventName":"countlyios","eventCount":1};
                 CountlyCordova.sendEvent(events);
+            }
+            app.start = function(){
+                CountlyCordova.start();
+            }
+            app.stop = function(){
+                CountlyCordova.stop();
             }
         </script>
     </body>
