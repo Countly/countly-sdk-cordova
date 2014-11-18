@@ -67,6 +67,15 @@
       <uses-permission android:name="android.permission.INTERNET"/>
     </config-file>
     
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <service android:name="org.OpenUDID.OpenUDID_service">
+            <intent-filter>
+                <action android:name="org.OpenUDID.GETUDID" />
+            </intent-filter>
+        </service>
+    </config-file>
+    
     <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/api"/>
     <source-file src="src/android/Countly.java" target-dir="src/ly/count/android/api"/>
     
