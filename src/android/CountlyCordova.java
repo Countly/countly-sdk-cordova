@@ -19,8 +19,8 @@ public class CountlyCordova extends CordovaPlugin {
 		Context context = this.cordova.getActivity().getApplicationContext();
 		if ("init".equals(action)) {
 			Log.e("Nicolson","at init");
-			String serverUrl = args.toString(0);
-			String appKey = args.toString(1);
+			String serverUrl = args.getString(0);
+			String appKey = args.getString(1);
 			serverUrl.replace("https://", "http://");
 			Log.e("Nicolson",serverUrl);
 			Log.e("Nicolson",appKey);
@@ -42,8 +42,8 @@ public class CountlyCordova extends CordovaPlugin {
         }
 		else if ("event".equals(action)) {
 			Log.e("Nicolson","at event");
-			Log.e("Nicolson",args.toString(0));
-			Countly.sharedInstance().recordEvent(args.toString(0), args.getInt(1));
+			Log.e("Nicolson",args.getString(0));
+			Countly.sharedInstance().recordEvent(args.getString(0), args.getInt(1));
 			callbackContext.success();
             return true;
         }
