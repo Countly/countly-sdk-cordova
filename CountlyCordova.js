@@ -38,4 +38,5 @@ CountlyCordova.onError = function(error){
 CountlyCordova.demo = function(){
 	
 }
+window.CountlyCordova;
 document.addEventListener("deviceready", CountlyCordova.deviceready, false);

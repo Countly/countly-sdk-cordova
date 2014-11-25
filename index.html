@@ -38,15 +38,16 @@
         <script type="text/javascript" src="CountlyCordova.js"></script>
         <script type="text/javascript">
             app = {};
-            alert("here");
             document.addEventListener("deviceready",function(){
+                CountlyCordova.init("https://cloud.count.ly","98165a6ea732c6af4e200ea0d74e931210c2bd92");
+                                    //replace your server ip/url // replace it with your "App Key"
                 alert("deviceready");
-                CountlyCordova.init("https://cloud.count.ly","71a31ea4da464cc63c359d22d0daec8ea1e19015");
             },false);
             app.event = function(){
-                alert("sending event");
-                var events = {"eventName":"countlyios","eventCount":1};
-                CountlyCordova.sendEvent(events);
+                var events = {"eventName":"android_test","eventCount":1};
+                setInterval(function(){
+                    CountlyCordova.sendEvent(events);
+                },1000);
             }
             app.start = function(){
                 CountlyCordova.start();

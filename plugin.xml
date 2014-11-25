@@ -65,8 +65,12 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest">
         <uses-permission android:name="android.permission.INTERNET"/>
+        <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
         <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
         <uses-permission android:name="android.permission.WAKE_LOCK"/>
+        <uses-permission android:name="ly.count.android.api.permission.C2D_MESSAGE"/>
+        <permission android:name="ly.count.android.example.messaging.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+<uses-permission android:name="ly.count.android.example.messaging.permission.C2D_MESSAGE" />
     </config-file>
     
 
@@ -80,7 +84,18 @@
     
     <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/api"/>
     <source-file src="src/android/Countly.java" target-dir="src/ly/count/android/api"/>
-    
+    <source-file src="src/android/AdvertisingIdAdapter.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/ConnectionProcessor.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/ConnectionQueue.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/CountlyStore.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/DeviceId.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/DeviceInfo.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/Event.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/EventQueue.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/OpenUDIDAdapter.java" target-dir="src/ly/count/android/api"/>
+    <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/api"/>
+
+
     <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/OpenUDID/"/>
     <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/OpenUDID/"/>
   </platform>
