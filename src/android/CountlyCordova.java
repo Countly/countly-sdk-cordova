@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
+import android.os.Bundle;
 //import android.telephony.TelephonyManager;
 import android.util.Log;
 //import android.widget.Toast;
@@ -23,10 +24,6 @@ public class CountlyCordova extends CordovaPlugin {
 			String serverUrl = args.getString(0);
 			String appKey = args.getString(1);
 			serverUrl = serverUrl.replace("https://", "http://");
-			//Log.e("Nicolson",serverUrl);
-			//Log.e("Nicolson",appKey);
-			//serverUrl = "http://cloud.count.ly";
-			//appKey = "98165a6ea732c6af4e200ea0d74e931210c2bd92";
 			Countly.sharedInstance().init(context, serverUrl, appKey,null,DeviceId.Type.OPEN_UDID);
 			Countly.sharedInstance().onStart();
 			callbackContext.success("initialized!");
@@ -51,6 +48,28 @@ public class CountlyCordova extends CordovaPlugin {
 			Countly.sharedInstance().recordEvent(eventName, eventCount);
 			callbackContext.success("event sent");
 			Log.e("Nicolson","at event " +eventName +" " +eventCount);
+			return true;
+        }
+		else if ("setloggingenabled".equals(action)) {
+			Countly.sharedInstance().setLoggingEnabled(true);
+			callbackContext.success("setloggingenabled success!");
+			Log.e("Nicolson","setloggingenabled ");
+			return true;
+        }
+		else if ("setuserdata".equals(action)) {
+			Bundle bundle = new Bundle();
+			bundle.putString("name", args.getString(0));
+			bundle.putString("username", args.getString(1));
+			bundle.putString("email", args.getString(2));
+			bundle.putString("org", args.getString(3));
+			bundle.putString("phone", args.getString(4));
+			bundle.putString("picture", args.getString(5));
+			bundle.putString("picturePath", args.getString(6));
+			bundle.putString("gender", args.getString(7));
+			bundle.putInt("byear", args.getInt(8));
+			Countly.sharedInstance().setUserData(bundle);
+			callbackContext.success("setuserdata success");
+			Log.e("Nicolson","setuserdata ");
 			return true;
         }
 		else{
