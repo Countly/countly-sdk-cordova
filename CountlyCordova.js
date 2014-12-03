@@ -17,6 +17,23 @@ CountlyCordova.sendEvent = function(options){
 		args.push(options.eventSum.toString());
 	cordova.exec(CountlyCordova.onSuccess,CountlyCordova.onError,"CountlyCordova","event",args);
 }
+CountlyCordova.setLoggingEnabled = function(boolean){
+	cordova.exec(CountlyCordova.onSuccess,CountlyCordova.onError,"CountlyCordova","setloggingenabled",[]);
+}
+CountlyCordova.setUserData = function(options){
+	var args = [];
+	args.push(options.name || "");
+	args.push(options.username || "");
+	args.push(options.email || "");
+	args.push(options.org || "");
+	args.push(options.phone || "");
+	args.push(options.picture || "");
+	args.push(options.picturePath || "");
+	args.push(options.gender || "");
+	args.push(options.byear || 0);
+
+	cordova.exec(CountlyCordova.onSuccess,CountlyCordova.onError,"CountlyCordova","setuserdata",args);
+}
 CountlyCordova.start = function(){
 	cordova.exec(CountlyCordova.onSuccess,CountlyCordova.onError,"CountlyCordova","start",[]);
 }
@@ -38,5 +55,5 @@ CountlyCordova.onError = function(error){
 CountlyCordova.demo = function(){
 	
 }
-window.CountlyCordova;
+window.CountlyCordova = CountlyCordova;
 document.addEventListener("deviceready", CountlyCordova.deviceready, false);
