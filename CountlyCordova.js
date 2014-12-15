@@ -9,12 +9,31 @@ CountlyCordova.init = function(serverUrl,appKey){
 }
 CountlyCordova.sendEvent = function(options){
 	var args = [];
+	var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
+	var segments = {};
+	
+	if(options.eventSum)
+		eventType = "eventWithSum";
+	if(options.segments)
+		eventType = "eventWithSegment";
+	if(options.segments && options.eventSum)
+		eventType = "eventWithSumSegment";
+
+	args.push(eventType);
+
 	if(options.eventName)
 		args.push(options.eventName.toString());
 	if(options.eventCount)
 		args.push(options.eventCount.toString());
 	if(options.eventSum)
 		args.push(options.eventSum.toString());
+
+	if(options.segments)
+		segments = options.segments;
+	for (var event in segments) {
+    	args.push(event);
+    	args.push(segments[event]);
+    }
 	cordova.exec(CountlyCordova.onSuccess,CountlyCordova.onError,"CountlyCordova","event",args);
 }
 CountlyCordova.setLoggingEnabled = function(boolean){

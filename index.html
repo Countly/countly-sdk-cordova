@@ -39,21 +39,13 @@
         <script type="text/javascript">
             app = {};
             document.addEventListener("deviceready",function(){
-                CountlyCordova.init("http://104.131.45.10","50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13");
+                CountlyCordova.init("https://cloud.count.ly","98165a6ea732c6af4e200ea0d74e931210c2bd92"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
                                     //replace your server ip/url // replace it with your "App Key"
                 
                 alert("deviceready");
-                var options = {};
-                options.name = "Nicolson Dsouza";
-                options.username = "nicolsondsouza";
-                options.email = "nicolsondsouza@gmail.com";
-                options.org = "Trinisoft Technologies Pvt. Ltd.";
-                options.phone = "+91 8128402946";
-                options.picture = "http://trinisofttechnologies.herokuapp.com/images/logo.png";
-                options.picturePath = "";
-                options.gender = "Male";
-                options.byear = 1989;
-                CountlyCordova.setUserData(options);
+
+                
+                app.sendSampleEvent();
                 
             },false);
             app.event = function(){
@@ -67,6 +59,44 @@
             }
             app.stop = function(){
                 CountlyCordova.stop();
+            }
+
+            app.sendSampleEvent = function(){
+                // example for basic event
+                var events = {"eventName":"basic_event","eventCount":1};
+                CountlyCordova.sendEvent(events);
+                
+                // example for event with sum
+                var events = {"eventName":"event_sum","eventCount":1,"eventSum":"0.99"};
+                CountlyCordova.sendEvent(events);
+
+                // example for event with segment
+                var events = {"eventName":"event_segment","eventCount":1};
+                events.segments = {"Country" : "Turkey", "Age" : "28"};
+                CountlyCordova.sendEvent(events);
+
+                // example for event with segment and sum
+                var events = {"eventName":"event_segment_sum","eventCount":1,"eventSum":"0.99"};
+                events.segments = {"Country" : "Turkey", "Age" : "28"};
+                CountlyCordova.sendEvent(events);
+            }
+            app.setUserData = function(){
+                // example for setUserData
+                var options = {};
+                options.name = "Nicolson Dsouza";
+                options.username = "nicolsondsouza";
+                options.email = "nicolsondsouza@gmail.com";
+                options.org = "Trinisoft Technologies Pvt. Ltd.";
+                options.phone = "+91 8128402946";
+                options.picture = "http://trinisofttechnologies.herokuapp.com/images/logo.png";
+                options.picturePath = "";
+                options.gender = "Male";
+                options.byear = 1989;
+                CountlyCordova.setUserData(options);
+            }
+            app.setloggingenabled = function(){
+                // example for setLoggingEnabled
+                CountlyCordova.setLoggingEnabled();
             }
         </script>
     </body>
