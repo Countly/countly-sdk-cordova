@@ -62,7 +62,9 @@ public class Countly {
     private static class SingletonHolder {
         static final Countly instance = new Countly();
     }
-
+    public void onRegistrationId(String registrationId) {
+        //connectionQueue_.tokenSession(registrationId, messagingMode_);
+    }
     private ConnectionQueue connectionQueue_;
     @SuppressWarnings("FieldCanBeLocal")
     private ScheduledExecutorService timerService_;
