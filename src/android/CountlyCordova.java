@@ -67,7 +67,7 @@ public class CountlyCordova extends CordovaPlugin {
 				int eventCount= Integer.parseInt(args.getString(2));
 				//int eventSum= Integer.parseInt(args.getString(3));
 				HashMap<String, String> segmentation = new HashMap<String, String>();
-				for(int i=3,il=5;i<il;i+=2){
+				for(int i=3,il=args.length();i<il;i+=2){
 					segmentation.put(args.getString(i), args.getString(i+1));
 				}
 				Countly.sharedInstance().recordEvent(eventName, segmentation, eventCount);
@@ -79,7 +79,7 @@ public class CountlyCordova extends CordovaPlugin {
 				int eventCount= Integer.parseInt(args.getString(2));
 				float eventSum= new Float(args.getString(3)).floatValue();
 				HashMap<String, String> segmentation = new HashMap<String, String>();
-				for(int i=4,il=5;i<il;i+=2){
+				for(int i=4,il=args.length();i<il;i+=2){
 					segmentation.put(args.getString(i), args.getString(i+1));
 				}
 				Countly.sharedInstance().recordEvent(eventName, segmentation, eventCount,eventSum);
