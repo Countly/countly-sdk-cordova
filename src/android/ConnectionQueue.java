@@ -21,11 +21,15 @@ THE SOFTWARE.
 */
 package ly.count.android.api;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ConnectionQueue queues session and event data and periodically sends that data to
@@ -115,7 +119,7 @@ public class ConnectionQueue {
                           + "&sdk_version=" + Countly.COUNTLY_SDK_VERSION_STRING
                           + "&begin_session=1"
                           + "&metrics=" + DeviceInfo.getMetrics(context_)
-        				  + UserData.getDataForRequest();
+                  + UserData.getDataForRequest();
 
         store_.addConnection(data);
 
@@ -140,6 +144,27 @@ public class ConnectionQueue {
 
             tick();
         }
+    }
+
+    public void tokenSession(String token, Countly.CountlyMessagingMode mode) {
+        checkInternalState();
+
+        final String data = "app_key=" + appKey_
+                + "&" + "timestamp=" + Countly.currentTimestamp()
+                + "&" + "token_session=1"
+                + "&" + "android_token=" + token
+                + "&" + "test_mode=" + (mode == Countly.CountlyMessagingMode.TEST ? 2 : 0)
+                + "&" + "locale=" + DeviceInfo.getLocale();
+
+        // To ensure begin_session will be fully processed by the server before token_session
+        final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
+        worker.schedule(new Runnable() {
+            @Override
+            public void run() {
+                store_.addConnection(data);
+                tick();
+            }
+        }, 10, TimeUnit.SECONDS);
     }
 
     /**

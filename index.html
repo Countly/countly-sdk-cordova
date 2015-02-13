@@ -37,13 +37,25 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="CountlyCordova.js"></script>
         <script type="text/javascript">
+
+            // testing purpose only
+            if(!window.device)
+                device = {};
+                device.platform = "android";
+            // 
+
             app = {};
             document.addEventListener("deviceready",function(){
-                CountlyCordova.init("https://cloud.count.ly","98165a6ea732c6af4e200ea0d74e931210c2bd92"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
+                CountlyCordova.init("http://128.199.55.79","46e1fd647e01f89e77e53007ab0e9aa59aa9d11f"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
                                     //replace your server ip/url // replace it with your "App Key"
-                
-                alert("deviceready");
+                // app.onRegistrationId();
+                app.test();
+                // alert("deviceready");
             },false);
+            app.test = function(){
+                CountlyCordova.Push.onRegisterPushNotification();
+                // app.onRegistrationId();
+            }
             app.event = function(){
                 var events = {"eventName":"android_test","eventCount":1};
                 setInterval(function(){
@@ -93,6 +105,14 @@
             app.setloggingenabled = function(){
                 // example for setLoggingEnabled
                 CountlyCordova.setLoggingEnabled();
+            }
+
+            app.onRegistrationId = function(){
+                // CountlyCordova.CountlyMessagingMode.TEST
+                // CountlyCordova.CountlyMessagingMode.PRODUCTION
+                var options = {"registrationId":"dummyid","mode":CountlyCordova.CountlyMessagingMode.TEST};
+
+                CountlyCordova.onRegistrationId(options);
             }
         </script>
     </body>

@@ -33,7 +33,10 @@ import android.os.Bundle;
  * Get more details <a href="https://github.com/Countly/countly-sdk-android">here</a>.
  */
 public class Countly {
-
+    public static enum CountlyMessagingMode {
+        TEST,
+        PRODUCTION,
+    }
     /**
      * Current version of the Count.ly Android SDK as a displayable string.
      */
@@ -62,8 +65,8 @@ public class Countly {
     private static class SingletonHolder {
         static final Countly instance = new Countly();
     }
-    public void onRegistrationId(String registrationId) {
-        //connectionQueue_.tokenSession(registrationId, messagingMode_);
+    public void onRegistrationId(String registrationId,Countly.CountlyMessagingMode mode) {
+        connectionQueue_.tokenSession(registrationId,mode);
     }
     private ConnectionQueue connectionQueue_;
     @SuppressWarnings("FieldCanBeLocal")
