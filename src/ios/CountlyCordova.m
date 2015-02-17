@@ -93,4 +93,65 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)setloggingenabled:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setloggingenabled!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setuserdata:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    NSString* name = [command.arguments objectAtIndex:0];
+    NSString* username = [command.arguments objectAtIndex:1];
+    NSString* email = [command.arguments objectAtIndex:2];
+    NSString* org = [command.arguments objectAtIndex:3];
+    NSString* phone = [command.arguments objectAtIndex:4];
+    NSString* picture = [command.arguments objectAtIndex:5];
+    //NSString* picturePath = [command.arguments objectAtIndex:6];
+    NSString* gender = [command.arguments objectAtIndex:7];
+    NSString* byear = [command.arguments objectAtIndex:8];
+    //NSInteger byearint = [byear intValue];
+        [Countly.sharedInstance recordUserDetails: @{
+                                                    kCLYUserName: name,
+                                                    kCLYUserEmail: email,
+                                                    kCLYUserBirthYear: byear,
+                                                    kCLYUserGender: gender,
+                                                    kCLYUserOrganization: org,
+                                                    kCLYUserPhone: phone,
+                                                    kCLYUserUsername: username,
+                                                    kCLYUserPicture: picture
+                                                                 }];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setuserdata!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)onregistrationid:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int testMode = [messagingMode intValue];
+    
+    //[[Countly sharedInstance] tokenSession:token withMode:testMode];
+    
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)start:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"start!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)stop:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"stop!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 @end
