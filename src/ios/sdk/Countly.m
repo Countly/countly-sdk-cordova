@@ -789,6 +789,11 @@ NSString* const kCLYUserBirthYear = @"byear";
     [self start:appKey withHost:@"https://cloud.count.ly"];
 }
 
+- (void)onRegistrationId:(NSString *)token withMode:(int)testMode
+{
+    [[CountlyConnectionQueue sharedInstance] tokenSession:token withMode:testMode];
+}
+
 - (void)recordEvent:(NSString *)key count:(int)count
 {
     [eventQueue recordEvent:key count:count];
@@ -827,8 +832,6 @@ NSString* const kCLYUserBirthYear = @"byear";
     [CountlyUserDetails.sharedUserDetails deserialize:userDetails];
     [CountlyConnectionQueue.sharedInstance sendUserDetails];
 }
-
-
 
 - (void)onTimer:(NSTimer *)timer
 {

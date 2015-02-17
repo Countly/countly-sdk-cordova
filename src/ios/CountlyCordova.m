@@ -131,9 +131,9 @@
 {
     NSString* token = [command.arguments objectAtIndex:0];
     NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int testMode = [messagingMode intValue];
+    int mode = [messagingMode intValue];
     
-    //[[Countly sharedInstance] tokenSession:token withMode:testMode];
+    [[Countly sharedInstance] onRegistrationId:token withMode:mode];
     
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];

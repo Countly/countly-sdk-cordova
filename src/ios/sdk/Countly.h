@@ -11,10 +11,10 @@
 
 @interface Countly : NSObject
 {
-	double unsentSessionLength;
-	NSTimer *timer;
-	double lastTime;
-	BOOL isSuspended;
+    double unsentSessionLength;
+    NSTimer *timer;
+    double lastTime;
+    BOOL isSuspended;
     CountlyEventQueue *eventQueue;
 }
 
@@ -41,7 +41,7 @@
         extern NSString* const kCLYUserGender;
         extern NSString* const kCLYUserPicture;
         extern NSString* const kCLYUserBirthYear;
-
+- (void)onRegistrationId:(NSString *)token withMode:(int)testMode;
 @end
 
 
