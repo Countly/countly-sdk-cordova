@@ -35,7 +35,7 @@
             <input type="button" value="send event" onclick="app.event()"/>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="CountlyCordova.js"></script>
+        <script type="text/javascript" src="Countly.js"></script>
         <script type="text/javascript">
 
             // testing purpose only
@@ -46,47 +46,46 @@
 
             app = {};
             document.addEventListener("deviceready",function(){
-                CountlyCordova.init("http://128.199.55.79","46e1fd647e01f89e77e53007ab0e9aa59aa9d11f"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
+                Countly.init("http://128.199.55.79","46e1fd647e01f89e77e53007ab0e9aa59aa9d11f"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
                                     //replace your server ip/url // replace it with your "App Key"
                 // app.onRegistrationId();
                 app.test();
                 // alert("deviceready");
             },false);
             app.test = function(){
-                CountlyCordova.Push.onRegisterPushNotification();
-                // app.onRegistrationId();
+                app.onRegistrationId();
             }
             app.event = function(){
                 var events = {"eventName":"android_test","eventCount":1};
                 setInterval(function(){
-                    CountlyCordova.sendEvent(events);
+                    Countly.sendEvent(events);
                 },1000);
             }
             app.start = function(){
-                CountlyCordova.start();
+                Countly.start();
             }
             app.stop = function(){
-                CountlyCordova.stop();
+                Countly.stop();
             }
 
             app.sendSampleEvent = function(){
                 // example for basic event
                 var events = {"eventName":"basic_event","eventCount":1};
-                CountlyCordova.sendEvent(events);
+                Countly.sendEvent(events);
                 
                 // example for event with sum
                 var events = {"eventName":"event_sum","eventCount":1,"eventSum":"0.99"};
-                CountlyCordova.sendEvent(events);
+                Countly.sendEvent(events);
 
                 // example for event with segment
                 var events = {"eventName":"event_segment","eventCount":1};
                 events.segments = {"Country" : "Turkey", "Age" : "28"};
-                CountlyCordova.sendEvent(events);
+                Countly.sendEvent(events);
 
                 // example for event with segment and sum
                 var events = {"eventName":"event_segment_sum","eventCount":1,"eventSum":"0.99"};
                 events.segments = {"Country" : "Turkey", "Age" : "28"};
-                CountlyCordova.sendEvent(events);
+                Countly.sendEvent(events);
             }
             app.setUserData = function(){
                 // example for setUserData
@@ -100,19 +99,22 @@
                 options.picturePath = "";
                 options.gender = "Male";
                 options.byear = 1989;
-                CountlyCordova.setUserData(options);
+                Countly.setUserData(options);
             }
             app.setloggingenabled = function(){
                 // example for setLoggingEnabled
-                CountlyCordova.setLoggingEnabled();
+                Countly.setLoggingEnabled();
             }
 
             app.onRegistrationId = function(){
-                // CountlyCordova.CountlyMessagingMode.TEST
-                // CountlyCordova.CountlyMessagingMode.PRODUCTION
-                var options = {"registrationId":"dummyid","mode":CountlyCordova.CountlyMessagingMode.TEST};
-
-                CountlyCordova.onRegistrationId(options);
+                // Countly.CountlyMessagingMode.TEST
+                // Countly.CountlyMessagingMode.PRODUCTION
+                // Countly.mode = Countly.CountlyMessagingMode.TEST;
+                // Countly.Push.onRegisterPushNotification();
+                Countly.initMessaging({
+                    "messageMode": Countly.CountlyMessagingMode.TEST,
+                    "projectId": "881000050249"
+                });
             }
         </script>
     </body>
