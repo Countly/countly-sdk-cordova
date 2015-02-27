@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ -->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>Countly Cordova Demo</h1>
+            <input type="button" value="start" onclick="app.start()"/>
+            <input type="button" value="stop" onclick="app.stop()"/>
+            <input type="button" value="send event" onclick="app.event()"/>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="Countly.js"></script>
+        <script type="text/javascript">
+            
+            // testing purpose only
+            if(!window.device)
+            device = {};
+            device.platform = "ios";
+            //
+            
+            app = {};
+            document.addEventListener("deviceready",function(){
+<<<<<<< HEAD
+                Countly.init("http://128.199.55.79","46e1fd647e01f89e77e53007ab0e9aa59aa9d11f"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
+                                    //replace your server ip/url // replace it with your "App Key"
+                // app.onRegistrationId();
+                app.test();
+                // alert("deviceready");
+            },false);
+            app.test = function(){
+                app.onRegistrationId();
+            }
+            app.event = function(){
+                var events = {"eventName":"android_test","eventCount":1};
+                setInterval(function(){
+                    Countly.sendEvent(events);
+                },1000);
+            }
+            app.start = function(){
+                Countly.start();
+            }
+            app.stop = function(){
+                Countly.stop();
+            }
+
+            app.sendSampleEvent = function(){
+                // example for basic event
+                var events = {"eventName":"basic_event","eventCount":1};
+                Countly.sendEvent(events);
+                
+                // example for event with sum
+                var events = {"eventName":"event_sum","eventCount":1,"eventSum":"0.99"};
+                Countly.sendEvent(events);
+
+                // example for event with segment
+                var events = {"eventName":"event_segment","eventCount":1};
+                events.segments = {"Country" : "Turkey", "Age" : "28"};
+                Countly.sendEvent(events);
+
+                // example for event with segment and sum
+                var events = {"eventName":"event_segment_sum","eventCount":1,"eventSum":"0.99"};
+                events.segments = {"Country" : "Turkey", "Age" : "28"};
+                Countly.sendEvent(events);
+            }
+            app.setUserData = function(){
+                // example for setUserData
+                var options = {};
+                options.name = "Nicolson Dsouza";
+                options.username = "nicolsondsouza";
+                options.email = "nicolsondsouza@gmail.com";
+                options.org = "Trinisoft Technologies Pvt. Ltd.";
+                options.phone = "+91 812 840 2946";
+                options.picture = "http://trinisofttechnologies.herokuapp.com/images/logo.png";
+                options.picturePath = "";
+                options.gender = "Male";
+                options.byear = 1989;
+                Countly.setUserData(options);
+            }
+            app.setloggingenabled = function(){
+                // example for setLoggingEnabled
+                Countly.setLoggingEnabled();
+            }
+
+            app.onRegistrationId = function(){
+                // Countly.CountlyMessagingMode.TEST
+                // Countly.CountlyMessagingMode.PRODUCTION
+                // Countly.mode = Countly.CountlyMessagingMode.TEST;
+                // Countly.Push.onRegisterPushNotification();
+                Countly.initMessaging({
+                    "messageMode": Countly.CountlyMessagingMode.TEST,
+                    "projectId": "881000050249"
+                });
+            }
+=======
+                                      CountlyCordova.init("http://128.199.55.79","46e1fd647e01f89e77e53007ab0e9aa59aa9d11f"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
+                                      //replace your server ip/url // replace it with your "App Key"
+                                      // app.onRegistrationId();
+                                      app.test();
+                                      // alert("deviceready");
+                                      },false);
+                                      app.test = function(){
+                                          //app.setUserData();
+                                          //CountlyCordova.Push.onRegisterPushNotification();
+                                           app.onRegistrationId();
+                                      }
+        app.event = function(){
+            var events = {"eventName":"android_test","eventCount":1};
+            setInterval(function(){
+                        CountlyCordova.sendEvent(events);
+                        },1000);
+        }
+        app.start = function(){
+            CountlyCordova.start();
+        }
+        app.stop = function(){
+            CountlyCordova.stop();
+        }
+        
+        app.sendSampleEvent = function(){
+            // example for basic event
+            var events = {"eventName":"basic_event","eventCount":1};
+            CountlyCordova.sendEvent(events);
+            
+            // example for event with sum
+            var events = {"eventName":"event_sum","eventCount":1,"eventSum":"0.99"};
+            CountlyCordova.sendEvent(events);
+            
+            // example for event with segment
+            var events = {"eventName":"event_segment","eventCount":1};
+            events.segments = {"Country" : "Turkey", "Age" : "28"};
+            CountlyCordova.sendEvent(events);
+            
+            // example for event with segment and sum
+            var events = {"eventName":"event_segment_sum","eventCount":1,"eventSum":"0.99"};
+            events.segments = {"Country" : "Turkey", "Age" : "28"};
+            CountlyCordova.sendEvent(events);
+        }
+        app.setUserData = function(){
+            // example for setUserData
+            var options = {};
+            options.name = "Nicolson Dsouza";
+            options.username = "nicolsondsouza";
+            options.email = "nicolsondsouza@gmail.com";
+            options.org = "Trinisoft Technologies Pvt. Ltd.";
+            options.phone = "+91 812 840 2946";
+            options.picture = "http://trinisofttechnologies.herokuapp.com/images/logo.png";
+            options.picturePath = "";
+            options.gender = "Male";
+            options.byear = 1989;
+            CountlyCordova.setUserData(options);
+        }
+        app.setloggingenabled = function(){
+            // example for setLoggingEnabled
+            CountlyCordova.setLoggingEnabled();
+        }
+        
+        app.onRegistrationId = function(){
+            // CountlyCordova.CountlyMessagingMode.TEST
+            // CountlyCordova.CountlyMessagingMode.PRODUCTION
+            var options = {"registrationId":"dummyid","mode":CountlyCordova.CountlyMessagingMode.TEST};
+            
+            CountlyCordova.onRegistrationId(options);
+        }
+>>>>>>> 5b7e7fd017033ddcb3a7ce478c06124a4332e4dc
+        </script>
+    </body>
+</html>
