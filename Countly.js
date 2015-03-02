@@ -11,7 +11,6 @@ Countly.init = function(serverUrl,appKey){
 }
 
 Countly.initMessaging = function(options){
-    alert(JSON.stringify(options))
     Countly.projectId = options.projectId;
     Countly.messageMode = options.messageMode;
     Countly.Push.onRegisterPushNotification();
@@ -72,7 +71,7 @@ Countly.setUserData = function(options){
 Countly.onRegistrationId = function(options){
     var args = [];
     args.push(options.registrationId || "");
-    args.push(options.mode || 0);
+    args.push(options.mode.toString() || "0");
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }
@@ -127,7 +126,7 @@ push.onPushSucess = function(result){
     push.onPushId(result)
 }
 push.onPushError = function(error){
-    alert(error)
+    // alert(error)
 }
 push.onPushId = function(pushId){
     if(pushId == "OK" || pushId == "ok")
@@ -137,7 +136,7 @@ push.onPushId = function(pushId){
 }
 
 push.onSendPushId = function(){
-    alert(push.pushId)
+    // alert(push.pushId)
     var options = {"registrationId":push.pushId,"mode":Countly.CountlyMessagingMode.TEST};
     Countly.onRegistrationId(options);
 }
@@ -147,7 +146,6 @@ push.onSendPushIdCallback = function(err,success){
     }
 }
 push.onNotificationGCM = function(e){
-    alert(e.event)
     switch( e.event )
     {
         case 'registered':
