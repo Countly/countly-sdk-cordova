@@ -24,8 +24,8 @@
     <engine name="cordova" version=">=3.0.0"/>
   </engines>
 
-  <js-module src="CountlyCordova.js" name="CountlyCordova">
-    <clobbers target="window.plugins.CountlyCordova" />
+  <js-module src="Countly.js" name="Countly">
+    <clobbers target="window.plugins.Countly" />
   </js-module>
 
   <!-- ios -->
