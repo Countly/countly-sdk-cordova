@@ -107,12 +107,12 @@
             }
 
             app.onRegistrationId = function(){
-                // Countly.CountlyMessagingMode.TEST
-                // Countly.CountlyMessagingMode.PRODUCTION
-                // Countly.mode = Countly.CountlyMessagingMode.TEST;
+                // Countly.messagingMode.TEST
+                // Countly.messagingMode.PRODUCTION
+                // Countly.mode = Countly.messagingMode.TEST;
                 // Countly.Push.onRegisterPushNotification();
                 Countly.initMessaging({
-                    "messageMode": Countly.CountlyMessagingMode.TEST,
+                    "messageMode": Countly.messagingMode.TEST,
                     "projectId": "881000050249"
                 });
             }

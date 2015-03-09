@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.CountlyMessagingMode = {"TEST":0,"PRODUCTION":1};
+Countly.messagingMode = {"TEST":0,"PRODUCTION":1};
 // countly initialization
 Countly.init = function(serverUrl,appKey){
     Countly.serverUrl = serverUrl;
@@ -137,7 +137,7 @@ push.onPushId = function(pushId){
 
 push.onSendPushId = function(){
     // alert(push.pushId)
-    var options = {"registrationId":push.pushId,"mode":Countly.CountlyMessagingMode.TEST};
+    var options = {"registrationId":push.pushId,"mode":messageMode || 0};
     Countly.onRegistrationId(options);
 }
 push.onSendPushIdCallback = function(err,success){
