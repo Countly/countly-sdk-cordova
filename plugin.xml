@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        id="ly.countly.cordova"
+        id="ly.count.cordova"
         version="0.0.1">
 
-  <name>CountlyCordova</name>
+  <name>Countly</name>
 
   <description>
-    Countly wrapper for cordova app.
+    Countly is an innovative, real-time, open source mobile analytics application. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.
   </description>
 
   <author>Nicolson Dsouza</author>
 
-  <license>NA</license>
+  <license>Open source with different licensing terms.</license>
 
   <keywords>Event, Mobile analytical</keywords>
 
-  <repo>https://github.com/nicolsondsouza/countly-sdk-js.git</repo>
+  <repo>https://github.com/Countly/countly-sdk-js.git</repo>
 
-  <issue>https://github.com/nicolsondsouza/countly-sdk-js/issues</issue>
+  <issue>https://github.com/Countly/countly-sdk-js/issues</issue>
 
   <engines>
     <engine name="cordova" version=">=3.0.0"/>
