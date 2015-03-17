@@ -38,11 +38,11 @@
         <script type="text/javascript" src="Countly.js"></script>
         <script type="text/javascript">
 
-            // testing purpose only
-            if(!window.device)
-                device = {};
-                device.platform = "android";
-            // 
+            // // testing purpose only
+            // if(!window.device)
+            //     device = {};
+            //     device.platform = "android";
+            // // 
 
             app = {};
             document.addEventListener("deviceready",function(){
@@ -54,6 +54,7 @@
             },false);
             app.test = function(){
                 app.onRegistrationId();
+                app.sendSampleEvent();
             }
             app.event = function(){
                 var events = {"eventName":"android_test","eventCount":1};

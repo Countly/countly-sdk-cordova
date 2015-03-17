@@ -2,39 +2,32 @@ Countly is an innovative, real-time, open source mobile analytics application. I
 
 This repository includes the SDK for Phonegap and Icenium. You also need Countly server (either hosted on cloud or installed on-premise as Community Edition or Enterprise Edition).
 
-### Using SDK under Android
+### Using SDK
 
 ```
-cordova plugin add https://github.com/nicolsondsouza/countly-sdk-js.git
+cordova create CountlyDemo ly.count.demo CountlyDemo
+cd CountlyDemo
+
+//adding plugins
+//if you are using countly push notification
+cordova plugin add org.apache.cordova.device
+cordova plugin add https://github.com/Wizcorp/phonegap-facebook-plugin.git
+
+//countly core plugin
+cordova plugin add https://github.com/Countly/countly-sdk-js.git
+
+//add platform
+cordova platform add android
+cordova platform add ios
+
 ```
-
-
-
-If you are facing any difficulty in implementing the above procedure there is also an sample code in the example folder.
-
-### Using SDK under iOS
-
-
-```
-cordova plugin add https://github.com/nicolsondsouza/countly-sdk-js.git
-
-cordova build ios
-
-/*
-Open the project in xcode
-Go to /src/ios/sdk/Countly.xcdatamodeld 
-drag and drop Countly.xcdatamodeld in your plugin folder.
-(because cordova plugin doesn't support folder, so has to be added manually.)
-*/
-```
-
 
 
 In your index.html
 
 ```
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="CountlyCordova.js"></script> <!-- no longer required in cordova 3.5 and above, it is auto added -->
+    <script type="text/javascript" src="Countly.js"></script> <!-- no longer required in cordova 3.5 and above, it is auto added -->
 ```
 
 Docs
@@ -42,27 +35,30 @@ Docs
 
 ```
 //initialize
-CountlyCordova.init("https://cloud.count.ly","App_Key");
+Countly.init("https://cloud.count.ly","App_Key");
+
+//countly push notification
+Countly.initMessaging({"messageMode": Countly.messagingMode.TEST, "projectId": "881000050249"});
 
 // example for basic event
 var events = {"eventName":"basic_event","eventCount":1};
-CountlyCordova.sendEvent(events);
+Countly.sendEvent(events);
 
 // example for event with sum
 var events = {"eventName":"event_sum","eventCount":1,"eventSum":"0.99"};
-CountlyCordova.sendEvent(events);
+Countly.sendEvent(events);
 
 // example for event with segment
 var events = {"eventName":"event_segment","eventCount":1};
 events.segments = {"Country" : "Turkey", "Age" : "28"};
-CountlyCordova.sendEvent(events);
+Countly.sendEvent(events);
 
 // example for event with segment and sum
 var events = {"eventName":"event_segment_sum","eventCount":1,"eventSum":"0.99"};
 events.segments = {"Country" : "Turkey", "Age" : "28"};
-CountlyCordova.sendEvent(events);
+Countly.sendEvent(events);
 
-// example for setUserData android only
+// example for setUserData enterprise edition only
 var options = {};
 options.name = "Nicolson Dsouza";
 options.username = "nicolsondsouza";
@@ -73,17 +69,17 @@ options.picture = "http://www.trinisofttechnologies.com/images/logo.png";
 options.picturePath = "";
 options.gender = "Male";
 options.byear = 1989;
-CountlyCordova.setUserData(options);
+Countly.setUserData(options);
 
 // example for setLoggingEnabled
-CountlyCordova.setLoggingEnabled();
+Countly.setLoggingEnabled();
 
 //example to start and stop countly
-CountlyCordova.start();
-CountlyCordova.stop();
+Countly.start();
+Countly.stop();
 ```
 
-If you are facing any dificulty in implementing the above procedure there is also a sample code in the example folder
+If you are facing any dificulty in implementing the above procedure. Please report an issue for the same, or email us at: 
 
 
 ### Acknowledgements 
