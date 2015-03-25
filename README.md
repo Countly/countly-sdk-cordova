@@ -1,6 +1,9 @@
-Countly is an innovative, real-time, open source mobile analytics application. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.
 
-This repository includes the SDK for Phonegap and Icenium. You also need Countly server (either hosted on cloud or installed on-premise as Community Edition or Enterprise Edition).
+## Phonegap and Cordova SDK for Countly
+
+[Countly](http://count.ly) is an innovative, real-time, open source mobile analytics application. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.
+
+This repository includes the SDK for Phonegap and Icenium. You also need Countly server - either hosted on cloud, or installed on-premise as Community Edition or Enterprise Edition.
 
 ### Using SDK
 
@@ -22,16 +25,17 @@ cordova platform add ios
 
 ```
 
-
-In your index.html
+In your index.html, use the following lines:
 
 ```
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="Countly.js"></script> <!-- no longer required in cordova 3.5 and above, it is auto added -->
 ```
 
-Docs
+Implementation
 -----
+
+Below you can find necessary code snippets to initialize the SDK for sending data to Countly servers. Where possible, use your server URL instead of cloud.count.ly in case you have your own server. 
 
 ```
 //initialize
@@ -40,7 +44,7 @@ Countly.init("https://cloud.count.ly","App_Key");
 //countly push notification
 Countly.initMessaging({"messageMode": Countly.messagingMode.TEST, "projectId": "881000050249"});
 
-// example for basic event
+// example for sending basic custom event
 var events = {"eventName":"basic_event","eventCount":1};
 Countly.sendEvent(events);
 
@@ -58,7 +62,7 @@ var events = {"eventName":"event_segment_sum","eventCount":1,"eventSum":"0.99"};
 events.segments = {"Country" : "Turkey", "Age" : "28"};
 Countly.sendEvent(events);
 
-// example for setUserData enterprise edition only
+// example for setUserData - Enterprise Edition only
 var options = {};
 options.name = "Nicolson Dsouza";
 options.username = "nicolsondsouza";
@@ -74,13 +78,12 @@ Countly.setUserData(options);
 // example for setLoggingEnabled
 Countly.setLoggingEnabled();
 
-//example to start and stop countly
+//example to start and stop Countly
 Countly.start();
 Countly.stop();
 ```
 
-If you are facing any dificulty in implementing the above procedure. Please report an issue for the same, or email us at: 
-
+If you are facing any difficulty in implementing procedures above, please report an issue or directly email me at nicolsondsouza@gmail.com.
 
 ### Acknowledgements 
 
