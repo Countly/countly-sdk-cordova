@@ -12,9 +12,11 @@ cordova create CountlyDemo ly.count.demo CountlyDemo
 cd CountlyDemo
 
 //adding plugins
-//if you are using countly push notification
-cordova plugin add org.apache.cordova.device
-cordova plugin add https://github.com/Wizcorp/phonegap-facebook-plugin.git
+{
+	//if you are using countly push notification
+	cordova plugin add org.apache.cordova.device
+	cordova plugin add https://github.com/phonegap-build/PushPlugin.git
+}
 
 //countly core plugin
 cordova plugin add https://github.com/Countly/countly-sdk-js.git
