@@ -25,6 +25,17 @@ cordova plugin add https://github.com/Countly/countly-sdk-js.git
 cordova platform add android
 cordova platform add ios
 
+//!important make sure you build it with cordova
+// as cordova links folders very well
+cordova build android
+cordova build ios
+
+//run the app directly
+cordova run android
+cordova run ios
+
+//or open the source in Xcode, or eclipse
+
 ```
 
 In your index.html, use the following lines:
@@ -85,9 +96,20 @@ Countly.start();
 Countly.stop();
 ```
 
+Troubleshooting
+-----
+```
+NSPersistentStoreCoordinator with a nil model'
+```
+In this case got to 
+https://github.com/Countly/countly-sdk-js/tree/master/src/ios/sdk
+Drag and drop "Countly.xcdatamodeld" folder into your plugins folder.
+and build it using Xcode.
+
 If you are facing any difficulty in implementing procedures above, please report an issue or directly email me at nicolsondsouza@gmail.com.
 
 ### Acknowledgements 
 
 This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr).<br>
 It's now maintained by Nicolson Dsouza (nicolsondsouza@gmail.com).
+
