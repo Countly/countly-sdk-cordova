@@ -38,7 +38,7 @@ cordova run ios
 
 ```
 
-### For meteor app
+### With meteor app
 
 ```
 meteor add countly:countly-sdk-js
