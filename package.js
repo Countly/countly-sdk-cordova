@@ -7,7 +7,7 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('0.8.2');
+  api.versionsFrom('1.0');
   api.addFiles(['Countly.js'], ['web.cordova']);
 });
 
