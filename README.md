@@ -38,6 +38,12 @@ cordova run ios
 
 ```
 
+### For meteor app
+
+```
+meteor add countly:countly-sdk-js
+```
+
 In your index.html, use the following lines:
 
 ```
