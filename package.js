@@ -14,5 +14,5 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   api.use('tinytest');
   api.use('countly:countly-sdk-js');
-  api.addFiles('countly-sdk-js-tests.js');
+  api.addFiles('js/countly-sdk-js-tests.js');
 });

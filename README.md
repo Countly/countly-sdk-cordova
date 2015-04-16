@@ -83,9 +83,9 @@ Countly.sendEvent(events);
 
 // example for setUserData - Enterprise Edition only
 var options = {};
-options.name = "Nicolson Dsouza";
-options.username = "nicolsondsouza";
-options.email = "nicolsondsouza@gmail.com";
+options.name = "Trinisoft Technologies";
+options.username = "trinisofttechnologies";
+options.email = "trinisofttechnologies@gmail.com";
 options.org = "Trinisoft Technologies Pvt. Ltd.";
 options.phone = "+91 812 840 2946";
 options.picture = "http://www.trinisofttechnologies.com/images/logo.png";
@@ -117,5 +117,5 @@ If you are facing any difficulty in implementing procedures above, please report
 ### Acknowledgements 
 
 This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr).<br>
-It's now maintained by Nicolson Dsouza (nicolsondsouza@gmail.com).
+It's now maintained by Trinisoft Technologies (trinisofttechnologies@gmail.com).
 
