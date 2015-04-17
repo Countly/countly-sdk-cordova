@@ -112,7 +112,7 @@ https://github.com/Countly/countly-sdk-js/tree/master/src/ios/sdk
 Drag and drop "Countly.xcdatamodeld" folder into your plugins folder.
 and build it using Xcode.
 
-If you are facing any difficulty in implementing procedures above, please report an issue or directly email me at nicolsondsouza@gmail.com.
+If you are facing any difficulty in implementing procedures above, please report an issue or directly email me at trinisofttechnologies@gmail.com.
 
 ### Acknowledgements 
 
