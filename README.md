@@ -119,3 +119,8 @@ If you are facing any difficulty in implementing procedures above, please report
 This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr).<br>
 It's now maintained by Trinisoft Technologies (trinisofttechnologies@gmail.com).
 
+### Help spread the word!
+
+If you liked Countly, [why not use one of our badges](https://count.ly/brand-assets/) and give a link back to us, so others know about this wonderful platform? 
+
+![Light badge](https://count.ly/wp-content/uploads/2014/10/countly_badge_5.png)  ![Dark badge](https://count.ly/wp-content/uploads/2014/10/countly_badge_6.png)
