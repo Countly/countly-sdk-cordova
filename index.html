@@ -19,20 +19,31 @@
 -->
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+        <style type="text/css">
+            button{
+              margin-top: 10px !important;
+            }
+        </style>
+        <title>Countly Cordova Demo App</title>
     </head>
     <body>
         <div class="app">
-            <h1>Countly Cordova Demo</h1>
-            <input type="button" value="start" onclick="app.start()"/>
-            <input type="button" value="stop" onclick="app.stop()"/>
-            <input type="button" value="send event" onclick="app.event()"/>
+            <h1>Countly Cordova Demo App</h1>
+            <img class="ui centered medium image" src="./img/logo.png">
+            <button onclick="app.start()" class="fluid ui green button">Start</button>
+            <button onclick="app.stop()" class="fluid ui red button">Stop</button>
+            
+            <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
+            <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
+            <button onclick="app.eventWithSegment()" class="fluid ui button">Event with Segment</button>
+            <button onclick="app.eventWithSum_Segment()" class="fluid ui button">Even with Sum and Segment</button>
+            
+            <button onclick="app.event()" class="fluid ui black button">All Events</button>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="Countly.js"></script>
@@ -49,7 +60,7 @@
                 Countly.init("http://128.199.55.79","46e1fd647e01f89e77e53007ab0e9aa59aa9d11f"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
                                     //replace your server ip/url // replace it with your "App Key"
                 // app.onRegistrationId();
-                app.test();
+                // app.test();
                 // alert("deviceready");
             },false);
             app.test = function(){
@@ -70,19 +81,28 @@
             }
 
             app.sendSampleEvent = function(){
+                app.basicEvent();
+                app.eventWithSum();
+                app.eventWithSegment();
+                app.eventWithSum_Segment();
+            }
+            app.basicEvent = function(){
                 // example for basic event
                 var events = {"eventName":"basic_event","eventCount":1};
                 Countly.sendEvent(events);
-                
+            }
+            app.eventWithSum = function(){
                 // example for event with sum
                 var events = {"eventName":"event_sum","eventCount":1,"eventSum":"0.99"};
                 Countly.sendEvent(events);
-
+            }
+            app.eventWithSegment = function(){
                 // example for event with segment
                 var events = {"eventName":"event_segment","eventCount":1};
                 events.segments = {"Country" : "Turkey", "Age" : "28"};
                 Countly.sendEvent(events);
-
+            }
+            app.eventWithSum_Segment = function(){
                 // example for event with segment and sum
                 var events = {"eventName":"event_segment_sum","eventCount":1,"eventSum":"0.99"};
                 events.segments = {"Country" : "Turkey", "Age" : "28"};
