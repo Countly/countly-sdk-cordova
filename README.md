@@ -1,4 +1,6 @@
 
+**Note:** Are you looking for Countly SDK for web pages? [Check this SDK instead](https://github.com/countly/countly-sdk-web)
+
 ## Phonegap and Cordova SDK for Countly
 
 [Countly](http://count.ly) is an innovative, real-time, open source mobile analytics and push notifications platform. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.
