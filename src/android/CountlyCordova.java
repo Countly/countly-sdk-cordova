@@ -25,7 +25,7 @@ public class CountlyCordova extends CordovaPlugin {
 			
 			String serverUrl = args.getString(0);
 			String appKey = args.getString(1);
-			serverUrl = serverUrl.replace("https://", "http://");
+			//serverUrl = serverUrl.replace("https://", "http://");
 			Countly.sharedInstance()
 				.init(context, serverUrl, appKey,null,DeviceId.Type.OPEN_UDID);
 			Countly.sharedInstance().onStart();
