@@ -7,10 +7,6 @@
 
 #import "CountlyDB.h"
 
-#if __has_feature(objc_arc)
-#error  This is a non-ARC class. Please add -fno-objc-arc flag for Countly.m, Countly_OpenUDID.m and CountlyDB.m under Build Phases > Compile Sources
-#endif
-
 #ifndef COUNTLY_DEBUG
 #define COUNTLY_DEBUG 0
 #endif
@@ -21,8 +17,31 @@
 #   define COUNTLY_LOG(...)
 #endif
 
+//#   define COUNTLY_APP_GROUP_ID @"group.example.myapp"
+#if COUNTLY_TARGET_WATCHKIT
+#   ifndef COUNTLY_APP_GROUP_ID
+#       error "Application Group Identifier not specified! Please uncomment the line above and specify it."
+#   endif
+#import <WatchKit/WatchKit.h>
+#endif
+
+/*
+Countly iOS SDK WatchKit Support
+================================
+To use Countly iOS SDK in WatchKit apps:
+1) While adding Countly iOS SDK files to the project, make sure you select WatchKit Extension target too.
+   (Or add them manually to WatchKit Extension target's Build Settings > Compile Sources section)
+2) Add "-DCOUNTLY_TARGET_WATCHKIT=1" flag to "Other C Flags" under WatchKit Extension target's Build Settings
+3) For both WatchKit Extension target and Container App target enable App Groups under Capabilities section. 
+   ( For details: http://is.gd/ConfiguringAppGroups )
+4) Uncomment COUNTLY_APP_GROUP_ID line and specify Application Group Identifier there
+5) Inside awakeWithContext:(id)context method of your watch app's main entry point (InterfaceController.m by default), start Countly as usual
+    [[Countly sharedInstance] start:@"YOUR_APP_KEY" withHost:@"https://YOUR_API_HOST.com"];
+6) That's it. You should see a new session on your Dashboard, when you run WatchKit Extension target. 
+   And you can record custom events as usual. 
+*/
+
 @interface CountlyDB()
-- (NSURL *)applicationDocumentsDirectory;
 @end
 
 @implementation CountlyDB
@@ -61,6 +80,19 @@
     NSManagedObjectContext *context = [self managedObjectContext];
     NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Data" inManagedObjectContext:context];
     
+#ifdef COUNTLY_TARGET_WATCHKIT
+    NSString* watchSegmentationKey = @"[CLY]_apple_watch";
+    NSString* watchModel = (WKInterfaceDevice.currentDevice.screenBounds.size.width == 136.0)?@"38mm":@"42mm";
+    NSString* segmentation = [NSString stringWithFormat:@"{\"%@\":\"%@\"}", watchSegmentationKey, watchModel];
+    NSString* escapedSegmentation = (NSString*)CFBridgingRelease(
+    CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                            (CFStringRef)segmentation,
+                                            NULL,
+                                            (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                            kCFStringEncodingUTF8));
+    postData = [postData stringByAppendingFormat:@"&segment=%@", escapedSegmentation];
+#endif
+
     [newManagedObject setValue:postData forKey:@"post"];
     
     [self saveContext];
@@ -75,7 +107,7 @@
 
 -(NSArray*) getEvents
 {
-    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest *fetchRequest = [NSFetchRequest new];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:[self managedObjectContext]];
     [fetchRequest setEntity:entity];
     
@@ -92,7 +124,7 @@
 
 -(NSArray*) getQueue
 {
-    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest *fetchRequest = [NSFetchRequest new];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Data" inManagedObjectContext:[self managedObjectContext]];
     [fetchRequest setEntity:entity];
     
@@ -109,7 +141,7 @@
 
 -(NSUInteger)getEventCount
 {
-    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest *fetchRequest = [NSFetchRequest new];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:[self managedObjectContext]];
     [fetchRequest setEntity:entity];
     
@@ -126,7 +158,7 @@
 
 -(NSUInteger)getQueueCount
 {
-    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest *fetchRequest = [NSFetchRequest new];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Data" inManagedObjectContext:[self managedObjectContext]];
     [fetchRequest setEntity:entity];
     
@@ -141,7 +173,6 @@
     return count;
 }
 
-
 - (void)saveContext
 {
     NSError *error = nil;
@@ -153,11 +184,6 @@
            COUNTLY_LOG(@"CoreData error %@, %@", error, [error userInfo]);
         }
     }
-}
-
-- (NSURL *)applicationDocumentsDirectory
-{
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 - (NSURL *)applicationSupportDirectory
@@ -181,9 +207,6 @@
 {
     static NSManagedObjectContext* s_managedObjectContext;
     
-    if (s_managedObjectContext != nil)
-        return s_managedObjectContext;
-    
     static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
         NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
@@ -201,12 +224,13 @@
 {
     static NSManagedObjectModel* s_managedObjectModel;
 
-    if (s_managedObjectModel != nil)
-        return s_managedObjectModel;
-
     static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-        NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Countly" withExtension:@"momd"];
+        NSURL *modelURL = [[NSBundle bundleForClass:[CountlyDB class]] URLForResource:@"Countly" withExtension:@"momd"];
+
+        if (modelURL == nil)
+            modelURL = [[NSBundle bundleForClass:[CountlyDB class]] URLForResource:@"Countly" withExtension:@"mom"];
+        
         s_managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     });
 
@@ -217,39 +241,24 @@
 {
     static NSPersistentStoreCoordinator* s_persistentStoreCoordinator;
     
-    if (s_persistentStoreCoordinator != nil)
-        return s_persistentStoreCoordinator;
-    
     static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
         
         s_persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
         
         NSError *error=nil;
+#ifdef COUNTLY_APP_GROUP_ID
+        NSURL *storeURL = [[NSFileManager.defaultManager containerURLForSecurityApplicationGroupIdentifier:COUNTLY_APP_GROUP_ID] URLByAppendingPathComponent:@"Countly.sqlite"];
+#else
         NSURL *storeURL = [[self applicationSupportDirectory] URLByAppendingPathComponent:@"Countly.sqlite"];
-        NSURL *oldStoreURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Countly.sqlite"];
-        
-        if([NSFileManager.defaultManager fileExistsAtPath:oldStoreURL.path])
-        {
-            NSPersistentStore* oldStore = [s_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldStoreURL options:nil error:&error];
-            if(error) COUNTLY_LOG(@"Old store opening error %@",error);
-
-            [s_persistentStoreCoordinator migratePersistentStore:oldStore toURL:storeURL options:nil withType:NSSQLiteStoreType error:&error];
-            if(error) COUNTLY_LOG(@"Old store migrating error %@",error);
-            
-            [NSFileManager.defaultManager removeItemAtPath:oldStoreURL.path error:&error];
-            [NSFileManager.defaultManager removeItemAtPath:[oldStoreURL.path stringByAppendingString:@"-shm"] error:&error];
-            [NSFileManager.defaultManager removeItemAtPath:[oldStoreURL.path stringByAppendingString:@"-wal"] error:&error];
-            if(error) COUNTLY_LOG(@"Old store deleting error %@",error);
-        }
-        else
-        {
-            [s_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
-            if(error) COUNTLY_LOG(@"Store opening error %@", error);
-        }
+#endif        
+        [s_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
+        if(error)
+            COUNTLY_LOG(@"Store opening error %@", error);
         
         [storeURL setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:&error];
-        if(error) COUNTLY_LOG(@"Unable to exclude Countly persistent store from backups (%@), error: %@", storeURL.absoluteString, error);
+        if(error)
+            COUNTLY_LOG(@"Unable to exclude Countly persistent store from backups (%@), error: %@", storeURL.absoluteString, error);
     });
 
     return s_persistentStoreCoordinator;
