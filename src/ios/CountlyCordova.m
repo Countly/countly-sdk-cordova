@@ -129,10 +129,15 @@
 
 - (void)onregistrationid:(CDVInvokedUrlCommand*)command
 {
-    // NSString* token = [command.arguments objectAtIndex:0];
-    // NSString* messagingMode = [command.arguments objectAtIndex:1];
-    // int mode = [messagingMode intValue];
-    // [[CountlyConnectionQueue sharedInstance] setStartedWithTest:YES];
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    if(mode == 1){
+      // [[CountlyConnectionQueue sharedInstance] setStartedWithTest:YES];
+    }
+    [Countly.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:tokenByte];
+    
     // [[CountlyConnectionQueue sharedInstance] tokenSession:token];
     
     CDVPluginResult* pluginResult = nil;
