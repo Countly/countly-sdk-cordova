@@ -129,11 +129,11 @@
 
 - (void)onregistrationid:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
+    // NSString* token = [command.arguments objectAtIndex:0];
+    // NSString* messagingMode = [command.arguments objectAtIndex:1];
+    // int mode = [messagingMode intValue];
     
-    [[Countly sharedInstance] onRegistrationId:token withMode:mode];
+    // [[Countly sharedInstance] onRegistrationId:token withMode:mode];
     
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];
