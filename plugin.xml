@@ -44,11 +44,12 @@
     <source-file src="src/ios/sdk/CountlyDB.m" compiler-flags="-fno-objc-arc" />
     <header-file src="src/ios/sdk/Countly_OpenUDID.h"/>
     <source-file src="src/ios/sdk/Countly_OpenUDID.m" compiler-flags="-fno-objc-arc" />
-    
+    <source-file src="src/ios/sdk/Countly.xcdatamodeld" custom="true"/>
+
     <header-file src="src/ios/CountlyCordova.h"/>
     <source-file src="src/ios/CountlyCordova.m"/>
 
-    <framework src="src/ios/sdk/Countly.xcdatamodeld"/>
+    <!-- <framework src="src/ios/sdk/Countly.xcdatamodeld"/> -->
 
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="CoreData.framework" weak="true" />
