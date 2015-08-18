@@ -52,7 +52,7 @@
 
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="CoreData.framework" weak="true" />
-    <framework src="OpenGELS.framework" weak="true" />
+    <framework src="OpenGLES.framework" weak="true" />
   </platform>
 
   <!-- android -->
