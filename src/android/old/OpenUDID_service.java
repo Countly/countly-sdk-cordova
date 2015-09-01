@@ -1,4 +1,4 @@
-package org.openudid;
+package org.OpenUDID;
 
 import android.app.Service;
 import android.content.Context;

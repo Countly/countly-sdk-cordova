@@ -1,4 +1,4 @@
-package ly.count.android.sdk;
+package ly.count.android.api;
 
 import android.content.Context;
 import android.util.Log;
@@ -61,7 +61,7 @@ public class DeviceId {
     public void init(Context context, CountlyStore store, boolean raiseExceptions) {
         Type overriddenType = retrieveOverriddenType(store);
 
-        // Some time ago some ID generation strategy was not available and SDK fell back to
+        // Some time ago some ID generation strategy was not available and SDK falled back to
         // some other strategy. We still have to use that strategy.
         if (overriddenType != null && overriddenType != type) {
             if (Countly.sharedInstance().isLoggingEnabled()) {

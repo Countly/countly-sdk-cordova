@@ -19,18 +19,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package ly.count.android.sdk;
+package ly.count.android.api;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 
 /**
  * ConnectionQueue queues session and event data and periodically sends that data to
@@ -50,7 +49,6 @@ public class ConnectionQueue {
     private String serverURL_;
     private Future<?> connectionProcessorFuture_;
     private DeviceId deviceId_;
-    private SSLContext sslContext_;
 
     // Getters are for unit testing
     String getAppKey() {
@@ -75,18 +73,6 @@ public class ConnectionQueue {
 
     void setServerURL(final String serverURL) {
         serverURL_ = serverURL;
-
-        if (Countly.publicKeyPinCertificates == null) {
-            sslContext_ = null;
-        } else {
-            try {
-                TrustManager tm[] = { new CertificateTrustManager(Countly.publicKeyPinCertificates) };
-                sslContext_ = SSLContext.getInstance("TLS");
-                sslContext_.init(null, tm, null);
-            } catch (Throwable e) {
-                throw new IllegalStateException(e);
-            }
-        }
     }
 
     CountlyStore getCountlyStore() {
@@ -105,7 +91,7 @@ public class ConnectionQueue {
 
     /**
      * Checks internal state and throws IllegalStateException if state is invalid to begin use.
-     * @throws IllegalStateException if context, app key, store, or server URL have not been set
+     * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
      */
     void checkInternalState() {
         if (context_ == null) {
@@ -120,14 +106,11 @@ public class ConnectionQueue {
         if (serverURL_ == null || !Countly.isValidURL(serverURL_)) {
             throw new IllegalStateException("server URL is not valid");
         }
-        if (Countly.publicKeyPinCertificates != null && !serverURL_.startsWith("https")) {
-            throw new IllegalStateException("server must start with https once you specified public keys");
-        }
     }
 
     /**
      * Records a session start event for the app and sends it to the server.
-     * @throws IllegalStateException if context, app key, store, or server URL have not been set
+     * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
      */
     void beginSession() {
         checkInternalState();
@@ -135,7 +118,8 @@ public class ConnectionQueue {
                           + "&timestamp=" + Countly.currentTimestamp()
                           + "&sdk_version=" + Countly.COUNTLY_SDK_VERSION_STRING
                           + "&begin_session=1"
-                          + "&metrics=" + DeviceInfo.getMetrics(context_);
+                          + "&metrics=" + DeviceInfo.getMetrics(context_)
+                  + UserData.getDataForRequest();
 
         store_.addConnection(data);
 
@@ -146,7 +130,7 @@ public class ConnectionQueue {
      * Records a session duration event for the app and sends it to the server. This method does nothing
      * if passed a negative or zero duration.
      * @param duration duration in seconds to extend the current app session, should be more than zero
-     * @throws IllegalStateException if context, app key, store, or server URL have not been set
+     * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
      */
     void updateSession(final int duration) {
         checkInternalState();
@@ -154,7 +138,7 @@ public class ConnectionQueue {
             final String data = "app_key=" + appKey_
                               + "&timestamp=" + Countly.currentTimestamp()
                               + "&session_duration=" + duration
-                              + "&location=" + getCountlyStore().getAndRemoveLocation();
+                              + UserData.getDataForRequest();
 
             store_.addConnection(data);
 
@@ -187,7 +171,7 @@ public class ConnectionQueue {
      * Records a session end event for the app and sends it to the server. Duration is only included in
      * the session end event if it is more than zero.
      * @param duration duration in seconds to extend the current app session
-     * @throws IllegalStateException if context, app key, store, or server URL have not been set
+     * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
      */
     void endSession(final int duration) {
         checkInternalState();
@@ -197,58 +181,7 @@ public class ConnectionQueue {
         if (duration > 0) {
             data += "&session_duration=" + duration;
         }
-
-        store_.addConnection(data);
-
-        tick();
-    }
-
-    /**
-     * Send user data to the server.
-     * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
-     */
-    void sendUserData() {
-        checkInternalState();
-        String userdata = UserData.getDataForRequest();
-
-        if(!userdata.equals("")){
-            String data = "app_key=" + appKey_
-                    + "&timestamp=" + Countly.currentTimestamp()
-                    + userdata;
-            store_.addConnection(data);
-
-            tick();
-        }
-    }
-
-    /**
-     * Attribute installation to Countly server.
-     * @param referrer query parameters
-     * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
-     */
-    void sendReferrerData(String referrer) {
-        checkInternalState();
-
-        if(referrer != null){
-            String data = "app_key=" + appKey_
-                    + "&timestamp=" + Countly.currentTimestamp()
-                    + referrer;
-            store_.addConnection(data);
-
-            tick();
-        }
-    }
-
-    /**
-     * Reports a crash with device data to the server.
-     * @throws IllegalStateException if context, app key, store, or server URL have not been set
-     */
-    void sendCrashReport(String error, boolean nonfatal) {
-        checkInternalState();
-        final String data = "app_key=" + appKey_
-                + "&timestamp=" + Countly.currentTimestamp()
-                + "&sdk_version=" + Countly.COUNTLY_SDK_VERSION_STRING
-                + "&crash=" + CrashDetails.getCrashData(context_, error, nonfatal);
+        data += UserData.getDataForRequest();
 
         store_.addConnection(data);
 
@@ -258,25 +191,9 @@ public class ConnectionQueue {
     /**
      * Records the specified events and sends them to the server.
      * @param events URL-encoded JSON string of event data
-     * @throws IllegalStateException if context, app key, store, or server URL have not been set
+     * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
      */
     void recordEvents(final String events) {
-        checkInternalState();
-        final String data = "app_key=" + appKey_
-                          + "&timestamp=" + Countly.currentTimestamp()
-                          + "&events=" + events;
-
-        store_.addConnection(data);
-
-        tick();
-    }
-
-    /**
-     * Records the specified events and sends them to the server.
-     * @param events URL-encoded JSON string of event data
-     * @throws IllegalStateException if context, app key, store, or server URL have not been set
-     */
-    void recordLocation(final String events) {
         checkInternalState();
         final String data = "app_key=" + appKey_
                           + "&timestamp=" + Countly.currentTimestamp()
@@ -305,7 +222,7 @@ public class ConnectionQueue {
     void tick() {
         if (!store_.isEmptyConnections() && (connectionProcessorFuture_ == null || connectionProcessorFuture_.isDone())) {
             ensureExecutor();
-            connectionProcessorFuture_ = executor_.submit(new ConnectionProcessor(serverURL_, store_, deviceId_, sslContext_));
+            connectionProcessorFuture_ = executor_.submit(new ConnectionProcessor(serverURL_, store_, deviceId_));
         }
     }
 

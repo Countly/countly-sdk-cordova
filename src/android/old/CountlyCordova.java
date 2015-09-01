@@ -1,4 +1,4 @@
-package ly.count.android.sdk;
+package ly.count.android.api;
 
 import java.util.HashMap;
 
@@ -15,14 +15,14 @@ import android.os.Bundle;
 //import android.telephony.TelephonyManager;
 import android.util.Log;
 //import android.widget.Toast;
-import ly.count.android.sdk.Countly;
+import ly.count.android.api.Countly;
 
 public class CountlyCordova extends CordovaPlugin {
-
+	
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		Context context = this.cordova.getActivity().getApplicationContext();
 		if ("init".equals(action)) {
-
+			
 			String serverUrl = args.getString(0);
 			String appKey = args.getString(1);
 			//serverUrl = serverUrl.replace("https://", "http://");
@@ -90,7 +90,7 @@ public class CountlyCordova extends CordovaPlugin {
 				callbackContext.success("event sent");
 				//Log.e("Nicolson","at none of the case sent");
 			}
-
+			
 			//Log.e("Nicolson","at event " +eventName +" " +eventCount);
 			return true;
         }
@@ -111,7 +111,7 @@ public class CountlyCordova extends CordovaPlugin {
 			bundle.putString("picturePath", args.getString(6));
 			bundle.putString("gender", args.getString(7));
 			bundle.putInt("byear", args.getInt(8));
-			// Countly.sharedInstance().setUserData(bundle);
+			Countly.sharedInstance().setUserData(bundle);
 			callbackContext.success("setuserdata success");
 			Log.e("Nicolson","setuserdata ");
 			return true;
@@ -125,7 +125,7 @@ public class CountlyCordova extends CordovaPlugin {
 			}
 			else
 				mode = Countly.CountlyMessagingMode.PRODUCTION;
-			// Countly.sharedInstance().onRegistrationId(registrationId,mode);
+			Countly.sharedInstance().onRegistrationId(registrationId,mode);
 			callbackContext.success("onRegistrationId success");
 			Log.e("Nicolson","onRegistrationId ");
 			return true;

@@ -1,4 +1,4 @@
-package ly.count.android.sdk;
+package ly.count.android.api;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class OpenUDIDAdapter {
-    private final static String OPEN_UDID_MANAGER_CLASS_NAME = "org.openudid.OpenUDID_manager";
+    private final static String OPEN_UDID_MANAGER_CLASS_NAME = "org.OpenUDID.OpenUDID_manager";
 
     public static boolean isOpenUDIDAvailable() {
         boolean openUDIDAvailable = false;

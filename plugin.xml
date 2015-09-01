@@ -61,7 +61,7 @@
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="CountlyCordova">
-        <param name="android-package" value="ly.count.android.api.CountlyCordova" />
+        <param name="android-package" value="ly.count.android.sdk.CountlyCordova" />
       </feature>
     </config-file>
 
@@ -71,7 +71,7 @@
         <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
         <uses-permission android:name="android.permission.WAKE_LOCK"/>
     </config-file>
-    
+
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
 
@@ -81,23 +81,28 @@
             </intent-filter>
         </service>
     </config-file>
-    
-    <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/Countly.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/AdvertisingIdAdapter.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/ConnectionProcessor.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/ConnectionQueue.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/CountlyStore.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/DeviceId.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/DeviceInfo.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/Event.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/EventQueue.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/OpenUDIDAdapter.java" target-dir="src/ly/count/android/api"/>
-    <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/api"/>
+
+    <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/sdk"/>
+
+    <source-file src="src/android/AdvertisingIdAdapter.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/CertificateTrustManager.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/ConnectionProcessor.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/ConnectionQueue.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/Countly.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/CountlyStore.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/CrashDetails.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/DeviceId.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/DeviceInfo.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/Event.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/EventQueue.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/MessagingAdapter.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/OpenUDIDAdapter.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/ReferrerReceiver.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
 
 
-    <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/OpenUDID/"/>
-    <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/OpenUDID/"/>
+    <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
+    <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/>
   </platform>
 
   <!-- wp8 -->

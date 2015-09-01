@@ -1,5 +1,6 @@
-package ly.count.android.sdk;
+package ly.count.android.api;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;

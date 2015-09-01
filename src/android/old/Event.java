@@ -19,10 +19,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package ly.count.android.sdk;
+package ly.count.android.api;
 
 import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,7 +83,7 @@ class Event {
      * @param json JSON object to extract event data from
      * @return Event object built from the data in the JSON or null if the "key" value is not
      *         present or the empty string, or if a JSON exception occurs
-     * @throws NullPointerException if JSONObject is null
+     * @throws java.lang.NullPointerException if JSONObject is null
      */
     static Event fromJSON(final JSONObject json) {
         Event event = new Event();

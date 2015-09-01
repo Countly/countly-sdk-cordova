@@ -19,15 +19,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package ly.count.android.sdk;
+package ly.count.android.api;
 
 import android.os.Build;
 import android.util.Log;
-
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,12 +37,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-
 /**
  * ConnectionProcessor is a Runnable that is executed on a background
- * thread to submit session &amp; event data to a Count.ly server.
+ * thread to submit session & event data to a Count.ly server.
  *
  * NOTE: This class is only public to facilitate unit testing, because
  *       of this bug in dexmaker: https://code.google.com/p/dexmaker/issues/detail?id=34
@@ -56,13 +51,11 @@ public class ConnectionProcessor implements Runnable {
     private final CountlyStore store_;
     private final DeviceId deviceId_;
     private final String serverURL_;
-    private final SSLContext sslContext_;
 
-    ConnectionProcessor(final String serverURL, final CountlyStore store, final DeviceId deviceId, final SSLContext sslContext) {
+    ConnectionProcessor(final String serverURL, final CountlyStore store, final DeviceId deviceId) {
         serverURL_ = serverURL;
         store_ = store;
         deviceId_ = deviceId;
-        sslContext_ = sslContext;
 
         // HTTP connection reuse which was buggy pre-froyo
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
@@ -71,18 +64,9 @@ public class ConnectionProcessor implements Runnable {
     }
 
     URLConnection urlConnectionForEventData(final String eventData) throws IOException {
-        String urlStr = serverURL_ + "/i?";
-        if(!eventData.contains("&crash="))
-            urlStr += eventData;
+        final String urlStr = serverURL_ + "/i?" + eventData;
         final URL url = new URL(urlStr);
-        final HttpURLConnection conn;
-        if (Countly.publicKeyPinCertificates == null) {
-            conn = (HttpURLConnection)url.openConnection();
-        } else {
-            HttpsURLConnection c = (HttpsURLConnection)url.openConnection();
-            c.setSSLSocketFactory(sslContext_.getSocketFactory());
-            conn = c;
-        }
+        final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setConnectTimeout(CONNECT_TIMEOUT_IN_MILLISECONDS);
         conn.setReadTimeout(READ_TIMEOUT_IN_MILLISECONDS);
         conn.setUseCaches(false);
@@ -123,19 +107,6 @@ public class ConnectionProcessor implements Runnable {
 
             // End of multipart/form-data.
             writer.append("--" + boundary + "--").append(CRLF).flush();
-        }
-        else if(eventData.contains("&crash=")){
-            if (Countly.sharedInstance().isLoggingEnabled()) {
-                Log.d(Countly.TAG, "Using post because of crash");
-            }
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(eventData);
-            writer.flush();
-            writer.close();
-            os.close();
         }
         else{
         	conn.setDoOutput(false);
