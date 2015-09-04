@@ -34,7 +34,7 @@ public final class CertificateTrustManager implements X509TrustManager {
             throw new IllegalArgumentException("You must specify non-empty keys list");
         }
 
-        this.keys = new ArrayList<>();
+        this.keys = new ArrayList<byte[]>();
         for (String key : certificates) {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             Certificate cert = cf.generateCertificate(new ByteArrayInputStream(Base64.decode(key, Base64.DEFAULT)));

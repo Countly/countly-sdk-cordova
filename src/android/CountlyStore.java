@@ -90,7 +90,7 @@ public class CountlyStore {
      */
     public List<Event> eventsList() {
         final String[] array = events();
-        final List<Event> events = new ArrayList<>(array.length);
+        final List<Event> events = new ArrayList<Event>(array.length);
         for (String s : array) {
             try {
                 final Event event = Event.fromJSON(new JSONObject(s));
@@ -125,7 +125,7 @@ public class CountlyStore {
      */
     public synchronized void addConnection(final String str) {
         if (str != null && str.length() > 0) {
-            final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
+            final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
             connections.add(str);
             preferences_.edit().putString(CONNECTIONS_PREFERENCE, join(connections, DELIMITER)).commit();
         }
@@ -138,7 +138,7 @@ public class CountlyStore {
      */
     public synchronized void removeConnection(final String str) {
         if (str != null && str.length() > 0) {
-            final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
+            final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
             if (connections.remove(str)) {
                 preferences_.edit().putString(CONNECTIONS_PREFERENCE, join(connections, DELIMITER)).commit();
             }
@@ -214,7 +214,7 @@ public class CountlyStore {
      * @param delimiter delimiter to use, should not be something that can be found in URL-encoded JSON string
      */
     static String joinEvents(final Collection<Event> collection, final String delimiter) {
-        final List<String> strings = new ArrayList<>();
+        final List<String> strings = new ArrayList<String>();
         for (Event e : collection) {
             strings.add(e.toJSON().toString());
         }

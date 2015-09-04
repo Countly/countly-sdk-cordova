@@ -75,9 +75,9 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
 
-        <service android:name="org.OpenUDID.OpenUDID_service">
+        <service android:name="org.openudid.OpenUDID_service">
             <intent-filter>
-                <action android:name="org.OpenUDID.GETUDID" />
+                <action android:name="org.openudid.GETUDID" />
             </intent-filter>
         </service>
     </config-file>
@@ -103,6 +103,8 @@
 
     <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
     <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/>
+
+
   </platform>
 
   <!-- wp8 -->

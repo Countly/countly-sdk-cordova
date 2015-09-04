@@ -1,0 +1,16 @@
+this.keys = new ArrayList<>();
+this.keys = new ArrayList<byte[]>();
+
+final List<Event> events = new ArrayList<>(array.length);
+final List<Event> events = new ArrayList<Event>(array.length);
+
+final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
+            connections.add(str);
+final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
+            connections.add(str);
+
+final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
+final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
+
+final List<String> strings = new ArrayList<>();
+final List<String> strings = new ArrayList<String>();
