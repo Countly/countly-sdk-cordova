@@ -72,9 +72,8 @@
                 app.sendSampleEvent();
             }
             app.event = function(){
-                var events = {"eventName":"android_test","eventCount":1};
                 setInterval(function(){
-                    Countly.sendEvent(events);
+                    app.sendSampleEvent();
                 },1000);
             }
             app.start = function(){
