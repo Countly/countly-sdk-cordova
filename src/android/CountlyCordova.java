@@ -85,7 +85,6 @@ public class CountlyCordova extends CordovaPlugin {
 		else if ("setloggingenabled".equals(action)) {
 			Countly.sharedInstance().setLoggingEnabled(true);
 			callbackContext.success("setloggingenabled success!");
-			Log.e("Nicolson","setloggingenabled ");
 			return true;
         }
 		else if ("setuserdata".equals(action)) {
@@ -114,7 +113,6 @@ public class CountlyCordova extends CordovaPlugin {
 			Countly.sharedInstance().setUserData(bundle);
 			// Countly.sharedInstance().setUserData(bundle);
 			callbackContext.success("setuserdata success");
-			Log.e("Nicolson","setuserdata ");
 			return true;
         }
 		else if("onregistrationid".equals(action)){
@@ -129,8 +127,8 @@ public class CountlyCordova extends CordovaPlugin {
 				mode = Countly.CountlyMessagingMode.PRODUCTION;
 			// Countly.sharedInstance().onRegistrationId(registrationId,mode);
 			// Countly.sharedInstance().initMessaging(cordova.getActivity(), context.getClass(), "PROJECT_NUMBER", Countly.CountlyMessagingMode.TEST);
-			callbackContext.success("onRegistrationId success");
-			Log.e("Nicolson","onRegistrationId ");
+			callbackContext.success("initMessaging success");
+			// Log.e("Nicolson","initMessaging ");
 			return true;
 		}
 		else{
