@@ -34,12 +34,12 @@ public class CountlyCordova extends CordovaPlugin {
 			Countly.sharedInstance().onStart();
             callbackContext.success("started!");
             return true;
-        }
+    }
 		else if ("stop".equals(action)) {
 			Countly.sharedInstance().onStop();
             callbackContext.success("stoped!");
             return true;
-        }
+    }
 		else if ("event".equals(action)) {
 			String eventType = args.getString(0);
 			if("event".equals(eventType)){
@@ -81,12 +81,12 @@ public class CountlyCordova extends CordovaPlugin {
 				callbackContext.success("event sent");
 			}
 			return true;
-        }
+    }
 		else if ("setloggingenabled".equals(action)) {
 			Countly.sharedInstance().setLoggingEnabled(true);
 			callbackContext.success("setloggingenabled success!");
 			return true;
-        }
+    }
 		else if ("setuserdata".equals(action)) {
 			// Bundle bundle = new Bundle();
 
@@ -114,26 +114,28 @@ public class CountlyCordova extends CordovaPlugin {
 			// Countly.sharedInstance().setUserData(bundle);
 			callbackContext.success("setuserdata success");
 			return true;
-        }
+    }
 		else if("onregistrationid".equals(action)){
 			// This is still in development
-			String registrationId = args.getString(0);
+			// String registrationId = args.getString(0);
 			int messagingMode = Integer.parseInt(args.getString(1));
 			Countly.CountlyMessagingMode mode = null;
 			if(messagingMode == 0){
 				mode = Countly.CountlyMessagingMode.TEST;
 			}
-			else
+			else{
 				mode = Countly.CountlyMessagingMode.PRODUCTION;
+			}
+			String projectId = args.getString(2);
 			// Countly.sharedInstance().onRegistrationId(registrationId,mode);
-			// Countly.sharedInstance().initMessaging(cordova.getActivity(), context.getClass(), "PROJECT_NUMBER", Countly.CountlyMessagingMode.TEST);
+			Countly.sharedInstance().initMessaging(cordova.getActivity(), cordova.getActivity().getClass(), projectId, mode);
 			callbackContext.success("initMessaging success");
-			// Log.e("Nicolson","initMessaging ");
+			// Log.e("Nicolson", String.valueOf(Countly.CountlyMessagingMode.TEST));
 			return true;
 		}
 		else{
 			return false;
 		}
-    }
+  }
 
 }

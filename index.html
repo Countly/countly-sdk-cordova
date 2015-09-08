@@ -40,7 +40,7 @@
             <button onclick="app.stop()" class="fluid ui red button">Stop</button>
 
             <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
-            <button onclick="app.initMessaging()" class="fluid ui button teal">Push Message</button>
+            <button onclick="app.onRegistrationId()" class="fluid ui button teal">Push Message</button>
 
             <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
             <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
@@ -139,6 +139,13 @@
                     "messageMode": Countly.messagingMode.TEST,
                     "projectId": "881000050249"
                 });
+
+                // Tesint purpose only
+                Countly.onRegistrationId({
+                    "registrationId":"abcdefg",
+                    "mode":Countly.messagingMode.TEST,
+                    "projectId": "881000050249"
+                })
             }
         </script>
     </body>

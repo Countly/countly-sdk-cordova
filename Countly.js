@@ -13,7 +13,13 @@ Countly.init = function(serverUrl,appKey){
 Countly.initMessaging = function(options){
     Countly.projectId = options.projectId;
     Countly.messageMode = options.messageMode;
-    Countly.Push.onRegisterPushNotification();
+    // Countly.Push.onRegisterPushNotification();
+
+    var args = [];
+    args.push(options.registrationId || "");
+    args.push(options.messageMode || "0");
+    args.push(options.projectId || "");
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }
 
 // countly sending various types of events
@@ -21,7 +27,7 @@ Countly.sendEvent = function(options){
     var args = [];
     var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
     var segments = {};
-    
+
     if(options.eventSum)
         eventType = "eventWithSum";
     if(options.segments)
@@ -71,8 +77,8 @@ Countly.setUserData = function(options){
 Countly.onRegistrationId = function(options){
     var args = [];
     args.push(options.registrationId || "");
-    args.push(options.mode.toString() || "0");
-    // alert(args.toString())
+    args.push(Countly.messageMode || "0");
+    args.push(options.projectId || "");
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }
 // countly start for android
@@ -100,7 +106,7 @@ Countly.onError = function(error){
      // alert(error);
 }
 Countly.demo = function(){
-    
+
 }
 
 /////////////////////////
@@ -156,11 +162,11 @@ push.onNotificationGCM = function(e){
         break;
 
         case 'message':
-            
+
         break;
 
         case 'error':
-          
+
         break;
 
         default:
