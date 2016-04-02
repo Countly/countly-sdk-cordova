@@ -23,14 +23,20 @@ package ly.count.android.sdk;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -45,7 +51,7 @@ public class Countly {
     /**
      * Current version of the Count.ly Android SDK as a displayable string.
      */
-    public static final String COUNTLY_SDK_VERSION_STRING = "15.06";
+    public static final String COUNTLY_SDK_VERSION_STRING = "16.02.01";
     /**
      * Default string used in the begin session metrics if the
      * app version cannot be found.
@@ -88,13 +94,21 @@ public class Countly {
     @SuppressWarnings("FieldCanBeLocal")
     private ScheduledExecutorService timerService_;
     private EventQueue eventQueue_;
-    private DeviceId deviceId_Manager_;
     private long prevSessionDurationStartTime_;
     private int activityCount_;
     private boolean disableUpdateSessionRequests_;
     private boolean enableLogging_;
     private Countly.CountlyMessagingMode messagingMode_;
     private Context context_;
+
+    //user data access
+    public static UserData userData;
+
+    //track views
+    private String lastView = null;
+    private int lastViewStart = 0;
+    private boolean firstView = true;
+    private boolean autoViewTracker = false;
 
     /**
      * Returns the Countly singleton.
@@ -109,6 +123,7 @@ public class Countly {
      */
     Countly() {
         connectionQueue_ = new ConnectionQueue();
+        Countly.userData = new UserData(connectionQueue_);
         timerService_ = Executors.newSingleThreadScheduledExecutor();
         timerService_.scheduleWithFixedDelay(new Runnable() {
             @Override
@@ -261,11 +276,11 @@ public class Countly {
         if (mode != null && !MessagingAdapter.isMessagingAvailable()) {
             throw new IllegalStateException("you need to include countly-messaging-sdk-android library instead of countly-sdk-android if you want to use Countly Messaging");
         } else {
+            messagingMode_ = mode;
             if (!MessagingAdapter.init(activity, activityClass, projectID, buttonNames)) {
                 throw new IllegalStateException("couldn't initialize Countly Messaging");
             }
         }
-        messagingMode_ = mode;
 
         if (MessagingAdapter.isMessagingAvailable()) {
             MessagingAdapter.storeConfiguration(connectionQueue_.getContext(), connectionQueue_.getServerURL(), connectionQueue_.getAppKey(), connectionQueue_.getDeviceId().getId(), connectionQueue_.getDeviceId().getType());
@@ -302,7 +317,8 @@ public class Countly {
      * session tracking.
      * @throws IllegalStateException if Countly SDK has not been initialized
      */
-    public synchronized void onStart() {
+    public synchronized void onStart(Activity activity) {
+        appLaunchDeepLink = false;
         if (eventQueue_ == null) {
             throw new IllegalStateException("init must be called before onStart");
         }
@@ -323,6 +339,10 @@ public class Countly {
         }
 
         CrashDetails.inForeground();
+
+        if(autoViewTracker){
+            recordView(activity.getClass().getName());
+        }
     }
 
     /**
@@ -356,6 +376,9 @@ public class Countly {
         }
 
         CrashDetails.inBackground();
+
+        //report current view duration
+        reportViewDuration();
     }
 
     /**
@@ -459,6 +482,45 @@ public class Countly {
     }
 
     /**
+     * Enable or disable automatic view tracking
+     * @param enable boolean for the state of automatic view tracking
+     */
+    public synchronized Countly setViewTracking(boolean enable){
+        autoViewTracker = enable;
+        return this;
+    }
+
+    /**
+     * Check state of automatic view tracking
+     * @return boolean - true if enabled, false if disabled
+     */
+    public synchronized boolean isViewTrackingEnabled(){
+        return autoViewTracker;
+    }
+
+    /**
+     *  Record a view manualy, without automatic tracking
+     * or track view that is not automatically tracked
+     * like fragment, Message box or transparent Activity
+     * @param viewName String - name of the view
+     */
+    public synchronized Countly recordView(String viewName){
+        reportViewDuration();
+        lastView = viewName;
+        lastViewStart = Countly.currentTimestamp();
+        HashMap<String, String> segments = new HashMap<String, String>();
+        segments.put("name", viewName);
+        segments.put("visit", "1");
+        segments.put("segment", "Android");
+        if(firstView) {
+            firstView = false;
+            segments.put("start", "1");
+        }
+        recordEvent("[CLY]_view", segments, 1);
+        return this;
+    }
+
+    /**
      * Sets information about user. Possible keys are:
      * <ul>
      * <li>
@@ -490,6 +552,7 @@ public class Countly {
      * </li>
      * </ul>
      * @param data Map&lt;String, String&gt; with user data
+     * @deprecated use {@link #Countly().sharedInstance().userData.setUserData(Map<String, String>)} to set data and {@link #Countly().sharedInstance().userData.save()} to send it to server.
      */
     public synchronized Countly setUserData(Map<String, String> data) {
         return setUserData(data, null);
@@ -530,12 +593,14 @@ public class Countly {
      * </ul>
      * @param data Map&lt;String, String&gt; with user data
      * @param customdata Map&lt;String, String&gt; with custom key values for this user
+     * @deprecated use {@link #Countly().sharedInstance().userData.setUserData(Map<String, String>, Map<String, String>)} to set data and {@link #Countly().sharedInstance().userData.save()} to send it to server.
      */
     public synchronized Countly setUserData(Map<String, String> data, Map<String, String> customdata) {
         UserData.setData(data);
         if(customdata != null)
             UserData.setCustomData(customdata);
         connectionQueue_.sendUserData();
+        UserData.clear();
         return this;
     }
 
@@ -543,11 +608,13 @@ public class Countly {
      * Sets custom properties.
      * In custom properties you can provide any string key values to be stored with user
      * @param customdata Map&lt;String, String&gt; with custom key values for this user
+     * @deprecated use {@link #Countly().sharedInstance().userData.setCustomUserData(Map<String, String>)} to set data and {@link #Countly().sharedInstance().userData.save()} to send it to server.
      */
     public synchronized Countly setCustomUserData(Map<String, String> customdata) {
         if(customdata != null)
             UserData.setCustomData(customdata);
         connectionQueue_.sendUserData();
+        UserData.clear();
         return this;
     }
 
@@ -617,7 +684,7 @@ public class Countly {
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
                 e.printStackTrace(pw);
-                connectionQueue_.sendCrashReport(sw.toString(), false);
+                Countly.sharedInstance().connectionQueue_.sendCrashReport(sw.toString(), false);
 
                 //if there was another handler before
                 if(oldHandler != null){
@@ -656,6 +723,44 @@ public class Countly {
 
     public synchronized boolean isLoggingEnabled() {
         return enableLogging_;
+    }
+
+    private boolean appLaunchDeepLink = true;
+
+    public static void onCreate(Activity activity) {
+        Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName());
+
+        if (sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Activity created: " + activity.getClass().getName() + " ( main is " + launchIntent.getComponent().getClassName() + ")");
+        }
+
+        Intent intent = activity.getIntent();
+        if (intent != null) {
+            Uri data = intent.getData();
+            if (data != null) {
+                if (sharedInstance().isLoggingEnabled()) {
+                    Log.d(Countly.TAG, "Data in activity created intent: " + data + " (appLaunchDeepLink " + sharedInstance().appLaunchDeepLink + ") " );
+                }
+                if (sharedInstance().appLaunchDeepLink) {
+                    DeviceInfo.deepLink = data.toString();
+                }
+            }
+        }
+    }
+
+    /**
+     * Reports duration of last view
+     */
+    void reportViewDuration(){
+        if(lastView != null){
+            HashMap<String, String> segments = new HashMap<String, String>();
+            segments.put("name", lastView);
+            segments.put("dur", String.valueOf(Countly.currentTimestamp()-lastViewStart));
+            segments.put("segment", "Android");
+            recordEvent("[CLY]_view",segments,1);
+            lastView = null;
+            lastViewStart = 0;
+        }
     }
 
     /**
@@ -701,6 +806,33 @@ public class Countly {
     }
 
     /**
+     * Utility method to return a current hour of the day that can be used in the Count.ly API.
+     */
+    static int currentHour(){return Calendar.getInstance().get(Calendar.HOUR_OF_DAY); }
+
+    /**
+     * Utility method to return a current day of the week that can be used in the Count.ly API.
+     */
+    static int currentDayOfWeek(){
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        switch (day) {
+            case Calendar.MONDAY:
+                return 1;
+            case Calendar.TUESDAY:
+                return 2;
+            case Calendar.WEDNESDAY:
+                return 3;
+            case Calendar.THURSDAY:
+                return 4;
+            case Calendar.FRIDAY:
+                return 5;
+            case Calendar.SATURDAY:
+                return 6;
+        }
+        return 0;
+    }
+
+    /**
      * Utility method for testing validity of a URL.
      */
     static boolean isValidURL(final String urlStr) {
@@ -739,5 +871,55 @@ public class Countly {
     long getPrevSessionDurationStartTime() { return prevSessionDurationStartTime_; }
     void setPrevSessionDurationStartTime(final long prevSessionDurationStartTime) { prevSessionDurationStartTime_ = prevSessionDurationStartTime; }
     int getActivityCount() { return activityCount_; }
-    boolean getDisableUpdateSessionRequests() { return disableUpdateSessionRequests_; }
+    synchronized boolean getDisableUpdateSessionRequests() { return disableUpdateSessionRequests_; }
+
+    public void stackOverflow() {
+        this.stackOverflow();
+    }
+
+    public synchronized Countly crashTest(int crashNumber) {
+
+        if (crashNumber == 1){
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.d(Countly.TAG, "Running crashTest 1");
+            }
+
+            stackOverflow();
+
+        }else if (crashNumber == 2){
+
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.d(Countly.TAG, "Running crashTest 2");
+            }
+
+            int test = 10/0;
+
+        }else if (crashNumber == 3){
+
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.d(Countly.TAG, "Running crashTest 3");
+            }
+
+            Object[] o = null;
+            while (true) { o = new Object[] { o }; }
+
+
+        }else if (crashNumber == 4){
+
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.d(Countly.TAG, "Running crashTest 4");
+            }
+
+            throw new RuntimeException("This is a crash");
+        }
+        else{
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.d(Countly.TAG, "Running crashTest 5");
+            }
+
+            String test = null;
+            test.charAt(1);
+        }
+        return Countly.sharedInstance();
+    }
 }

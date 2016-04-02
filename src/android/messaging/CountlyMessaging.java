@@ -102,6 +102,7 @@ public class CountlyMessaging extends WakefulBroadcastReceiver {
     private static final String PREFERENCES_NAME = "ly.count.android.api.messaging";
     private static final String PROPERTY_REGISTRATION_ID = "ly.count.android.api.messaging.registration.id";
     private static final String PROPERTY_REGISTRATION_VERSION = "ly.count.android.api.messaging.version";
+    private static final String PROPERTY_REGISTRATION_SENDER = "ly.count.android.api.messaging.sender";
     private static final String PROPERTY_APPLICATION_TITLE = "ly.count.android.api.messaging.app.title";
     private static final String PROPERTY_SERVER_URL = "ly.count.android.api.messaging.server.url";
     private static final String PROPERTY_APP_KEY = "ly.count.android.api.messaging.app.key";
@@ -125,7 +126,7 @@ public class CountlyMessaging extends WakefulBroadcastReceiver {
 
         if (checkPlayServices(activity) ) {
             gcm = GoogleCloudMessaging.getInstance(activity);
-            String registrationId = getRegistrationId(activity);
+            String registrationId = getRegistrationId(activity, sender);
             if (registrationId.isEmpty()) {
                 registerInBackground(activity, sender);
             } else {
@@ -139,7 +140,14 @@ public class CountlyMessaging extends WakefulBroadcastReceiver {
     }
 
     public static void storeConfiguration(Context context, String serverURL, String appKey, String deviceID, DeviceId.Type idMode) {
-        String label = context.getString(context.getApplicationInfo().labelRes);
+        String label = "App";
+        try {
+            label = context.getString(context.getApplicationInfo().labelRes);
+        } catch (Throwable t) {
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.wtf(TAG, "Couldn't find android:label='@string/app_name' resource, please set it in AndroidManifest.xml", t);
+            }
+        }
 
         if (Countly.sharedInstance().isLoggingEnabled()) {
             Log.i(TAG, "Storing configuration: " + label + ", " + serverURL + ", " + appKey + ", " + deviceID + ", " + idMode);
@@ -159,6 +167,7 @@ public class CountlyMessaging extends WakefulBroadcastReceiver {
         editor.commit();
     }
 
+    @SuppressWarnings("unchecked")
     protected static boolean initCountly(Context context) {
         String serverURL = getGCMPreferences(context).getString(PROPERTY_SERVER_URL, null);
         String appKey = getGCMPreferences(context).getString(PROPERTY_APP_KEY, null);
@@ -189,7 +198,7 @@ public class CountlyMessaging extends WakefulBroadcastReceiver {
                 try {
                     String registrationId = gcm.register(sender);
                     Countly.sharedInstance().onRegistrationId(registrationId);
-                    storeRegistrationId(context, registrationId);
+                    storeRegistrationId(context, registrationId, sender);
                 } catch (IOException ex) {
                     Log.e(TAG, "Failed to register for GCM identificator: " + ex.getMessage());
                 }
@@ -198,12 +207,15 @@ public class CountlyMessaging extends WakefulBroadcastReceiver {
         }.execute(null, null, null);
     }
 
-    private static void storeRegistrationId(Context context, String regId) {
+    private static void storeRegistrationId(Context context, String regId, String sender) {
         int appVersion = getAppVersion(context);
         if (Countly.sharedInstance().isLoggingEnabled()) {
-            Log.i(TAG, "Saving regId " + regId + " for app version " + appVersion);
+            Log.i(TAG, "Saving regId " + regId + " for sender ID " + sender + " for app version " + appVersion);
         }
-        getGCMPreferences(context).edit().putString(PROPERTY_REGISTRATION_ID, regId).putInt(PROPERTY_REGISTRATION_VERSION, appVersion).commit();
+        getGCMPreferences(context).edit()
+                .putString(PROPERTY_REGISTRATION_ID, regId)
+                .putString(PROPERTY_REGISTRATION_SENDER, sender)
+                .putInt(PROPERTY_REGISTRATION_VERSION, appVersion).commit();
     }
 
 
@@ -224,7 +236,7 @@ public class CountlyMessaging extends WakefulBroadcastReceiver {
         return true;
     }
 
-    private static String getRegistrationId(Activity activity) {
+    private static String getRegistrationId(Activity activity, String sender) {
         final SharedPreferences preferences = getGCMPreferences(activity);
         String registrationId = preferences.getString(PROPERTY_REGISTRATION_ID, "");
 
@@ -240,6 +252,14 @@ public class CountlyMessaging extends WakefulBroadcastReceiver {
         if (registeredVersion != currentVersion) {
             if (Countly.sharedInstance().isLoggingEnabled()) {
                 Log.i(TAG, "App version changed.");
+            }
+            return "";
+        }
+
+        String registeredSender = preferences.getString(PROPERTY_REGISTRATION_SENDER, "");
+        if (!registeredSender.equals(sender)) {
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.i(TAG, "Sender ID changed.");
             }
             return "";
         }

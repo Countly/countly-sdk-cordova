@@ -90,7 +90,7 @@ public class CountlyStore {
      */
     public List<Event> eventsList() {
         final String[] array = events();
-        final List<Event> events = new ArrayList<Event>(array.length);
+        final List<Event> events = new ArrayList<>(array.length);
         for (String s : array) {
             try {
                 final Event event = Event.fromJSON(new JSONObject(s));
@@ -125,7 +125,7 @@ public class CountlyStore {
      */
     public synchronized void addConnection(final String str) {
         if (str != null && str.length() > 0) {
-            final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
+            final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
             connections.add(str);
             preferences_.edit().putString(CONNECTIONS_PREFERENCE, join(connections, DELIMITER)).commit();
         }
@@ -138,7 +138,7 @@ public class CountlyStore {
      */
     public synchronized void removeConnection(final String str) {
         if (str != null && str.length() > 0) {
-            final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
+            final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
             if (connections.remove(str)) {
                 preferences_.edit().putString(CONNECTIONS_PREFERENCE, join(connections, DELIMITER)).commit();
             }
@@ -178,15 +178,19 @@ public class CountlyStore {
      * @param key name of the custom event, required, must not be the empty string
      * @param segmentation segmentation values for the custom event, may be null
      * @param timestamp timestamp (seconds since 1970) in GMT when the event occurred
+     * @param hour current local hour on device
+     * @param dow current day of the week on device
      * @param count count associated with the custom event, should be more than zero
      * @param sum sum associated with the custom event, if not used, pass zero.
      *            NaN and infinity values will be quietly ignored.
      */
-    public synchronized void addEvent(final String key, final Map<String, String> segmentation, final int timestamp, final int count, final double sum) {
+    public synchronized void addEvent(final String key, final Map<String, String> segmentation, final int timestamp, final int hour, final int dow, final int count, final double sum) {
         final Event event = new Event();
         event.key = key;
         event.segmentation = segmentation;
         event.timestamp = timestamp;
+        event.hour = hour;
+        event.dow = dow;
         event.count = count;
         event.sum = sum;
 
@@ -214,7 +218,7 @@ public class CountlyStore {
      * @param delimiter delimiter to use, should not be something that can be found in URL-encoded JSON string
      */
     static String joinEvents(final Collection<Event> collection, final String delimiter) {
-        final List<String> strings = new ArrayList<String>();
+        final List<String> strings = new ArrayList<>();
         for (Event e : collection) {
             strings.add(e.toJSON().toString());
         }
