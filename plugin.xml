@@ -125,6 +125,7 @@
     <source-file src="src/android/libs/google-play-services.jar" target-dir="libs/" />
     <source-file src="src/android/libs/play-services-gcm.jar" target-dir="libs/" />
 
+    <source-file src="src/android/gradle/build-extras.gradle" target-dir="src/.." />
   </platform>
 
   <!-- wp8 -->
