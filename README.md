@@ -1,5 +1,7 @@
 
-**Note:** Are you looking for Countly SDK for web pages? [Check this SDK instead](https://github.com/countly/countly-sdk-web)
+* **Note:** Are you looking for Countly SDK for web pages? [Check this SDK instead](https://github.com/countly/countly-sdk-web)
+
+* **Questions?** Visit [http://community.count.ly](http://community.count.ly).
 
 ## Phonegap and Cordova SDK for Countly
 
