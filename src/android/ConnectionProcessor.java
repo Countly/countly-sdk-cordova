@@ -24,8 +24,6 @@ package ly.count.android.sdk;
 import android.os.Build;
 import android.util.Log;
 
-import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -38,6 +36,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.MessageDigest;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -58,6 +57,8 @@ public class ConnectionProcessor implements Runnable {
     private final String serverURL_;
     private final SSLContext sslContext_;
 
+    protected static String salt;
+
     ConnectionProcessor(final String serverURL, final CountlyStore store, final DeviceId deviceId, final SSLContext sslContext) {
         serverURL_ = serverURL;
         store_ = store;
@@ -72,8 +73,12 @@ public class ConnectionProcessor implements Runnable {
 
     URLConnection urlConnectionForEventData(final String eventData) throws IOException {
         String urlStr = serverURL_ + "/i?";
-        if(!eventData.contains("&crash="))
+        if(!eventData.contains("&crash=") && eventData.length() < 2048) {
             urlStr += eventData;
+            urlStr += "&checksum=" + sha1Hash(eventData + salt);
+        } else {
+            urlStr += "checksum=" + sha1Hash(eventData + salt);
+        }
         final URL url = new URL(urlStr);
         final HttpURLConnection conn;
         if (Countly.publicKeyPinCertificates == null) {
@@ -114,8 +119,12 @@ public class ConnectionProcessor implements Runnable {
             FileInputStream fileInputStream = new FileInputStream(binaryFile);
             byte[] buffer = new byte[1024];
             int len;
-            while ((len = fileInputStream.read(buffer)) != -1) {
-                output.write(buffer, 0, len);
+            try {
+                while ((len = fileInputStream.read(buffer)) != -1) {
+                    output.write(buffer, 0, len);
+                }
+            }catch(IOException ex){
+                ex.printStackTrace();
             }
             output.flush(); // Important before continuing with writer!
             writer.append(CRLF).flush(); // CRLF is important! It indicates end of boundary.
@@ -124,7 +133,7 @@ public class ConnectionProcessor implements Runnable {
             // End of multipart/form-data.
             writer.append("--" + boundary + "--").append(CRLF).flush();
         }
-        else if(eventData.contains("&crash=")){
+        else if(eventData.contains("&crash=") || eventData.length() >= 2048){
             if (Countly.sharedInstance().isLoggingEnabled()) {
                 Log.d(Countly.TAG, "Using post because of crash");
             }
@@ -161,43 +170,48 @@ public class ConnectionProcessor implements Runnable {
                 }
                 break;
             }
-            final String eventData = storedEvents[0] + "&device_id=" + deviceId_.getId();
+
+            boolean deviceIdOverride = storedEvents[0].contains("&override_id=");
+            boolean deviceIdChange = storedEvents[0].contains("&device_id=");
+
+            final String eventData, newId;
+            if (deviceIdOverride) {
+                eventData = storedEvents[0].replace("&override_id=", "&device_id=");
+                newId = null;
+            } else if (deviceIdChange) {
+                newId = storedEvents[0].substring(storedEvents[0].indexOf("&device_id=") + "&device_id=".length());
+                if (newId.equals(deviceId_.getId())) {
+                    eventData = storedEvents[0];
+                    deviceIdChange = false;
+                } else {
+                    eventData = storedEvents[0] + "&old_device_id=" + deviceId_.getId();
+                }
+            } else {
+                newId = null;
+                eventData = storedEvents[0] + "&device_id=" + deviceId_.getId();
+            }
 
             URLConnection conn = null;
-            BufferedInputStream responseStream = null;
             try {
                 // initialize and open connection
                 conn = urlConnectionForEventData(eventData);
                 conn.connect();
 
-                // consume response stream
-                responseStream = new BufferedInputStream(conn.getInputStream());
-                final ByteArrayOutputStream responseData = new ByteArrayOutputStream(256); // big enough to handle success response without reallocating
-                int c;
-                while ((c = responseStream.read()) != -1) {
-                    responseData.write(c);
-                }
-
                 // response code has to be 2xx to be considered a success
                 boolean success = true;
+                final int responseCode;
                 if (conn instanceof HttpURLConnection) {
                     final HttpURLConnection httpConn = (HttpURLConnection) conn;
-                    final int responseCode = httpConn.getResponseCode();
+                    responseCode = httpConn.getResponseCode();
                     success = responseCode >= 200 && responseCode < 300;
                     if (!success && Countly.sharedInstance().isLoggingEnabled()) {
                         Log.w(Countly.TAG, "HTTP error response code was " + responseCode + " from submitting event data: " + eventData);
                     }
+                } else {
+                    responseCode = 0;
                 }
 
                 // HTTP response code was good, check response JSON contains {"result":"Success"}
-                if (success) {
-                    final JSONObject responseDict = new JSONObject(responseData.toString("UTF-8"));
-                    success = responseDict.optString("result").equalsIgnoreCase("success");
-                    if (!success && Countly.sharedInstance().isLoggingEnabled()) {
-                        Log.w(Countly.TAG, "Response from Countly server did not report success, it was: " + responseData.toString("UTF-8"));
-                    }
-                }
-
                 if (success) {
                     if (Countly.sharedInstance().isLoggingEnabled()) {
                         Log.d(Countly.TAG, "ok ->" + eventData);
@@ -206,8 +220,16 @@ public class ConnectionProcessor implements Runnable {
                     // successfully submitted event data to Count.ly server, so remove
                     // this one from the stored events collection
                     store_.removeConnection(storedEvents[0]);
-                }
-                else {
+
+                    if (deviceIdChange) {
+                        deviceId_.changeToDeveloperId(store_, newId);
+                    }
+                } else if (responseCode >= 400 && responseCode < 500) {
+                    if (Countly.sharedInstance().isLoggingEnabled()) {
+                        Log.d(Countly.TAG, "fail " + responseCode + " ->" + eventData);
+                    }
+                    store_.removeConnection(storedEvents[0]);
+                } else {
                     // warning was logged above, stop processing, let next tick take care of retrying
                     break;
                 }
@@ -221,14 +243,42 @@ public class ConnectionProcessor implements Runnable {
             }
             finally {
                 // free connection resources
-                if (responseStream != null) {
-                    try { responseStream.close(); } catch (IOException ignored) {}
-                }
                 if (conn != null && conn instanceof HttpURLConnection) {
                     ((HttpURLConnection)conn).disconnect();
                 }
             }
         }
+    }
+
+    private static String sha1Hash (String toHash) {
+        String hash = null;
+        try {
+            MessageDigest digest = MessageDigest.getInstance( "SHA-1" );
+            byte[] bytes = toHash.getBytes("UTF-8");
+            digest.update(bytes, 0, bytes.length);
+            bytes = digest.digest();
+
+            // This is ~55x faster than looping and String.formating()
+            hash = bytesToHex( bytes );
+        }
+        catch( Throwable e ) {
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.e(Countly.TAG, "Cannot tamper-protect params", e);
+            }
+        }
+        return hash;
+    }
+
+    // http://stackoverflow.com/questions/9655181/convert-from-byte-array-to-hex-string-in-java
+    final private static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex( byte[] bytes ) {
+        char[] hexChars = new char[ bytes.length * 2 ];
+        for( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[ j ] & 0xFF;
+            hexChars[ j * 2 ] = hexArray[ v >>> 4 ];
+            hexChars[ j * 2 + 1 ] = hexArray[ v & 0x0F ];
+        }
+        return new String( hexChars ).toLowerCase();
     }
 
     // for unit testing

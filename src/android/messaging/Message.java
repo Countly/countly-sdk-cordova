@@ -45,7 +45,7 @@ public class Message implements Parcelable {
             t |= CountlyMessaging.NOTIFICATION_TYPE_URL;
         }
 
-        if (getReview() != null && !"".equals(getReview())) {
+        if (getReview() != null) {
             t |= CountlyMessaging.NOTIFICATION_TYPE_REVIEW;
         }
 
@@ -86,11 +86,16 @@ public class Message implements Parcelable {
         if (hasLink()) {
             return new Intent(Intent.ACTION_VIEW, Uri.parse(getLink()));
         } else if (hasReview()) {
-            return new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + ("".equals(getReview()) ? context.getPackageName() : getReview())));
         } else if (hasMessage()) {
-            Intent intent = new Intent(context, activityClass);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            return intent;
+            if (activityClass == null) {
+                activityClass = CountlyMessaging.getMainActivityClass(context);
+            }
+            if (activityClass != null) {
+                Intent intent = new Intent(context, activityClass);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                return intent;
+            }
         }
         return null;
     }
@@ -138,7 +143,7 @@ public class Message implements Parcelable {
     };
 
     Message(Parcel in) {
-        data = in.readBundle();
+        data = in.readBundle(getClass().getClassLoader());
         type = setType();
     }
 }

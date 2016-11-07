@@ -24,6 +24,7 @@ import ly.count.android.sdk.Countly;
 */
 public class CountlyMessagingService extends IntentService {
     public static final String TAG = "CountlyMessagingService";
+    public static final int NOTIFICATION_ID = 736192;
 
     public CountlyMessagingService() {
         super(TAG);
@@ -31,12 +32,13 @@ public class CountlyMessagingService extends IntentService {
 
     @Override
     protected void onHandleIntent (Intent intent) {
+        Log.i(TAG, "Handling intent");
         Bundle extras = intent.getExtras();
 
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
         String messageType = gcm.getMessageType(intent);
 
-        if (!extras.isEmpty()) {
+        if (extras != null && !extras.isEmpty()) {
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 final Message msg = new Message(extras);
 
@@ -55,6 +57,12 @@ public class CountlyMessagingService extends IntentService {
                         if (!CountlyMessaging.initCountly(getApplicationContext())) {
                             Log.e(TAG, "Cannot init Countly in background");
                         }
+                    }
+
+                    if (CountlyMessaging.isUIDisabled(this)) {
+                        Log.i(TAG, "Won't do anything since Countly Messaging UI is disabled");
+                        CountlyMessaging.completeWakefulIntent(intent);
+                        return;
                     }
 
                     // Show message if not silent
@@ -111,7 +119,7 @@ public class CountlyMessagingService extends IntentService {
                 builder.setSound(Uri.parse(msg.getSoundUri()));
             }
 
-            manager.notify(1, builder.build());
+            manager.notify(NOTIFICATION_ID, builder.build());
         }
     }
 

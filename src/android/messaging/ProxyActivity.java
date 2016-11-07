@@ -5,6 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
+import ly.count.android.sdk.Countly;
 
 /**
 * Created by artem on 14/10/14.
@@ -26,65 +29,76 @@ public class ProxyActivity extends Activity {
         super.onStart();
 
         Bundle extras = getIntent().getExtras();
-        final Message msg = extras.getParcelable(CountlyMessaging.EXTRA_MESSAGE);
+        if(extras != null) {
+            final Message msg = extras.getParcelable(CountlyMessaging.EXTRA_MESSAGE);
 
-        if (msg != null) {
-            if (extras.containsKey(CountlyMessaging.NOTIFICATION_SHOW_DIALOG)) {
-                CountlyMessaging.recordMessageOpen(msg.getId());
+            if (msg != null) {
+                if (extras.containsKey(CountlyMessaging.NOTIFICATION_SHOW_DIALOG)) {
+                    CountlyMessaging.recordMessageOpen(msg.getId());
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(msg.getNotificationTitle(this))
-                        .setMessage(msg.getNotificationMessage());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(msg.getNotificationTitle(this))
+                            .setMessage(msg.getNotificationMessage());
 
-                if (msg.hasLink()){
-                    builder.setCancelable(true)
-                            .setPositiveButton(CountlyMessaging.buttonNames[0], new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick (DialogInterface dialog, int which) {
-                                    CountlyMessaging.recordMessageAction(msg.getId());
-                                    finish();
-                                    startActivity(msg.getIntent(ProxyActivity.this, CountlyMessaging.getActivityClass()));
-                                }
-                            })
-                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    finish();
-                                }
-                            });
-                } else if (msg.hasReview()){
-                    builder.setCancelable(true)
-                            .setPositiveButton(CountlyMessaging.buttonNames[1], new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick (DialogInterface dialog, int which) {
-                                    CountlyMessaging.recordMessageAction(msg.getId());
-                                    finish();
-                                    startActivity(msg.getIntent(ProxyActivity.this, CountlyMessaging.getActivityClass()));
-                                }
-                            })
-                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    finish();
-                                }
-                            });
-                } else if (msg.hasMessage()) {
-                    CountlyMessaging.recordMessageAction(msg.getId());
-                    builder.setCancelable(true);
-                    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel (DialogInterface dialog) {
-                            finish();
-                        }
-                    });
+                    if (msg.hasLink()) {
+                        builder.setCancelable(true)
+                                .setPositiveButton(CountlyMessaging.buttonNames[0], new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        CountlyMessaging.recordMessageAction(msg.getId());
+                                        finish();
+                                        Intent activity = msg.getIntent(ProxyActivity.this, CountlyMessaging.getActivityClass(ProxyActivity.this));
+                                        if(activity != null)
+                                            startActivity(activity);
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialog) {
+                                        finish();
+                                    }
+                                });
+                    } else if (msg.hasReview()) {
+                        builder.setCancelable(true)
+                                .setPositiveButton(CountlyMessaging.buttonNames[1], new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        CountlyMessaging.recordMessageAction(msg.getId());
+                                        finish();
+                                        Intent activity = msg.getIntent(ProxyActivity.this, CountlyMessaging.getActivityClass(ProxyActivity.this));
+                                        if(activity != null)
+                                            startActivity(activity);
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialog) {
+                                        finish();
+                                    }
+                                });
+                    } else if (msg.hasMessage()) {
+                        CountlyMessaging.recordMessageAction(msg.getId());
+                        builder.setCancelable(true);
+                        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                finish();
+                            }
+                        });
+                    } else {
+                        throw new IllegalStateException("Countly Message with UNKNOWN type in ProxyActivity");
+                    }
+
+                    builder.create().show();
                 } else {
-                    throw new IllegalStateException("Countly Message with UNKNOWN type in ProxyActivity");
+                    CountlyMessaging.recordMessageAction(msg.getId());
+                    Intent activity = msg.getIntent(this, CountlyMessaging.getActivityClass(this));
+                    if (activity != null)
+                        startActivity(activity);
+                    else
+                        Log.e(Countly.TAG, "Countly Message with UNKNOWN type in ProxyActivity");
+//                        throw new IllegalStateException("Countly Message with UNKNOWN type in ProxyActivity");
                 }
-
-                builder.create().show();
-            } else {
-                CountlyMessaging.recordMessageAction(msg.getId());
-                startActivity(msg.getIntent(this, CountlyMessaging.getActivityClass()));
             }
         }
     }

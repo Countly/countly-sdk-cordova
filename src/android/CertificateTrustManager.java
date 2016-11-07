@@ -34,7 +34,7 @@ public final class CertificateTrustManager implements X509TrustManager {
             throw new IllegalArgumentException("You must specify non-empty keys list");
         }
 
-        this.keys = new ArrayList<byte[]>();
+        this.keys = new ArrayList<>();
         for (String key : certificates) {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             Certificate cert = cf.generateCertificate(new ByteArrayInputStream(Base64.decode(key, Base64.DEFAULT)));
@@ -51,7 +51,7 @@ public final class CertificateTrustManager implements X509TrustManager {
             throw new IllegalArgumentException("PublicKeyManager: X509Certificate is empty");
         }
 
-        if (!(null != authType && authType.equalsIgnoreCase("RSA"))) {
+        if (!(null != authType && authType.contains("RSA"))) {
             throw new CertificateException("PublicKeyManager: AuthType is not RSA");
         }
 

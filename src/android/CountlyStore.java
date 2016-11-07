@@ -54,6 +54,8 @@ public class CountlyStore {
     private static final String CONNECTIONS_PREFERENCE = "CONNECTIONS";
     private static final String EVENTS_PREFERENCE = "EVENTS";
     private static final String LOCATION_PREFERENCE = "LOCATION";
+    private static final int MAX_EVENTS = 100;
+    private static final int MAX_REQUESTS = 1000;
 
     private final SharedPreferences preferences_;
 
@@ -90,7 +92,7 @@ public class CountlyStore {
      */
     public List<Event> eventsList() {
         final String[] array = events();
-        final List<Event> events = new ArrayList<Event>(array.length);
+        final List<Event> events = new ArrayList<>(array.length);
         for (String s : array) {
             try {
                 final Event event = Event.fromJSON(new JSONObject(s));
@@ -106,7 +108,7 @@ public class CountlyStore {
         Collections.sort(events, new Comparator<Event>() {
             @Override
             public int compare(final Event e1, final Event e2) {
-                return e1.timestamp - e2.timestamp;
+                return (int)(e1.timestamp - e2.timestamp);
             }
         });
         return events;
@@ -125,9 +127,11 @@ public class CountlyStore {
      */
     public synchronized void addConnection(final String str) {
         if (str != null && str.length() > 0) {
-            final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
-            connections.add(str);
-            preferences_.edit().putString(CONNECTIONS_PREFERENCE, join(connections, DELIMITER)).commit();
+            final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
+            if (connections.size() < MAX_REQUESTS) {
+                connections.add(str);
+                preferences_.edit().putString(CONNECTIONS_PREFERENCE, join(connections, DELIMITER)).commit();
+            }
         }
     }
 
@@ -138,7 +142,7 @@ public class CountlyStore {
      */
     public synchronized void removeConnection(final String str) {
         if (str != null && str.length() > 0) {
-            final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
+            final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
             if (connections.remove(str)) {
                 preferences_.edit().putString(CONNECTIONS_PREFERENCE, join(connections, DELIMITER)).commit();
             }
@@ -151,8 +155,10 @@ public class CountlyStore {
      */
     void addEvent(final Event event) {
         final List<Event> events = eventsList();
-        events.add(event);
-        preferences_.edit().putString(EVENTS_PREFERENCE, joinEvents(events, DELIMITER)).commit();
+        if (events.size() < MAX_EVENTS) {
+            events.add(event);
+            preferences_.edit().putString(EVENTS_PREFERENCE, joinEvents(events, DELIMITER)).commit();
+        }
     }
 
     /**
@@ -178,17 +184,22 @@ public class CountlyStore {
      * @param key name of the custom event, required, must not be the empty string
      * @param segmentation segmentation values for the custom event, may be null
      * @param timestamp timestamp (seconds since 1970) in GMT when the event occurred
+     * @param hour current local hour on device
+     * @param dow current day of the week on device
      * @param count count associated with the custom event, should be more than zero
      * @param sum sum associated with the custom event, if not used, pass zero.
      *            NaN and infinity values will be quietly ignored.
      */
-    public synchronized void addEvent(final String key, final Map<String, String> segmentation, final int timestamp, final int count, final double sum) {
+    public synchronized void addEvent(final String key, final Map<String, String> segmentation, final long timestamp, final int hour, final int dow, final int count, final double sum, final double dur) {
         final Event event = new Event();
         event.key = key;
         event.segmentation = segmentation;
         event.timestamp = timestamp;
+        event.hour = hour;
+        event.dow = dow;
         event.count = count;
         event.sum = sum;
+        event.dur = dur;
 
         addEvent(event);
     }
@@ -214,7 +225,7 @@ public class CountlyStore {
      * @param delimiter delimiter to use, should not be something that can be found in URL-encoded JSON string
      */
     static String joinEvents(final Collection<Event> collection, final String delimiter) {
-        final List<String> strings = new ArrayList<String>();
+        final List<String> strings = new ArrayList<>();
         for (Event e : collection) {
             strings.add(e.toJSON().toString());
         }
@@ -264,6 +275,7 @@ public class CountlyStore {
         final SharedPreferences.Editor prefsEditor = preferences_.edit();
         prefsEditor.remove(EVENTS_PREFERENCE);
         prefsEditor.remove(CONNECTIONS_PREFERENCE);
+        prefsEditor.clear();
         prefsEditor.commit();
     }
 }
