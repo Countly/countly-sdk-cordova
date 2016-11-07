@@ -26,12 +26,12 @@ public class CountlyCordova extends CordovaPlugin {
 			String appKey = args.getString(1);
 			Countly.sharedInstance()
 				.init(context, serverUrl, appKey,null,DeviceId.Type.OPEN_UDID);
-			Countly.sharedInstance().onStart();
+			Countly.sharedInstance().onStart(this.cordova.getActivity());
 			callbackContext.success("initialized!");
 			return true;
         }
 		else if ("start".equals(action)) {
-			Countly.sharedInstance().onStart();
+			Countly.sharedInstance().onStart(this.cordova.getActivity());
             callbackContext.success("started!");
             return true;
     }
@@ -101,23 +101,12 @@ public class CountlyCordova extends CordovaPlugin {
 			bundle.put("picturePath", args.getString(6));
 			bundle.put("gender", args.getString(7));
 			bundle.put("byear", String.valueOf(args.getInt(8)));
-			// bundle.putString("name", args.getString(0));
-			// bundle.putString("username", args.getString(1));
-			// bundle.putString("email", args.getString(2));
-			// bundle.putString("org", args.getString(3));
-			// bundle.putString("phone", args.getString(4));
-			// bundle.putString("picture", args.getString(5));
-			// bundle.putString("picturePath", args.getString(6));
-			// bundle.putString("gender", args.getString(7));
-			// bundle.putInt("byear", args.getInt(8));
 			Countly.sharedInstance().setUserData(bundle);
 			// Countly.sharedInstance().setUserData(bundle);
 			callbackContext.success("setuserdata success");
 			return true;
     }
 		else if("onregistrationid".equals(action)){
-			// This is still in development
-			// String registrationId = args.getString(0);
 			int messagingMode = Integer.parseInt(args.getString(1));
 			Countly.CountlyMessagingMode mode = null;
 			if(messagingMode == 0){
