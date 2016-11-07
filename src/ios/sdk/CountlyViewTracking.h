@@ -14,7 +14,9 @@
 - (void)endView;
 #if TARGET_OS_IOS
 - (void)startAutoViewTracking;
-@property (nonatomic, readwrite) BOOL isAutoViewTrackingEnabled;
+- (void)addExceptionForAutoViewTracking:(Class _Nullable)exceptionViewControllerSubclass;
+- (void)removeExceptionForAutoViewTracking:(Class _Nullable)exceptionViewControllerSubclass;
+@property (nonatomic) BOOL isAutoViewTrackingEnabled;
 #endif
 @end
 

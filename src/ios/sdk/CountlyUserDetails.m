@@ -10,26 +10,16 @@
 @property (nonatomic, strong) NSMutableDictionary* modifications;
 @end
 
-@implementation CountlyUserDetails
+NSString* const kCountlyLocalPicturePath = @"kCountlyLocalPicturePath";
 
-NSString* const kCLYUserName = @"name";
-NSString* const kCLYUserUsername = @"username";
-NSString* const kCLYUserEmail = @"email";
-NSString* const kCLYUserOrganization = @"organization";
-NSString* const kCLYUserPhone = @"phone";
-NSString* const kCLYUserGender = @"gender";
-NSString* const kCLYUserPictureURL = @"picture";
-NSString* const kCLYUserPictureLocalPath = @"picturePath";
-NSString* const kCLYUserBirthYear = @"byear";
-NSString* const kCLYUserCustom = @"custom";
+@implementation CountlyUserDetails
 
 + (CountlyUserDetails *)sharedInstance
 {
-    static CountlyUserDetails *s_CountlyUserDetails = nil;
+    static CountlyUserDetails *s_sharedInstance = nil;
     static dispatch_once_t onceToken;
-    
-    dispatch_once(&onceToken, ^{s_CountlyUserDetails = CountlyUserDetails.new;});
-    return s_CountlyUserDetails;
+    dispatch_once(&onceToken, ^{s_sharedInstance = self.new;});
+    return s_sharedInstance;
 }
 
 - (instancetype)init
@@ -38,140 +28,174 @@ NSString* const kCLYUserCustom = @"custom";
     {
         self.modifications = NSMutableDictionary.new;
     }
-    
+
     return self;
 }
 
 - (void)recordUserDetails
 {
     [CountlyConnectionManager.sharedInstance sendUserDetails:[CountlyUserDetails.sharedInstance serialize]];
+
+    if(self.pictureLocalPath && !self.pictureURL)
+    {
+        [CountlyConnectionManager.sharedInstance sendUserDetails:[@{kCountlyLocalPicturePath:self.pictureLocalPath} JSONify]];
+    }
 }
 
 - (NSString *)serialize
 {
     NSMutableDictionary* userDictionary = NSMutableDictionary.new;
     if(self.name)
-        userDictionary[kCLYUserName] = self.name;
+        userDictionary[@"name"] = self.name;
     if(self.username)
-        userDictionary[kCLYUserUsername] = self.username;
+        userDictionary[@"username"] = self.username;
     if(self.email)
-        userDictionary[kCLYUserEmail] = self.email;
+        userDictionary[@"email"] = self.email;
     if(self.organization)
-        userDictionary[kCLYUserOrganization] = self.organization;
+        userDictionary[@"organization"] = self.organization;
     if(self.phone)
-        userDictionary[kCLYUserPhone] = self.phone;
+        userDictionary[@"phone"] = self.phone;
     if(self.gender)
-        userDictionary[kCLYUserGender] = self.gender;
+        userDictionary[@"gender"] = self.gender;
     if(self.pictureURL)
-        userDictionary[kCLYUserPictureURL] = self.pictureURL;
-    if(self.pictureLocalPath)
-        userDictionary[kCLYUserPictureLocalPath] = self.pictureLocalPath;
-    if(self.birthYear!=0)
-        userDictionary[kCLYUserBirthYear] = @(self.birthYear);
+        userDictionary[@"picture"] = self.pictureURL;
+    if(self.birthYear)
+        userDictionary[@"byear"] = self.birthYear;
     if(self.custom)
-        userDictionary[kCLYUserCustom] = self.custom;
-    
+        userDictionary[@"custom"] = self.custom;
+
     return [userDictionary JSONify];
 }
 
-- (NSString *)extractPicturePathFromURLString:(NSString*)URLString
+- (NSData *)pictureUploadDataForRequest:(NSString *)requestString
 {
-    NSString* unescaped = [URLString stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-    unescaped = [unescaped stringByRemovingPercentEncoding];
-    NSRange rPicturePathKey = [unescaped rangeOfString:kCLYUserPictureLocalPath];
-    if (rPicturePathKey.location == NSNotFound)
+#if TARGET_OS_IOS
+    NSString* unescaped = [requestString stringByRemovingPercentEncoding];
+    NSRange rLocalPicturePath = [unescaped rangeOfString:kCountlyLocalPicturePath];
+    if (rLocalPicturePath.location == NSNotFound)
         return nil;
 
-    NSString* picturePath = nil;
+    NSRange rChecksum = [unescaped rangeOfString:@"&checksum="];
+    NSUInteger startIndex = rLocalPicturePath.location-2;
+    NSString* pathString;
+    if (rChecksum.location == NSNotFound)
+        pathString = [unescaped substringFromIndex:startIndex];
+    else
+        pathString = [unescaped substringWithRange:(NSRange){startIndex, rChecksum.location - startIndex}];
 
-    @try
+    NSDictionary* pathDictionary = [NSJSONSerialization JSONObjectWithData:[pathString dataUTF8] options:0 error:nil];
+    NSString* localPicturePath = pathDictionary[kCountlyLocalPicturePath];
+    if(!localPicturePath || [localPicturePath isEqualToString:@""])
+        return nil;
+
+    COUNTLY_LOG(@"Local picture path successfully extracted from query string: %@", localPicturePath);
+
+    NSArray* allowedFileTypes = @[@"gif", @"png", @"jpg", @"jpeg"];
+    NSString* fileExt = localPicturePath.pathExtension.lowercaseString;
+    NSInteger fileExtIndex = [allowedFileTypes indexOfObject:fileExt];
+
+    if(fileExtIndex == NSNotFound)
+        return nil;
+
+    NSData* imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:localPicturePath]];
+
+    if (!imageData)
     {
-        NSRange rSearchForEnding = (NSRange){0,unescaped.length};
-        rSearchForEnding.location = rPicturePathKey.location+rPicturePathKey.length+3;
-        rSearchForEnding.length = rSearchForEnding.length - rSearchForEnding.location;
-        NSRange rEnding = [unescaped rangeOfString:@"\",\"" options:0 range:rSearchForEnding];
-        picturePath = [unescaped substringWithRange:(NSRange){rSearchForEnding.location,rEnding.location-rSearchForEnding.location}];
-        picturePath = [picturePath stringByReplacingOccurrencesOfString:@"\\/" withString:@"/"];
-    }
-    @catch (NSException *exception)
-    {
-        COUNTLY_LOG(@"Cannot extract picture path!");
-        picturePath = @"";
+        COUNTLY_LOG(@"Local picture data can not be read!");
+        return nil;
     }
 
-    COUNTLY_LOG(@"Extracted picturePath: %@", picturePath);
-    return picturePath;
+    COUNTLY_LOG(@"Local picture data read successfully.");
+
+    //NOTE: png file data read directly from disk somehow fails on upload, this fixes it
+    if (fileExtIndex == 1)
+        imageData = UIImagePNGRepresentation([UIImage imageWithData:imageData]);
+
+    //NOTE: for mime type jpg -> jpeg
+    if (fileExtIndex == 2)
+        fileExtIndex = 3;
+
+    NSMutableData* uploadData = NSMutableData.new;
+    [uploadData appendStringUTF8:[NSString stringWithFormat:@"--%@\r\n", CountlyConnectionManager.sharedInstance.boundary]];
+    [uploadData appendStringUTF8:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"pictureFile\"; filename=\"%@\"\r\n", localPicturePath.lastPathComponent]];
+    [uploadData appendStringUTF8:[NSString stringWithFormat:@"Content-Type: image/%@\r\n\r\n", allowedFileTypes[fileExtIndex]]];
+    [uploadData appendData:imageData];
+    [uploadData appendStringUTF8:[NSString stringWithFormat:@"\r\n--%@--\r\n", CountlyConnectionManager.sharedInstance.boundary]];
+
+    return uploadData;
+#endif
+    return nil;
 }
 
 
 #pragma mark -
 
-- (void)set:(NSString*)key value:(NSString*)value
+- (void)set:(NSString *)key value:(NSString *)value
 {
     self.modifications[key] = value;
 }
 
-- (void)setOnce:(NSString*)key value:(NSString*)value
+- (void)setOnce:(NSString *)key value:(NSString *)value
 {
     self.modifications[key] = @{@"$setOnce":value};
 }
 
-- (void)unSet:(NSString*)key
+- (void)unSet:(NSString *)key
 {
     self.modifications[key] = NSNull.null;
 }
 
-- (void)increment:(NSString*)key
+- (void)increment:(NSString *)key
 {
     [self incrementBy:key value:1];
 }
 
-- (void)incrementBy:(NSString*)key value:(NSInteger)value
+- (void)incrementBy:(NSString *)key value:(NSInteger)value
 {
     self.modifications[key] = @{@"$inc":@(value)};
 }
 
-- (void)multiply:(NSString*)key value:(NSInteger)value
+- (void)multiply:(NSString *)key value:(NSInteger)value
 {
     self.modifications[key] = @{@"$mul":@(value)};
 }
 
-- (void)max:(NSString*)key value:(NSInteger)value
+- (void)max:(NSString *)key value:(NSInteger)value
 {
     self.modifications[key] = @{@"$max":@(value)};
 }
 
-- (void)min:(NSString*)key value:(NSInteger)value
+- (void)min:(NSString *)key value:(NSInteger)value
 {
     self.modifications[key] = @{@"$min":@(value)};
 }
 
-- (void)push:(NSString*)key value:(NSString*)value
+- (void)push:(NSString *)key value:(NSString *)value
 {
     self.modifications[key] = @{@"$push":value};
 }
 
-- (void)push:(NSString*)key values:(NSArray*)value
+- (void)push:(NSString *)key values:(NSArray *)value
 {
     self.modifications[key] = @{@"$push":value};
 }
 
-- (void)pushUnique:(NSString*)key value:(NSString*)value
+- (void)pushUnique:(NSString *)key value:(NSString *)value
 {
     self.modifications[key] = @{@"$addToSet":value};
 }
 
-- (void)pushUnique:(NSString*)key values:(NSArray*)value
+- (void)pushUnique:(NSString *)key values:(NSArray *)value
 {
     self.modifications[key] = @{@"$addToSet":value};
 }
 
-- (void)pull:(NSString*)key value:(NSString*)value
+- (void)pull:(NSString *)key value:(NSString *)value
 {
     self.modifications[key] = @{@"$pull":value};
 }
 
-- (void)pull:(NSString*)key values:(NSArray*)value
+- (void)pull:(NSString *)key values:(NSArray *)value
 {
     self.modifications[key] = @{@"$pull":value};
 }
@@ -179,9 +203,9 @@ NSString* const kCLYUserCustom = @"custom";
 - (void)save
 {
     NSDictionary* custom = @{@"custom":self.modifications};
-    
+
     [CountlyConnectionManager.sharedInstance sendUserDetails:[custom JSONify]];
-    
+
     [self.modifications removeAllObjects];
 }
 

@@ -11,15 +11,19 @@
 @property (nonatomic, strong) NSString *deviceID;
 
 + (instancetype)sharedInstance;
-- (void)initializeDeviceID:(NSString*)deviceID;
+- (void)initializeDeviceID:(NSString *)deviceID;
+- (NSString *)zeroSafeIDFA;
 
 + (NSString *)device;
 + (NSString *)osName;
 + (NSString *)osVersion;
 + (NSString *)carrier;
 + (NSString *)resolution;
++ (NSString *)density;
 + (NSString *)locale;
 + (NSString *)appVersion;
++ (NSString *)appBuild;
++ (NSString *)buildUUID;
 + (NSString *)bundleId;
 #if TARGET_OS_IOS
 + (NSInteger)hasWatch;

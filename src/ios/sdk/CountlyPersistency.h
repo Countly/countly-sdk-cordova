@@ -6,21 +6,35 @@
 
 #import <Foundation/Foundation.h>
 
+@class CountlyEvent;
+
 @interface CountlyPersistency : NSObject
 
 + (instancetype)sharedInstance;
-- (void)addToQueue:(NSString*)queryString;
+
+- (void)addToQueue:(NSString *)queryString;
+- (void)removeFromQueue:(NSString *)queryString;
+- (NSString *)firstItemInQueue;
+
+- (void)recordEvent:(CountlyEvent *)event;
+- (NSString *)serializedRecordedEvents;
+
+- (void)recordTimedEvent:(CountlyEvent *)event;
+- (CountlyEvent *)timedEventForKey:(NSString *)key;
+- (void)clearAllTimedEvents;
+
 - (void)saveToFile;
 - (void)saveToFileSync;
 
-- (NSString*)retrieveStoredDeviceID;
-- (void)storeDeviceID:(NSString*)deviceID;
+- (NSString *)retrieveStoredDeviceID;
+- (void)storeDeviceID:(NSString *)deviceID;
 
-- (NSString*)retrieveWatchParentDeviceID;
-- (void)storeWatchParentDeviceID:(NSString*)deviceID;
+- (NSString *)retrieveWatchParentDeviceID;
+- (void)storeWatchParentDeviceID:(NSString *)deviceID;
 
-@property (nonatomic, strong) NSMutableArray* recordedEvents;
-@property (nonatomic, strong) NSMutableArray* queuedRequests;
-@property (nonatomic, strong) NSMutableDictionary* startedEvents;
+- (NSDictionary *)retrieveStarRatingStatus;
+- (void)storeStarRatingStatus:(NSDictionary *)status;
+
+@property (nonatomic) NSUInteger eventSendThreshold;
+@property (nonatomic) NSUInteger storedRequestsLimit;
 @end
-
