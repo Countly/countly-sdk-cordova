@@ -12,4 +12,5 @@
 - (void)onregistrationid:(CDVInvokedUrlCommand*)command;
 - (void)start:(CDVInvokedUrlCommand*)command;
 - (void)stop:(CDVInvokedUrlCommand*)command;
+- (void)recordView:(CDVInvokedUrlCommand*)command;
 @end
