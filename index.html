@@ -48,6 +48,9 @@
             <button onclick="app.eventWithSum_Segment()" class="fluid ui button">Even with Sum and Segment</button>
 
             <button onclick="app.event()" class="fluid ui black button">All Events</button>
+
+            <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
+            <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="Countly.js"></script>
@@ -61,7 +64,8 @@
 
             app = {};
             document.addEventListener("deviceready",function(){
-                Countly.init("http://128.199.55.79","46e1fd647e01f89e77e53007ab0e9aa59aa9d11f"); //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
+                Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928");
+                //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
                                     //replace your server ip/url // replace it with your "App Key"
                 // app.onRegistrationId();
                 // app.test();
@@ -146,6 +150,9 @@
                     "mode":Countly.messagingMode.TEST,
                     "projectId": "881000050249"
                 })
+            }
+            app.recordView = function(viewName){
+                Countly.recordView(viewName);
             }
         </script>
     </body>
