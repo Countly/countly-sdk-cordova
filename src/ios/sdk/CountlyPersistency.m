@@ -206,8 +206,9 @@ NSString* const kCountlyStarRatingStatusKey = @"kCountlyStarRatingStatusKey";
 #if TARGET_OS_TV
     [NSUserDefaults.standardUserDefaults setObject:saveData forKey:kCountlyTVOSNSUDKey];
     [NSUserDefaults.standardUserDefaults synchronize];
-#else
-    [saveData writeToFile:[self storageFileURL].path atomically:YES];
+// This code is creating error
+// #else
+//     [saveData writeToFile:[self storageFileURL].path atomically:YES];
 #endif
 }
 
