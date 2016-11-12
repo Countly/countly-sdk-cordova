@@ -40,11 +40,35 @@
 
     <header-file src="src/ios/sdk/Countly.h"/>
     <source-file src="src/ios/sdk/Countly.m"  compiler-flags="-fno-objc-arc" />
-    <header-file src="src/ios/sdk/CountlyDB.h"/>
-    <source-file src="src/ios/sdk/CountlyDB.m" compiler-flags="-fno-objc-arc" />
     <header-file src="src/ios/sdk/Countly_OpenUDID.h"/>
     <source-file src="src/ios/sdk/Countly_OpenUDID.m" compiler-flags="-fno-objc-arc" />
-    <source-file src="src/ios/sdk/Countly.xcdatamodeld" custom="true"/>
+    <header-file src="src/ios/sdk/CountlyAPM.h"/>
+    <source-file src="src/ios/sdk/CountlyAPM.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyAPMNetworkLog.h"/>
+    <source-file src="src/ios/sdk/CountlyAPMNetworkLog.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyCommon.h"/>
+    <source-file src="src/ios/sdk/CountlyCommon.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyConfig.h"/>
+    <source-file src="src/ios/sdk/CountlyConfig.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyConnectionManager.h"/>
+    <source-file src="src/ios/sdk/CountlyConnectionManager.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyCrashReporter.h"/>
+    <source-file src="src/ios/sdk/CountlyCrashReporter.m" compiler-flags="-fno-objc-arc" />
+    <!-- <header-file src="src/ios/sdk/CountlyDB.h"/> -->
+    <!-- <source-file src="src/ios/sdk/CountlyDB.m" compiler-flags="-fno-objc-arc" /> -->
+    <header-file src="src/ios/sdk/CountlyDeviceInfo.h"/>
+    <source-file src="src/ios/sdk/CountlyDeviceInfo.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyEvent.h"/>
+    <source-file src="src/ios/sdk/CountlyEvent.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyPersistency.h"/>
+    <source-file src="src/ios/sdk/CountlyPersistency.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyStarRating.h"/>
+    <source-file src="src/ios/sdk/CountlyStarRating.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyUserDetails.h"/>
+    <source-file src="src/ios/sdk/CountlyUserDetails.m" compiler-flags="-fno-objc-arc" />
+    <header-file src="src/ios/sdk/CountlyViewTracking.h"/>
+    <source-file src="src/ios/sdk/CountlyViewTracking.m" compiler-flags="-fno-objc-arc" />
+    <!-- <source-file src="src/ios/sdk/Countly.xcdatamodeld" custom="true"/> -->
 
     <header-file src="src/ios/CountlyCordova.h"/>
     <source-file src="src/ios/CountlyCordova.m"/>
