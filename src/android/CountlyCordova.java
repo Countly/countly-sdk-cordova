@@ -122,6 +122,12 @@ public class CountlyCordova extends CordovaPlugin {
 			// Log.e("Nicolson", String.valueOf(Countly.CountlyMessagingMode.TEST));
 			return true;
 		}
+		else if("recordView".equals(action)){
+			String viewName = args.getString(0);
+			Countly.sharedInstance().recordView(viewName)
+			callbackContext.success("View name sent: "+viewName);
+			return true;
+		}
 		else{
 			return false;
 		}
