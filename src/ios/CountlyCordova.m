@@ -117,7 +117,18 @@
     //NSString* picturePath = [command.arguments objectAtIndex:6];
     NSString* gender = [command.arguments objectAtIndex:7];
     NSString* byear = [command.arguments objectAtIndex:8];
+    
+    Countly.user.name = name;
+    Countly.user.username = username;
+    Countly.user.email = email;
+    Countly.user.organization = org;
+    Countly.user.phone = phone;
+    Countly.user.pictureURL = picture;
+    Countly.user.gender = gender;
+    Countly.user.birthYear = byear;
     //NSInteger byearint = [byear intValue];
+    
+    [Countly.user recordUserDetails];
         // [Countly.sharedInstance recordUserDetails: @{
         //                                             kCLYUserName: name,
         //                                             kCLYUserEmail: email,
@@ -131,6 +142,7 @@
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setuserdata!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
+
 
 - (void)onregistrationid:(CDVInvokedUrlCommand*)command
 {
