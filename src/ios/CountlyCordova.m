@@ -26,13 +26,18 @@
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
     
+    CountlyConfig* config = CountlyConfig.new;
+    config.appKey = appkey;
+    config.host = serverurl;
+    
     if (serverurl != nil && [serverurl length] > 0) {
-        [[Countly sharedInstance] start:appkey withHost:serverurl];
+        [[Countly sharedInstance] startWithConfig:config];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"initialized!"];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
     
+
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -113,16 +118,16 @@
     NSString* gender = [command.arguments objectAtIndex:7];
     NSString* byear = [command.arguments objectAtIndex:8];
     //NSInteger byearint = [byear intValue];
-        [Countly.sharedInstance recordUserDetails: @{
-                                                    kCLYUserName: name,
-                                                    kCLYUserEmail: email,
-                                                    kCLYUserBirthYear: byear,
-                                                    kCLYUserGender: gender,
-                                                    kCLYUserOrganization: org,
-                                                    kCLYUserPhone: phone,
-                                                    kCLYUserUsername: username,
-                                                    kCLYUserPicture: picture
-                                                                 }];
+        // [Countly.sharedInstance recordUserDetails: @{
+        //                                             kCLYUserName: name,
+        //                                             kCLYUserEmail: email,
+        //                                             kCLYUserBirthYear: byear,
+        //                                             kCLYUserGender: gender,
+        //                                             kCLYUserOrganization: org,
+        //                                             kCLYUserPhone: phone,
+        //                                             kCLYUserUsername: username,
+        //                                             kCLYUserPicture: picture
+        //                                                          }];
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setuserdata!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
