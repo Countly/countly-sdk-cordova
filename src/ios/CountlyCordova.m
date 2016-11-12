@@ -10,13 +10,13 @@
 {
     CDVPluginResult* pluginResult = nil;
     NSString* echo = [command.arguments objectAtIndex:0];
-    
+
     if (echo != nil && [echo length] > 0) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
-    
+
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -25,18 +25,18 @@
     CDVPluginResult* pluginResult = nil;
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
-    
+
     CountlyConfig* config = CountlyConfig.new;
     config.appKey = appkey;
     config.host = serverurl;
-    
+
     if (serverurl != nil && [serverurl length] > 0) {
         [[Countly sharedInstance] startWithConfig:config];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"initialized!"];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
-    
+
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -67,7 +67,7 @@
             NSString* countString = [command.arguments objectAtIndex:2];
             int countInt = [countString intValue];
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-            
+
             for(int i=3,il=(int)command.arguments.count;i<il;i+=2){
                 dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
             }
@@ -81,12 +81,17 @@
             NSString* sumString = [command.arguments objectAtIndex:3];
             float sumFloat = [sumString floatValue];
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-            
+
             for(int i=4,il=(int)command.arguments.count;i<il;i+=2){
                 dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
             }
             [[Countly sharedInstance] recordEvent:eventName segmentation:dict count:countInt  sum:sumFloat];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
+        }
+        else if ([eventType  isEqual: @"recordView"]){
+            NSString* recordView = [command.arguments objectAtIndex:1];
+            [Countly.sharedInstance reportView:recordView];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"reportView sent!"];
         }
         else{
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"none cases!"];
@@ -94,7 +99,7 @@
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
-    
+
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -117,7 +122,7 @@
     //NSString* picturePath = [command.arguments objectAtIndex:6];
     NSString* gender = [command.arguments objectAtIndex:7];
     NSString* byear = [command.arguments objectAtIndex:8];
-    
+
     Countly.user.name = name;
     Countly.user.username = username;
     Countly.user.email = email;
@@ -127,7 +132,7 @@
     Countly.user.gender = gender;
     Countly.user.birthYear = byear;
     //NSInteger byearint = [byear intValue];
-    
+
     [Countly.user recordUserDetails];
         // [Countly.sharedInstance recordUserDetails: @{
         //                                             kCLYUserName: name,
@@ -154,9 +159,9 @@
       // [[CountlyConnectionQueue sharedInstance] setStartedWithTest:YES];
     }
     [Countly.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:tokenByte];
-    
+
     // [[CountlyConnectionQueue sharedInstance] tokenSession:token];
-    
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
