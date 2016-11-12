@@ -52,6 +52,9 @@ Countly.sendEvent = function(options){
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","event",args);
 }
+Countly.recordView = function(recordView){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",[recordView || ""]);
+};
 
 // countly enable logger
 Countly.setLoggingEnabled = function(boolean){
