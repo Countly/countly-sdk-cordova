@@ -88,11 +88,6 @@
             [[Countly sharedInstance] recordEvent:eventName segmentation:dict count:countInt  sum:sumFloat];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
         }
-        else if ([eventType  isEqual: @"recordView"]){
-            NSString* recordView = [command.arguments objectAtIndex:1];
-            [Countly.sharedInstance reportView:recordView];
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"reportView sent!"];
-        }
         else{
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"none cases!"];
         }
@@ -102,7 +97,14 @@
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
-
+- (void)recordView:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    NSString* recordView = [command.arguments objectAtIndex:0];
+    [Countly.sharedInstance reportView:recordView];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"recordView Sent!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
 - (void)setloggingenabled:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
