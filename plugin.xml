@@ -115,7 +115,7 @@
         <service android:name="ly.count.android.sdk.messaging.CountlyMessagingService" >
             <meta-data android:name="broadcast_action" android:value="ly.count.android.api.broadcast" />
         </service>
-
+	<activity android:label="@string/app_name" android:name="ly.count.android.sdk.messaging.ProxyActivity" android:noHistory="true" android:theme="@android:style/Theme.Translucent" />
     </config-file>
 
     <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/sdk"/>
