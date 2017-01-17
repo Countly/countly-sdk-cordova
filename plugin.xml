@@ -22,6 +22,8 @@
 
   <engines>
     <engine name="cordova" version=">=3.0.0"/>
+    <engine name="cordova-android" version=">=3.0.0"/>
+    <engine name="cordova-ios" version=">=3.0.0"/>
   </engines>
 
   <js-module src="Countly.js" name="Countly">
@@ -104,7 +106,9 @@
                 <action android:name="org.openudid.GETUDID" />
             </intent-filter>
         </service>
-        <receiver
+
+        <!-- push notification config -->
+        <!-- <receiver
             android:name="ly.count.android.sdk.messaging.CountlyMessaging"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
@@ -114,7 +118,7 @@
         </receiver>
         <service android:name="ly.count.android.sdk.messaging.CountlyMessagingService" >
             <meta-data android:name="broadcast_action" android:value="ly.count.android.api.broadcast" />
-        </service>
+        </service> -->
 
     </config-file>
 
@@ -136,18 +140,19 @@
     <source-file src="src/android/ReferrerReceiver.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
 
-    <source-file src="src/android/messaging/CountlyMessaging.java" target-dir="src/ly/count/android/sdk/messaging"/>
+    <!-- push notification config -->
+    <!-- <source-file src="src/android/messaging/CountlyMessaging.java" target-dir="src/ly/count/android/sdk/messaging"/>
     <source-file src="src/android/messaging/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk/messaging"/>
     <source-file src="src/android/messaging/Message.java" target-dir="src/ly/count/android/sdk/messaging"/>
-    <source-file src="src/android/messaging/ProxyActivity.java" target-dir="src/ly/count/android/sdk/messaging"/>
+    <source-file src="src/android/messaging/ProxyActivity.java" target-dir="src/ly/count/android/sdk/messaging"/> -->
 
     <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
     <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/>
 
-    <source-file src="src/android/libs/gcm.jar" target-dir="libs/" />
+    <!-- <source-file src="src/android/libs/gcm.jar" target-dir="libs/" />
     <source-file src="src/android/libs/android-support-v13.jar" target-dir="libs/" />
     <source-file src="src/android/libs/google-play-services.jar" target-dir="libs/" />
-    <source-file src="src/android/libs/play-services-gcm.jar" target-dir="libs/" />
+    <source-file src="src/android/libs/play-services-gcm.jar" target-dir="libs/" /> -->
 
     <source-file src="src/android/gradle/build-extras.gradle" target-dir="src/.." />
   </platform>
