@@ -101,7 +101,11 @@ public class CountlyCordova extends CordovaPlugin {
 			bundle.put("picturePath", args.getString(6));
 			bundle.put("gender", args.getString(7));
 			bundle.put("byear", String.valueOf(args.getInt(8)));
-			Countly.sharedInstance().setUserData(bundle);
+
+			Countly.userData.setUserData(bundle);
+			Countly.userData.save();
+
+			// Countly.sharedInstance().setUserData(bundle);
 			// Countly.sharedInstance().setUserData(bundle);
 			callbackContext.success("setuserdata success");
 			return true;
