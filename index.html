@@ -51,6 +51,15 @@
 
             <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
             <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
+
+            <button class="fluid ui button">2017</button>
+
+
+            <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
+            <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
+            <button onclick="app.startEvent('hello')" class="fluid ui button">Timed event: Start</button>
+            <button onclick="app.endEvent('hello')" class="fluid ui button">Timed event: Stop</button>
+
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="Countly.js"></script>
@@ -64,8 +73,10 @@
 
             app = {};
             document.addEventListener("deviceready",function(){
-                Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928");
-                //50bffd5c8a7332b55f8aca45a1af0cd6e6f31b13  //http://104.131.45.10
+                // Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928");
+                Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928", "custom_device_id_123456");
+                var isAdvertiseID = true;
+                // Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928", null, isAdvertiseID);
                                     //replace your server ip/url // replace it with your "App Key"
                 // app.onRegistrationId();
                 // app.test();
@@ -153,6 +164,20 @@
             }
             app.recordView = function(viewName){
                 Countly.recordView(viewName);
+            }
+
+            // 2017
+            app.changeDeviceId = function(){
+                Countly.changeDeviceId("123456");
+            }
+            app.enableParameterTamperingProtection = function(){
+                Countly.enableParameterTamperingProtection("salt");
+            }
+            app.startEvent = function(){
+                Countly.startEvent("timedEvent");
+            }
+            app.endEvent = function(){
+                Countly.endEvent("timedEvent");
             }
         </script>
     </body>

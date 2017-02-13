@@ -112,6 +112,48 @@ Countly.demo = function(){
 
 }
 
+// 2017
+
+Countly.changeDeviceId = function(newDeviceID){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","changeDeviceId",[newDeviceID.toString() || ""]);
+}
+Countly.enableParameterTamperingProtection = function(salt){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
+}
+Countly.enableParameterTamperingProtection = function(salt){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
+}
+Countly.startEvent = function(eventName){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startEvent",[eventName.toString() || ""]);
+}
+Countly.endEvent = function(options){
+    if(typeof options === "string")
+        options = {eventName: options};
+    var args = [];
+    var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
+    var segments = {};
+
+    if(options.segments && options.eventSum)
+        eventType = "eventWithSumSegment";
+
+    args.push(eventType);
+
+    if(options.eventName)
+        args.push(options.eventName.toString());
+    if(options.eventCount)
+        args.push(options.eventCount.toString());
+    if(options.eventSum)
+        args.push(options.eventSum.toString());
+
+    if(options.segments)
+        segments = options.segments;
+    for (var event in segments) {
+        args.push(event);
+        args.push(segments[event]);
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endEvent",args);
+}
+
 /////////////////////////
 ////// PUSH CODE ////////
 /////////////////////////
