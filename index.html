@@ -39,7 +39,7 @@
             <button onclick="app.start()" class="fluid ui green button">Start</button>
             <button onclick="app.stop()" class="fluid ui red button">Stop</button>
 
-            <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
+            
             <button onclick="app.onRegistrationId()" class="fluid ui button teal">Push Message</button>
 
             <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
@@ -52,13 +52,24 @@
             <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
             <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
 
-            <button class="fluid ui button">2017</button>
+            <div class="ui horizontal divider">2017</div>
 
 
             <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
             <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
             <button onclick="app.startEvent('hello')" class="fluid ui button">Timed event: Start</button>
             <button onclick="app.endEvent('hello')" class="fluid ui button">Timed event: Stop</button>
+
+            <div class="ui horizontal divider">User Methods Start</div>
+                <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
+                <button onclick="app.userData.setProperty()" class="fluid ui button teal">UserData.setProperty</button>
+                <button onclick="app.userData.increment()" class="fluid ui button teal">UserData.increment</button>
+                <button onclick="app.userData.incrementBy()" class="fluid ui button teal">UserData.incrementBy</button>
+                <button onclick="app.userData.multiply()" class="fluid ui button teal">UserData.multiply</button>
+                <button onclick="app.userData.saveMax()" class="fluid ui button teal">UserData.saveMax</button>
+                <button onclick="app.userData.saveMin()" class="fluid ui button teal">UserData.saveMin</button>
+                <button onclick="app.userData.setOnce()" class="fluid ui button teal">UserData.setOnce</button>
+            <div class="ui horizontal divider">User Methods End</div>
 
         </div>
         <script type="text/javascript" src="cordova.js"></script>
@@ -178,6 +189,31 @@
             }
             app.endEvent = function(){
                 Countly.endEvent("timedEvent");
+            }
+
+            // user details
+            
+            app.userData = {};
+            app.userData.setProperty = function(){
+                Countly.userData.setProperty("keyName", "keyValue");
+            }
+            app.userData.increment = function(){
+                Countly.userData.increment("keyName", 5);
+            }
+            app.userData.incrementBy = function(){
+                Countly.userData.incrementBy("keyName", 10);
+            }
+            app.userData.multiply = function(){
+                Countly.userData.multiply("keyName", 20);
+            }
+            app.userData.saveMax = function(){
+                Countly.userData.saveMax("keyName", 100);
+            }
+            app.userData.saveMin = function(){
+                Countly.userData.saveMin("keyName", 50);
+            }
+            app.userData.setOnce = function(){
+                Countly.userData.setOnce("keyName", 200);
             }
         </script>
     </body>

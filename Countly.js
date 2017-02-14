@@ -152,7 +152,30 @@ Countly.endEvent = function(options){
         args.push(segments[event]);
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endEvent",args);
-}
+};
+
+Countly.userData = {};
+Countly.userData.setProperty = function(keyName, keyValue){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData.setProperty",[keyName.toString() || "", keyValue.toString() || ""]);
+};
+Countly.userData.increment = function(keyName){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData.setProperty",[keyName.toString() || ""]);
+};
+Countly.userData.incrementBy = function(keyName, keyIncrement){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData.setProperty",[keyName.toString() || "", keyIncrement.toString() || ""]);
+};
+Countly.userData.multiply = function(keyName, multiplyValue){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData.setProperty",[keyName.toString() || "", multiplyValue.toString() || ""]);
+};
+Countly.userData.saveMax = function(keyName, saveMax){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData.setProperty",[keyName.toString() || "", saveMax.toString() || ""]);
+};
+Countly.userData.saveMin = function(keyName, saveMin){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData.setProperty",[keyName.toString() || "", saveMin.toString() || ""]);
+};
+Countly.userData.setOnce = function(keyName, setOnce){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData.setProperty",[keyName.toString() || "", setOnce.toString() || ""]);
+};
 
 /////////////////////////
 ////// PUSH CODE ////////

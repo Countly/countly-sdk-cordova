@@ -98,7 +98,6 @@ public class CountlyCordova extends CordovaPlugin {
             String eventType = args.getString(0);
             if("event".equals(eventType)){
                 String eventName = args.getString(1);
-                int eventCount= Integer.parseInt(args.getString(2));
                 Countly.sharedInstance().endEvent(eventName);
                 callbackContext.success("event sent");
             }
