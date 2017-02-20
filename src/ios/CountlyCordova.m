@@ -183,4 +183,147 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)changeDeviceId:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"changeDeviceId!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setHttpPostForced:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setHttpPostForced!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"enableParameterTamperingProtection!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setLocation:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setLocation!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)enableCrashReporting:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"enableCrashReporting!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)addCrashLog:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"addCrashLog!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)userData.setProperty:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData.setProperty!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)userData.incrementBy:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData.incrementBy!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)userData.multiply:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData.multiply!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)userData.saveMax:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData.saveMax!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)userData.saveMin:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData.saveMin!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)userData.setOnce:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData.setOnce!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)demo:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    NSString* messagingMode = [command.arguments objectAtIndex:1];
+    int mode = [messagingMode intValue];
+    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"demo!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 @end
