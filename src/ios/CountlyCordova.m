@@ -266,7 +266,6 @@
 - (void)userData_increment:(CDVInvokedUrlCommand*)command
 {
     NSString* keyName = [command.arguments objectAtIndex:0];
-    NSString* keyValue = [command.arguments objectAtIndex:1];
     
     [Countly.user increment:keyName];
     [Countly.user save];
@@ -310,7 +309,7 @@
     NSString* keyValue = [command.arguments objectAtIndex:1];
     int keyValueInteger = [keyValue intValue];
 
-    [Countly.user max:keyName value:keyValue];
+    [Countly.user max:keyName value:keyValueInteger];
     [Countly.user save];
 
     CDVPluginResult* pluginResult = nil;
@@ -324,7 +323,7 @@
     NSString* keyValue = [command.arguments objectAtIndex:1];
     int keyValueInteger = [keyValue intValue];
 
-    [Countly.user min:keyName value:keyValue];
+    [Countly.user min:keyName value:keyValueInteger];
     [Countly.user save];
 
     CDVPluginResult* pluginResult = nil;
