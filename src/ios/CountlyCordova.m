@@ -172,6 +172,8 @@
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
+    [Countly.sharedInstance resume];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"start!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -179,6 +181,8 @@
 
 - (void)stop:(CDVInvokedUrlCommand*)command
 {
+    [Countly.sharedInstance suspend];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"stop!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
