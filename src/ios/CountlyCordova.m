@@ -136,6 +136,7 @@
     //NSInteger byearint = [byear intValue];
 
     [Countly.user recordUserDetails];
+    [Countly.user save];
         // [Countly.sharedInstance recordUserDetails: @{
         //                                             kCLYUserName: name,
         //                                             kCLYUserEmail: email,
@@ -251,21 +252,39 @@
 
 - (void)userData_setProperty:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* keyName = [command.arguments objectAtIndex:0];
+    NSString* keyValue = [command.arguments objectAtIndex:1];
+    
+    [Countly.user set:keyName value:keyValue];
+    [Countly.user save];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData_setProperty!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)userData_increment:(CDVInvokedUrlCommand*)command
+{
+    NSString* keyName = [command.arguments objectAtIndex:0];
+    NSString* keyValue = [command.arguments objectAtIndex:1];
+    
+    [Countly.user increment:keyName];
+    [Countly.user save];
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData_incrementBy!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void)userData_incrementBy:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* keyName = [command.arguments objectAtIndex:0];
+    NSString* keyValue = [command.arguments objectAtIndex:1];
+    int keyValueInteger = [keyValue intValue];
+
+    [Countly.user incrementBy:keyName value:keyValueInteger];
+    [Countly.user save];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData_incrementBy!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -273,10 +292,13 @@
 
 - (void)userData_multiply:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* keyName = [command.arguments objectAtIndex:0];
+    NSString* keyValue = [command.arguments objectAtIndex:1];
+    int keyValueInteger = [keyValue intValue];
+
+    [Countly.user multiply:keyName value:keyValueInteger];
+    [Countly.user save];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData_multiply!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -284,10 +306,13 @@
 
 - (void)userData_saveMax:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* keyName = [command.arguments objectAtIndex:0];
+    NSString* keyValue = [command.arguments objectAtIndex:1];
+    int keyValueInteger = [keyValue intValue];
+
+    [Countly.user max:keyName value:keyValue];
+    [Countly.user save];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData_saveMax!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -295,10 +320,13 @@
 
 - (void)userData_saveMin:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* keyName = [command.arguments objectAtIndex:0];
+    NSString* keyValue = [command.arguments objectAtIndex:1];
+    int keyValueInteger = [keyValue intValue];
+
+    [Countly.user min:keyName value:keyValue];
+    [Countly.user save];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData_saveMin!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -306,10 +334,12 @@
 
 - (void)userData_setOnce:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* keyName = [command.arguments objectAtIndex:0];
+    NSString* keyValue = [command.arguments objectAtIndex:1];
+    
+    [Countly.user setOnce:keyName value:keyValue];
+    [Countly.user save];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData_setOnce!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
