@@ -189,52 +189,59 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success("setuserdata success");
             return true;
         }
-        else if ("userData.setProperty".equals(action)) {
+        else if ("userData_setProperty".equals(action)) {
             String keyName = args.getString(0);
             String keyValue = args.getString(1);
             Countly.userData.setProperty(keyName, keyValue);
-            callbackContext.success("userData.setProperty success!");
+            Countly.userData.save();
+            callbackContext.success("userData_setProperty success!");
             return true;
         }
-        else if ("userData.increment".equals(action)) {
+        else if ("userData_increment".equals(action)) {
             String keyName = args.getString(0);
             Countly.userData.increment(keyName);
-            callbackContext.success("userData.increment success!");
+            Countly.userData.save();
+            callbackContext.success("userData_increment success!");
             return true;
         }
-        else if ("userData.incrementBy".equals(action)) {
+        else if ("userData_incrementBy".equals(action)) {
             String keyName = args.getString(0);
             int keyIncrement = Integer.parseInt(args.getString(1));
             Countly.userData.incrementBy(keyName, keyIncrement);
-            callbackContext.success("userData.incrementBy success!");
+            Countly.userData.save();
+            callbackContext.success("userData_incrementBy success!");
             return true;
         }
-        else if ("userData.multiply".equals(action)) {
+        else if ("userData_multiply".equals(action)) {
             String keyName = args.getString(0);
             int multiplyValue = Integer.parseInt(args.getString(1));
             Countly.userData.multiply(keyName, multiplyValue);
-            callbackContext.success("userData.multiply success!");
+            Countly.userData.save();
+            callbackContext.success("userData_multiply success!");
             return true;
         }
-        else if ("userData.saveMax".equals(action)) {
+        else if ("userData_saveMax".equals(action)) {
             String keyName = args.getString(0);
             int maxScore = Integer.parseInt(args.getString(1));
             Countly.userData.saveMax(keyName, maxScore);
-            callbackContext.success("userData.saveMax success!");
+            Countly.userData.save();
+            callbackContext.success("userData_saveMax success!");
             return true;
         }
-        else if ("userData.saveMin".equals(action)) {
+        else if ("userData_saveMin".equals(action)) {
             String keyName = args.getString(0);
             int minScore = Integer.parseInt(args.getString(1));
             Countly.userData.saveMin(keyName, minScore);
-            callbackContext.success("userData.saveMin success!");
+            Countly.userData.save();
+            callbackContext.success("userData_saveMin success!");
             return true;
         }
-        else if ("userData.setOnce".equals(action)) {
+        else if ("userData_setOnce".equals(action)) {
             String keyName = args.getString(0);
             String minScore = args.getString(1);
             Countly.userData.setOnce(keyName, minScore);
-            callbackContext.success("userData.setOnce success!");
+            Countly.userData.save();
+            callbackContext.success("userData_setOnce success!");
             return true;
         }
 

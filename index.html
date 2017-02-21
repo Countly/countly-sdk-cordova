@@ -36,18 +36,21 @@
         <div class="app">
             <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
             <img class="ui centered medium image" src="https://count.ly/wp-content/uploads/2014/10/countly_logo_color.png">
+
             <button onclick="app.start()" class="fluid ui green button">Start</button>
-            <button onclick="app.stop()" class="fluid ui red button">Stop</button>
+            <button onclick="app.stop()" class="fluid ui red button">Stop</button>            
 
-            
-            <button onclick="app.onRegistrationId()" class="fluid ui button teal">Push Message</button>
+            <div class="ui horizontal divider">Events Start</div>
+                <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
+                <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
+                <button onclick="app.eventWithSegment()" class="fluid ui button">Event with Segment</button>
+                <button onclick="app.eventWithSum_Segment()" class="fluid ui button">Even with Sum and Segment</button>
 
-            <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
-            <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
-            <button onclick="app.eventWithSegment()" class="fluid ui button">Event with Segment</button>
-            <button onclick="app.eventWithSum_Segment()" class="fluid ui button">Even with Sum and Segment</button>
+                <button onclick="app.event()" class="fluid ui black button">All Events</button>
 
-            <button onclick="app.event()" class="fluid ui black button">All Events</button>
+                <button onclick="app.startEvent('hello')" class="fluid ui button">Timed event: Start</button>
+                <button onclick="app.endEvent('hello')" class="fluid ui button">Timed event: Stop</button>
+            <div class="ui horizontal divider">Events End</div>
 
             <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
             <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
@@ -55,10 +58,7 @@
             <div class="ui horizontal divider">2017</div>
 
 
-            <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
-            <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
-            <button onclick="app.startEvent('hello')" class="fluid ui button">Timed event: Start</button>
-            <button onclick="app.endEvent('hello')" class="fluid ui button">Timed event: Stop</button>
+            
 
             <div class="ui horizontal divider">User Methods Start</div>
                 <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
@@ -70,6 +70,12 @@
                 <button onclick="app.userData.saveMin()" class="fluid ui button teal">UserData.saveMin</button>
                 <button onclick="app.userData.setOnce()" class="fluid ui button teal">UserData.setOnce</button>
             <div class="ui horizontal divider">User Methods End</div>
+
+            <div class="ui horizontal divider">Other Methods Start</div>
+                <button onclick="app.onRegistrationId()" class="fluid ui button teal">Push Message</button>
+                <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
+                <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
+            <div class="ui horizontal divider">Other Methods End</div>  
 
         </div>
         <script type="text/javascript" src="cordova.js"></script>
