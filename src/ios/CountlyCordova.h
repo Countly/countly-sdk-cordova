@@ -19,12 +19,12 @@
 - (void)setLocation:(CDVInvokedUrlCommand*)command;
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command;
 - (void)addCrashLog:(CDVInvokedUrlCommand*)command;
-- (void)userData.setProperty:(CDVInvokedUrlCommand*)command;
-- (void)userData.increment:(CDVInvokedUrlCommand*)command;
-- (void)userData.incrementBy:(CDVInvokedUrlCommand*)command;
-- (void)userData.multiply:(CDVInvokedUrlCommand*)command;
-- (void)userData.saveMax:(CDVInvokedUrlCommand*)command;
-- (void)userData.saveMin:(CDVInvokedUrlCommand*)command;
+- (void)userData_setProperty:(CDVInvokedUrlCommand*)command;
+- (void)userData_increment:(CDVInvokedUrlCommand*)command;
+- (void)userData_incrementBy:(CDVInvokedUrlCommand*)command;
+- (void)userData_multiply:(CDVInvokedUrlCommand*)command;
+- (void)userData_saveMax:(CDVInvokedUrlCommand*)command;
+- (void)userData_saveMin:(CDVInvokedUrlCommand*)command;
 - (void)demo:(CDVInvokedUrlCommand*)command;
 
 @end
