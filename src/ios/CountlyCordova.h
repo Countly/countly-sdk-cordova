@@ -13,12 +13,18 @@
 - (void)start:(CDVInvokedUrlCommand*)command;
 - (void)stop:(CDVInvokedUrlCommand*)command;
 - (void)recordView:(CDVInvokedUrlCommand*)command;
-- (void)changeDeviceId:(CDVInvokedUrlCommand*)command;
+
 - (void)setHttpPostForced:(CDVInvokedUrlCommand*)command;
-- (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command;
 - (void)setLocation:(CDVInvokedUrlCommand*)command;
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command;
 - (void)addCrashLog:(CDVInvokedUrlCommand*)command;
+
+- (void)changeDeviceId:(CDVInvokedUrlCommand*)command;
+- (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command;
+- (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command;
+- (void)startEvent:(CDVInvokedUrlCommand*)command;
+- (void)endEvent:(CDVInvokedUrlCommand*)command;
+
 - (void)userData_setProperty:(CDVInvokedUrlCommand*)command;
 - (void)userData_increment:(CDVInvokedUrlCommand*)command;
 - (void)userData_incrementBy:(CDVInvokedUrlCommand*)command;

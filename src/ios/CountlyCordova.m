@@ -2,7 +2,10 @@
 
 #import "Countly.h"
 #import "CountlyCordova.h"
+#import "CountlyConfig.h"
 #import <Cordova/CDV.h>
+
+CountlyConfig* config = nil;
 
 @implementation CountlyCordova
 
@@ -26,7 +29,7 @@
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
 
-    CountlyConfig* config = CountlyConfig.new;
+    config = CountlyConfig.new;
     config.appKey = appkey;
     config.host = serverurl;
 
@@ -190,10 +193,9 @@
 
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* newDeviceID = [command.arguments objectAtIndex:0];
+    [Countly.sharedInstance setNewDeviceID:newDeviceID onServer:YES];
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"changeDeviceId!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -201,10 +203,6 @@
 
 - (void)setHttpPostForced:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setHttpPostForced!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -212,21 +210,64 @@
 
 - (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* salt = [command.arguments objectAtIndex:0];
+    config.secretSalt = salt;
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"enableParameterTamperingProtection!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)startEvent:(CDVInvokedUrlCommand*)command
+{
+    NSString* eventName = [command.arguments objectAtIndex:0];
+    [Countly.sharedInstance startEvent:eventName];
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"startEvent!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)endEvent:(CDVInvokedUrlCommand*)command
+{
+    NSString* eventType = [command.arguments objectAtIndex:0];
+    CDVPluginResult* pluginResult = nil;
+    
+    if ([eventType  isEqual: @"event"]) {
+        NSString* eventName = [command.arguments objectAtIndex:1];
+        [Countly.sharedInstance endEvent:eventName];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"event sent!"];
+    }
+    else if ([eventType  isEqual: @"eventWithSegment"]){
+        NSString* eventName = [command.arguments objectAtIndex:1];
+        NSString* countString = [command.arguments objectAtIndex:2];
+        int countInt = [countString intValue];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+
+        for(int i=3,il=(int)command.arguments.count;i<il;i+=2){
+            dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
+        }
+        [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:0];
+
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
+    }
+    else{
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"none cases!"];
+    }
+    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void)setLocation:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* latitudeString = [command.arguments objectAtIndex:0];
+    NSString* longitudeString = [command.arguments objectAtIndex:1];
+
+    double latitudeDouble = [latitudeString doubleValue];
+    double longitudeDouble = [longitudeString doubleValue];
+
+    config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setLocation!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -234,10 +275,8 @@
 
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    config.features = @[CLYCrashReporting];
+    
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"enableCrashReporting!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

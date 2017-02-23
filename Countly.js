@@ -114,11 +114,12 @@ Countly.demo = function(){
 
 // 2017
 
+
+Countly.setLocation = function(newDeviceID){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[newDeviceID.toString() || ""]);
+}
 Countly.changeDeviceId = function(newDeviceID){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","changeDeviceId",[newDeviceID.toString() || ""]);
-}
-Countly.enableParameterTamperingProtection = function(salt){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
 }
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
