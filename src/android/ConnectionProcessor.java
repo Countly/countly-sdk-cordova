@@ -81,7 +81,7 @@ public class ConnectionProcessor implements Runnable {
         }
         final URL url = new URL(urlStr);
         final HttpURLConnection conn;
-        if (Countly.publicKeyPinCertificates == null) {
+        if (Countly.publicKeyPinCertificates == null && Countly.certificatePinCertificates == null) {
             conn = (HttpURLConnection)url.openConnection();
         } else {
             HttpsURLConnection c = (HttpsURLConnection)url.openConnection();
@@ -92,9 +92,13 @@ public class ConnectionProcessor implements Runnable {
         conn.setReadTimeout(READ_TIMEOUT_IN_MILLISECONDS);
         conn.setUseCaches(false);
         conn.setDoInput(true);
+        conn.setRequestMethod("GET");
         String picturePath = UserData.getPicturePathFromQuery(url);
         if (Countly.sharedInstance().isLoggingEnabled()) {
             Log.d(Countly.TAG, "Got picturePath: " + picturePath);
+        }
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.v(Countly.TAG, "Is the HTTP POST forced: " + Countly.sharedInstance().isHttpPostForced());
         }
         if(!picturePath.equals("")){
         	//Uploading files:
@@ -133,9 +137,9 @@ public class ConnectionProcessor implements Runnable {
             // End of multipart/form-data.
             writer.append("--" + boundary + "--").append(CRLF).flush();
         }
-        else if(eventData.contains("&crash=") || eventData.length() >= 2048){
+        else if(eventData.length() >= 2048 || Countly.sharedInstance().isHttpPostForced()){
             if (Countly.sharedInstance().isLoggingEnabled()) {
-                Log.d(Countly.TAG, "Using post because of crash");
+                Log.d(Countly.TAG, "Using post");
             }
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");

@@ -139,7 +139,8 @@
     <source-file src="src/android/OpenUDIDAdapter.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/ReferrerReceiver.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
-
+    <source-file src="src/android/CountlyStarRating.java" target-dir="src/ly/count/android/sdk"/>
+    
     <!-- push notification config -->
     <!-- <source-file src="src/android/messaging/CountlyMessaging.java" target-dir="src/ly/count/android/sdk/messaging"/>
     <source-file src="src/android/messaging/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk/messaging"/>

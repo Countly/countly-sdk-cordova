@@ -49,7 +49,11 @@ public class Countly {
     /**
      * Current version of the Count.ly Android SDK as a displayable string.
      */
-    public static final String COUNTLY_SDK_VERSION_STRING = "16.06.04";
+    public static final String COUNTLY_SDK_VERSION_STRING = "16.12.3";
+    /**
+     * Used as request meta data on every request
+     */
+    public static final String COUNTLY_SDK_NAME = "java-native-android";
     /**
      * Default string used in the begin session metrics if the
      * app version cannot be found.
@@ -71,6 +75,7 @@ public class Countly {
     private static final long TIMER_DELAY_IN_SECONDS = 60;
 
     protected static List<String> publicKeyPinCertificates;
+    protected static List<String> certificatePinCertificates;
 
     protected static final Map<String, Event> timedEvents = new HashMap<String, Event>();
 
@@ -109,6 +114,17 @@ public class Countly {
     private int lastViewStart = 0;
     private boolean firstView = true;
     private boolean autoViewTracker = false;
+
+    //overrides
+    private boolean isHttpPostForced = false;//when true, all data sent to the server will be sent using HTTP POST
+
+    //optional parameters for begin_session call
+    private String optionalParameterCountryCode = null;
+    private String optionalParameterCity = null;
+    private String optionalParameterLocation = null;
+
+    //star rating
+    private CountlyStarRating.RatingCallback starRatingCallback_;// saved callback that is used for automatic star rating
 
     /**
      * Returns the Countly singleton.
@@ -178,12 +194,44 @@ public class Countly {
      * @throws IllegalStateException if init has previously been called with different values during the same application instance
      */
     public synchronized Countly init(final Context context, final String serverURL, final String appKey, final String deviceID, DeviceId.Type idMode) {
+        return init(context, serverURL, appKey, deviceID, idMode, -1, null, null, null, null);
+    }
+
+
+    /**
+     * Initializes the Countly SDK. Call from your main Activity's onCreate() method.
+     * Must be called before other SDK methods can be used.
+     * @param context application context
+     * @param serverURL URL of the Countly server to submit data to
+     * @param appKey app key for the application being tracked; find in the Countly Dashboard under Management &gt; Applications
+     * @param deviceID unique ID for the device the app is running on; note that null in deviceID means that Countly will fall back to OpenUDID, then, if it's not available, to Google Advertising ID
+     * @param idMode enum value specifying which device ID generation strategy Countly should use: OpenUDID or Google Advertising ID
+     * @param starRatingLimit sets the limit after how many sessions, for each apps version, the automatic star rating dialog is shown
+     * @param starRatingCallback the callback function that will be called from the automatic star rating dialog
+     * @param starRatingTextTitle the shown title text for the star rating dialogs
+     * @param starRatingTextMessage the shown message text for the star rating dialogs
+     * @param starRatingTextDismiss the shown dismiss button text for the shown star rating dialogs
+     * @return Countly instance for easy method chaining
+     * @throws IllegalArgumentException if context, serverURL, appKey, or deviceID are invalid
+     * @throws IllegalStateException if init has previously been called with different values during the same application instance
+     */
+    public synchronized Countly init(final Context context, String serverURL, final String appKey, final String deviceID, DeviceId.Type idMode,
+                                     int starRatingLimit, CountlyStarRating.RatingCallback starRatingCallback, String starRatingTextTitle, String starRatingTextMessage, String starRatingTextDismiss) {
+
         if (context == null) {
             throw new IllegalArgumentException("valid context is required");
         }
+
         if (!isValidURL(serverURL)) {
             throw new IllegalArgumentException("valid serverURL is required");
         }
+        if (serverURL.charAt(serverURL.length() - 1) == '/') {
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.i(Countly.TAG, "Removing trailing '/' from provided server url");
+            }
+            serverURL = serverURL.substring(0, serverURL.length() - 1);//removing trailing '/' from server url
+        }
+
         if (appKey == null || appKey.length() == 0) {
             throw new IllegalArgumentException("valid appKey is required");
         }
@@ -212,6 +260,10 @@ public class Countly {
             MessagingAdapter.storeConfiguration(context, serverURL, appKey, deviceID, idMode);
         }
 
+        //set the star rating values
+        starRatingCallback_ = starRatingCallback;
+        CountlyStarRating.setStarRatingInitConfig(context, starRatingLimit, starRatingTextTitle, starRatingTextMessage, starRatingTextDismiss);
+
         // if we get here and eventQueue_ != null, init is being called again with the same values,
         // so there is nothing to do, because we are already initialized with those values
         if (eventQueue_ == null) {
@@ -232,6 +284,9 @@ public class Countly {
             connectionQueue_.setDeviceId(deviceIdInstance);
 
             eventQueue_ = new EventQueue(countlyStore);
+
+            //do star rating related things
+            CountlyStarRating.registerAppSession(context, starRatingCallback_);
         }
 
         context_ = context;
@@ -428,6 +483,13 @@ public class Countly {
      */
     public void onRegistrationId(String registrationId) {
         connectionQueue_.tokenSession(registrationId, messagingMode_);
+    }
+
+    /**
+     * DON'T USE THIS!!!!
+     */
+    public void onRegistrationId(String registrationId, CountlyMessagingMode mode) {
+        connectionQueue_.tokenSession(registrationId, mode);
     }
 
     /**
@@ -845,8 +907,10 @@ public class Countly {
                 }
             }
 
+            long currentTimestamp = Countly.currentTimestampMs();
+
             event.segmentation = segmentation;
-            event.dur = Countly.currentTimestamp() - event.timestamp;
+            event.dur = (currentTimestamp - event.timestamp) / 1000.0;
             event.count = count;
             event.sum = sum;
             eventQueue_.recordEvent(event);
@@ -1032,13 +1096,133 @@ public class Countly {
      * Allows public key pinning.
      * Supply list of SSL certificates (base64-encoded strings between "-----BEGIN CERTIFICATE-----" and "-----END CERTIFICATE-----" without end-of-line)
      * along with server URL starting with "https://". Countly will only accept connections to the server
-     * if public key of SSL certificate provided by the server matches one provided to this method.
-     * @param certificates List of SSL certificates
+     * if public key of SSL certificate provided by the server matches one provided to this method or by {@link #enableCertificatePinning(List)}.
+     * @param certificates List of SSL public keys
      * @return Countly instance
      */
     public static Countly enablePublicKeyPinning(List<String> certificates) {
         publicKeyPinCertificates = certificates;
         return Countly.sharedInstance();
+    }
+
+    /**
+     * Allows certificate pinning.
+     * Supply list of SSL certificates (base64-encoded strings between "-----BEGIN CERTIFICATE-----" and "-----END CERTIFICATE-----" without end-of-line)
+     * along with server URL starting with "https://". Countly will only accept connections to the server
+     * if certificate provided by the server matches one provided to this method or by {@link #enablePublicKeyPinning(List)}.
+     * @param certificates List of SSL certificates
+     * @return Countly instance
+     */
+    public static Countly enableCertificatePinning(List<String> certificates) {
+        certificatePinCertificates = certificates;
+        return Countly.sharedInstance();
+    }
+
+    /**
+     * Shows the star rating dialog
+     * @param activity the activity that will own the dialog
+     * @param callback callback for the star rating dialog "rate" and "dismiss" events
+     */
+    public void showStarRating(Activity activity, CountlyStarRating.RatingCallback callback){
+        CountlyStarRating.showStarRating(activity, callback);
+    }
+
+    /**
+     * Set's the text's for the different fields in the star rating dialog. Set value null if for some field you want to keep the old value
+     * @param starRatingTextTitle dialog's title text
+     * @param starRatingTextMessage dialog's message text
+     * @param starRatingTextDismiss dialog's dismiss buttons text
+     */
+    public void setStarRatingDialogTexts(String starRatingTextTitle, String starRatingTextMessage, String starRatingTextDismiss) {
+        if(context_ == null) {
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.e(Countly.TAG, "Can't call this function before init has been called");
+                return;
+            }
+        }
+        CountlyStarRating.setStarRatingInitConfig(context_, -1, starRatingTextTitle, starRatingTextMessage, starRatingTextDismiss);
+    }
+
+    /**
+     * Set if the star rating
+     * @param IsShownAutomatically set it true if you want to show the app star rating dialog automatically for each new version after the specified session amount
+     */
+    public void setIfStarRatingShownAutomatically(boolean IsShownAutomatically) {
+        if(context_ == null) {
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.e(Countly.TAG, "Can't call this function before init has been called");
+                return;
+            }
+        }
+        CountlyStarRating.setShowDialogAutomatically(context_, IsShownAutomatically);
+    }
+
+    /**
+     * Set if the star rating is shown only once per app lifetime
+     * @param disableAsking set true if you want to disable asking the app rating for each new app version (show it only once per apps lifetime)
+     */
+    public void setStarRatingDisableAskingForEachAppVersion(boolean disableAsking) {
+        if(context_ == null) {
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.e(Countly.TAG, "Can't call this function before init has been called");
+                return;
+            }
+        }
+        CountlyStarRating.setShowDialogAutomatically(context_, disableAsking);
+    }
+
+    /**
+     * Set after how many sessions the automatic star rating will be shown for each app version
+     * @param limit app session amount for the limit
+     */
+    public void setAutomaticStarRatingSessionLimit(int limit) {
+        if(context_ == null) {
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.e(Countly.TAG, "Can't call this function before init has been called");
+                return;
+            }
+        }
+        CountlyStarRating.setStarRatingInitConfig(context_, limit, null, null, null);
+    }
+
+    /**
+     * Set the override for forcing to use HTTP POST for all connections to the server
+     * @param isItForced the flag for the new status, set "true" if you want it to be forced
+     */
+    public void setHttpPostForced(boolean isItForced) {
+        isHttpPostForced = isItForced;
+    }
+
+    /**
+     * Get the status of the override for HTTP POST
+     * @return return "true" if HTTP POST ir forced
+     */
+    public boolean isHttpPostForced() {
+        return isHttpPostForced;
+    }
+
+    /**
+     * Set optional parameters that are added to all begin_session requests
+     * @param country_code ISO Country code for the user's country
+     * @param city Name of the user's city
+     * @param location comma separate lat and lng values. For example, "56.42345,123.45325"
+     */
+    public void setOptionalParametersForInitialization(String country_code, String city, String location){
+        optionalParameterCountryCode = country_code;
+        optionalParameterCity = city;
+        optionalParameterLocation = location;
+    }
+
+    public String getOptionalParameterCountryCode() {
+        return optionalParameterCountryCode;
+    }
+
+    public String getOptionalParameterCity() {
+        return optionalParameterCity;
+    }
+
+    public String getOptionalParameterLocation() {
+        return optionalParameterLocation;
     }
 
     // for unit testing
