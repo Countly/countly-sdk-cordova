@@ -171,7 +171,7 @@ public class CountlyCordova extends CordovaPlugin {
 
             Map<String, String> bundle = new HashMap<String, String>();
 
-            bundle .put("name", args.getString(0));
+            bundle.put("name", args.getString(0));
             bundle.put("username", args.getString(1));
             bundle.put("email", args.getString(2));
             bundle.put("org", args.getString(3));
