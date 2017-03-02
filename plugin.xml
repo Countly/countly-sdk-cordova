@@ -70,7 +70,7 @@
     <source-file src="src/ios/sdk/CountlyUserDetails.m" compiler-flags="-fno-objc-arc" />
     <header-file src="src/ios/sdk/CountlyViewTracking.h"/>
     <source-file src="src/ios/sdk/CountlyViewTracking.m" compiler-flags="-fno-objc-arc" />
-    <source-file src="src/ios/sdk/CountlyPushNotifications.h" compiler-flags="-fno-objc-arc" />
+    <source-file src="src/ios/sdk/CountlyPushNotifications.h" />
     <source-file src="src/ios/sdk/CountlyPushNotifications.m" compiler-flags="-fno-objc-arc" />
     <!-- <source-file src="src/ios/sdk/Countly.xcdatamodeld" custom="true"/> -->
 
