@@ -247,7 +247,10 @@ public class CountlyCordova extends CordovaPlugin {
 
 
         else if("onregistrationid".equals(action)){
+            String registrationId = args.getString(0);
             int messagingMode = Integer.parseInt(args.getString(1));
+            String projectId = args.getString(2);
+            
             Countly.CountlyMessagingMode mode = null;
             if(messagingMode == 0){
                 mode = Countly.CountlyMessagingMode.TEST;
@@ -255,9 +258,8 @@ public class CountlyCordova extends CordovaPlugin {
             else{
                 mode = Countly.CountlyMessagingMode.PRODUCTION;
             }
-            String projectId = args.getString(2);
-            // Countly.sharedInstance().onRegistrationId(registrationId,mode);
-            Countly.sharedInstance().initMessaging(cordova.getActivity(), cordova.getActivity().getClass(), projectId, mode);
+            Countly.sharedInstance().onRegistrationId(registrationId,mode);
+            // Countly.sharedInstance().initMessaging(cordova.getActivity(), cordova.getActivity().getClass(), projectId, mode);
             callbackContext.success("initMessaging success");
             // Log.e("Nicolson", String.valueOf(Countly.CountlyMessagingMode.TEST));
             return true;
