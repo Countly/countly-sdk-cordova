@@ -47,7 +47,7 @@
     <header-file src="src/ios/sdk/CountlyAPM.h"/>
     <source-file src="src/ios/sdk/CountlyAPM.m" compiler-flags="-fno-objc-arc" />
     <header-file src="src/ios/sdk/CountlyAPMNetworkLog.h"/>
-    <source-file src="src/ios/sdk/CountlyAPMNetworkLog.m" compiler-flags="-fno-objc-arc" />
+    <source-file src="src/ios/sdk/CountlyAPMNetworkLog.m"/>
     <header-file src="src/ios/sdk/CountlyCommon.h"/>
     <source-file src="src/ios/sdk/CountlyCommon.m" compiler-flags="-fno-objc-arc" />
     <header-file src="src/ios/sdk/CountlyConfig.h"/>

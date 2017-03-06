@@ -135,7 +135,7 @@ CountlyConfig* config = nil;
     Countly.user.phone = phone;
     Countly.user.pictureURL = picture;
     Countly.user.gender = gender;
-    Countly.user.birthYear = byear;
+    Countly.user.birthYear = @([byear integerValue]);
     //NSInteger byearint = [byear intValue];
 
     [Countly.user recordUserDetails];
@@ -164,7 +164,8 @@ CountlyConfig* config = nil;
     if(mode == 1){
       // [[CountlyConnectionQueue sharedInstance] setStartedWithTest:YES];
     }
-    [Countly.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:tokenByte];
+    CountlyPushNotifications.sharedInstance.token = token;    [CountlyPushNotifications.sharedInstance sendToken];
+    // [Countly.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:tokenByte];
 
     // [[CountlyConnectionQueue sharedInstance] tokenSession:token];
 
