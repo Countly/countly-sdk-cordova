@@ -8,6 +8,11 @@
 
 CountlyConfig* config = nil;
 
+@interface CountlyPushNotifications()
+- (void)sendToken;
+@property (nonatomic, strong) NSString* token;
+@end
+
 @implementation CountlyCordova
 
 - (void)echo:(CDVInvokedUrlCommand*)command
@@ -165,7 +170,8 @@ CountlyConfig* config = nil;
     if(mode == 1){
       // [[CountlyConnectionQueue sharedInstance] setStartedWithTest:YES];
     }
-    CountlyPushNotifications.sharedInstance.token = token;    [CountlyPushNotifications.sharedInstance sendToken];
+    CountlyPushNotifications.sharedInstance.token = token;    
+    [CountlyPushNotifications.sharedInstance sendToken];
     // [Countly.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:tokenByte];
 
     // [[CountlyConnectionQueue sharedInstance] tokenSession:token];

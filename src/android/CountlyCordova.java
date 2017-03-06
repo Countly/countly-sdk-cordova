@@ -50,12 +50,12 @@ public class CountlyCordova extends CordovaPlugin {
             return true;
         }
         else if ("setHttpPostForced".equals(action)){
-//          int isEnabled = Integer.parseInt(args.getString(0));
-//          if(isEnabled == 1){
-//              Countly.sharedInstance().setHttpPostForced(true);
-//          }else{
-//              Countly.sharedInstance().setHttpPostForced(false);
-//          }
+            int isEnabled = Integer.parseInt(args.getString(0));
+            if(isEnabled == 1){
+                Countly.sharedInstance().setHttpPostForced(true);
+            }else{
+                Countly.sharedInstance().setHttpPostForced(false);
+            }
             callbackContext.success("setHttpPostForced This method doesn't exists!");
             return true;
         }else if("enableParameterTamperingProtection".equals(action)){
@@ -259,9 +259,9 @@ public class CountlyCordova extends CordovaPlugin {
                 mode = Countly.CountlyMessagingMode.PRODUCTION;
             }
             Countly.sharedInstance().onRegistrationId(registrationId,mode);
-            // Countly.sharedInstance().initMessaging(cordova.getActivity(), cordova.getActivity().getClass(), projectId, mode);
+            Countly.sharedInstance().initMessaging(cordova.getActivity(), cordova.getActivity().getClass(), projectId, mode);
             callbackContext.success("initMessaging success");
-            // Log.e("Nicolson", String.valueOf(Countly.CountlyMessagingMode.TEST));
+            Log.e("Nicolson", registrationId);
             return true;
         }
         else if("recordView".equals(action)){
