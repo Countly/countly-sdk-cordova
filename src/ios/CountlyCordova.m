@@ -3,6 +3,7 @@
 #import "Countly.h"
 #import "CountlyCordova.h"
 #import "CountlyConfig.h"
+#import "CountlyPushNotifications.h"
 #import <Cordova/CDV.h>
 
 CountlyConfig* config = nil;
