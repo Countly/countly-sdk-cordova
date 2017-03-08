@@ -80,7 +80,6 @@
     <!-- <framework src="src/ios/sdk/Countly.xcdatamodeld"/> -->
 
     <framework src="CoreTelephony.framework" weak="true" />
-    <framework src="CoreData.framework" weak="true" />
     <framework src="OpenGLES.framework" weak="true" />
   </platform>
 
