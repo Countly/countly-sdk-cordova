@@ -166,7 +166,7 @@ NSString* const kCountlyStarRatingStatusKey = @"kCountlyStarRatingStatusKey";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^
     {
-        url = [[NSFileManager.defaultManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
+        url = [[NSFileManager.defaultManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask create:YES] lastObject];
 #if TARGET_OS_OSX
         url = [url URLByAppendingPathComponent:NSBundle.mainBundle.bundleIdentifier];
 #endif
