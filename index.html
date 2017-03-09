@@ -18,210 +18,254 @@
     under the License.
 -->
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
-        <style type="text/css">
-            button{
-              margin-top: 20px !important;
-              margin-bottom: 20px !important;
-            }
-        </style>
-        <title>Countly Cordova Demo App</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
-            <img class="ui centered medium image" src="https://count.ly/wp-content/uploads/2014/10/countly_logo_color.png">
 
-            <button onclick="app.start()" class="fluid ui green button">Start</button>
-            <button onclick="app.stop()" class="fluid ui red button">Stop</button>            
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+    <style type="text/css">
+    button {
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+    }
+    </style>
+    <title>Countly Cordova Demo App</title>
+</head>
 
-            <div class="ui horizontal divider">Events Start</div>
-                <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
-                <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
-                <button onclick="app.eventWithSegment()" class="fluid ui button">Event with Segment</button>
-                <button onclick="app.eventWithSum_Segment()" class="fluid ui button">Even with Sum and Segment</button>
+<body>
+    <div class="app">
+        <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
+        <img class="ui centered medium image" src="https://count.ly/wp-content/uploads/2014/10/countly_logo_color.png">
+        <button onclick="app.start()" class="fluid ui green button">Start</button>
+        <button onclick="app.stop()" class="fluid ui red button">Stop</button>
+        <div class="ui horizontal divider">Events Start</div>
+        <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
+        <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
+        <button onclick="app.eventWithSegment()" class="fluid ui button">Event with Segment</button>
+        <button onclick="app.eventWithSum_Segment()" class="fluid ui button">Even with Sum and Segment</button>
+        <button onclick="app.event()" class="fluid ui black button">All Events</button>
+        <button onclick="app.startEvent('hello')" class="fluid ui button">Timed event: Start</button>
+        <button onclick="app.endEvent('hello')" class="fluid ui button">Timed event: Stop</button>
+        <div class="ui horizontal divider">Events End</div>
+        <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
+        <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
+        <div class="ui horizontal divider">2017</div>
+        <div class="ui horizontal divider">User Methods Start</div>
+        <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
+        <button onclick="app.userData.setProperty()" class="fluid ui button teal">UserData.setProperty</button>
+        <button onclick="app.userData.increment()" class="fluid ui button teal">UserData.increment</button>
+        <button onclick="app.userData.incrementBy()" class="fluid ui button teal">UserData.incrementBy</button>
+        <button onclick="app.userData.multiply()" class="fluid ui button teal">UserData.multiply</button>
+        <button onclick="app.userData.saveMax()" class="fluid ui button teal">UserData.saveMax</button>
+        <button onclick="app.userData.saveMin()" class="fluid ui button teal">UserData.saveMin</button>
+        <button onclick="app.userData.setOnce()" class="fluid ui button teal">UserData.setOnce</button>
+        <div class="ui horizontal divider">User Methods End</div>
+        <div class="ui horizontal divider">Other Methods Start</div>
+        <button onclick="app.onRegistrationId()" class="fluid ui button teal">Push Message</button>
+        <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
+        <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
+        <div class="ui horizontal divider">Other Methods End</div>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="Countly.js"></script>
+    <script type="text/javascript">
+    // // testing purpose only
+    // if(!window.device)
+    //     device = {};
+    //     device.platform = "android";
+    // //
 
-                <button onclick="app.event()" class="fluid ui black button">All Events</button>
+    app = {};
+    document.addEventListener("deviceready", function() {
+        // Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928");
+        Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e", "custom_device_id_123456");
+        var isAdvertiseID = true;
+        // Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928", null, isAdvertiseID);
+        //replace your server ip/url // replace it with your "App Key"
+        // app.onRegistrationId();
+        // app.test();
+        // alert("deviceready");
+    }, false);
+    app.test = function() {
+        app.onRegistrationId();
+        app.sendSampleEvent();
+    }
+    app.event = function() {
+        setInterval(function() {
+            app.sendSampleEvent();
+        }, 1000);
+    }
+    app.start = function() {
+        Countly.start();
+    }
+    app.stop = function() {
+        Countly.stop();
+    }
 
-                <button onclick="app.startEvent('hello')" class="fluid ui button">Timed event: Start</button>
-                <button onclick="app.endEvent('hello')" class="fluid ui button">Timed event: Stop</button>
-            <div class="ui horizontal divider">Events End</div>
+    app.sendSampleEvent = function() {
+        app.basicEvent();
+        app.eventWithSum();
+        app.eventWithSegment();
+        app.eventWithSum_Segment();
+    }
+    app.basicEvent = function() {
+        // example for basic event
+        var events = {
+            "eventName": "basic_event",
+            "eventCount": 1
+        };
+        Countly.sendEvent(events);
+    }
+    app.eventWithSum = function() {
+        // example for event with sum
+        var events = {
+            "eventName": "event_sum",
+            "eventCount": 1,
+            "eventSum": "0.99"
+        };
+        Countly.sendEvent(events);
+    }
+    app.eventWithSegment = function() {
+        // example for event with segment
+        var events = {
+            "eventName": "event_segment",
+            "eventCount": 1
+        };
+        events.segments = {
+            "Country": "Turkey",
+            "Age": "28"
+        };
+        Countly.sendEvent(events);
+    }
+    app.eventWithSum_Segment = function() {
+        // example for event with segment and sum
+        var events = {
+            "eventName": "event_segment_sum",
+            "eventCount": 1,
+            "eventSum": "0.99"
+        };
+        events.segments = {
+            "Country": "Turkey",
+            "Age": "28"
+        };
+        Countly.sendEvent(events);
+    }
+    app.setUserData = function() {
+        // example for setUserData
+        var options = {};
+        options.name = "Trinisoft Technologies";
+        options.username = "trinisofttechnologies";
+        options.email = "trinisofttechnologies@gmail.com";
+        options.org = "Trinisoft Technologies Pvt. Ltd.";
+        options.phone = "+91 812 840 2946";
+        options.picture = "http://www.trinisofttechnologies.com/images/logo.png";
+        options.picturePath = "";
+        options.gender = "M"; // "F"
+        options.byear = 1989;
+        Countly.setUserData(options);
+    }
+    app.setloggingenabled = function() {
+        // example for setLoggingEnabled
+        Countly.setLoggingEnabled();
+    }
 
-            <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
-            <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
+    app.onRegistrationId = function() {
 
-            <div class="ui horizontal divider">2017</div>
+        var push = PushNotification.init({
+            android: {
+                senderID: "12345679"
+            },
+            browser: {
+                pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+            },
+            ios: {
+                alert: "true",
+                badge: "true",
+                sound: "true"
+            },
+            windows: {}
+        });
 
+        push.on('registration', function(data) {
+            Countly.onRegistrationId({
+                "registrationId": data.registrationId,
+                "mode": Countly.messagingMode.TEST,
+                "projectId": "881000050249"
+            })
 
-            
+            // data.registrationId
+        });
 
-            <div class="ui horizontal divider">User Methods Start</div>
-                <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
-                <button onclick="app.userData.setProperty()" class="fluid ui button teal">UserData.setProperty</button>
-                <button onclick="app.userData.increment()" class="fluid ui button teal">UserData.increment</button>
-                <button onclick="app.userData.incrementBy()" class="fluid ui button teal">UserData.incrementBy</button>
-                <button onclick="app.userData.multiply()" class="fluid ui button teal">UserData.multiply</button>
-                <button onclick="app.userData.saveMax()" class="fluid ui button teal">UserData.saveMax</button>
-                <button onclick="app.userData.saveMin()" class="fluid ui button teal">UserData.saveMin</button>
-                <button onclick="app.userData.setOnce()" class="fluid ui button teal">UserData.setOnce</button>
-            <div class="ui horizontal divider">User Methods End</div>
+        push.on('notification', function(data) {
+            // data.message,
+            // data.title,
+            // data.count,
+            // data.sound,
+            // data.image,
+            // data.additionalData
+        });
 
-            <div class="ui horizontal divider">Other Methods Start</div>
-                <button onclick="app.onRegistrationId()" class="fluid ui button teal">Push Message</button>
-                <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
-                <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
-            <div class="ui horizontal divider">Other Methods End</div>  
+        push.on('error', function(e) {
+            // e.message
+        });
+        // Countly.messagingMode.TEST
+        // Countly.messagingMode.PRODUCTION
+        // Countly.mode = Countly.messagingMode.TEST;
+        // Countly.Push.onRegisterPushNotification();
+        // @depricated: The below commented method is depricated and no longer works.
+        // Countly.initMessaging({
+        //     "messageMode": Countly.messagingMode.TEST,
+        //     "projectId": "881000050249"
+        // });
 
-        </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="Countly.js"></script>
-        <script type="text/javascript">
+        // Tesing purpose only
 
-            // // testing purpose only
-            // if(!window.device)
-            //     device = {};
-            //     device.platform = "android";
-            // //
+    }
+    app.recordView = function(viewName) {
+        Countly.recordView(viewName);
+    }
 
-            app = {};
-            document.addEventListener("deviceready",function(){
-                // Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928");
-                Countly.init("https://try.count.ly","0e8a00e8c01395a0af8be0e55da05a404bb23c3e", "custom_device_id_123456");
-                var isAdvertiseID = true;
-                // Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928", null, isAdvertiseID);
-                                    //replace your server ip/url // replace it with your "App Key"
-                // app.onRegistrationId();
-                // app.test();
-                // alert("deviceready");
-            },false);
-            app.test = function(){
-                app.onRegistrationId();
-                app.sendSampleEvent();
-            }
-            app.event = function(){
-                setInterval(function(){
-                    app.sendSampleEvent();
-                },1000);
-            }
-            app.start = function(){
-                Countly.start();
-            }
-            app.stop = function(){
-                Countly.stop();
-            }
+    // 2017
+    app.changeDeviceId = function() {
+        Countly.changeDeviceId("123456");
+    }
+    app.enableParameterTamperingProtection = function() {
+        Countly.enableParameterTamperingProtection("salt");
+    }
+    app.startEvent = function() {
+        Countly.startEvent("timedEvent");
+    }
+    app.endEvent = function() {
+        Countly.endEvent("timedEvent");
+    }
 
-            app.sendSampleEvent = function(){
-                app.basicEvent();
-                app.eventWithSum();
-                app.eventWithSegment();
-                app.eventWithSum_Segment();
-            }
-            app.basicEvent = function(){
-                // example for basic event
-                var events = {"eventName":"basic_event","eventCount":1};
-                Countly.sendEvent(events);
-            }
-            app.eventWithSum = function(){
-                // example for event with sum
-                var events = {"eventName":"event_sum","eventCount":1,"eventSum":"0.99"};
-                Countly.sendEvent(events);
-            }
-            app.eventWithSegment = function(){
-                // example for event with segment
-                var events = {"eventName":"event_segment","eventCount":1};
-                events.segments = {"Country" : "Turkey", "Age" : "28"};
-                Countly.sendEvent(events);
-            }
-            app.eventWithSum_Segment = function(){
-                // example for event with segment and sum
-                var events = {"eventName":"event_segment_sum","eventCount":1,"eventSum":"0.99"};
-                events.segments = {"Country" : "Turkey", "Age" : "28"};
-                Countly.sendEvent(events);
-            }
-            app.setUserData = function(){
-                // example for setUserData
-                var options = {};
-                options.name = "Trinisoft Technologies";
-                options.username = "trinisofttechnologies";
-                options.email = "trinisofttechnologies@gmail.com";
-                options.org = "Trinisoft Technologies Pvt. Ltd.";
-                options.phone = "+91 812 840 2946";
-                options.picture = "http://www.trinisofttechnologies.com/images/logo.png";
-                options.picturePath = "";
-                options.gender = "M"; // "F"
-                options.byear = 1989;
-                Countly.setUserData(options);
-            }
-            app.setloggingenabled = function(){
-                // example for setLoggingEnabled
-                Countly.setLoggingEnabled();
-            }
+    // user details
 
-            app.onRegistrationId = function(){
-                // Countly.messagingMode.TEST
-                // Countly.messagingMode.PRODUCTION
-                // Countly.mode = Countly.messagingMode.TEST;
-                // Countly.Push.onRegisterPushNotification();
-                // @depricated: The below commented method is depricated and no longer works.
-                // Countly.initMessaging({
-                //     "messageMode": Countly.messagingMode.TEST,
-                //     "projectId": "881000050249"
-                // });
+    app.userData = {};
+    app.userData.setProperty = function() {
+        Countly.userData.setProperty("keyName", "keyValue");
+    }
+    app.userData.increment = function() {
+        Countly.userData.increment("keyName");
+    }
+    app.userData.incrementBy = function() {
+        Countly.userData.incrementBy("keyName", 10);
+    }
+    app.userData.multiply = function() {
+        Countly.userData.multiply("keyName", 20);
+    }
+    app.userData.saveMax = function() {
+        Countly.userData.saveMax("keyName", 100);
+    }
+    app.userData.saveMin = function() {
+        Countly.userData.saveMin("keyName", 50);
+    }
+    app.userData.setOnce = function() {
+        Countly.userData.setOnce("keyName", 200);
+    }
+    </script>
+</body>
 
-                // Tesing purpose only
-                Countly.onRegistrationId({
-                    "registrationId":"abcdefg",
-                    "mode":Countly.messagingMode.TEST,
-                    "projectId": "881000050249"
-                })
-            }
-            app.recordView = function(viewName){
-                Countly.recordView(viewName);
-            }
-
-            // 2017
-            app.changeDeviceId = function(){
-                Countly.changeDeviceId("123456");
-            }
-            app.enableParameterTamperingProtection = function(){
-                Countly.enableParameterTamperingProtection("salt");
-            }
-            app.startEvent = function(){
-                Countly.startEvent("timedEvent");
-            }
-            app.endEvent = function(){
-                Countly.endEvent("timedEvent");
-            }
-
-            // user details
-            
-            app.userData = {};
-            app.userData.setProperty = function(){
-                Countly.userData.setProperty("keyName", "keyValue");
-            }
-            app.userData.increment = function(){
-                Countly.userData.increment("keyName");
-            }
-            app.userData.incrementBy = function(){
-                Countly.userData.incrementBy("keyName", 10);
-            }
-            app.userData.multiply = function(){
-                Countly.userData.multiply("keyName", 20);
-            }
-            app.userData.saveMax = function(){
-                Countly.userData.saveMax("keyName", 100);
-            }
-            app.userData.saveMin = function(){
-                Countly.userData.saveMin("keyName", 50);
-            }
-            app.userData.setOnce = function(){
-                Countly.userData.setOnce("keyName", 200);
-            }
-        </script>
-    </body>
 </html>
