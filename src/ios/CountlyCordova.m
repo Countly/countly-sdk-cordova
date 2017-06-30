@@ -406,8 +406,8 @@ CountlyConfig* config = nil;
     double latitudeDouble = [latitudeString doubleValue];
     double longitudeDouble = [longitudeString doubleValue];
 
-    config.ISOCountryCode = city;
-    config.city = country;
+    config.ISOCountryCode = country;
+    config.city = city;
     config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
 
     CDVPluginResult* pluginResult = nil;
