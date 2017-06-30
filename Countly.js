@@ -119,7 +119,7 @@ Countly.setOptionalParametersForInitialization = function(options){
 
     var args = [];
     args.push(options.city || "");
-    args.push(Countly.country || "");
+    args.push(options.country || "");
     args.push(String(options.latitude) || "0.0");
     args.push(String(options.longitude) || "0.0");
 
