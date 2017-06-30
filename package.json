@@ -1,0 +1,38 @@
+{
+  "name": "countly-sdk-js",
+  "description": "Analytics.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Countly/countly-sdk-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Countly/countly-sdk-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Countly/countly-sdk-js/issues"
+  },
+  "cordova": {
+    "id": "ly.count.cordova",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "ecosystem:phonegap",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "engines": {
+
+  },
+  "author": "Trinisoft Technologies Pvt. Ltd.",
+  "license": "MIT",
+  "scripts": {
+
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+  }
+}
