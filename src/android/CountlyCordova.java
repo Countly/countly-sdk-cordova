@@ -250,7 +250,7 @@ public class CountlyCordova extends CordovaPlugin {
             String registrationId = args.getString(0);
             int messagingMode = Integer.parseInt(args.getString(1));
             String projectId = args.getString(2);
-            
+
             Countly.CountlyMessagingMode mode = null;
             if(messagingMode == 0){
                 mode = Countly.CountlyMessagingMode.TEST;
@@ -268,6 +268,15 @@ public class CountlyCordova extends CordovaPlugin {
             String viewName = args.getString(0);
             Countly.sharedInstance().recordView(viewName);
             callbackContext.success("View name sent: "+viewName);
+            return true;
+        }
+        else if("setOptionalParametersForInitialization".equals(action)){
+            String city = args.getString(0);
+            String country = args.getString(1);
+            double latitude = Double.parseDouble(args.getString(2));
+            double longitude = Double.parseDouble(args.getString(3));
+            Countly.sharedInstance().setOptionalParametersForInitialization(city, country, latitude +"," +longitude);
+            callbackContext.success("setOptionalParametersForInitialization sent.");
             return true;
         }
         else{

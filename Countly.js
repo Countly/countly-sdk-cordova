@@ -115,6 +115,18 @@ Countly.demo = function(){
 // 2017
 
 
+Countly.setOptionalParametersForInitialization = function(options){
+
+    var args = [];
+    args.push(options.city || "");
+    args.push(Countly.country || "");
+    args.push(String(options.latitude) || "0.0");
+    args.push(String(options.longitude) || "0.0");
+
+
+    // Countly.sharedInstance().setOptionalParametersForInitialization("2 character country code", "city", "56.42345,123.45325");
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setOptionalParametersForInitialization",args);
+}
 Countly.setLocation = function(newDeviceID){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[newDeviceID.toString() || ""]);
 }

@@ -66,6 +66,7 @@
         <button onclick="app.onRegistrationId()" class="fluid ui button teal">Push Message</button>
         <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
+        <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
         <div class="ui horizontal divider">Other Methods End</div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
@@ -92,6 +93,16 @@
         app.onRegistrationId();
         app.sendSampleEvent();
     }
+
+    app.setOptionalParametersForInitialization = function(){
+        Countly.setOptionalParametersForInitialization({
+            city: "Ahmedabad",
+            country: "IN",
+            latitude: "56.42345",
+            longitude: "123.45325"
+        });
+    };
+
     app.event = function() {
         setInterval(function() {
             app.sendSampleEvent();
