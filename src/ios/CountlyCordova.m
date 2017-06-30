@@ -409,6 +409,7 @@ CountlyConfig* config = nil;
     config.ISOCountryCode = country;
     config.city = city;
     config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
+    [Countly.user save];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setOptionalParametersForInitialization!"];
