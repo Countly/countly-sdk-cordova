@@ -38,6 +38,7 @@
     <div class="app">
         <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
         <img class="ui centered medium image" src="https://count.ly/wp-content/uploads/2014/10/countly_logo_color.png">
+        <button onclick="app.init()" class="fluid ui green button">Init</button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
         <div class="ui horizontal divider">Events Start</div>
@@ -81,14 +82,18 @@
     app = {};
     document.addEventListener("deviceready", function() {
         // Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928");
-        Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e", "custom_device_id_123456");
-        var isAdvertiseID = true;
+        // Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e", "custom_device_id_123456");
+        // var isAdvertiseID = true;
         // Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928", null, isAdvertiseID);
         //replace your server ip/url // replace it with your "App Key"
         // app.onRegistrationId();
         // app.test();
         // alert("deviceready");
     }, false);
+
+    app.init = function(){
+        Countly.init("https://try.count.ly","21b377226a4260dcbf42e88db5a7d0f2d904c928");
+    };
     app.test = function() {
         app.onRegistrationId();
         app.sendSampleEvent();
@@ -96,8 +101,8 @@
 
     app.setOptionalParametersForInitialization = function(){
         Countly.setOptionalParametersForInitialization({
-            city: "Ahmedabad",
-            country: "IN",
+            city: "Tempa, Florida",
+            country: "US",
             latitude: "56.42345",
             longitude: "123.45325"
         });
