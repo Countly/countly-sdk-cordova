@@ -92,7 +92,9 @@
     }, false);
 
     app.init = function(){
-        Countly.init("https://try.count.ly","0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
+        document.addEventListener("deviceready", function() {
+            Countly.init("https://try.count.ly","0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
+        }, false);
     };
     app.test = function() {
         app.onRegistrationId();
@@ -101,10 +103,10 @@
 
     app.setOptionalParametersForInitialization = function(){
         Countly.setOptionalParametersForInitialization({
-            city: "Tempa, Florida",
+            city: "Tampa",
             country: "US",
-            latitude: "56.42345",
-            longitude: "123.45325"
+            latitude: "28.006324",
+            longitude: "-82.7166183"
         });
     };
 

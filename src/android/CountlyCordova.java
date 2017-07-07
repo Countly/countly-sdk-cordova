@@ -277,7 +277,7 @@ public class CountlyCordova extends CordovaPlugin {
             double longitude = Double.parseDouble(args.getString(3));
 
             Countly.sharedInstance().setOptionalParametersForInitialization(country, city, latitude +"," +longitude);
-            Countly.userData.save();
+
             callbackContext.success("setOptionalParametersForInitialization sent.");
             return true;
         }
