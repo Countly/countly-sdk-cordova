@@ -34,8 +34,10 @@ CountlyConfig* config = nil;
     CDVPluginResult* pluginResult = nil;
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
-
-    config = CountlyConfig.new;
+    
+    if(config == nil){
+        config = CountlyConfig.new;
+    }
     config.appKey = appkey;
     config.host = serverurl;
 
@@ -406,11 +408,14 @@ CountlyConfig* config = nil;
     double latitudeDouble = [latitudeString doubleValue];
     double longitudeDouble = [longitudeString doubleValue];
 
+    if(config == nil){
+        config = CountlyConfig.new;
+    }
+    
     config.ISOCountryCode = country;
     config.city = city;
     config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
-    [Countly.user save];
-
+    
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setOptionalParametersForInitialization!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
