@@ -49,11 +49,11 @@ public class Countly {
     /**
      * Current version of the Count.ly Android SDK as a displayable string.
      */
-    public static final String COUNTLY_SDK_VERSION_STRING = "16.12.3";
+    public static final String COUNTLY_SDK_VERSION_STRING = "2.2.1";
     /**
      * Used as request meta data on every request
      */
-    public static final String COUNTLY_SDK_NAME = "java-native-android";
+    public static final String COUNTLY_SDK_NAME = "js-cordova-android";
     /**
      * Default string used in the begin session metrics if the
      * app version cannot be found.
