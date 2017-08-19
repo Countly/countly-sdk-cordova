@@ -194,5 +194,10 @@ Countly.userData.setOnce = function(keyName, setOnce){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
 };
 
+Countly.addCrashLog = function(crashLog){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","addCrashLog",[crashLog || ""]);
+};
+
+
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
