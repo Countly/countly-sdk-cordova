@@ -252,7 +252,7 @@ public class CountlyCordova extends CordovaPlugin {
             String projectId = args.getString(2);
 
             Countly.CountlyMessagingMode mode = null;
-            if(messagingMode == 0){
+            if(messagingMode == 1){
                 mode = Countly.CountlyMessagingMode.TEST;
             }
             else{
