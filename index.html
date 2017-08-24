@@ -65,6 +65,8 @@
         <div class="ui horizontal divider">User Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
         <button onclick="app.onRegistrationId()" class="fluid ui button teal">Push Message</button>
+        <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button>
+        <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button>
         <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
@@ -188,6 +190,23 @@
         // example for setLoggingEnabled
         Countly.setLoggingEnabled();
     }
+
+    app.testAndroidPush = function(){
+        Countly.onRegistrationId({
+            "registrationId": "1234567890",
+            "mode": Countly.messagingMode.PRODUCTION,
+            "projectId": "881000050249" // only for google / android
+        });
+    };
+
+    app.testiOSPush = function(){
+        Countly.onRegistrationId({
+            "registrationId": "1234567890",
+            "mode": Countly.messagingMode.PRODUCTION,
+            "projectId": "881000050249" // only for google / android
+        });
+    };
+    
 
     app.onRegistrationId = function() {
 
