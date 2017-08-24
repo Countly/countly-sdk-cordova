@@ -170,14 +170,15 @@ CountlyConfig* config = nil;
     int mode = [messagingMode intValue];
     NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
     if(mode == 1){
-      // [[CountlyConnectionQueue sharedInstance] setStartedWithTest:YES];
+        if(config == nil){
+            config = CountlyConfig.new;
+        }
+        config.isTestDevice = YES;
     }
+    
     CountlyPushNotifications.sharedInstance.token = token;
     [CountlyPushNotifications.sharedInstance sendToken];
-    // [Countly.sharedInstance didRegisterForRemoteNotificationsWithDeviceToken:tokenByte];
-
-    // [[CountlyConnectionQueue sharedInstance] tokenSession:token];
-
+    
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
