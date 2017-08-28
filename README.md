@@ -22,4 +22,6 @@ It's now maintained by Trinisoft Technologies (trinisofttechnologies@gmail.com).
 
 If you liked Countly, [why not use one of our badges](https://count.ly/brand-assets/) and give a link back to us, so others know about this wonderful platform? 
 
-![Light badge](https://count.ly/wp-content/uploads/2014/10/countly_badge_5.png)  ![Dark badge](https://count.ly/wp-content/uploads/2014/10/countly_badge_6.png)
+
+![Light badge](https://47s0a63u864g42xntj2cg92q-wpengine.netdna-ssl.com/wp-content/uploads/2014/10/white-2.svg) ![Gray badge](https://47s0a63u864g42xntj2cg92q-wpengine.netdna-ssl.com/wp-content/uploads/2014/10/greyscale-2.svg) ![Green badge](https://47s0a63u864g42xntj2cg92q-wpengine.netdna-ssl.com/wp-content/uploads/2014/10/green-2.svg)
+
