@@ -186,7 +186,7 @@ CountlyConfig* config = nil;
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
-    [Countly.sharedInstance resume];
+//    [Countly.sharedInstance resume];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"start!"];
@@ -195,7 +195,7 @@ CountlyConfig* config = nil;
 
 - (void)stop:(CDVInvokedUrlCommand*)command
 {
-    [Countly.sharedInstance suspend];
+//    [Countly.sharedInstance suspend];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"stop!"];
@@ -334,7 +334,7 @@ CountlyConfig* config = nil;
     NSString* keyValue = [command.arguments objectAtIndex:1];
     int keyValueInteger = [keyValue intValue];
 
-    [Countly.user incrementBy:keyName value:keyValueInteger];
+    [Countly.user incrementBy:keyName value:[NSNumber numberWithInt:keyValueInteger]];
     [Countly.user save];
 
     CDVPluginResult* pluginResult = nil;
@@ -348,7 +348,7 @@ CountlyConfig* config = nil;
     NSString* keyValue = [command.arguments objectAtIndex:1];
     int keyValueInteger = [keyValue intValue];
 
-    [Countly.user multiply:keyName value:keyValueInteger];
+    [Countly.user multiply:keyName value:[NSNumber numberWithInt:keyValueInteger]];
     [Countly.user save];
 
     CDVPluginResult* pluginResult = nil;
@@ -360,9 +360,9 @@ CountlyConfig* config = nil;
 {
     NSString* keyName = [command.arguments objectAtIndex:0];
     NSString* keyValue = [command.arguments objectAtIndex:1];
-    int keyValueInteger = [keyValue intValue];
+    int  keyValueInteger = [keyValue intValue];
 
-    [Countly.user max:keyName value:keyValueInteger];
+    [Countly.user max:keyName value:[NSNumber numberWithInt:keyValueInteger]];
     [Countly.user save];
 
     CDVPluginResult* pluginResult = nil;
@@ -376,7 +376,7 @@ CountlyConfig* config = nil;
     NSString* keyValue = [command.arguments objectAtIndex:1];
     int keyValueInteger = [keyValue intValue];
 
-    [Countly.user min:keyName value:keyValueInteger];
+    [Countly.user min:keyName value:[NSNumber numberWithInt:keyValueInteger]];
     [Countly.user save];
 
     CDVPluginResult* pluginResult = nil;
