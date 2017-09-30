@@ -40,9 +40,12 @@ CountlyConfig* config = nil;
     }
     config.appKey = appkey;
     config.host = serverurl;
+    config.enableDebug = YES;
+    config.features = @[CLYPushNotifications];
 
     if (serverurl != nil && [serverurl length] > 0) {
-        [[Countly sharedInstance] startWithConfig:config];
+        [Countly.sharedInstance startWithConfig:config];
+        [Countly.sharedInstance askForNotificationPermission];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"initialized!"];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
@@ -175,10 +178,10 @@ CountlyConfig* config = nil;
         }
         config.isTestDevice = YES;
     }
-    
+
     CountlyPushNotifications.sharedInstance.token = token;
     [CountlyPushNotifications.sharedInstance sendToken];
-    
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
