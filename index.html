@@ -194,7 +194,7 @@
     app.testAndroidPush = function(){
         Countly.onRegistrationId({
             "registrationId": "1234567890",
-            "mode": Countly.messagingMode.PRODUCTION,
+            "mode": Countly.messagingMode.TEST,
             "projectId": "881000050249" // only for google / android
         });
     };
@@ -202,11 +202,11 @@
     app.testiOSPush = function(){
         Countly.onRegistrationId({
             "registrationId": "1234567890",
-            "mode": Countly.messagingMode.PRODUCTION,
+            "mode": Countly.messagingMode.TEST,
             "projectId": "881000050249" // only for google / android
         });
     };
-    
+
 
     app.onRegistrationId = function() {
 
