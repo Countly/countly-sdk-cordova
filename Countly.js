@@ -150,6 +150,10 @@ Countly.endEvent = function(options){
     var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
     var segments = {};
 
+    if(options.eventSum)
+        eventType = "eventWithSum";
+    if(options.segments)
+        eventType = "eventWithSegment";
     if(options.segments && options.eventSum)
         eventType = "eventWithSumSegment";
 
