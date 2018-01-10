@@ -9,19 +9,24 @@
 
 This repository includes the SDK for Phonegap and Icenium. You also need Countly server - either hosted on cloud, or installed on-premise as Community Edition or [Enterprise Edition](http://count.ly/enterprise-edition)
 
-### Using and configuring SDK
+## Using and configuring SDK
 
 For more information about how to use this SDK inside your mobile app, [click this link](http://resources.count.ly/v1.0/docs/phonegap-icenium-meteor).
 
-### Acknowledgements 
+## Acknowledgements 
 
 This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr).<br>
 It's now maintained by Trinisoft Technologies (trinisofttechnologies@gmail.com).
 
-### Help spread the word!
+## Badges
 
-If you liked Countly, [why not use one of our badges](https://count.ly/brand-assets/) and give a link back to us, so others know about this wonderful platform? 
+If you like Countly, [why not use one of our badges](https://count.ly/brand-assets) and give a link back to us, so others know about this wonderful platform? 
 
+<a href="https://count.ly/f/badge" rel="nofollow"><img style="width:145px;height:60px" src="https://count.ly/badges/dark.svg" alt="Countly - Product Analytics" /></a>
 
-![Light badge](https://47s0a63u864g42xntj2cg92q-wpengine.netdna-ssl.com/wp-content/uploads/2014/10/white-2.svg) ![Gray badge](https://47s0a63u864g42xntj2cg92q-wpengine.netdna-ssl.com/wp-content/uploads/2014/10/greyscale-2.svg) ![Green badge](https://47s0a63u864g42xntj2cg92q-wpengine.netdna-ssl.com/wp-content/uploads/2014/10/green-2.svg)
+    <a href="https://count.ly/f/badge" rel="nofollow"><img style="width:145px;height:60px" src="https://count.ly/badges/dark.svg" alt="Countly - Product Analytics" /></a>
+
+<a href="https://count.ly/f/badge" rel="nofollow"><img style="width:145px;height:60px" src="https://count.ly/badges/light.svg" alt="Countly - Product Analytics" /></a>
+
+    <a href="https://count.ly/f/badge" rel="nofollow"><img style="width:145px;height:60px" src="https://count.ly/badges/light.svg" alt="Countly - Product Analytics" /></a>
 
