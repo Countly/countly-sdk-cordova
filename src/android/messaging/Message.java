@@ -3,10 +3,23 @@ package ly.count.android.sdk.messaging;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Countly Messaging service message representation.
@@ -14,18 +27,53 @@ import android.os.Parcelable;
 public class Message implements Parcelable {
     private static final String TAG = "Countly|Message";
 
-    private Bundle data;
-    private int type;
+    static final class Button {
+        int index;
+        String title;
+        String link;
+    }
+
+    private final Bundle data;
+    private final int type;
+    private List<Button> buttons;
 
     public Message(Bundle data) {
         this.data = data;
+        this.readButtons();
         this.type = setType();
+    }
+
+    private static final Map<String, Object> dataStore = new HashMap<>();
+
+    private void readButtons() {
+        this.buttons = new ArrayList<>();
+
+        String json = data.getString("c.b");
+        if (json != null) {
+            try {
+                JSONArray array = new JSONArray(json);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject btn = array.getJSONObject(i);
+                    if (btn.has("t") && btn.has("l")) {
+                        Button button = new Button();
+                        button.index = i + 1;
+                        button.title = btn.getString("t");
+                        button.link = btn.getString("l");
+                        this.buttons.add(button);
+                    }
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getId() { return data.getString("c.i"); }
     public String getLink() { return data.getString("c.l"); }
-    public String getReview() { return data.getString("c.r"); }
     public String getMessage() { return data.getString("message"); }
+    public String getTitle() { return data.getString("title"); }
+    public String getMedia() { return data.getString("c.m"); }
+    public List<Button> getButtons() { return buttons; }
     public String getSoundUri() { return data.getString("sound"); }
     public Bundle getData() { return data; }
     public int getType() { return type; }
@@ -41,12 +89,20 @@ public class Message implements Parcelable {
             t |= CountlyMessaging.NOTIFICATION_TYPE_MESSAGE;
         }
 
-        if (getLink() != null && !"".equals(getLink())) {
-            t |= CountlyMessaging.NOTIFICATION_TYPE_URL;
+        if (getTitle() != null && !"".equals(getTitle())) {
+            t |= CountlyMessaging.NOTIFICATION_TYPE_TITLE;
         }
 
-        if (getReview() != null) {
-            t |= CountlyMessaging.NOTIFICATION_TYPE_REVIEW;
+        if (getMedia() != null && !"".equals(getMedia())) {
+            t |= CountlyMessaging.NOTIFICATION_TYPE_MEDIA;
+        }
+
+        if (getButtons() != null && getButtons().size() > 0) {
+            t |= CountlyMessaging.NOTIFICATION_TYPE_BUTTONS;
+        }
+
+        if (getLink() != null && !"".equals(getLink())) {
+            t |= CountlyMessaging.NOTIFICATION_TYPE_URL;
         }
 
         if ("true".equals(data.getString("c.s"))) {
@@ -62,8 +118,11 @@ public class Message implements Parcelable {
     }
 
     public boolean hasLink() { return (type & CountlyMessaging.NOTIFICATION_TYPE_URL) > 0; }
-    public boolean hasReview() { return (type & CountlyMessaging.NOTIFICATION_TYPE_REVIEW) > 0; }
     public boolean hasMessage() { return (type & CountlyMessaging.NOTIFICATION_TYPE_MESSAGE) > 0; }
+    public boolean hasTitle() { return (type & CountlyMessaging.NOTIFICATION_TYPE_TITLE) > 0; }
+    public boolean hasMedia() { return (type & CountlyMessaging.NOTIFICATION_TYPE_MEDIA) > 0; }
+    public boolean hasButtons() { return (type & CountlyMessaging.NOTIFICATION_TYPE_BUTTONS) > 0; }
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isSilent() { return (type & CountlyMessaging.NOTIFICATION_TYPE_SILENT) > 0; }
     public boolean hasSoundUri() { return (type & CountlyMessaging.NOTIFICATION_TYPE_SOUND_URI) > 0; }
     public boolean hasSoundDefault() { return (type & CountlyMessaging.NOTIFICATION_TYPE_SOUND_DEFAULT) > 0; }
@@ -85,8 +144,6 @@ public class Message implements Parcelable {
     public Intent getIntent(Context context, Class <? extends Activity> activityClass) {
         if (hasLink()) {
             return new Intent(Intent.ACTION_VIEW, Uri.parse(getLink()));
-        } else if (hasReview()) {
-            return new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + ("".equals(getReview()) ? context.getPackageName() : getReview())));
         } else if (hasMessage()) {
             if (activityClass == null) {
                 activityClass = CountlyMessaging.getMainActivityClass(context);
@@ -101,7 +158,7 @@ public class Message implements Parcelable {
     }
 
     public String getNotificationTitle(Context context) {
-        return CountlyMessaging.getAppTitle(context);
+        return hasTitle() ? getTitle() : CountlyMessaging.getAppTitle(context);
     }
 
     /**
@@ -109,8 +166,6 @@ public class Message implements Parcelable {
      */
     public String getNotificationMessage() {
         if (hasLink()) {
-            return hasMessage() ? getMessage() : "";
-        } else if (hasReview()) {
             return hasMessage() ? getMessage() : "";
         } else if (hasMessage()) {
             return getMessage();
@@ -144,6 +199,39 @@ public class Message implements Parcelable {
 
     Message(Parcel in) {
         data = in.readBundle(getClass().getClassLoader());
+        this.readButtons();
         type = setType();
+    }
+
+    void prepare(final Runnable callback) {
+        if (hasMedia()) {
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        URL url = new URL(getMedia());
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setDoInput(true);
+                        connection.connect();
+                        InputStream input = connection.getInputStream();
+                        dataStore.put(getMedia(), BitmapFactory.decodeStream(input));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    callback.run();
+                    return null;
+                }
+            }.doInBackground();
+        } else {
+            callback.run();
+        }
+    }
+
+    static Object getFromStore(String key) {
+        return dataStore.get(key);
+    }
+
+    static Object removeFromStore(String key) {
+        return dataStore.remove(key);
     }
 }

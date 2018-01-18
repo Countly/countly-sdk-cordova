@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -31,7 +32,7 @@ public class CountlyMessagingService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent (Intent intent) {
+    protected void onHandleIntent (final Intent intent) {
         Log.i(TAG, "Handling intent");
         Bundle extras = intent.getExtras();
 
@@ -52,29 +53,31 @@ public class CountlyMessagingService extends IntentService {
                     broadcast.putExtra(CountlyMessaging.BROADCAST_RECEIVER_ACTION_MESSAGE, msg);
                     sendBroadcast(broadcast);
 
-                    // Init Countly in case app is not running
-                    if (!Countly.sharedInstance().isInitialized()) {
-                        if (!CountlyMessaging.initCountly(getApplicationContext())) {
-                            Log.e(TAG, "Cannot init Countly in background");
+                    msg.prepare(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Init Countly in case app is not running
+                            if (!Countly.sharedInstance().isInitialized()) {
+                                if (!CountlyMessaging.initCountly(getApplicationContext())) {
+                                    Log.e(TAG, "Cannot init Countly in background");
+                                }
+                            }
+
+                            if (CountlyMessaging.isUIDisabled(CountlyMessagingService.this)) {
+                                Log.i(TAG, "Won't do anything since Countly Messaging UI is disabled");
+                                CountlyMessaging.completeWakefulIntent(intent);
+                                return;
+                            }
+
+                            // Show message if not silent
+                            if (!msg.isSilent() && msg.hasMessage()) {
+                                // Go through proxy activity to be able to record message open & action performed events
+                                Intent proxy = new Intent(getApplicationContext(), ProxyActivity.class);
+                                proxy.putExtra(CountlyMessaging.EXTRA_MESSAGE, msg);
+                                CountlyMessagingService.this.notify(proxy);
+                            }
                         }
-                    }
-
-                    if (CountlyMessaging.isUIDisabled(this)) {
-                        Log.i(TAG, "Won't do anything since Countly Messaging UI is disabled");
-                        CountlyMessaging.completeWakefulIntent(intent);
-                        return;
-                    }
-
-                    // Show message if not silent
-                    if (msg.isSilent()) {
-                        CountlyMessaging.recordMessageOpen(msg.getId());
-                    } else {
-                        // Go through proxy activity to be able to record message open & action performed events
-                        Intent proxy = new Intent(getApplicationContext(), ProxyActivity.class);
-                        proxy.putExtra(CountlyMessaging.EXTRA_MESSAGE, msg);
-                        notify(proxy);
-                    }
-
+                    });
                 }
             }
         }
@@ -92,15 +95,18 @@ public class CountlyMessagingService extends IntentService {
             startActivity(proxy);
         } else {
             // Notification case
-            CountlyMessaging.recordMessageOpen(msg.getId());
-
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, proxy, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // Get icon from application or use default one
             int icon;
+            int iconOverride = CountlyMessaging.getIconOverride(CountlyMessagingService.this);
             try {
-                icon = getPackageManager().getApplicationInfo(getPackageName(), 0).icon;
+                if(iconOverride != -1){
+                    icon = iconOverride;
+                } else {
+                    icon = getPackageManager().getApplicationInfo(getPackageName(), 0).icon;
+                }
             } catch (PackageManager.NameNotFoundException e) {
                 icon = android.R.drawable.ic_dialog_email;
             }
@@ -111,7 +117,22 @@ public class CountlyMessagingService extends IntentService {
                     .setTicker(msg.getNotificationMessage())
                     .setContentTitle(msg.getNotificationTitle(getApplicationContext()))
                     .setContentText(msg.getNotificationMessage())
-                    .setContentIntent(contentIntent);
+                    .setContentIntent(contentIntent)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(msg.getNotificationMessage()).setBigContentTitle(msg.getNotificationTitle(getApplicationContext())));
+
+            if (msg.hasMedia() && Message.getFromStore(msg.getMedia()) != null) {
+                builder.setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture((Bitmap)Message.getFromStore(msg.getMedia()))
+                        .setBigContentTitle(msg.getNotificationTitle(getApplicationContext()))
+                        .setSummaryText(msg.getNotificationMessage()));
+            }
+
+            for (Message.Button button : msg.getButtons()) {
+                Log.d(Countly.TAG, button.index + " " + button.link);
+                Intent actionIntent = (Intent) proxy.clone();
+                actionIntent.putExtra(CountlyMessaging.EXTRA_ACTION_INDEX, button.index);
+                builder.addAction(0, button.title, PendingIntent.getActivity(getApplicationContext(), button.index, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            }
 
             if (msg.hasSoundDefault()) {
                 builder.setDefaults(Notification.DEFAULT_SOUND);
@@ -119,7 +140,7 @@ public class CountlyMessagingService extends IntentService {
                 builder.setSound(Uri.parse(msg.getSoundUri()));
             }
 
-            manager.notify(NOTIFICATION_ID, builder.build());
+            manager.notify(msg.getId().hashCode(), builder.build());
         }
     }
 
