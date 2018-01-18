@@ -8,11 +8,11 @@
 
 @interface CountlyCrashReporter : NSObject
 #if TARGET_OS_IOS
-@property (nonatomic, strong) NSDictionary* crashSegmentation;
+@property (nonatomic) NSDictionary* crashSegmentation;
 
 + (instancetype)sharedInstance;
 - (void)startCrashReporting;
-- (void)recordHandledException:(NSException *)exception;
-- (void)logWithFormat:(NSString *)format andArguments:(va_list)args;
+- (void)recordHandledException:(NSException *)exception withStackTrace:(NSArray *)stackTrace;
+- (void)log:(NSString *)log;
 #endif
 @end

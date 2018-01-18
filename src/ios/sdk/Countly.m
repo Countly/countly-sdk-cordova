@@ -68,23 +68,21 @@
         [CountlyDeviceInfo.sharedInstance initializeDeviceID:config.deviceID];
 
     CountlyConnectionManager.sharedInstance.appKey = config.appKey;
-    BOOL hostHasExtraSlash = [[config.host substringFromIndex:config.host.length-1] isEqualToString:@"/"];
-    CountlyConnectionManager.sharedInstance.host = hostHasExtraSlash ? [config.host substringToIndex:config.host.length-1] : config.host;
+    BOOL hostHasExtraSlash = [[config.host substringFromIndex:config.host.length - 1] isEqualToString:@"/"];
+    CountlyConnectionManager.sharedInstance.host = hostHasExtraSlash ? [config.host substringToIndex:config.host.length - 1] : config.host;
     CountlyConnectionManager.sharedInstance.alwaysUsePOST = config.alwaysUsePOST;
     CountlyConnectionManager.sharedInstance.pinnedCertificates = config.pinnedCertificates;
     CountlyConnectionManager.sharedInstance.customHeaderFieldName = config.customHeaderFieldName;
     CountlyConnectionManager.sharedInstance.customHeaderFieldValue = config.customHeaderFieldValue;
     CountlyConnectionManager.sharedInstance.secretSalt = config.secretSalt;
+    CountlyConnectionManager.sharedInstance.applyZeroIDFAFix = config.applyZeroIDFAFix;
 
     CountlyPersistency.sharedInstance.eventSendThreshold = config.eventSendThreshold;
-    CountlyPersistency.sharedInstance.storedRequestsLimit = config.storedRequestsLimit;
+    CountlyPersistency.sharedInstance.storedRequestsLimit = MAX(1, config.storedRequestsLimit);
 
     CountlyCommon.sharedInstance.manualSessionHandling = config.manualSessionHandling;
     CountlyCommon.sharedInstance.enableAppleWatch = config.enableAppleWatch;
-    CountlyCommon.sharedInstance.ISOCountryCode = config.ISOCountryCode;
-    CountlyCommon.sharedInstance.city = config.city;
-    CountlyCommon.sharedInstance.location = CLLocationCoordinate2DIsValid(config.location)?[NSString stringWithFormat:@"%f,%f", config.location.latitude, config.location.longitude]:nil;
-    CountlyCommon.sharedInstance.IP = config.IP;
+    CountlyCommon.sharedInstance.enableAttribution = config.enableAttribution;
 
 #if TARGET_OS_IOS
     CountlyStarRating.sharedInstance.message = config.starRatingMessage;
@@ -100,6 +98,12 @@
         CountlyPushNotifications.sharedInstance.isTestDevice = config.isTestDevice;
         CountlyPushNotifications.sharedInstance.sendPushTokenAlways = config.sendPushTokenAlways;
         CountlyPushNotifications.sharedInstance.doNotShowAlertForNotifications = config.doNotShowAlertForNotifications;
+
+        CountlyPushNotifications.sharedInstance.location = CLLocationCoordinate2DIsValid(config.location) ? [NSString stringWithFormat:@"%f,%f", config.location.latitude, config.location.longitude] : nil;
+        CountlyPushNotifications.sharedInstance.city = config.city;
+        CountlyPushNotifications.sharedInstance.ISOCountryCode = config.ISOCountryCode;
+        CountlyPushNotifications.sharedInstance.IP = config.IP;
+
         [CountlyPushNotifications.sharedInstance startPushNotifications];
     }
 
@@ -125,7 +129,7 @@
     if (!CountlyCommon.sharedInstance.manualSessionHandling)
         [CountlyConnectionManager.sharedInstance beginSession];
 
-#if (TARGET_OS_WATCH)
+#if TARGET_OS_WATCH
     CountlyCommon.sharedInstance.enableAppleWatch = YES;
     [CountlyCommon.sharedInstance activateWatchConnectivity];
 #endif
@@ -336,6 +340,9 @@
 
 - (void)recordEvent:(NSString *)key segmentation:(NSDictionary *)segmentation count:(NSUInteger)count sum:(double)sum duration:(NSTimeInterval)duration timestamp:(NSTimeInterval)timestamp
 {
+    if (key.length == 0)
+        return;
+
     CountlyEvent *event = CountlyEvent.new;
     event.key = key;
     event.segmentation = segmentation;
@@ -403,9 +410,47 @@
 
 }
 
-- (void)recordLocation:(CLLocationCoordinate2D)coordinate
+- (void)recordLocation:(CLLocationCoordinate2D)location
 {
-    [CountlyConnectionManager.sharedInstance sendLocation:coordinate];
+    if (!CLLocationCoordinate2DIsValid(location))
+        return;
+
+    CountlyPushNotifications.sharedInstance.location = [NSString stringWithFormat:@"%f,%f", location.latitude, location.longitude];
+
+    if (CountlyPushNotifications.sharedInstance.isGeoLocationEnabled)
+        [CountlyConnectionManager.sharedInstance sendLocation];
+}
+
+- (void)recordCity:(NSString *)city andISOCountryCode:(NSString *)ISOCountryCode
+{
+    if (city)
+        CountlyPushNotifications.sharedInstance.city = city;
+
+    if (ISOCountryCode)
+        CountlyPushNotifications.sharedInstance.ISOCountryCode = ISOCountryCode;
+
+    if (CountlyPushNotifications.sharedInstance.isGeoLocationEnabled && (city || ISOCountryCode))
+        [CountlyConnectionManager.sharedInstance sendCityAndCountryCode];
+}
+
+- (void)recordIP:(NSString *)IP
+{
+    CountlyPushNotifications.sharedInstance.IP = IP;
+}
+
+- (void)recordActionForNotification:(NSDictionary *)userInfo clickedButtonIndex:(NSInteger)buttonIndex;
+{
+    [CountlyPushNotifications.sharedInstance recordActionForNotification:userInfo clickedButtonIndex:buttonIndex];
+}
+
+- (void)setIsGeoLocationEnabled:(BOOL)isGeoLocationEnabled
+{
+    CountlyPushNotifications.sharedInstance.isGeoLocationEnabled = isGeoLocationEnabled;
+}
+
+- (BOOL)isGeoLocationEnabled
+{
+    return CountlyPushNotifications.sharedInstance.isGeoLocationEnabled;
 }
 #endif
 
@@ -416,16 +461,24 @@
 #if TARGET_OS_IOS
 - (void)recordHandledException:(NSException *)exception
 {
-    [CountlyCrashReporter.sharedInstance recordHandledException:exception];
+    [CountlyCrashReporter.sharedInstance recordHandledException:exception withStackTrace:nil];
+}
+
+- (void)recordHandledException:(NSException *)exception withStackTrace:(NSArray *)stackTrace
+{
+    [CountlyCrashReporter.sharedInstance recordHandledException:exception withStackTrace:stackTrace];
+}
+
+- (void)recordCrashLog:(NSString *)log
+{
+    [CountlyCrashReporter.sharedInstance log:log];
 }
 
 - (void)crashLog:(NSString *)format, ...
 {
-    va_list args;
-    va_start(args, format);
-    [CountlyCrashReporter.sharedInstance logWithFormat:format andArguments:args];
-    va_end(args);
+
 }
+
 #endif
 
 

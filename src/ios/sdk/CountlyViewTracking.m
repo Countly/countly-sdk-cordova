@@ -9,10 +9,15 @@
 @interface CountlyViewTracking ()
 @property (nonatomic) NSTimeInterval lastViewStartTime;
 @property (nonatomic) NSTimeInterval accumulatedTime;
-@property (nonatomic, strong) NSMutableArray* exceptionViewControllers;
+@property (nonatomic) NSMutableArray* exceptionViewControllers;
 @end
 
 NSString* const kCountlyReservedEventView = @"[CLY]_view";
+
+NSString* const kCountlyVTKeyName     = @"name";
+NSString* const kCountlyVTKeySegment  = @"segment";
+NSString* const kCountlyVTKeyVisit    = @"visit";
+NSString* const kCountlyVTKeyStart    = @"start";
 
 @implementation CountlyViewTracking
 
@@ -26,8 +31,7 @@ NSString* const kCountlyReservedEventView = @"[CLY]_view";
 
 - (instancetype)init
 {
-    self = [super init];
-    if (self)
+    if (self = [super init])
     {
         self.exceptionViewControllers =
         @[
@@ -41,7 +45,35 @@ NSString* const kCountlyReservedEventView = @"[CLY]_view";
             @"UIInputViewController",
             @"UISearchController",
             @"UISearchContainerViewController",
-            @"UIApplicationRotationFollowingController"
+            @"UIApplicationRotationFollowingController",
+            @"MFMailComposeInternalViewController",
+            @"MFMailComposeInternalViewController",
+            @"MFMailComposePlaceholderViewController",
+            @"UIInputWindowController",
+            @"_UIFallbackPresentationViewController",
+            @"UIActivityViewController",
+            @"UIActivityGroupViewController",
+            @"_UIActivityGroupListViewController",
+            @"_UIActivityViewControllerContentController",
+            @"UIKeyboardCandidateRowViewController",
+            @"UIKeyboardCandidateGridCollectionViewController",
+            @"UIPrintMoreOptionsTableViewController",
+            @"UIPrintPanelTableViewController",
+            @"UIPrintPanelViewController",
+            @"UIPrintPaperViewController",
+            @"UIPrintPreviewViewController",
+            @"UIPrintRangeViewController",
+            @"UIDocumentMenuViewController",
+            @"UIDocumentPickerViewController",
+            @"UIDocumentPickerExtensionViewController",
+            @"UIInterfaceActionGroupViewController",
+            @"UISystemInputViewController",
+            @"UIRecentsInputViewController",
+            @"UICompatibilityInputViewController",
+            @"UIInputViewAnimationControllerViewController",
+            @"UISnapshotModalViewController",
+            @"UIMultiColumnViewController",
+            @"UIKeyCommandDiscoverabilityHUDViewController"
         ].mutableCopy;
     }
 
@@ -56,13 +88,13 @@ NSString* const kCountlyReservedEventView = @"[CLY]_view";
 
     NSMutableDictionary* segmentation =
     @{
-        @"name": viewName,
-        @"segment": CountlyDeviceInfo.osName,
-        @"visit": @1
+        kCountlyVTKeyName: viewName,
+        kCountlyVTKeySegment: CountlyDeviceInfo.osName,
+        kCountlyVTKeyVisit: @1
     }.mutableCopy;
 
     if (!self.lastView)
-        segmentation[@"start"] = @1;
+        segmentation[kCountlyVTKeyStart] = @1;
 
     [Countly.sharedInstance recordEvent:kCountlyReservedEventView segmentation:segmentation];
 
@@ -76,8 +108,8 @@ NSString* const kCountlyReservedEventView = @"[CLY]_view";
     {
         NSDictionary* segmentation =
         @{
-            @"name": self.lastView,
-            @"segment": CountlyDeviceInfo.osName,
+            kCountlyVTKeyName: self.lastView,
+            kCountlyVTKeySegment: CountlyDeviceInfo.osName,
         };
 
         NSTimeInterval duration = NSDate.date.timeIntervalSince1970 - self.lastViewStartTime + self.accumulatedTime;
@@ -90,7 +122,8 @@ NSString* const kCountlyReservedEventView = @"[CLY]_view";
 
 - (void)pauseView
 {
-    self.accumulatedTime = NSDate.date.timeIntervalSince1970 - self.lastViewStartTime;
+    if (self.lastViewStartTime)
+        self.accumulatedTime = NSDate.date.timeIntervalSince1970 - self.lastViewStartTime;
 }
 
 - (void)resumeView

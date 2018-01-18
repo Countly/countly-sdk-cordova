@@ -13,7 +13,7 @@
 @property (nonatomic) long long sentDataSize;
 @property (nonatomic) long long receivedDataSize;
 @property (nonatomic) NSInteger connectionType;
-@property (nonatomic, strong) NSURLRequest* request;
+@property (nonatomic) NSURLRequest* request;
 @property (nonatomic, weak) id <NSURLConnectionDataDelegate, NSURLConnectionDelegate> originalDelegate;
 @end
 
@@ -118,12 +118,12 @@ NSString* const kCountlyReservedEventAPM = @"[CLY]_apm";
                                         self.request.URL.path,
                                         self.startTime,
                                         self.endTime,
-                                        self.endTime-self.startTime,
+                                        self.endTime - self.startTime,
                                         (long)self.HTTPStatusCode,
                                         (long)self.sentDataSize,
                                         (long)self.receivedDataSize,
                                         (int)self.connectionType,
-                                        self.connectionType!=0 && self.HTTPStatusCode/100 == 2] ;
+                                        self.connectionType != 0 && self.HTTPStatusCode / 100 == 2] ;
 }
 
 #pragma mark - Delegate Forwarding

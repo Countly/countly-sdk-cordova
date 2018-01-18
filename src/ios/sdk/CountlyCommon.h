@@ -30,8 +30,6 @@
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
 #import <AdSupport/ASIdentifierManager.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import <CoreTelephony/CTCarrier.h>
 #import "WatchConnectivity/WatchConnectivity.h"
 #endif
 
@@ -53,14 +51,6 @@
 #import <AppKit/AppKit.h>
 #endif
 
-#include <sys/types.h>
-#include <sys/sysctl.h>
-#include <libkern/OSAtomic.h>
-#include <execinfo.h>
-#import <mach/mach.h>
-#import <mach/mach_host.h>
-#import <arpa/inet.h>
-#import <ifaddrs.h>
 #import <objc/runtime.h>
 
 extern NSString* const kCountlySDKVersion;
@@ -70,11 +60,8 @@ extern NSString* const kCountlySDKName;
 
 @property (nonatomic) BOOL enableDebug;
 @property (nonatomic) BOOL enableAppleWatch;
+@property (nonatomic) BOOL enableAttribution;
 @property (nonatomic) BOOL manualSessionHandling;
-@property (nonatomic, strong) NSString* ISOCountryCode;
-@property (nonatomic, strong) NSString* city;
-@property (nonatomic, strong) NSString* location;
-@property (nonatomic, strong) NSString* IP;
 
 void CountlyInternalLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 

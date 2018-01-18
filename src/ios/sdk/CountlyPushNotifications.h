@@ -15,12 +15,18 @@
 @property (nonatomic) BOOL isTestDevice;
 @property (nonatomic) BOOL sendPushTokenAlways;
 @property (nonatomic) BOOL doNotShowAlertForNotifications;
+@property (nonatomic) BOOL isGeoLocationEnabled;
+@property (nonatomic) NSString* location;
+@property (nonatomic) NSString* city;
+@property (nonatomic) NSString* ISOCountryCode;
+@property (nonatomic) NSString* IP;
 
 + (instancetype)sharedInstance;
 
 #if TARGET_OS_IOS
 - (void)startPushNotifications;
 - (void)askForNotificationPermissionWithOptions:(UNAuthorizationOptions)options completionHandler:(void (^)(BOOL granted, NSError * error))completionHandler;
+- (void)recordActionForNotification:(NSDictionary *)userInfo clickedButtonIndex:(NSInteger)buttonIndex;
 #endif
 @end
 

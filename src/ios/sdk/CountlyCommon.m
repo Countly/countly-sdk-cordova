@@ -16,8 +16,8 @@
 @end
 
 NSString* const kCountlyParentDeviceIDTransferKey = @"kCountlyParentDeviceIDTransferKey";
-NSString* const kCountlySDKVersion = @"17.05";
-NSString* const kCountlySDKName = @"js-cordova-ios";
+NSString* const kCountlySDKVersion = @"18.01";
+NSString* const kCountlySDKName = @"objc-native-ios";
 
 @implementation CountlyCommon
 
@@ -66,7 +66,7 @@ void CountlyInternalLog(NSString *format, ...)
 - (NSInteger)dayOfWeek
 {
     NSDateComponents* components = [gregorianCalendar components:NSCalendarUnitWeekday fromDate:NSDate.date];
-    return components.weekday-1;
+    return components.weekday - 1;
 }
 
 - (NSInteger)timeZone
@@ -84,11 +84,11 @@ void CountlyInternalLog(NSString *format, ...)
     long long now = floor(NSDate.date.timeIntervalSince1970 * 1000);
 
     if (now <= self.lastTimestamp)
-        self.lastTimestamp ++;
+        self.lastTimestamp++;
     else
         self.lastTimestamp = now;
 
-    return (double)(self.lastTimestamp / 1000.0);
+    return (NSTimeInterval)(self.lastTimestamp / 1000.0);
 }
 
 #pragma mark - Watch Connectivity
@@ -118,13 +118,13 @@ void CountlyInternalLog(NSString *format, ...)
 
     if (WCSession.defaultSession.paired && WCSession.defaultSession.watchAppInstalled)
     {
-        [WCSession.defaultSession transferUserInfo:@{kCountlyParentDeviceIDTransferKey:CountlyDeviceInfo.sharedInstance.deviceID}];
+        [WCSession.defaultSession transferUserInfo:@{kCountlyParentDeviceIDTransferKey: CountlyDeviceInfo.sharedInstance.deviceID}];
         COUNTLY_LOG(@"Transferring parent device ID %@ ...", CountlyDeviceInfo.sharedInstance.deviceID);
     }
 }
 #endif
 
-#if (TARGET_OS_WATCH)
+#if TARGET_OS_WATCH
 - (void)session:(WCSession *)session didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo
 {
     COUNTLY_LOG(@"Watch received user info: \n%@", userInfo);
@@ -189,8 +189,8 @@ void CountlyInternalLog(NSString *format, ...)
 
 + (CLYButton *)dismissAlertButton
 {
-    const float kCountlyDismissButtonSize = 30.0;
-    const float kCountlyDismissButtonMargin = 10.0;
+    const CGFloat kCountlyDismissButtonSize = 30.0;
+    const CGFloat kCountlyDismissButtonMargin = 10.0;
     CLYButton* dismissButton = [CLYButton buttonWithType:UIButtonTypeCustom];
     dismissButton.frame = (CGRect){UIScreen.mainScreen.bounds.size.width - kCountlyDismissButtonSize - kCountlyDismissButtonMargin, kCountlyDismissButtonMargin, kCountlyDismissButtonSize, kCountlyDismissButtonSize};
     [dismissButton setTitle:@"✕" forState:UIControlStateNormal];
@@ -206,6 +206,9 @@ void CountlyInternalLog(NSString *format, ...)
 #pragma mark - Categories
 NSString* CountlyJSONFromObject(id object)
 {
+    if (!object)
+        return nil;
+
     NSError *error = nil;
     NSData *data = [NSJSONSerialization dataWithJSONObject:object options:0 error:&error];
     if (error){ COUNTLY_LOG(@"JSON can not be created: \n%@", error); }
