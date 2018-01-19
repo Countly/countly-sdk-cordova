@@ -146,7 +146,7 @@ CountlyConfig* config = nil;
     Countly.user.birthYear = @([byear integerValue]);
     //NSInteger byearint = [byear intValue];
 
-    [Countly.user recordUserDetails];
+    // [Countly.user recordUserDetails];
     [Countly.user save];
         // [Countly.sharedInstance recordUserDetails: @{
         //                                             kCLYUserName: name,
