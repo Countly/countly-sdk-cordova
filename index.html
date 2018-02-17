@@ -37,7 +37,7 @@
 <body>
     <div class="app">
         <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
-        <img class="ui centered medium image" src="https://count.ly/wp-content/uploads/2014/10/countly_logo_color.png">
+        <img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
         <button onclick="app.init()" class="fluid ui green button">Init</button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
@@ -47,8 +47,10 @@
         <button onclick="app.eventWithSegment()" class="fluid ui button">Event with Segment</button>
         <button onclick="app.eventWithSum_Segment()" class="fluid ui button">Even with Sum and Segment</button>
         <button onclick="app.event()" class="fluid ui black button">All Events</button>
-        <button onclick="app.startEvent('hello')" class="fluid ui button">Timed event: Start</button>
-        <button onclick="app.endEvent('hello')" class="fluid ui button">Timed event: Stop</button>
+        <button onclick="app.endEventBasic()" class="fluid ui button">Timed event: Start / Stop</button>
+        <button onclick="app.endEventWithSum()" class="fluid ui button">Timed event Sum: Start / Stop</button>
+        <button onclick="app.endEventWithSegment()" class="fluid ui button">Timed event Segment: Start / Stop</button>
+        <button onclick="app.endEventWithSumSegment()" class="fluid ui button">Timed event Sum Segment: Start / Stop</button>
         <div class="ui horizontal divider">Events End</div>
         <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
         <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
@@ -206,7 +208,7 @@
             "projectId": "881000050249" // only for google / android
         });
     };
-    
+
 
     app.onRegistrationId = function() {
 
@@ -271,13 +273,52 @@
     app.enableParameterTamperingProtection = function() {
         Countly.enableParameterTamperingProtection("salt");
     }
-    app.startEvent = function() {
-        Countly.startEvent("timedEvent");
-    }
-    app.endEvent = function() {
-        Countly.endEvent("timedEvent");
-    }
+    // app.startEvent = function() {
+    //     Countly.startEvent("timedEvent");
+    // }
 
+    app.endEventBasic = function(){
+        Countly.startEvent("Timed Event");
+        setTimeout(function(){
+            Countly.endEvent({"eventName": "Timed Event"});
+        },1000);
+    }
+    app.endEventWithSum = function(){
+        Countly.startEvent("Timed Event With Sum");
+        setTimeout(function(){
+            Countly.endEvent({"eventName": "Timed Event With Sum", "eventSum": "0.99"});
+        },1000);
+    }
+    app.endEventWithSegment = function(){
+        Countly.startEvent("Timed Event With Segment");
+        setTimeout(function(){
+
+            var events = {
+              "eventName": "Timed Event With Segment"
+            };
+            events.segments = {
+              "Country": "Turkey",
+              "Age": "28"
+            };
+            Countly.endEvent(events);
+        },1000);
+    }
+    app.endEventWithSumSegment = function(){
+        Countly.startEvent("Timed Event With Segment, Sum and Count");
+        setTimeout(function(){
+            var events = {
+              "eventName": "Timed Event With Segment, Sum and Count",
+              "eventCount": 1,
+              "eventSum": "0.99"
+            };
+            events.segments = {
+              "Country": "Turkey",
+              "Age": "28"
+            };
+            Countly.endEvent(events);
+        },1000);
+    }
+    
     // user details
 
     app.userData = {};

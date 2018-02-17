@@ -159,12 +159,17 @@ Countly.endEvent = function(options){
 
     args.push(eventType);
 
-    if(options.eventName)
-        args.push(options.eventName.toString());
-    if(options.eventCount)
-        args.push(options.eventCount.toString());
-    if(options.eventSum)
-        args.push(options.eventSum.toString());
+    if(!options.eventName)
+        options.eventName = "";
+    args.push(options.eventName.toString());
+    
+    if(!options.eventCount)
+        options.eventCount = "1";
+    args.push(options.eventCount.toString());
+    
+    if(!options.eventSum)
+        options.eventSum = "0";
+    args.push(options.eventSum.toString());
 
     if(options.segments)
         segments = options.segments;
@@ -174,6 +179,8 @@ Countly.endEvent = function(options){
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endEvent",args);
 };
+
+
 
 Countly.userData = {};
 Countly.userData.setProperty = function(keyName, keyValue){

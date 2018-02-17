@@ -241,6 +241,7 @@ CountlyConfig* config = nil;
 
 - (void)endEvent:(CDVInvokedUrlCommand*)command
 {
+    
     NSString* eventType = [command.arguments objectAtIndex:0];
     CDVPluginResult* pluginResult = nil;
 
@@ -249,17 +250,39 @@ CountlyConfig* config = nil;
         [Countly.sharedInstance endEvent:eventName];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"event sent!"];
     }
+    else if ([eventType  isEqual: @"eventWithSum"]){
+        NSString* eventName = [command.arguments objectAtIndex:1];
+        NSString* countString = [command.arguments objectAtIndex:2];
+        int countInt = [countString intValue];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:0];
+        
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
+    }
     else if ([eventType  isEqual: @"eventWithSegment"]){
         NSString* eventName = [command.arguments objectAtIndex:1];
         NSString* countString = [command.arguments objectAtIndex:2];
         int countInt = [countString intValue];
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-
-        for(int i=3,il=(int)command.arguments.count;i<il;i+=2){
+        for(int i=4,il=(int)command.arguments.count;i<il;i+=2){
             dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
         }
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:0];
 
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
+    }
+    else if ([eventType  isEqual: @"eventWithSumSegment"]){
+        NSString* eventName = [command.arguments objectAtIndex:1];
+        NSString* countString = [command.arguments objectAtIndex:2];
+        int countInt = [countString intValue];
+        NSString* sumString = [command.arguments objectAtIndex:3];
+        int sumInt = [sumString intValue];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        for(int i=4,il=(int)command.arguments.count;i<il;i+=2){
+            dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
+        }
+        [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
+        
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
     }
     else{
