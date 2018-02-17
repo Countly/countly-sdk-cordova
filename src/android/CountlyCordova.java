@@ -101,6 +101,25 @@ public class CountlyCordova extends CordovaPlugin {
                 Countly.sharedInstance().endEvent(eventName);
                 callbackContext.success("event sent");
             }
+            else if ("eventWithSegment".equals(eventType)) {
+                String eventName = args.getString(1);
+                HashMap<String, String> segmentation = new HashMap<String, String>();
+                for(int i=4,il=args.length();i<il;i+=2){
+                    segmentation.put(args.getString(i), args.getString(i+1));
+                }
+                Countly.sharedInstance().endEvent(eventName, segmentation, 1,0);
+                callbackContext.success("eventWithSumSegment sent");
+            }
+            else if ("eventWithSum".equals(eventType)) {
+                String eventName = args.getString(1);
+                int eventCount= Integer.parseInt(args.getString(2));
+                HashMap<String, String> segmentation = new HashMap<String, String>();
+                for(int i=4,il=args.length();i<il;i+=2){
+                    segmentation.put(args.getString(i), args.getString(i+1));
+                }
+                Countly.sharedInstance().endEvent(eventName, segmentation, eventCount,0);
+                callbackContext.success("eventWithSumSegment sent");
+            }
             else if ("eventWithSumSegment".equals(eventType)) {
                 String eventName = args.getString(1);
                 int eventCount= Integer.parseInt(args.getString(2));

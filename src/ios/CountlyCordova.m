@@ -254,8 +254,10 @@ CountlyConfig* config = nil;
         NSString* eventName = [command.arguments objectAtIndex:1];
         NSString* countString = [command.arguments objectAtIndex:2];
         int countInt = [countString intValue];
+        NSString* sumString = [command.arguments objectAtIndex:3];
+        int sumInt = [sumString intValue];
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:0];
+        [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
         
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
     }
