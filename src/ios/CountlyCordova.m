@@ -328,6 +328,17 @@ CountlyConfig* config = nil;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)logException:(CDVInvokedUrlCommand*)command
+{
+    NSString* execption = [command.arguments objectAtIndex:0];
+    NSException* myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:@{}];
+    [Countly.sharedInstance recordHandledException:myException];
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"logException!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void)userData_setProperty:(CDVInvokedUrlCommand*)command
 {
     NSString* keyName = [command.arguments objectAtIndex:0];
