@@ -136,6 +136,12 @@ Countly.changeDeviceId = function(newDeviceID){
 Countly.enableCrashReporting = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableCrashReporting",[]);
 }
+Countly.addCrashLog = function(crashLog){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","addCrashLog",[crashLog || ""]);
+};
+Countly.logException = function(exception){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",[exception || ""]);
+};
 
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
@@ -203,10 +209,6 @@ Countly.userData.saveMin = function(keyName, saveMin){
 };
 Countly.userData.setOnce = function(keyName, setOnce){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
-};
-
-Countly.addCrashLog = function(crashLog){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","addCrashLog",[crashLog || ""]);
 };
 
 

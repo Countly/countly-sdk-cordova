@@ -72,6 +72,7 @@
         <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
+        <button onclick="app.addCrashLog()" class="fluid ui button">Send Crash Report</button>
         <div class="ui horizontal divider">Other Methods End</div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
@@ -319,6 +320,19 @@
         },1000);
     }
     
+    app.addCrashLog = function(){
+        Countly.addCrashLog("User Performed Step A");
+        setTimeout(function(){
+            Countly.addCrashLog("User Performed Step B");
+        },1000);
+        setTimeout(function(){
+            Countly.addCrashLog("User Performed Step C");
+            console.log("Opps found and error");
+            Countly.logException("My Customized error message");
+        },1000);
+
+    }
+
     // user details
 
     app.userData = {};

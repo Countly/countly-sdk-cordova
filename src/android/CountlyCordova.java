@@ -78,6 +78,15 @@ public class CountlyCordova extends CordovaPlugin {
             Countly.sharedInstance().addCrashLog(record);
             callbackContext.success("addCrashLog success!");
             return true;
+        }else if("logException".equals(action)){
+            String exceptionString = args.getString(0);
+            try{
+                throw new Exception(exceptionString);
+            }catch(Exception exception){
+                Countly.sharedInstance().logException(exception);
+            }
+            callbackContext.success("logException success!");
+            return true;
         }
 
 
