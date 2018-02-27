@@ -321,7 +321,7 @@ CountlyConfig* config = nil;
 - (void)addCrashLog:(CDVInvokedUrlCommand*)command
 {
     NSString* record = [command.arguments objectAtIndex:0];
-    [Countly.sharedInstance crashLog: record];
+    [Countly.sharedInstance recordCrashLog: record];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"addCrashLog!"];
@@ -332,7 +332,7 @@ CountlyConfig* config = nil;
 {
     NSString* execption = [command.arguments objectAtIndex:0];
     NSException* myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:@{}];
-    [Countly.sharedInstance recordHandledException:myException];
+    [Countly.sharedInstance recordHandledException:myException withStackTrace:[NSThread callStackSymbols]];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"logException!"];
