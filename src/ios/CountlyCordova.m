@@ -331,8 +331,19 @@ CountlyConfig* config = nil;
 - (void)logException:(CDVInvokedUrlCommand*)command
 {
     NSString* execption = [command.arguments objectAtIndex:0];
-    NSException* myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:@{}];
-    [Countly.sharedInstance recordHandledException:myException withStackTrace:[NSThread callStackSymbols]];
+    NSString* nonfatal = [command.arguments objectAtIndex:1];
+    NSArray *nsException = [execption componentsSeparatedByString:@"\n"];
+
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    for(int i=2,il=(int)command.arguments.count;i<il;i+=2){
+        dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
+    }
+    [dict setObject:nonfatal forKey:@"nonfatal"];
+
+    NSException* myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:dict];
+    
+    [Countly.sharedInstance recordHandledException:myException withStackTrace: nsException];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"logException!"];
