@@ -125,6 +125,29 @@ export class Countly {
   enableCrashReporting(){
     cordova.exec(this.onSuccess,this.onError,"CountlyCordova","enableCrashReporting",[]);
   }
+
+  addCrashLog(crashLog){
+    cordova.exec(this.onSuccess,this.onError,"CountlyCordova","addCrashLog",[crashLog || ""]);
+  }
+
+  logException (exception: String, nonfatal: Boolean, segments: any){
+      var exceptionString = "";
+      for(var i=0,il=exception.length;i<il;i++){
+          exceptionString += "columnNumber: " +exception[i].columnNumber +"\n";
+          exceptionString += "fileName: " +exception[i].fileName +"\n";
+          exceptionString += "functionName: " +exception[i].functionName +"\n";
+          exceptionString += "lineNumber: " +exception[i].lineNumber +"\n";
+      }
+      var args = [];
+      args.push(exceptionString || "");
+      args.push(nonfatal || false);
+      for(var key in segments){
+          args.push(key);
+          args.push(segments.toString());
+      }
+      cordova.exec(this.onSuccess,this.onError,"CountlyCordova","logException",args);
+  }
+
   enableParameterTamperingProtection(salt: any){
     cordova.exec(this.onSuccess,this.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
   }
@@ -179,9 +202,5 @@ export class Countly {
   }
   setOnce(keyName: String, setOnce: Number){
     cordova.exec(this.onSuccess,this.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
-  }
-
-  addCrashLog(crashLog){
-    cordova.exec(this.onSuccess,this.onError,"CountlyCordova","addCrashLog",[crashLog || ""]);
   }
 } 
