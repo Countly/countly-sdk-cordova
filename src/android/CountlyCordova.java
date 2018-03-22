@@ -80,11 +80,23 @@ public class CountlyCordova extends CordovaPlugin {
             return true;
         }else if("logException".equals(action)){
             String exceptionString = args.getString(0);
-            try{
-                throw new Exception(exceptionString);
-            }catch(Exception exception){
-                Countly.sharedInstance().logException(exception);
+            Exception exception = new Exception(exceptionString);
+
+            Boolean nonfatal = args.getBoolean(1);
+
+            HashMap<String, String> segments = new HashMap<String, String>();
+            for(int i=2,il=args.length();i<il;i+=2){
+                segments.put(args.getString(i), args.getString(i+1));
             }
+            segments.put("nonfatal", nonfatal.toString());
+            Countly.sharedInstance().setCustomCrashSegments(segments);
+
+            Countly.sharedInstance().logException(exception);
+            // try{
+            //     throw new Exception(exceptionString);
+            // }catch(Exception exception){
+            //     Countly.sharedInstance().logException(exception);
+            // }
             callbackContext.success("logException success!");
             return true;
         }

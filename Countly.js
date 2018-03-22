@@ -132,16 +132,34 @@ Countly.setLocation = function(newDeviceID){
 }
 Countly.changeDeviceId = function(newDeviceID){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","changeDeviceId",[newDeviceID.toString() || ""]);
-}
+};
+
+Countly.isCrashReportingEnabled = false;
 Countly.enableCrashReporting = function(){
+    Countly.isCrashReportingEnabled = true;
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableCrashReporting",[]);
 }
 Countly.addCrashLog = function(crashLog){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","addCrashLog",[crashLog || ""]);
 };
-Countly.logException = function(exception){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",[exception || ""]);
+Countly.logException = function(exception, nonfatal, segments){
+    var exceptionString = "";
+    for(var i=0,il=exception.length;i<il;i++){
+        exceptionString += "columnNumber: " +exception[i].columnNumber +"\n";
+        exceptionString += "fileName: " +exception[i].fileName +"\n";
+        exceptionString += "functionName: " +exception[i].functionName +"\n";
+        exceptionString += "lineNumber: " +exception[i].lineNumber +"\n";
+    }
+    var args = [];
+    args.push(exceptionString || "");
+    args.push(nonfatal || false);
+    for(var key in segments){
+        args.push(key);
+        args.push(segments.toString());
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
+
 
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
@@ -168,11 +186,11 @@ Countly.endEvent = function(options){
     if(!options.eventName)
         options.eventName = "";
     args.push(options.eventName.toString());
-    
+
     if(!options.eventCount)
         options.eventCount = "1";
     args.push(options.eventCount.toString());
-    
+
     if(!options.eventSum)
         options.eventSum = "0";
     args.push(options.eventSum.toString());
