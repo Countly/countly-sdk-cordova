@@ -283,13 +283,15 @@
     }
 
     /** Use StackTrace to log all exceptions **/
-    if (window.StackTrace) {
-        StackTrace.get().then(function(stackframes) {
-            if (Countly.isCrashReportingEnabled) {
-                Countly.logException(stackframes, true, {"_facebook_version": "0.0.1"});
-            }
-        }).catch(function(err) {});
-    }
+    (function(){
+        if (window.StackTrace) {
+            StackTrace.get().then(function(stackframes) {
+                if (Countly.isCrashReportingEnabled) {
+                    Countly.logException(stackframes, true, {"_facebook_version": "0.0.1"});
+                }
+            }).catch(function(err) {});
+        }
+    })();
 
 
     app.addCrashLog = function() {
