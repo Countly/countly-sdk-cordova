@@ -1,22 +1,4 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
 
 <head>
@@ -76,37 +58,20 @@
         <div class="ui horizontal divider">Other Methods End</div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stacktrace.js/2.0.0/stacktrace.min.js"> </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stacktrace.js/2.0.0/stacktrace.min.js">
+    </script>
     <script type="text/javascript">
-    // // testing purpose only
-    // if(!window.device)
-    //     device = {};
-    //     device.platform = "android";
-    // //
-
     app = {};
-    document.addEventListener("deviceready", function() {
-        // Countly.init("https://try.count.ly","0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
-        // Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e", "custom_device_id_123456");
-        // var isAdvertiseID = true;
-        // Countly.init("https://try.count.ly","0e8a00e8c01395a0af8be0e55da05a404bb23c3e", null, isAdvertiseID);
-        //replace your server ip/url // replace it with your "App Key"
-        // app.onRegistrationId();
-        // app.test();
-        // alert("deviceready");
-    }, false);
 
-    app.init = function(){
-        document.addEventListener("deviceready", function() {
-            Countly.init("https://try.count.ly","0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
-        }, false);
+    app.init = function() {
+        Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
     };
     app.test = function() {
         app.onRegistrationId();
         app.sendSampleEvent();
     }
 
-    app.setOptionalParametersForInitialization = function(){
+    app.setOptionalParametersForInitialization = function() {
         Countly.setOptionalParametersForInitialization({
             city: "Tampa",
             country: "US",
@@ -194,7 +159,7 @@
         Countly.setLoggingEnabled();
     }
 
-    app.testAndroidPush = function(){
+    app.testAndroidPush = function() {
         Countly.onRegistrationId({
             "registrationId": "1234567890",
             "mode": Countly.messagingMode.PRODUCTION,
@@ -202,7 +167,7 @@
         });
     };
 
-    app.testiOSPush = function(){
+    app.testiOSPush = function() {
         Countly.onRegistrationId({
             "registrationId": "1234567890",
             "mode": Countly.messagingMode.PRODUCTION,
@@ -267,106 +232,103 @@
         Countly.recordView(viewName);
     }
 
-    // 2017
+    /** 2017 **/
     app.changeDeviceId = function() {
         Countly.changeDeviceId("123456");
     }
     app.enableParameterTamperingProtection = function() {
         Countly.enableParameterTamperingProtection("salt");
     }
-    // app.startEvent = function() {
-    //     Countly.startEvent("timedEvent");
-    // }
 
-    app.endEventBasic = function(){
+    app.endEventBasic = function() {
         Countly.startEvent("Timed Event");
-        setTimeout(function(){
-            Countly.endEvent({"eventName": "Timed Event"});
-        },1000);
+        setTimeout(function() {
+            Countly.endEvent({ "eventName": "Timed Event" });
+        }, 1000);
     }
-    app.endEventWithSum = function(){
+    app.endEventWithSum = function() {
         Countly.startEvent("Timed Event With Sum");
-        setTimeout(function(){
-            Countly.endEvent({"eventName": "Timed Event With Sum", "eventSum": "0.99"});
-        },1000);
+        setTimeout(function() {
+            Countly.endEvent({ "eventName": "Timed Event With Sum", "eventSum": "0.99" });
+        }, 1000);
     }
-    app.endEventWithSegment = function(){
+    app.endEventWithSegment = function() {
         Countly.startEvent("Timed Event With Segment");
-        setTimeout(function(){
+        setTimeout(function() {
 
             var events = {
-              "eventName": "Timed Event With Segment"
+                "eventName": "Timed Event With Segment"
             };
             events.segments = {
-              "Country": "Turkey",
-              "Age": "28"
+                "Country": "Turkey",
+                "Age": "28"
             };
             Countly.endEvent(events);
-        },1000);
+        }, 1000);
     }
-    app.endEventWithSumSegment = function(){
+    app.endEventWithSumSegment = function() {
         Countly.startEvent("Timed Event With Segment, Sum and Count");
-        setTimeout(function(){
+        setTimeout(function() {
             var events = {
-              "eventName": "Timed Event With Segment, Sum and Count",
-              "eventCount": 1,
-              "eventSum": "0.99"
+                "eventName": "Timed Event With Segment, Sum and Count",
+                "eventCount": 1,
+                "eventSum": "0.99"
             };
             events.segments = {
-              "Country": "Turkey",
-              "Age": "28"
+                "Country": "Turkey",
+                "Age": "28"
             };
             Countly.endEvent(events);
-        },1000);
+        }, 1000);
     }
-    
-    // Use StackTrace to log all exceptions
-    if(window.StackTrace){
-        StackTrace.get().then(function(stackframes){
-            if(Countly.isCrashReportingEnabled){
-                Countly.logException(stackframes, true, {});
+
+    /** Use StackTrace to log all exceptions **/
+    if (window.StackTrace) {
+        StackTrace.get().then(function(stackframes) {
+            if (Countly.isCrashReportingEnabled) {
+                Countly.logException(stackframes, true, {"_facebook_version": "0.0.1"});
             }
-        }).catch(function(err){});
+        }).catch(function(err) {});
     }
 
 
-    app.addCrashLog = function(){
+    app.addCrashLog = function() {
         Countly.enableCrashReporting();
         Countly.addCrashLog("User Performed Step A");
-        setTimeout(function(){
+        setTimeout(function() {
             Countly.addCrashLog("User Performed Step B");
-        },1000);
-        setTimeout(function(){
+        }, 1000);
+        setTimeout(function() {
             Countly.addCrashLog("User Performed Step C");
             // console.log("Opps found and error");
             a();
-        },1000);
+        }, 1000);
     }
 
-    function a (){
+    function a() {
         b();
     }
-    function b(){
+
+    function b() {
         c();
     }
 
-    function c(){
+    function c() {
         d();
         throw new Error("My Custom Error");
     }
 
-    function d(){
-        try{
+    function d() {
+        try {
             throw new Error("My Second Error");
-        }catch(err){
-            StackTrace.fromError(err).then(function(stackframes){
-                Countly.logException(stackframes, true, {"my one": "value"});
-                // console.log(stackframes, nonfatal, segments);
+        } catch (err) {
+            StackTrace.fromError(err).then(function(stackframes) {
+                Countly.logException(stackframes, true, {"_facebook_version": "0.0.1"});
             });
         }
     }
 
-    // user details
+    /** user details **/
 
     app.userData = {};
     app.userData.setProperty = function() {
