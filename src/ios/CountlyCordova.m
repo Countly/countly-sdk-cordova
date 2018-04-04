@@ -34,13 +34,17 @@ CountlyConfig* config = nil;
     CDVPluginResult* pluginResult = nil;
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
-
     if(config == nil){
         config = CountlyConfig.new;
     }
     config.appKey = appkey;
     config.host = serverurl;
 
+    if(command.arguments.count === 3){
+        NSString* deviceID = [command.arguments objectAtIndex:2];
+        config.deviceID = deviceID;
+    }
+    
     if (serverurl != nil && [serverurl length] > 0) {
         [[Countly sharedInstance] startWithConfig:config];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"initialized!"];

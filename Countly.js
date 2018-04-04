@@ -4,10 +4,16 @@ Countly.appKey = "";
 Countly.ready = false;
 Countly.messagingMode = {"TEST":1,"PRODUCTION":0};
 // countly initialization
-Countly.init = function(serverUrl,appKey){
+Countly.init = function(serverUrl,appKey, deviceId){
+    var args = [];
     Countly.serverUrl = serverUrl;
     Countly.appKey = appKey;
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",[serverUrl,appKey]);
+    args.push(serverUrl || "");
+    args.push(appKey || "");
+    if(deviceId){
+        args.push(deviceId || "");
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
 }
 
 Countly.initMessaging = function(options){
