@@ -34,14 +34,15 @@ CountlyConfig* config = nil;
     CDVPluginResult* pluginResult = nil;
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
+    NSString* deviceID = @"";
     if(config == nil){
         config = CountlyConfig.new;
     }
     config.appKey = appkey;
     config.host = serverurl;
-
-    if(command.arguments.count === 3){
-        NSString* deviceID = [command.arguments objectAtIndex:2];
+    
+    if(command.arguments.count == 3){
+        deviceID = [command.arguments objectAtIndex:2];
         config.deviceID = deviceID;
     }
     
@@ -52,7 +53,11 @@ CountlyConfig* config = nil;
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
 
+    if(command.arguments.count == 3){
+        deviceID = [command.arguments objectAtIndex:2];
+        [Countly.sharedInstance setNewDeviceID:deviceID onServer:YES];   //replace and merge on server
 
+    }
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
