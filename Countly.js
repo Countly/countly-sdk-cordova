@@ -73,7 +73,7 @@ Countly.setUserData = function(options){
     args.push(options.name || "");
     args.push(options.username || "");
     args.push(options.email || "");
-    args.push(options.org || "");
+    args.push(options.organization || "");
     args.push(options.phone || "");
     args.push(options.picture || "");
     args.push(options.picturePath || "");
