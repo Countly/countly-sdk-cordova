@@ -324,25 +324,25 @@
 
     app.userData = {};
     app.userData.setProperty = function() {
-        Countly.userData.setProperty("keyName", "keyValue");
+        Countly.userData.setProperty("setProperty", "My Property");
     }
     app.userData.increment = function() {
-        Countly.userData.increment("keyName");
+        Countly.userData.increment("increment");
     }
     app.userData.incrementBy = function() {
-        Countly.userData.incrementBy("keyName", 10);
+        Countly.userData.incrementBy("incrementBy", 10);
     }
     app.userData.multiply = function() {
-        Countly.userData.multiply("keyName", 20);
+        Countly.userData.multiply("multiply", 20);
     }
     app.userData.saveMax = function() {
-        Countly.userData.saveMax("keyName", 100);
+        Countly.userData.saveMax("saveMax", 100);
     }
     app.userData.saveMin = function() {
-        Countly.userData.saveMin("keyName", 50);
+        Countly.userData.saveMin("saveMin", 50);
     }
     app.userData.setOnce = function() {
-        Countly.userData.setOnce("keyName", 200);
+        Countly.userData.setOnce("setOnce", 200);
     }
     
     
