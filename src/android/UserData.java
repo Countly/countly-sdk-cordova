@@ -144,7 +144,7 @@ public class UserData {
      * @param value String with value for the property
      */
     public void setProperty(String key, String value){
-        UserData.setCustomProperty(key, value);
+        UserData.modifyCustomData(key, value, "$set");
     }
 
     /**
