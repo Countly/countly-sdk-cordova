@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.messagingMode = {"TEST":1,"PRODUCTION":0};
+Countly.messagingMode = {"TEST":"1","PRODUCTION":"0"};
 // countly initialization
 Countly.init = function(serverUrl,appKey, deviceId){
     var args = [];
@@ -18,12 +18,11 @@ Countly.init = function(serverUrl,appKey, deviceId){
 
 Countly.initMessaging = function(options){
     Countly.projectId = options.projectId;
-    Countly.messageMode = options.messageMode;
-    // Countly.Push.onRegisterPushNotification();
-
+    Countly.messageMode = options.mode;
+    
     var args = [];
     args.push(options.registrationId || "");
-    args.push(options.messageMode || "0");
+    args.push(options.mode || Countly.messagingMode.PRODUCTION);
     args.push(options.projectId || "");
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }
@@ -86,7 +85,7 @@ Countly.setUserData = function(options){
 Countly.onRegistrationId = function(options){
     var args = [];
     args.push(options.registrationId || "");
-    args.push(Countly.messageMode || "0");
+    args.push(options.messageMode);
     args.push(options.projectId || "");
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }

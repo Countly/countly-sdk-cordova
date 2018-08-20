@@ -302,7 +302,7 @@ public class CountlyCordova extends CordovaPlugin {
             Countly.sharedInstance().onRegistrationId(registrationId,mode);
             // Countly.sharedInstance().initMessaging(cordova.getActivity(), cordova.getActivity().getClass(), projectId, mode);
             callbackContext.success("initMessaging success");
-            Log.e("Nicolson", registrationId);
+            // Log.e("Nicolson", registrationId);
             return true;
         }
         else if("recordView".equals(action)){
