@@ -289,8 +289,8 @@ public class CountlyCordova extends CordovaPlugin {
 
         else if("onregistrationid".equals(action)){
             String registrationId = args.getString(0);
-            int messagingMode = Integer.parseInt(args.getString(1));
-            String projectId = args.getString(2);
+            // int messagingMode = Integer.parseInt(args.getString(1));
+            // String projectId = args.getString(2);
 
             Countly.CountlyMessagingMode mode = null;
             if(args.getString(1).equals("1")){
