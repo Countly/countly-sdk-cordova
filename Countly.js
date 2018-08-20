@@ -15,17 +15,17 @@ Countly.init = function(serverUrl,appKey, deviceId){
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
 }
-
-// Countly.initMessaging = function(options){
-//     Countly.projectId = options.projectId;
-//     Countly.messageMode = options.mode;
+// @depricated
+Countly.initMessaging = function(options){
+    Countly.projectId = options.projectId;
+    Countly.messageMode = options.mode;
     
-//     var args = [];
-//     args.push(options.registrationId || "");
-//     args.push(options.mode || Countly.messagingMode.PRODUCTION);
-//     args.push(options.projectId || "");
-//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
-// }
+    var args = [];
+    args.push(options.registrationId || "");
+    args.push(options.mode || Countly.messagingMode.PRODUCTION);
+    args.push(options.projectId || "");
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
+}
 
 // countly sending various types of events
 Countly.sendEvent = function(options){
