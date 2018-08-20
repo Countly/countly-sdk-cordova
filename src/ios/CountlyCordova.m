@@ -176,9 +176,9 @@ CountlyConfig* config = nil;
 {
     NSString* token = [command.arguments objectAtIndex:0];
     NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
+    // int mode = [messagingMode intValue];
     NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
-    if(mode == 1){
+    if(messagingMode isEqual: @"1"){
         if(config == nil){
             config = CountlyConfig.new;
         }
