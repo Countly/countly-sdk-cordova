@@ -178,7 +178,7 @@ CountlyConfig* config = nil;
     NSString* messagingMode = [command.arguments objectAtIndex:1];
     // int mode = [messagingMode intValue];
     NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
-    if(messagingMode isEqual: @"1"){
+    if([messagingMode isEqual: @"1"]){
         if(config == nil){
             config = CountlyConfig.new;
         }
