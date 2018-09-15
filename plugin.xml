@@ -54,6 +54,8 @@
     <source-file src="src/ios/sdk/CountlyConfig.m" />
     <header-file src="src/ios/sdk/CountlyConnectionManager.h"/>
     <source-file src="src/ios/sdk/CountlyConnectionManager.m" />
+    <header-file src="src/ios/sdk/CountlyConsentManager.h"/>
+    <source-file src="src/ios/sdk/CountlyConsentManager.m" />
     <header-file src="src/ios/sdk/CountlyCrashReporter.h"/>
     <source-file src="src/ios/sdk/CountlyCrashReporter.m" />
     <!-- <header-file src="src/ios/sdk/CountlyDB.h"/> -->
@@ -62,6 +64,8 @@
     <source-file src="src/ios/sdk/CountlyDeviceInfo.m" />
     <header-file src="src/ios/sdk/CountlyEvent.h"/>
     <source-file src="src/ios/sdk/CountlyEvent.m" />
+    <header-file src="src/ios/sdk/CountlyLocationManager.h"/>
+    <source-file src="src/ios/sdk/CountlyLocationManager.m" />
     <header-file src="src/ios/sdk/CountlyPersistency.h"/>
     <source-file src="src/ios/sdk/CountlyPersistency.m" />
     <header-file src="src/ios/sdk/CountlyStarRating.h"/>

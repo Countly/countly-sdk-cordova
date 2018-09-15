@@ -13,11 +13,18 @@
     NSTimeInterval startTime;
 }
 @property long long lastTimestamp;
+#if (TARGET_OS_IOS || TARGET_OS_TV)
+@property (nonatomic) UIBackgroundTaskIdentifier bgTask;
+#endif
 @end
 
-NSString* const kCountlyParentDeviceIDTransferKey = @"kCountlyParentDeviceIDTransferKey";
-NSString* const kCountlySDKVersion = @"18.01";
+NSString* const kCountlySDKVersion = @"18.08";
 NSString* const kCountlySDKName = @"objc-native-ios";
+
+NSString* const kCountlyParentDeviceIDTransferKey = @"kCountlyParentDeviceIDTransferKey";
+NSString* const kCountlyAttributionIDFAKey = @"idfa";
+
+NSString* const kCountlyErrorDomain = @"ly.count.ErrorDomain";
 
 @implementation CountlyCommon
 
@@ -93,36 +100,36 @@ void CountlyInternalLog(NSString *format, ...)
 
 #pragma mark - Watch Connectivity
 
-#if (TARGET_OS_IOS || TARGET_OS_WATCH)
-- (void)activateWatchConnectivity
+- (void)startAppleWatchMatching
 {
     if (!self.enableAppleWatch)
         return;
 
-    if ([WCSession isSupported])
+    if (!CountlyConsentManager.sharedInstance.consentForAppleWatch)
+        return;
+
+#if (TARGET_OS_IOS || TARGET_OS_WATCH)
+    if (@available(iOS 9.0, *))
     {
-        WCSession *session = WCSession.defaultSession;
-        session.delegate = (id<WCSessionDelegate>)self;
-        [session activateSession];
+        if ([WCSession isSupported])
+        {
+            WCSession.defaultSession.delegate = (id<WCSessionDelegate>)self;
+            [WCSession.defaultSession activateSession];
+        }
     }
-}
 #endif
 
 #if TARGET_OS_IOS
-- (void)transferParentDeviceID
-{
-    if (!self.enableAppleWatch)
-        return;
-
-    [self activateWatchConnectivity];
-
-    if (WCSession.defaultSession.paired && WCSession.defaultSession.watchAppInstalled)
+    if (@available(iOS 9.0, *))
     {
-        [WCSession.defaultSession transferUserInfo:@{kCountlyParentDeviceIDTransferKey: CountlyDeviceInfo.sharedInstance.deviceID}];
-        COUNTLY_LOG(@"Transferring parent device ID %@ ...", CountlyDeviceInfo.sharedInstance.deviceID);
+        if (WCSession.defaultSession.paired && WCSession.defaultSession.watchAppInstalled)
+        {
+            [WCSession.defaultSession transferUserInfo:@{kCountlyParentDeviceIDTransferKey: CountlyDeviceInfo.sharedInstance.deviceID}];
+            COUNTLY_LOG(@"Transferring parent device ID %@ ...", CountlyDeviceInfo.sharedInstance.deviceID);
+        }
     }
-}
 #endif
+}
 
 #if TARGET_OS_WATCH
 - (void)session:(WCSession *)session didReceiveUserInfo:(NSDictionary<NSString *, id> *)userInfo
@@ -142,29 +149,87 @@ void CountlyInternalLog(NSString *format, ...)
 }
 #endif
 
+#pragma mark - Attribution
+
+- (void)startAttribution
+{
+    if (!self.enableAttribution)
+        return;
+
+    if (!CountlyConsentManager.sharedInstance.consentForAttribution)
+        return;
+
+    NSDictionary* attribution = nil;
+
+#if (TARGET_OS_IOS || TARGET_OS_TV)
+#ifndef COUNTLY_EXCLUDE_IDFA
+    if (ASIdentifierManager.sharedManager.advertisingTrackingEnabled)
+    {
+        attribution = @{kCountlyAttributionIDFAKey: ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString};
+    }
+#endif
+#endif
+
+    if (!attribution)
+        return;
+
+    [CountlyConnectionManager.sharedInstance sendAttribution:[attribution cly_JSONify]];
+}
+
+#pragma mark - Others
+
+- (void)startBackgroundTask
+{
+#if (TARGET_OS_IOS || TARGET_OS_TV)
+    if (self.bgTask != UIBackgroundTaskInvalid)
+        return;
+
+    self.bgTask = [UIApplication.sharedApplication beginBackgroundTaskWithExpirationHandler:^
+    {
+        [UIApplication.sharedApplication endBackgroundTask:self.bgTask];
+        self.bgTask = UIBackgroundTaskInvalid;
+    }];
+#endif
+}
+
+- (void)finishBackgroundTask
+{
+#if (TARGET_OS_IOS || TARGET_OS_TV)
+    if (self.bgTask != UIBackgroundTaskInvalid && !CountlyConnectionManager.sharedInstance.connection)
+    {
+        [UIApplication.sharedApplication endBackgroundTask:self.bgTask];
+        self.bgTask = UIBackgroundTaskInvalid;
+    }
+#endif
+}
+
+#if (TARGET_OS_IOS || TARGET_OS_TV)
+- (UIViewController *)topViewController
+{
+    UIViewController* topVC = UIApplication.sharedApplication.keyWindow.rootViewController;
+
+    while (YES)
+    {
+        if (topVC.presentedViewController)
+            topVC = topVC.presentedViewController;
+         else if ([topVC isKindOfClass:UINavigationController.class])
+             topVC = ((UINavigationController *)topVC).topViewController;
+         else if ([topVC isKindOfClass:UITabBarController.class])
+             topVC = ((UITabBarController *)topVC).selectedViewController;
+         else
+             break;
+    }
+
+    return topVC;
+}
+#endif
+
 @end
 
 
 #pragma mark - Internal ViewController
 #if TARGET_OS_IOS
 @implementation CLYInternalViewController : UIViewController
-
-//NOTE: For using the same status bar preferences as the view controller currently being  displayed, when a Countly triggered alert is displayed using a separate window
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    if (UIApplication.sharedApplication.windows.firstObject.rootViewController == self)
-        return UIStatusBarStyleDefault;
-
-    return [UIApplication.sharedApplication.windows.firstObject.rootViewController preferredStatusBarStyle];
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    if (UIApplication.sharedApplication.windows.firstObject.rootViewController == self)
-        return NO;
-
-    return [UIApplication.sharedApplication.windows.firstObject.rootViewController prefersStatusBarHidden];
-}
 
 @end
 
