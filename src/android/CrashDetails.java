@@ -46,6 +46,7 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,7 +57,9 @@ import java.util.regex.Pattern;
  *
  */
 class CrashDetails {
-    private static final ArrayList<String> logs = new ArrayList<>();
+    private static final int maxBreadcrumbLimit = 1000;//the limit of how many breadcrumbs can be saved
+    private static final int maxBreadcrumbSize = 1000;//maximum allowed length of a breadcrumb in characters
+    private static final LinkedList<String> logs = new LinkedList<>();
     private static final int startTime = Countly.currentTimestamp();
     private static Map<String,String> customSegments = null;
     private static boolean inBackground = true;
@@ -130,7 +133,22 @@ class CrashDetails {
      * Adds a record in the log
      */
     static void addLog(String record) {
+        int recordLength = record.length();
+        if(recordLength > maxBreadcrumbSize){
+            if(Countly.sharedInstance().isLoggingEnabled()){
+                Log.d(Countly.TAG, "Breadcrumb exceeds character limit: [" + recordLength + "], reducing it to: [" + maxBreadcrumbSize + "]");
+            }
+            record = record.substring(0, Math.min(maxBreadcrumbSize, recordLength));
+        }
+
         logs.add(record);
+
+        if(logs.size() > maxBreadcrumbLimit){
+            if(Countly.sharedInstance().isLoggingEnabled()){
+                Log.d(Countly.TAG, "Breadcrumb amount limit exceeded, deleting the oldest one");
+            }
+            logs.removeFirst();
+        }
     }
 
     /**
@@ -399,15 +417,7 @@ class CrashDetails {
         } catch (JSONException e) {
             //no custom segments
         }
-        String result = json.toString();
-
-        try {
-            result = java.net.URLEncoder.encode(result, "UTF-8");
-        } catch (UnsupportedEncodingException ignored) {
-            // should never happen because Android guarantees UTF-8 support
-        }
-
-        return result;
+        return json.toString();
     }
 
     /**

@@ -127,9 +127,8 @@ Countly.setOptionalParametersForInitialization = function(options){
     args.push(options.country || "");
     args.push(String(options.latitude) || "0.0");
     args.push(String(options.longitude) || "0.0");
+    args.push(String(options.ipAddress) || "0.0.0.0");
 
-
-    // Countly.sharedInstance().setOptionalParametersForInitialization("2 character country code", "city", "56.42345,123.45325");
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setOptionalParametersForInitialization",args);
 }
 Countly.setLocation = function(newDeviceID){

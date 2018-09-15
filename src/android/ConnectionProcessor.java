@@ -27,9 +27,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -172,24 +174,71 @@ public class ConnectionProcessor implements Runnable {
                 break;
             }
 
-            boolean deviceIdOverride = storedEvents[0].contains("&override_id=");
-            boolean deviceIdChange = storedEvents[0].contains("&device_id=");
+            boolean deviceIdOverride = storedEvents[0].contains("&override_id="); //if the sendable data contains a override tag
+            boolean deviceIdChange = storedEvents[0].contains("&device_id="); //if the sendable data contains a device_id tag
 
+            //add the device_id to the created request
             final String eventData, newId;
             if (deviceIdOverride) {
+                // if the override tag is used, it means that the device_id will be changed
+                // to finish the session of the previous device_id, we have cache it into the request
+                // this is indicated by having the "override_id" tag. This just means that we
+                // don't use the id provided in the deviceId variable as this might have changed already.
+
                 eventData = storedEvents[0].replace("&override_id=", "&device_id=");
                 newId = null;
-            } else if (deviceIdChange) {
-                newId = storedEvents[0].substring(storedEvents[0].indexOf("&device_id=") + "&device_id=".length());
-                if (newId.equals(deviceId_.getId())) {
-                    eventData = storedEvents[0];
-                    deviceIdChange = false;
-                } else {
-                    eventData = storedEvents[0] + "&old_device_id=" + deviceId_.getId();
-                }
             } else {
-                newId = null;
-                eventData = storedEvents[0] + "&device_id=" + deviceId_.getId();
+                if (deviceIdChange) {
+                    // this branch will be used if a new device_id is provided
+                    // and a device_id merge on server has to be performed
+
+                    final int endOfDeviceIdTag = storedEvents[0].indexOf("&device_id=") + "&device_id=".length();
+                    newId = ConnectionProcessor.urlDecodeString(storedEvents[0].substring(endOfDeviceIdTag));
+
+                    if (newId.equals(deviceId_.getId())) {
+                        // If the new device_id is the same as previous,
+                        // we don't do anything to change it
+
+                        eventData = storedEvents[0];
+                        deviceIdChange = false;
+
+                        if (Countly.sharedInstance().isLoggingEnabled()) {
+                            Log.d(Countly.TAG, "Provided device_id is the same as the previous one used, nothing will be merged");
+                        }
+
+                    } else {
+                        //new device_id provided, make sure it will be merged
+                        eventData = storedEvents[0] + "&old_device_id=" + deviceId_.getId();
+
+                        // since the new_id will be merged with the old one, we wait 10 seconds before sending this request
+                        // to give the server time to finish processing previous requests.
+
+                        if (Countly.sharedInstance().isLoggingEnabled()) {
+                            Log.d(Countly.TAG, "Waiting 10 seconds before sending device_id merge request");
+                        }
+
+                        try {
+                            Thread.sleep(10000);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+
+                            if (Countly.sharedInstance().isLoggingEnabled()) {
+                                Log.w(Countly.TAG, "While waiting for 10 seconds, sleep was interrupted");
+                            }
+                        }
+
+                        if (Countly.sharedInstance().isLoggingEnabled()) {
+                            Log.d(Countly.TAG, "Wait (for changing device_id) finished, continuing processing request");
+                        }
+                    }
+                } else {
+                    // this branch will be used in almost all requests.
+                    // This just adds the device_id to them
+
+                    newId = null;
+                    eventData = storedEvents[0] + "&device_id=" + ConnectionProcessor.urlEncodeString(deviceId_.getId());
+                }
             }
 
             if(!(Countly.sharedInstance().isDeviceAppCrawler() && Countly.sharedInstance().ifShouldIgnoreCrawlers())) {
@@ -207,6 +256,7 @@ public class ConnectionProcessor implements Runnable {
                         final HttpURLConnection httpConn = (HttpURLConnection) conn;
                         responseCode = httpConn.getResponseCode();
                         success = responseCode >= 200 && responseCode < 300;
+
                         if (!success && Countly.sharedInstance().isLoggingEnabled()) {
                             Log.w(Countly.TAG, "HTTP error response code was " + responseCode + " from submitting event data: " + eventData);
                         }
@@ -225,7 +275,7 @@ public class ConnectionProcessor implements Runnable {
                         store_.removeConnection(storedEvents[0]);
 
                         if (deviceIdChange) {
-                            deviceId_.changeToDeveloperId(store_, newId);
+                            deviceId_.changeToDeveloperProvidedId(store_, newId);
                         }
                     } else if (responseCode >= 400 && responseCode < 500) {
                         if (Countly.sharedInstance().isLoggingEnabled()) {
@@ -238,13 +288,18 @@ public class ConnectionProcessor implements Runnable {
                     }
                 } catch (Exception e) {
                     if (Countly.sharedInstance().isLoggingEnabled()) {
-                        Log.w(Countly.TAG, "Got exception while trying to submit event data: " + eventData, e);
+                        Log.w(Countly.TAG, "Got exception while trying to submit event data: [" + eventData + "] [" + e + "]");
                     }
                     // if exception occurred, stop processing, let next tick take care of retrying
                     break;
                 } finally {
                     // free connection resources
                     if (conn != null && conn instanceof HttpURLConnection) {
+                        try {
+                            InputStream stream = conn.getInputStream();
+                            stream.close();
+                        } catch (Throwable ignored){}
+
                         ((HttpURLConnection) conn).disconnect();
                     }
                 }
@@ -258,6 +313,30 @@ public class ConnectionProcessor implements Runnable {
                 store_.removeConnection(storedEvents[0]);
             }
         }
+    }
+
+    protected static String urlEncodeString(String givenValue){
+        String result = "";
+
+        try {
+            result = java.net.URLEncoder.encode(givenValue, "UTF-8");
+        } catch (UnsupportedEncodingException ignored) {
+            // should never happen because Android guarantees UTF-8 support
+        }
+
+        return result;
+    }
+
+    protected static String urlDecodeString(String givenValue){
+        String decodedResult = "";
+
+        try {
+            decodedResult = java.net.URLDecoder.decode(givenValue, "UTF-8");
+        } catch (UnsupportedEncodingException ignored) {
+            // should never happen because Android guarantees UTF-8 support
+        }
+
+        return decodedResult;
     }
 
     private static String sha1Hash (String toHash) {
