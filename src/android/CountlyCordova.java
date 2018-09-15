@@ -64,9 +64,10 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success("enableParameterTamperingProtection success!");
             return true;
         }else if("setLocation".equals(action)){
-            double latitude = Double.parseDouble(args.getString(0));
-            double longitude = Double.parseDouble(args.getString(1));
-            Countly.sharedInstance().setLocation(latitude, longitude);
+            String latitude = args.getString(0);
+            String longitude = args.getString(1);
+            String latlng = (latitude +"," +longitude);
+            Countly.sharedInstance().setLocation(null, null, latlng, null);
             callbackContext.success("setLocation success!");
             return true;
         }else if("enableCrashReporting".equals(action)){
@@ -314,10 +315,11 @@ public class CountlyCordova extends CordovaPlugin {
         else if("setOptionalParametersForInitialization".equals(action)){
             String city = args.getString(0);
             String country = args.getString(1);
-            double latitude = Double.parseDouble(args.getString(2));
-            double longitude = Double.parseDouble(args.getString(3));
+            String latitude = args.getString(2);
+            String longitude = args.getString(3);
+            String ipAddress = args.getString(4);
 
-            Countly.sharedInstance().setOptionalParametersForInitialization(country, city, latitude +"," +longitude);
+            Countly.sharedInstance().setLocation(country, city, latitude +"," +longitude, ipAddress);
 
             callbackContext.success("setOptionalParametersForInitialization sent.");
             return true;
