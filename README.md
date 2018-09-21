@@ -13,6 +13,10 @@ This repository includes the SDK for Phonegap and Icenium. You also need Countly
 
 For more information about how to use this SDK inside your mobile app, [click this link](http://resources.count.ly/v1.0/docs/phonegap-icenium-meteor).
 
+## Security
+
+Security is very important to us. If you discover any issue regarding security, please disclose the information responsibly by sending an email to security@count.ly and **not by creating a GitHub issue**.
+
 ## Acknowledgements 
 
 This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr).<br>
