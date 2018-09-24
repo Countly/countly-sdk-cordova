@@ -121,7 +121,7 @@ CountlyConfig* config = nil;
 {
     CDVPluginResult* pluginResult = nil;
     NSString* recordView = [command.arguments objectAtIndex:0];
-    [Countly.sharedInstance reportView:recordView];
+    [Countly.sharedInstance recordView:recordView];
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"recordView Sent!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
