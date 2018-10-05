@@ -6,7 +6,7 @@
 
 #import "CountlyCommon.h"
 
-@interface CountlyPersistency()
+@interface CountlyPersistency ()
 @property (nonatomic) NSMutableArray* queuedRequests;
 @property (nonatomic) NSMutableArray* recordedEvents;
 @property (nonatomic) NSMutableDictionary* startedEvents;
@@ -19,10 +19,12 @@ NSString* const kCountlyStoredDeviceIDKey = @"kCountlyStoredDeviceIDKey";
 NSString* const kCountlyWatchParentDeviceIDKey = @"kCountlyWatchParentDeviceIDKey";
 NSString* const kCountlyStarRatingStatusKey = @"kCountlyStarRatingStatusKey";
 NSString* const kCountlyNotificationPermissionKey = @"kCountlyNotificationPermissionKey";
-NSString* const kCountlyGeoLocationDisabledKey = @"kCountlyGeoLocationDisabledKey";
 
 + (instancetype)sharedInstance
 {
+    if (!CountlyCommon.sharedInstance.hasStarted)
+        return nil;
+
     static CountlyPersistency* s_sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{s_sharedInstance = self.new;});
@@ -174,7 +176,7 @@ NSString* const kCountlyGeoLocationDisabledKey = @"kCountlyGeoLocationDisabledKe
 #endif
         NSError *error = nil;
 
-        if (![NSFileManager.defaultManager fileExistsAtPath:url.absoluteString])
+        if (![NSFileManager.defaultManager fileExistsAtPath:url.path])
         {
             [NSFileManager.defaultManager createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:&error];
             if (error){ COUNTLY_LOG(@"Application Support directory can not be created: \n%@", error); }
@@ -204,6 +206,7 @@ NSString* const kCountlyGeoLocationDisabledKey = @"kCountlyGeoLocationDisabledKe
     }
 
     [saveData writeToFile:[self storageFileURL].path atomically:YES];
+    [CountlyCommon.sharedInstance finishBackgroundTask];
 }
 
 #pragma mark ---
@@ -315,17 +318,6 @@ NSString* const kCountlyGeoLocationDisabledKey = @"kCountlyGeoLocationDisabledKe
 - (void)storeNotificationPermission:(BOOL)allowed
 {
     [NSUserDefaults.standardUserDefaults setBool:allowed forKey:kCountlyNotificationPermissionKey];
-    [NSUserDefaults.standardUserDefaults synchronize];
-}
-
-- (BOOL)retrieveGeoLocationDisabled
-{
-    return [NSUserDefaults.standardUserDefaults boolForKey:kCountlyGeoLocationDisabledKey];
-}
-
-- (void)storeGeoLocationDisabled:(BOOL)disabled
-{
-    [NSUserDefaults.standardUserDefaults setBool:disabled forKey:kCountlyGeoLocationDisabledKey];
     [NSUserDefaults.standardUserDefaults synchronize];
 }
 

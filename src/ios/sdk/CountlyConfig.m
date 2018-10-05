@@ -16,7 +16,7 @@
 #elif TARGET_OS_TV
     NSString* const CLYAutoViewTracking = @"CLYAutoViewTracking";
 #endif
-//NOTE: Disable APM feature until server completely supports it
+//NOTE: Disable APM feature until Countly Server completely supports it
 // NSString* const CLYAPM = @"CLYAPM";
 
 
@@ -37,11 +37,13 @@
 #if TARGET_OS_WATCH
         self.updateSessionPeriod = 20.0;
         self.eventSendThreshold = 3;
+        self.enableAppleWatch = YES;
 #else
         self.updateSessionPeriod = 60.0;
         self.eventSendThreshold = 10;
 #endif
         self.storedRequestsLimit = 1000;
+        self.crashLogLimit = 100;
 
         self.location = kCLLocationCoordinate2DInvalid;
     }

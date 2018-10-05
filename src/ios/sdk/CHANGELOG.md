@@ -1,3 +1,60 @@
+## 18.08
+- Added feedback widgets support
+- Added limit for number of custom crash logs (100 logs)
+- Added limit for each custom crash log length (1000 chars)
+- Added support for cancelling timed events
+- Added support for recording fatal exceptions manually
+- Added `userInfo` to crash report custom property
+- Added delay before sending change device ID request (server requirement)
+- Renamed `isAutoViewTrackingEnabled` as `isAutoViewTrackingActive`
+- Fixed Xcode warnings for `askForNotificationPermission` method 
+- Fixed `UIAlertController` leak in push notification manager
+- Fixed `crashSegmentation` availability for manually recorded crashes
+- Fixed `openURL:` call thread as main thread
+- Updated minimum supported `macOS` version as `10.10`
+
+- Other various improvements
+  - Discarded separate `UIWindow` for presenting `UIAlertControllers`
+  - Refactored `buildUUID` and `executableName` as properties
+  - Refactored custom crash log array and date formatter
+  - Updated HeaderDocs, inline notes, pragma marks 
+
+
+
+## 18.04
+- Added consent management for GDPR compliance
+- Exposed device ID to be used for data export and/or removal requests
+- Added precautions for SDK start state to prevent re-starting and early method calls
+- Added mutability protection for core functions, configuration properties, events and user details
+- Added `COUNTLY_EXCLUDE_IDFA` pre-processor flag to exclude IDFA references
+- Added API availability checks and warnings for Apple Watch and Push Notifications
+- Renamed `reportView:` method as `recordView:` 
+- Fixed early ending of `UIBackgroundTask`
+- Fixed getting file path form local storage URL (thanks @dsmo)
+- Fixed not respecting `doNotShowAlertForNotifications` flag on iOS10+ devices
+- Fixed not starting requests queue when `manualSessionHandling` is enabled
+- Fixed `block implicitly retains self` warning in Star Rating
+- Fixed local variable shadowing warnings
+- Fixed Japanese language code for Star Rating dialog
+
+- Other various improvements
+  - Refactored all location info into Location Manager
+  - Refactored `checkForAutoAsk` in Star Rating
+  - Refactored event recording for consents compatibility
+  - Refactored Apple Watch matching
+  - Refactored auto view tracking
+  - Added top view controller finding method
+  - Replaced asserts with exceptions 
+  - Deleted unneccessary method declarations in Push Notifications 
+  - Deleted unnecessary reference for `WCSession.defaultSession.delegate`
+  - Deleted unnecessary `TARGET_OS_OSX` definition
+  - Standardized `nil` checks
+  - Renamed and reordered some query string constants
+  - Updated HeaderDocs, inline notes, pragma marks 
+  - Performed whitespace cleaning
+
+
+
 ## 18.01
 
 - Added `attribution` config
