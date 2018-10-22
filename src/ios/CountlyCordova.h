@@ -4,7 +4,6 @@
 
 @interface CountlyCordova : CDVPlugin
 
-- (void)echo:(CDVInvokedUrlCommand*)command;
 - (void)init:(CDVInvokedUrlCommand*)command;
 - (void)event:(CDVInvokedUrlCommand*)command;
 - (void)setloggingenabled:(CDVInvokedUrlCommand*)command;

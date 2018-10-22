@@ -119,12 +119,6 @@ Countly.stop = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","stop",[]);
 }
 
-// countly deviceready for testing purpose
-Countly.deviceready = function(){
-    Countly.ready = true;
-    //testing
-}
-
 // countly dummy success and error event
 Countly.onSuccess = function(result){
     // alert(result);
@@ -133,11 +127,6 @@ Countly.onError = function(error){
      // alert("error");
      // alert(error);
 }
-Countly.demo = function(){
-
-}
-
-// 2017
 
 
 Countly.setOptionalParametersForInitialization = function(options){
@@ -255,4 +244,3 @@ Countly.userData.setOnce = function(keyName, setOnce){
 
 
 window.Countly = Countly;
-document.addEventListener("deviceready", Countly.deviceready, false);
