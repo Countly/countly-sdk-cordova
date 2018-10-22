@@ -185,10 +185,10 @@ CountlyConfig* config = nil;
         }
         config.isTestDevice = YES;
     }
-    
+
     CountlyPushNotifications.sharedInstance.token = token;
     [CountlyPushNotifications.sharedInstance sendToken];
-    
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -260,7 +260,7 @@ CountlyConfig* config = nil;
 
 - (void)endEvent:(CDVInvokedUrlCommand*)command
 {
-    
+
     NSString* eventType = [command.arguments objectAtIndex:0];
     CDVPluginResult* pluginResult = nil;
 
@@ -277,7 +277,7 @@ CountlyConfig* config = nil;
         int sumInt = [sumString intValue];
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
-        
+
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
     }
     else if ([eventType  isEqual: @"eventWithSegment"]){
@@ -303,7 +303,7 @@ CountlyConfig* config = nil;
             dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
         }
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
-        
+
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
     }
     else{
@@ -354,14 +354,14 @@ CountlyConfig* config = nil;
     NSArray *nsException = [execption componentsSeparatedByString:@"\n"];
 
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    
+
     for(int i=2,il=(int)command.arguments.count;i<il;i+=2){
         dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
     }
     [dict setObject:nonfatal forKey:@"nonfatal"];
 
     NSException* myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:dict];
-    
+
     [Countly.sharedInstance recordHandledException:myException withStackTrace: nsException];
 
     CDVPluginResult* pluginResult = nil;

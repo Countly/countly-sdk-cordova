@@ -16,7 +16,6 @@
 - (void)resume:(CDVInvokedUrlCommand*)command;
 - (void)suspend:(CDVInvokedUrlCommand*)command;
 
-
 - (void)setHttpPostForced:(CDVInvokedUrlCommand*)command;
 - (void)setLocation:(CDVInvokedUrlCommand*)command;
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command;
