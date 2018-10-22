@@ -15,7 +15,10 @@ Countly.init = function(serverUrl,appKey, deviceId){
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
 }
-// @depricated
+
+/**
+ * @deprecated
+ */
 Countly.initMessaging = function(options){
     Countly.projectId = options.projectId;
     Countly.messageMode = options.mode;
