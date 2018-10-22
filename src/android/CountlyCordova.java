@@ -17,31 +17,36 @@ import android.util.Log;
 import ly.count.android.sdk.Countly;
 
 public class CountlyCordova extends CordovaPlugin {
+    private boolean isTestDevice = false;
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         Context context = this.cordova.getActivity().getApplicationContext();
         if ("init".equals(action)) {
-
             String serverUrl = args.getString(0);
             String appKey = args.getString(1);
 
-            if(args.length() == 2){
-                Countly.sharedInstance()
-                    .init(context, serverUrl, appKey,null,DeviceId.Type.OPEN_UDID);
-            }else if(args.length() == 3){
-                String yourDeviceID = args.getString(2);
-                Countly.sharedInstance()
-                    .init(context, serverUrl, appKey,yourDeviceID,null);
-            }else{
-                Countly.sharedInstance()
-                    .init(context, serverUrl, appKey,null,DeviceId.Type.ADVERTISING_ID);
+            String deviceId = null;
+            DeviceId.Type deviceIdType = DeviceId.Type.OPEN_UDID;
+
+            if (!args.isNull(2)) {
+                JSONObject options = args.getJSONObject(2);
+
+                if (options.has("isTestDevice")) {
+                    this.isTestDevice = options.getBoolean("isTestDevice");
+                }
+
+                if (args.length() == 3 && options.has("customDeviceId")) {
+                    deviceId = options.getString("customDeviceId");
+                }
             }
 
+            Countly.sharedInstance()
+                    .init(context, serverUrl, appKey, deviceId, deviceIdType);
             Countly.sharedInstance().onStart(this.cordova.getActivity());
+
             callbackContext.success("initialized!");
             return true;
         }
-
 
         else if ("changeDeviceId".equals(action)){
             String newDeviceID = args.getString(0);
@@ -285,25 +290,16 @@ public class CountlyCordova extends CordovaPlugin {
             Countly.userData.save();
             callbackContext.success("userData_setOnce success!");
             return true;
-        }
-
-
-        else if("onregistrationid".equals(action)){
+        } else if ("onregistrationid".equals(action)) {
             String registrationId = args.getString(0);
-            // int messagingMode = Integer.parseInt(args.getString(1));
-            // String projectId = args.getString(2);
 
-            Countly.CountlyMessagingMode mode = null;
-            if(args.getString(1).equals("1")){
-                mode = Countly.CountlyMessagingMode.TEST;
-            }
-            else{
-                mode = Countly.CountlyMessagingMode.PRODUCTION;
-            }
-            Countly.sharedInstance().onRegistrationId(registrationId,mode);
-            // Countly.sharedInstance().initMessaging(cordova.getActivity(), cordova.getActivity().getClass(), projectId, mode);
+            Countly.CountlyMessagingMode messagingMode = this.isTestDevice ?
+                    Countly.CountlyMessagingMode.TEST :
+                    Countly.CountlyMessagingMode.PRODUCTION;
+
+            Countly.sharedInstance().onRegistrationId(registrationId, messagingMode);
             callbackContext.success("initMessaging success");
-            // Log.e("Nicolson", registrationId);
+
             return true;
         }
         else if("recordView".equals(action)){

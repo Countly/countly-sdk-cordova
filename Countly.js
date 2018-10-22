@@ -1,19 +1,26 @@
 Countly = {};
-Countly.serverUrl = "";
-Countly.appKey = "";
-Countly.ready = false;
-Countly.messagingMode = {"TEST":"1","PRODUCTION":"0"};
-// countly initialization
-Countly.init = function(serverUrl,appKey, deviceId){
+
+/**
+ * Initializes Countly.
+ * @param {string} serverUrl
+ * @param {string} appKey
+ * @param {Object} [options] - Available options:
+ *   - customDeviceId
+ *   - isTestDevice: Only used for Push Notifications and determines whether the device should be registered
+ *     as a test device or production device. Countly allows you to choose which group of devices you
+ *      would like to send your push notifications to.
+ */
+Countly.init = function(serverUrl, appKey, options) {
     var args = [];
-    Countly.serverUrl = serverUrl;
-    Countly.appKey = appKey;
+
     args.push(serverUrl || "");
     args.push(appKey || "");
-    if(deviceId){
-        args.push(deviceId || "");
+
+    if(options) {
+        args.push(options);
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
+
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "init", args);
 }
 
 /**

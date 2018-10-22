@@ -32,20 +32,35 @@ CountlyConfig* config = nil;
 - (void)init:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
+
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
-    NSString* deviceID = @"";
-    if(config == nil){
+    NSString* deviceId = nil;
+
+    if (config == nil) {
         config = CountlyConfig.new;
     }
+
     config.appKey = appkey;
     config.host = serverurl;
-    
-    if(command.arguments.count == 3){
-        deviceID = [command.arguments objectAtIndex:2];
-        config.deviceID = deviceID;
+
+    if (command.arguments.count == 3) {
+        NSDictionary *options = [command.arguments objectAtIndex:2];
+
+        if ([options objectForKey:@"isTestDevice"]) {
+            // isTestDevice only works when the Push Notification feature is enabled.
+            config.features = @[CLYPushNotifications];
+            config.isTestDevice = [[options objectForKey:@"isTestDevice"] boolValue];
+        }
+
+        if ([options objectForKey:@"customDeviceId"]) {
+            deviceId = config.deviceID;
+
+            config.forceDeviceIDInitialization = true;
+            config.deviceID = [options objectForKey:@"customDeviceId"];
+        }
     }
-    
+
     if (serverurl != nil && [serverurl length] > 0) {
         [[Countly sharedInstance] startWithConfig:config];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"initialized!"];
@@ -53,11 +68,12 @@ CountlyConfig* config = nil;
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
 
-    if(command.arguments.count == 3){
-        deviceID = [command.arguments objectAtIndex:2];
-        [Countly.sharedInstance setNewDeviceID:deviceID onServer:YES];   //replace and merge on server
-
+    if (deviceId) {
+        // This makes sure that the device id is changed even when it is already set.
+        // https://resources.count.ly/docs/countly-sdk-for-ios-and-os-x#section-changing-device-id
+        [Countly.sharedInstance setNewDeviceID:deviceId onServer:YES];
     }
+
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -176,7 +192,6 @@ CountlyConfig* config = nil;
 {
     NSString* token = [command.arguments objectAtIndex:0];
     NSString* messagingMode = [command.arguments objectAtIndex:1];
-    // int mode = [messagingMode intValue];
     NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
     if([messagingMode isEqual: @"1"]){
         if(config == nil){
