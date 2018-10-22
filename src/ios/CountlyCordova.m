@@ -193,6 +193,15 @@ CountlyConfig* config = nil;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)getDeviceIdentifier:(CDVInvokedUrlCommand*)command
+{
+    [self.commandDelegate
+     sendPluginResult: [CDVPluginResult
+                        resultWithStatus:CDVCommandStatus_OK
+                        messageAsString:[[Countly sharedInstance] deviceID]]
+     callbackId:command.callbackId];
+}
+
 - (void)start:(CDVInvokedUrlCommand*)command
 {
 //    [Countly.sharedInstance resume];

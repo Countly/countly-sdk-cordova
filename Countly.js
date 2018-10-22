@@ -89,6 +89,16 @@ Countly.onRegistrationId = function(options){
     args.push(options.projectId || "");
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }
+
+/**
+ * Returns the device identifier that is currently known by the plugin.
+ * @param {function():string} successCallback
+ * @param {function():string} errorCallback
+ */
+Countly.getDeviceIdentifier = function(successCallback, errorCallback) {
+    cordova.exec(successCallback, errorCallback, "CountlyCordova", "getDeviceIdentifier", []);
+}
+
 // countly start for android
 Countly.start = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","start",[]);

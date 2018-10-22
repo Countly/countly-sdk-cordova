@@ -323,6 +323,14 @@ public class CountlyCordova extends CordovaPlugin {
 
             callbackContext.success("setOptionalParametersForInitialization sent.");
             return true;
+        } else if ("getDeviceIdentifier".equals(action)) {
+            if(!Countly.sharedInstance().isInitialized()) {
+                callbackContext.error("Countly has not been initialized yet.");
+                return true;
+            }
+
+            callbackContext.success(Countly.sharedInstance().getDeviceID());
+            return true;
         }
         else{
             return false;
