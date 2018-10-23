@@ -38,6 +38,11 @@
         <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
         <div class="ui horizontal divider">2017</div>
         <div class="ui horizontal divider">User Methods Start</div>
+
+        <button onclick="app.setCaptianAmericaData()" class="fluid ui button teal">Send Captian America Data</button>
+        <button onclick="app.setIronManData()" class="fluid ui button teal">Send Iron Man Data</button>
+        <button onclick="app.setSpiderManData()" class="fluid ui button teal">Send Spider-Man Data</button>
+
         <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
         <button onclick="app.userData.setProperty()" class="fluid ui button teal">UserData.setProperty</button>
         <button onclick="app.userData.increment()" class="fluid ui button teal">UserData.increment</button>
@@ -140,8 +145,8 @@
         };
         Countly.sendEvent(events);
     }
-    app.setUserData = function() {
-        // example for setUserData
+    app. = function() {
+        // example for 
         var options = {};
         options.name = "Trinisoft Technologies";
         options.username = "trinisofttechnologies";
@@ -153,7 +158,56 @@
         options.gender = "M"; // "F"
         options.byear = 1989;
         Countly.setUserData(options);
-    }
+    };
+    
+    app.setCaptianAmericaData = function() {
+        // example for  setCaptianAmericaData
+        var options = {};
+        options.name = "Captian America";
+        options.username = "captianamerica";
+        options.email = "captianamerica@avengers.com";
+        options.organization = "Avengers";
+        options.phone = "+91 555 555 5555";
+        options.picture = "http://icons.iconarchive.com/icons/hopstarter/superhero-avatar/256/Avengers-Captain-America-icon.png";
+        options.picturePath = "";
+        options.gender = "M"; // "F"
+        options.byear = 1989;
+        Countly.setUserData(options);
+    };
+    
+    app.setIronManData = function() {
+        // example for setIronManData 
+        var options = {};
+        options.name = "Iron Man";
+        options.username = "ironman";
+        options.email = "ironman@avengers.com";
+        options.organization = "Avengers";
+        options.phone = "+91 555 555 5555";
+        options.picture = "http://icons.iconarchive.com/icons/hopstarter/superhero-avatar/256/Avengers-Iron-Man-icon.png";
+        options.picturePath = "";
+        options.gender = "M"; // "F"
+        options.byear = 1989;
+        Countly.setUserData(options);
+    };
+    
+    app.setSpiderManData = function() {
+        // example for  setSpiderManData
+        var options = {};
+        options.name = "Spider-Man";
+        options.username = "spiderman";
+        options.email = "spiderman@avengers.com";
+        options.organization = "Avengers";
+        options.phone = "+91 555 555 5555";
+        options.picture = "http://icons.iconarchive.com/icons/mattahan/ultrabuuf/512/Comics-Spiderman-Morales-icon.png";
+        options.picturePath = "";
+        options.gender = "M"; // "F"
+        options.byear = 1989;
+        Countly.setUserData(options);
+    };
+    
+    
+
+
     app.setloggingenabled = function() {
         // example for setLoggingEnabled
         Countly.setLoggingEnabled();
