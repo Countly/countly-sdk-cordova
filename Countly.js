@@ -164,6 +164,13 @@ Countly.logException = function(exception, nonfatal, segments){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
 
+Countly.startSession = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startSession",[]);
+}
+
+Countly.endSession = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endSession",[]);
+}
 
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
