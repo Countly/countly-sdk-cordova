@@ -145,15 +145,15 @@
         };
         Countly.sendEvent(events);
     }
-    app. = function() {
-        // example for 
+    app.setUserData = function() {
+        // example for setUserData
         var options = {};
         options.name = "Trinisoft Technologies";
         options.username = "trinisofttechnologies";
         options.email = "trinisofttechnologies@gmail.com";
         options.organization = "Trinisoft Technologies Pvt. Ltd.";
         options.phone = "+91 812 840 2946";
-        options.picture = "http://www.trinisofttechnologies.com/images/logo.png";
+        options.picture = "https://avatars0.githubusercontent.com/u/10754117?s=400&u=fe019f92d573ac76cbfe7969dde5e20d7206975a&v=4";
         options.picturePath = "";
         options.gender = "M"; // "F"
         options.byear = 1989;
@@ -161,7 +161,9 @@
     };
     
     app.setCaptianAmericaData = function() {
-        // example for  setCaptianAmericaData
+        // example for setCaptianAmericaData
+        Countly.stop();
+        Countly.changeDeviceId("234567");
         var options = {};
         options.name = "Captian America";
         options.username = "captianamerica";
@@ -173,10 +175,13 @@
         options.gender = "M"; // "F"
         options.byear = 1989;
         Countly.setUserData(options);
+        Countly.start();
     };
     
     app.setIronManData = function() {
         // example for setIronManData 
+        Countly.stop();
+        Countly.changeDeviceId("345678");
         var options = {};
         options.name = "Iron Man";
         options.username = "ironman";
@@ -188,10 +193,13 @@
         options.gender = "M"; // "F"
         options.byear = 1989;
         Countly.setUserData(options);
+        Countly.start();
     };
     
     app.setSpiderManData = function() {
-        // example for  setSpiderManData
+        // example for setSpiderManData
+        Countly.stop();
+        Countly.changeDeviceId("456789");
         var options = {};
         options.name = "Spider-Man";
         options.username = "spiderman";
@@ -205,9 +213,9 @@
         Countly.setUserData(options);
     };
     
+
+
     
-
-
     app.setloggingenabled = function() {
         // example for setLoggingEnabled
         Countly.setLoggingEnabled();
@@ -410,7 +418,33 @@
             }).catch(function(err) {});
         }
     })();
+    /*
+    @dev instructions for personal modification
+
+    cordova plugin remove ly.count.cordova
+    cordova plugin add /Users/mac-3/office/client/countly/plugins/countly-sdk-js
+    
+    cordova create countly-demo-js ly.count.demo countly-demo-js
+    cd countly-demo-js
+
+    cordova plugin add https://github.com/Countly/countly-sdk-js.git
+
+    cd www/
+    rm index.html
+    wget https://raw.githubusercontent.com/Countly/countly-sdk-js/master/index.html
+    cd ..
+
+    cordova platform add android
+    cordova platform add ios
+
+    cordova build android
+    cordova build ios
+
+
+
+    */
     </script>
+    
 </body>
 
 </html>

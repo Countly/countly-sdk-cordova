@@ -15,6 +15,37 @@ CountlyConfig* config = nil;
 
 @implementation CountlyCordova
 
+
+
+- (void)suspend:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    NSString* echo = [command.arguments objectAtIndex:0];
+    
+    if (echo != nil && [echo length] > 0) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
+    } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+
+- (void)resume:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    NSString* echo = [command.arguments objectAtIndex:0];
+    
+    if (echo != nil && [echo length] > 0) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
+    } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void)echo:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
@@ -153,20 +184,8 @@ CountlyConfig* config = nil;
     Countly.user.pictureURL = picture;
     Countly.user.gender = gender;
     Countly.user.birthYear = @([byear integerValue]);
-    //NSInteger byearint = [byear intValue];
-
-    // [Countly.user recordUserDetails];
+    
     [Countly.user save];
-        // [Countly.sharedInstance recordUserDetails: @{
-        //                                             kCLYUserName: name,
-        //                                             kCLYUserEmail: email,
-        //                                             kCLYUserBirthYear: byear,
-        //                                             kCLYUserGender: gender,
-        //                                             kCLYUserOrganization: org,
-        //                                             kCLYUserPhone: phone,
-        //                                             kCLYUserUsername: username,
-        //                                             kCLYUserPicture: picture
-        //                                                          }];
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setuserdata!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -177,7 +196,7 @@ CountlyConfig* config = nil;
     NSString* token = [command.arguments objectAtIndex:0];
     NSString* messagingMode = [command.arguments objectAtIndex:1];
     // int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+//    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
     if([messagingMode isEqual: @"1"]){
         if(config == nil){
             config = CountlyConfig.new;
@@ -195,17 +214,23 @@ CountlyConfig* config = nil;
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
-//    [Countly.sharedInstance resume];
-
+    [Countly.sharedInstance beginSession];
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"start!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)update:(CDVInvokedUrlCommand*)command
+{
+    [Countly.sharedInstance updateSession];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"stop!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void)stop:(CDVInvokedUrlCommand*)command
 {
-//    [Countly.sharedInstance suspend];
-
+    [Countly.sharedInstance endSession];
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"stop!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -213,8 +238,10 @@ CountlyConfig* config = nil;
 
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command
 {
+    
     NSString* newDeviceID = [command.arguments objectAtIndex:0];
-    [Countly.sharedInstance setNewDeviceID:newDeviceID onServer:YES];
+    BOOL onServer = NO;
+    [Countly.sharedInstance setNewDeviceID:newDeviceID onServer:onServer];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"changeDeviceId!"];
@@ -479,10 +506,10 @@ CountlyConfig* config = nil;
 
 - (void)demo:(CDVInvokedUrlCommand*)command
 {
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+//    NSString* token = [command.arguments objectAtIndex:0];
+//    NSString* messagingMode = [command.arguments objectAtIndex:1];
+//    int mode = [messagingMode intValue];
+//    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"demo!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
