@@ -93,11 +93,7 @@ public class CountlyCordova extends CordovaPlugin {
             Countly.sharedInstance().setCustomCrashSegments(segments);
 
             Countly.sharedInstance().logException(exception);
-            // try{
-            //     throw new Exception(exceptionString);
-            // }catch(Exception exception){
-            //     Countly.sharedInstance().logException(exception);
-            // }
+            
             callbackContext.success("logException success!");
             return true;
         }
@@ -177,7 +173,6 @@ public class CountlyCordova extends CordovaPlugin {
             else if ("eventWithSegment".equals(eventType)) {
                 String eventName = args.getString(1);
                 int eventCount= Integer.parseInt(args.getString(2));
-                //int eventSum= Integer.parseInt(args.getString(3));
                 HashMap<String, String> segmentation = new HashMap<String, String>();
                 for(int i=3,il=args.length();i<il;i+=2){
                     segmentation.put(args.getString(i), args.getString(i+1));
@@ -226,8 +221,6 @@ public class CountlyCordova extends CordovaPlugin {
             Countly.userData.setUserData(bundle);
             Countly.userData.save();
 
-            // Countly.sharedInstance().setUserData(bundle);
-            // Countly.sharedInstance().setUserData(bundle);
             callbackContext.success("setuserdata success");
             return true;
         }
@@ -290,9 +283,6 @@ public class CountlyCordova extends CordovaPlugin {
 
         else if("onregistrationid".equals(action)){
             String registrationId = args.getString(0);
-            // int messagingMode = Integer.parseInt(args.getString(1));
-            // String projectId = args.getString(2);
-
             Countly.CountlyMessagingMode mode = null;
             if(args.getString(1).equals("1")){
                 mode = Countly.CountlyMessagingMode.TEST;
@@ -301,9 +291,7 @@ public class CountlyCordova extends CordovaPlugin {
                 mode = Countly.CountlyMessagingMode.PRODUCTION;
             }
             Countly.sharedInstance().onRegistrationId(registrationId,mode);
-            // Countly.sharedInstance().initMessaging(cordova.getActivity(), cordova.getActivity().getClass(), projectId, mode);
             callbackContext.success("initMessaging success");
-            // Log.e("Nicolson", registrationId);
             return true;
         }
         else if("recordView".equals(action)){
