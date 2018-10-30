@@ -1,16 +1,16 @@
-this.keys = new ArrayList<>();
-this.keys = new ArrayList<byte[]>();
+Developer release notes.
 
-final List<Event> events = new ArrayList<>(array.length);
-final List<Event> events = new ArrayList<Event>(array.length);
+plugin.xml update version
+package.json update version 
+package.js update version
+Countly.js update version 
+create tag / release based on the same version
+Sync Countly.js with ngCountly.js some angular customer depends on it.
 
-final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
-            connections.add(str);
-final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
-            connections.add(str);
+Updating index.html should also update ionic/home.html 
 
-final List<String> connections = new ArrayList<>(Arrays.asList(connections()));
-final List<String> connections = new ArrayList<String>(Arrays.asList(connections()));
+Making a new release on github, should also release on npm and meteor.
 
-final List<String> strings = new ArrayList<>();
-final List<String> strings = new ArrayList<String>();
+Apply documentation to the sdk, for a newbie to understand.
+
+Provide callback to the user instead of handling the callback manually.

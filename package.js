@@ -1,6 +1,6 @@
 Package.describe({
   name: 'countly:countly-sdk-js',
-  version: '0.0.3',
+  version: '18.08',
   summary: 'Countly is an innovative, real-time, open source mobile analytics and push notifications platform.',
   git: 'https://github.com/Countly/countly-sdk-js.git',
   documentation: 'README.md'

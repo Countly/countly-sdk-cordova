@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="ly.count.cordova"
-        version="0.0.1">
+        version="18.08">
 
   <name>Countly</name>
 
@@ -10,7 +10,7 @@
     Countly is an innovative, real-time, open source mobile analytics application. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.
   </description>
 
-  <author>Nicolson Dsouza</author>
+  <author>Trinisoft Technologies Pvt. Ltd.</author>
 
   <license>Open source with different licensing terms.</license>
 
@@ -58,8 +58,6 @@
     <source-file src="src/ios/sdk/CountlyConsentManager.m" />
     <header-file src="src/ios/sdk/CountlyCrashReporter.h"/>
     <source-file src="src/ios/sdk/CountlyCrashReporter.m" />
-    <!-- <header-file src="src/ios/sdk/CountlyDB.h"/> -->
-    <!-- <source-file src="src/ios/sdk/CountlyDB.m" compiler-flags="-fno-objc-arc" /> -->
     <header-file src="src/ios/sdk/CountlyDeviceInfo.h"/>
     <source-file src="src/ios/sdk/CountlyDeviceInfo.m" />
     <header-file src="src/ios/sdk/CountlyEvent.h"/>
@@ -78,12 +76,8 @@
     <source-file src="src/ios/sdk/CountlyPushNotifications.m" />
     <source-file src="src/ios/sdk/CountlyNotificationService.h" />
     <source-file src="src/ios/sdk/CountlyNotificationService.m" />
-    <!-- <source-file src="src/ios/sdk/Countly.xcdatamodeld" custom="true"/> -->
-
     <header-file src="src/ios/CountlyCordova.h"/>
     <source-file src="src/ios/CountlyCordova.m"/>
-
-    <!-- <framework src="src/ios/sdk/Countly.xcdatamodeld"/> -->
 
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="OpenGLES.framework" weak="true" />
@@ -114,19 +108,7 @@
             </intent-filter>
         </service>
 
-        <!-- push notification config -->
-        <!-- <receiver
-            android:name="ly.count.android.sdk.messaging.CountlyMessaging"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="ly.count.android.api" />
-            </intent-filter>
-        </receiver>
-        <service android:name="ly.count.android.sdk.messaging.CountlyMessagingService" >
-            <meta-data android:name="broadcast_action" android:value="ly.count.android.api.broadcast" />
-        </service> -->
-	<activity android:label="@string/app_name" android:name="ly.count.android.sdk.messaging.ProxyActivity" android:noHistory="true" android:theme="@android:style/Theme.Translucent" />
+  <activity android:label="@string/app_name" android:name="ly.count.android.sdk.messaging.ProxyActivity" android:noHistory="true" android:theme="@android:style/Theme.Translucent" />
     </config-file>
 
     <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/sdk"/>
@@ -148,19 +130,9 @@
     <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/CountlyStarRating.java" target-dir="src/ly/count/android/sdk"/>
 
-    <!-- push notification config -->
-    <!-- <source-file src="src/android/messaging/CountlyMessaging.java" target-dir="src/ly/count/android/sdk/messaging"/>
-    <source-file src="src/android/messaging/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk/messaging"/>
-    <source-file src="src/android/messaging/Message.java" target-dir="src/ly/count/android/sdk/messaging"/>
-    <source-file src="src/android/messaging/ProxyActivity.java" target-dir="src/ly/count/android/sdk/messaging"/> -->
-
+  
     <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
     <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/>
-
-    <!-- <source-file src="src/android/libs/gcm.jar" target-dir="libs/" />
-    <source-file src="src/android/libs/android-support-v13.jar" target-dir="libs/" />
-    <source-file src="src/android/libs/google-play-services.jar" target-dir="libs/" />
-    <source-file src="src/android/libs/play-services-gcm.jar" target-dir="libs/" /> -->
 
     <source-file src="src/android/gradle/build-extras.gradle" target-dir="src/.." />
   </platform>
