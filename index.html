@@ -195,13 +195,12 @@
         });
 
         push.on('registration', function(data) {
+            alert('Token received: '+data.registrationId);
             Countly.onRegistrationId({
                 "registrationId": data.registrationId,
                 "mode": Countly.messagingMode.TEST,
                 "projectId": "881000050249" // only for google / android
             });
-
-            // data.registrationId
         });
 
         push.on('notification', function(data) {
@@ -370,14 +369,17 @@
     2.2.3
     https://github.com/phonegap/phonegap-plugin-push/commit/2f45c0dd7520da1f6bb4b86c15c747dec0cfef1c
 
-    cordova create countly-demo-js ly.count.demo countly-demo-js
+    cordova create countly-demo-js com.countly.demo countly-demo-js
     cd countly-demo-js
 
     cp ../../backup/google-services.json ./
     cp ../../backup/GoogleService-Info.plist ./
+    rm config.xml
+    cp ../../backup/config.xml ./
     cordova plugin add https://github.com/phonegap/phonegap-plugin-push.git --verbose
     cd platforms/ios/
     pod install
+    cd ../..
 
     cordova plugin add /Users/mac-3/office/client/countly/plugins/countly-sdk-js
     
@@ -386,18 +388,26 @@
     wget https://raw.githubusercontent.com/Countly/countly-sdk-js/master/index.html
     cd ..
 
-    cordova platform add android
-    cordova platform add ios
+    cordova platform add android --verbose
+    cordova platform add ios --verbose
 
-    cordova build android
-    cordova build ios
+    cordova build android --verbose
+    cordova build ios --verbose
 
     debug
-    cordova plugin remove phonegap-plugin-push
+    cordova plugin remove phonegap-plugin-push --verbose
     cordova plugin remove cordova-support-google-services
     cordova plugin remove phonegap-plugin-multidex
     cordova plugin remove cordova-plugin-whitelist
-    
+    cordova plugin add https://github.com/phonegap/phonegap-plugin-push.git#ec7c3ea1fafbf3fafe502d278af218715aebb909 --verbose
+    cordova plugin add phonegap-plugin-push@1.8.0  --variable SENDER_ID=881000050249
+    from
+    diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+    to
+    diff "${SRCROOT}/Podfile.lock" "${SRCROOT}/Pods/Manifest.lock" > /dev/null
+    ${SRCROOT}/Podfile.lock
+    ${SRCROOT}/Pods/Manifest.lock
+
     cordova plugin remove ly.count.cordova
     cordova platform remove android
     cordova platform remove ios
