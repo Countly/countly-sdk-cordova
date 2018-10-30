@@ -60,8 +60,7 @@ Currently
         CLYPushTokenModeAdHoc,
     } CLYPushTokenMode;
 
-    int testMode;
-    testMode = CountlyPushNotifications.sharedInstance.isTestDevice ? CLYPushTokenModeAdHoc : CLYPushTokenModeProduction;
+    int testMode = CountlyPushNotifications.sharedInstance.isTestDevice;
     
 
     NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",

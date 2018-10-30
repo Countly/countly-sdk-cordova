@@ -270,6 +270,7 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
 
 #pragma mark ---
 
+
 - (void)sendPushToken:(NSString *)token
 {
     typedef enum : NSInteger
@@ -279,8 +280,7 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
         CLYPushTokenModeAdHoc,
     } CLYPushTokenMode;
 
-    int testMode;
-    testMode = CountlyPushNotifications.sharedInstance.isTestDevice ? CLYPushTokenModeAdHoc : CLYPushTokenModeProduction;
+    int testMode = CountlyPushNotifications.sharedInstance.isTestDevice;
     
 
     NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",

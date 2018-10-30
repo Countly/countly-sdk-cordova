@@ -5,6 +5,7 @@
 #import "CountlyConfig.h"
 #import "CountlyPushNotifications.h"
 #import <Cordova/CDV.h>
+#import "CountlyCommon.h"
 
 CountlyConfig* config = nil;
 
@@ -164,11 +165,8 @@ CountlyConfig* config = nil;
         CountlyPushNotifications.sharedInstance.isTestDevice = NO;
     }
     
-    config.features = @[CLYPushNotifications];
-    [Countly.sharedInstance startWithConfig:config];
+    [CountlyConnectionManager.sharedInstance sendPushToken:token];
 
-    CountlyPushNotifications.sharedInstance.token = token;
-    [CountlyPushNotifications.sharedInstance sendToken];
     
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];
