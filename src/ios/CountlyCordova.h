@@ -1,10 +1,7 @@
-/********* Echo.h Cordova Plugin Header *******/
-
 #import <Cordova/CDV.h>
 
 @interface CountlyCordova : CDVPlugin
 
-- (void)echo:(CDVInvokedUrlCommand*)command;
 - (void)init:(CDVInvokedUrlCommand*)command;
 - (void)event:(CDVInvokedUrlCommand*)command;
 - (void)setloggingenabled:(CDVInvokedUrlCommand*)command;
@@ -36,6 +33,5 @@
 - (void)userData_saveMin:(CDVInvokedUrlCommand*)command;
 - (void)userData_setOnce:(CDVInvokedUrlCommand*)command;
 - (void)setOptionalParametersForInitialization:(CDVInvokedUrlCommand*)command;
-- (void)demo:(CDVInvokedUrlCommand*)command;
 
 @end

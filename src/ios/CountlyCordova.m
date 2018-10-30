@@ -169,17 +169,23 @@ CountlyConfig* config = nil;
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
-//    [Countly.sharedInstance resume];
-
+    [Countly.sharedInstance beginSession];
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"start!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)update:(CDVInvokedUrlCommand*)command
+{
+    [Countly.sharedInstance updateSession];
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"stop!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void)stop:(CDVInvokedUrlCommand*)command
 {
-//    [Countly.sharedInstance suspend];
-
+    [Countly.sharedInstance endSession];
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"stop!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -448,17 +454,6 @@ CountlyConfig* config = nil;
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setOptionalParametersForInitialization!"];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void)demo:(CDVInvokedUrlCommand*)command
-{
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    int mode = [messagingMode intValue];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
-    CDVPluginResult* pluginResult = nil;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"demo!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
