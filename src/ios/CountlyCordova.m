@@ -15,20 +15,6 @@ CountlyConfig* config = nil;
 
 @implementation CountlyCordova
 
-- (void)echo:(CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* echo = [command.arguments objectAtIndex:0];
-
-    if (echo != nil && [echo length] > 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-    } else {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-    }
-
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
 - (void)init:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
@@ -153,20 +139,9 @@ CountlyConfig* config = nil;
     Countly.user.pictureURL = picture;
     Countly.user.gender = gender;
     Countly.user.birthYear = @([byear integerValue]);
-    //NSInteger byearint = [byear intValue];
 
-    // [Countly.user recordUserDetails];
     [Countly.user save];
-        // [Countly.sharedInstance recordUserDetails: @{
-        //                                             kCLYUserName: name,
-        //                                             kCLYUserEmail: email,
-        //                                             kCLYUserBirthYear: byear,
-        //                                             kCLYUserGender: gender,
-        //                                             kCLYUserOrganization: org,
-        //                                             kCLYUserPhone: phone,
-        //                                             kCLYUserUsername: username,
-        //                                             kCLYUserPicture: picture
-        //                                                          }];
+
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setuserdata!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -176,7 +151,6 @@ CountlyConfig* config = nil;
 {
     NSString* token = [command.arguments objectAtIndex:0];
     NSString* messagingMode = [command.arguments objectAtIndex:1];
-    // int mode = [messagingMode intValue];
     NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
     if([messagingMode isEqual: @"1"]){
         if(config == nil){
