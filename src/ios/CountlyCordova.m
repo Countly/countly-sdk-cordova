@@ -151,14 +151,22 @@ CountlyConfig* config = nil;
 {
     NSString* token = [command.arguments objectAtIndex:0];
     NSString* messagingMode = [command.arguments objectAtIndex:1];
-    NSData *tokenByte = [token dataUsingEncoding:NSUTF8StringEncoding];
+    
     if([messagingMode isEqual: @"1"]){
         if(config == nil){
             config = CountlyConfig.new;
         }
         config.isTestDevice = YES;
+        CountlyPushNotifications.sharedInstance.isTestDevice = YES;
+    
+    }else{
+        config.isTestDevice = NO;
+        CountlyPushNotifications.sharedInstance.isTestDevice = NO;
     }
     
+    config.features = @[CLYPushNotifications];
+    [Countly.sharedInstance startWithConfig:config];
+
     CountlyPushNotifications.sharedInstance.token = token;
     [CountlyPushNotifications.sharedInstance sendToken];
     
