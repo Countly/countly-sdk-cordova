@@ -356,6 +356,37 @@
             }).catch(function(err) {});
         }
     })();
+
+    /*
+    @dev instructions for personal modification
+
+    
+    cordova -v
+    8.1.2 (cordova-lib@8.1.1)
+    countly -v
+    18.08.0
+    
+    cordova create countly-demo-js ly.count.demo countly-demo-js
+    cd countly-demo-js
+
+    cordova plugin remove ly.count.cordova
+    cordova plugin add phonegap-plugin-push
+    cordova plugin add /Users/mac-3/office/client/countly/plugins/countly-sdk-js
+    
+    cd www/
+    rm index.html
+    wget https://raw.githubusercontent.com/Countly/countly-sdk-js/master/index.html
+    cd ..
+
+    cordova platform add android
+    cordova platform add ios
+
+    cordova build android
+    cordova build ios
+
+
+
+    */
     </script>
 </body>
 

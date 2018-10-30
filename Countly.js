@@ -3,7 +3,7 @@ Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
 Countly.messagingMode = {"TEST":"1","PRODUCTION":"0"};
-Countly.version = "18.08";
+Countly.version = "18.08.0";
 
 // countly initialization
 Countly.init = function(serverUrl,appKey, deviceId){
