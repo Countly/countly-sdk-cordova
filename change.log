@@ -18,8 +18,6 @@ Provide callback to the user instead of handling the callback manually.
 
 Please review the documentation once the changes are made.
 
-Core SDK code modified 
-
 
 1.  Update both sdk to 18.08.1 Done 
 2.  review plugin.xml files Done
@@ -28,6 +26,8 @@ Core SDK code modified
    `Notification channels` there
 3.  Test push on android 8 and 9 version
 4.  Make a release on meteor community. Done
+
+Core SDK code modified
 
 
 Previously 
