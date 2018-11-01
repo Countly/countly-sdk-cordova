@@ -1,13 +1,13 @@
 Package.describe({
   name: 'countly:countly-sdk-js',
-  version: '18.08.0',
+  version: '18.08.1',
   summary: 'Countly is an innovative, real-time, open source mobile analytics and push notifications platform.',
   git: 'https://github.com/Countly/countly-sdk-js.git',
   documentation: 'README.md'
 });
 
 Cordova.depends({
-  "ly.count.cordova": '18.08.0'
+  "ly.count.cordova": '18.08.1'
   // "https://github.com/Countly/countly-sdk-js/tarball/bc7ec996924c1beef460d969d0b64ddb4bdb5b8f",
 });
 

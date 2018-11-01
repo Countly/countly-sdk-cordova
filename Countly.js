@@ -3,7 +3,7 @@ Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
 Countly.messagingMode = {"TEST":"1","PRODUCTION":"0"};
-Countly.version = "18.08.0";
+Countly.version = "18.08.1";
 
 // countly initialization
 Countly.init = function(serverUrl,appKey, deviceId){
@@ -16,17 +16,6 @@ Countly.init = function(serverUrl,appKey, deviceId){
         args.push(deviceId || "");
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
-}
-// @depricated
-Countly.initMessaging = function(options){
-    Countly.projectId = options.projectId;
-    Countly.messageMode = options.mode;
-    
-    var args = [];
-    args.push(options.registrationId || "");
-    args.push(options.mode || Countly.messagingMode.PRODUCTION);
-    args.push(options.projectId || "");
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }
 
 // countly sending various types of events
@@ -64,7 +53,7 @@ Countly.recordView = function(recordView){
 };
 
 // countly enable logger
-Countly.setLoggingEnabled = function(boolean){
+Countly.setLoggingEnabled = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setloggingenabled",[]);
 }
 
@@ -87,7 +76,7 @@ Countly.setUserData = function(options){
 Countly.onRegistrationId = function(options){
     var args = [];
     args.push(options.registrationId || "");
-    args.push(options.mode);
+    args.push(options.mode || Countly.messagingMode.PRODUCTION);
     args.push(options.projectId || "");
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }
@@ -114,9 +103,6 @@ Countly.onSuccess = function(result){
 Countly.onError = function(error){
      // alert("error");
      // alert(error);
-}
-Countly.demo = function(){
-
 }
 
 // 2017
