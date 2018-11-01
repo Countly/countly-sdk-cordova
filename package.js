@@ -7,11 +7,11 @@ Package.describe({
 });
 
 Cordova.depends({
-  "ly.count.cordova": "https://github.com/Countly/countly-sdk-js/tarball/bc7ec996924c1beef460d969d0b64ddb4bdb5b8f",
+  "ly.count.cordova": '18.08.0'
+  // "https://github.com/Countly/countly-sdk-js/tarball/bc7ec996924c1beef460d969d0b64ddb4bdb5b8f",
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.0');
   api.addFiles(['Countly.js'], ['web.cordova']);
 });
 
