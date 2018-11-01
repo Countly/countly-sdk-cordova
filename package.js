@@ -1,22 +1,15 @@
 Package.describe({
   name: 'countly:countly-sdk-js',
-  version: '18.08.1',
+  version: '18.8.1', // Meteor doesn't go with 18.08.1
   summary: 'Countly is an innovative, real-time, open source mobile analytics and push notifications platform.',
   git: 'https://github.com/Countly/countly-sdk-js.git',
   documentation: 'README.md'
 });
 
 Cordova.depends({
-  "ly.count.cordova": '18.08.1'
-  // "https://github.com/Countly/countly-sdk-js/tarball/bc7ec996924c1beef460d969d0b64ddb4bdb5b8f",
+  "ly.count.cordova": "https://github.com/Countly/countly-sdk-js/tarball/fc78daf627464b2e5b63ee945ca5b66d2314c322",
 });
 
 Package.onUse(function(api) {
   api.addFiles(['Countly.js'], ['web.cordova']);
-});
-
-Package.onTest(function(api) {
-  api.use('tinytest');
-  api.use('countly:countly-sdk-js');
-  api.addFiles('js/countly-sdk-js-tests.js');
 });
