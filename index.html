@@ -212,6 +212,13 @@
             // data.additionalData
         });
 
+        // Test android 8.0 and 9.0
+        push.subscribe('myTopic', function(n){
+            alert(JSON.stringify(n));
+        }, function(e){
+            alert(JSON.stringify(e));
+        });
+        
         push.on('error', function(e) {
             // e.message
         });
@@ -381,6 +388,7 @@
     pod install
     cd ../..
 
+    cordova plugin add https://github.com/Countly/countly-sdk-js.git
     cordova plugin add /Users/mac-3/office/client/countly/plugins/countly-sdk-js
     
     cd www/
