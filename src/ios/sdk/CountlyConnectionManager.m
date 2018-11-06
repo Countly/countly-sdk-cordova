@@ -280,8 +280,12 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
         CLYPushTokenModeAdHoc,
     } CLYPushTokenMode;
 
-    int testMode = CountlyPushNotifications.sharedInstance.isTestDevice;
-    
+    int testMode;
+#ifdef DEBUG
+    testMode = CLYPushTokenModeDevelopment;
+#else
+    testMode = CountlyPushNotifications.sharedInstance.isTestDevice ? CLYPushTokenModeAdHoc : CLYPushTokenModeProduction;
+#endif
 
     NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",
                              kCountlyQSKeyPushTokenSession, @"1",

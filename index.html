@@ -204,6 +204,7 @@
         });
 
         push.on('notification', function(data) {
+            alert(JSON.stringify(data));
             // data.message,
             // data.title,
             // data.count,
@@ -218,7 +219,7 @@
         }, function(e){
             alert(JSON.stringify(e));
         });
-        
+
         push.on('error', function(e) {
             // e.message
         });
@@ -401,6 +402,9 @@
 
     cordova build android --verbose
     cordova build ios --verbose
+
+    cordova run android --device --verbose
+    cordova run ios --device --verbose
 
     debug
     cordova plugin remove phonegap-plugin-push --verbose
