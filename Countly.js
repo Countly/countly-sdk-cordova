@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.messagingMode = {"PRODUCTION": 0, "TEST": 1, "ADHOC": 2};
+Countly.messagingMode = {"TEST": 1, "PRODUCTION": 0, "ADHOC": 2};
 Countly.version = "18.08.1";
 
 // countly initialization
@@ -16,7 +16,11 @@ Countly.init = function(serverUrl,appKey, deviceId){
         args.push(deviceId || "");
     };
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
-    Ajax.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
+    if(serverUrl.lastIndexOf('/') === serverUrl.length -1){
+        Ajax.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
+    }else{
+        Ajax.ROOT_URL = serverUrl; 
+    }
     // For push notification, sending token using pure js method.
 }
 
@@ -79,6 +83,8 @@ Countly.getDeviceID = function(successCallback, failureCallback){
 
 }
 Countly.sendPushToken = function(options, successCallback, failureCallback){
+    successCallback = successCallback || Countly.onSuccess;
+    failureCallback = failureCallback || Countly.onError;
     if(!Countly.appKey){
         return failureCallback('Countly sdk is not initialized.')
     }
@@ -86,7 +92,7 @@ Countly.sendPushToken = function(options, successCallback, failureCallback){
         var data = {
             device_id: deviceId, 
             app_key: Countly.appKey, 
-            token_session: true, 
+            token_session: 1, 
             test_mode: options.messagingMode,
             android_token: options.token,
             ios_token: options.token

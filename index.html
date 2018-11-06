@@ -169,17 +169,15 @@
 
     app.testAndroidPush = function() {
         Countly.sendPushToken({
-            "registrationId": "1234567890",
-            "mode": Countly.messagingMode.PRODUCTION,
-            "projectId": "881000050249" // only for google / android
+            "token": "1234567890",
+            "messagingMode": Countly.messagingMode.PRODUCTION
         });
     };
 
     app.testiOSPush = function() {
         Countly.sendPushToken({
-            "registrationId": "1234567890",
-            "mode": Countly.messagingMode.PRODUCTION,
-            "projectId": "881000050249" // only for google / android
+            "token": "1234567890",
+            "messagingMode": Countly.messagingMode.PRODUCTION
         });
     };
 
