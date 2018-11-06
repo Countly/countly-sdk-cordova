@@ -78,7 +78,7 @@ Countly.getDeviceID = function(successCallback, failureCallback){
     cordova.exec(successCallback, failureCallback,"CountlyCordova","getDeviceID",[]);
 
 }
-Countly.onRegistrationId = function(options, successCallback, failureCallback){
+Countly.sendPushToken = function(options, successCallback, failureCallback){
     if(!Countly.appKey){
         return failureCallback('Countly sdk is not initialized.')
     }
@@ -87,9 +87,9 @@ Countly.onRegistrationId = function(options, successCallback, failureCallback){
             device_id: deviceId, 
             app_key: Countly.appKey, 
             token_session: true, 
-            test_mode: Number(options.mode),
-            android_token: options.registrationId,
-            ios_token: options.registrationId
+            test_mode: options.messagingMode,
+            android_token: options.token,
+            ios_token: options.token
         };
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         if (/android/i.test(userAgent)) {

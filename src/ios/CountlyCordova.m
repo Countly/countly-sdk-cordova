@@ -174,9 +174,10 @@ CountlyConfig* config = nil;
 }
 
 - (void)getDeviceID:(CDVInvokedUrlCommand*)command
-{   
+{
+    NSString* deviceID = Countly.sharedInstance.deviceID;
     CDVPluginResult* pluginResult = nil;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[Countly sharedInstance] deviceID]]];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: deviceID];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
