@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.messagingMode = {"TEST":"1","PRODUCTION":"0", "ADHOC": "2"};
+Countly.messagingMode = {"PRODUCTION": 0, "TEST": 1, "ADHOC": 2};
 Countly.version = "18.08.1";
 
 // countly initialization
@@ -14,8 +14,10 @@ Countly.init = function(serverUrl,appKey, deviceId){
     args.push(appKey || "");
     if(deviceId){
         args.push(deviceId || "");
-    }
+    };
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
+    Ajax.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
+    // For push notification, sending token using pure js method.
 }
 
 // countly sending various types of events
@@ -76,15 +78,31 @@ Countly.getDeviceID = function(successCallback, failureCallback){
     cordova.exec(successCallback, failureCallback,"CountlyCordova","getDeviceID",[]);
 
 }
-Countly.onRegistrationId = function(options){
-    Ajax.get('/i', {
-        device_id: '1223455', 
-        app_key: Countly.appKey, 
-        token_session: true, 
-        test_mode: Number(options.mode),
-        android_token: options.registrationId,
-        ios_token: options.registrationId
-    });
+Countly.onRegistrationId = function(options, successCallback, failureCallback){
+    if(!Countly.appKey){
+        return failureCallback('Countly sdk is not initialized.')
+    }
+    Countly.getDeviceID(function(deviceId){
+        var data = {
+            device_id: deviceId, 
+            app_key: Countly.appKey, 
+            token_session: true, 
+            test_mode: Number(options.mode),
+            android_token: options.registrationId,
+            ios_token: options.registrationId
+        };
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(userAgent)) {
+            delete data.ios_token;
+        }
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            delete data.android_token;
+        }
+        Ajax.get('/i', data, successCallback);
+    
+    }, failureCallback);
+
+    // Old method
     // var args = [];
     // args.push(options.registrationId || "");
     // args.push(options.mode || Countly.messagingMode.PRODUCTION);
@@ -232,6 +250,29 @@ Countly.userData.setOnce = function(keyName, setOnce){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
 };
 
+var Ajax = {};
+Ajax.get = function(url, data, cb) {
+    if(!data)
+        data = {};
+    var queryString = Ajax.query(data);
+    if (queryString)
+        url += "?" + queryString;
 
+    var http = new XMLHttpRequest();
+    http.onreadystatechange = function() {
+        if (http.readyState === 4)
+            cb(http.responseText);
+    };
+    http.open("GET", Ajax.ROOT_URL + url, true);
+    http.send();
+};
+Ajax.query = function(data) {
+    var queryString = "";
+    for (var key in data) {
+        queryString += (key + "=" + data[key] + "&");
+    }
+    return queryString;
+};
+    
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
