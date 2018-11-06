@@ -294,6 +294,10 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success("initMessaging success");
             return true;
         }
+        else if("getDeviceID".equals(action)){
+            callbackContext.success(Countly.sharedInstance().getDeviceID());
+            return true;
+        }
         else if("recordView".equals(action)){
             String viewName = args.getString(0);
             Countly.sharedInstance().recordView(viewName);
