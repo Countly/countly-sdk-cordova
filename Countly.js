@@ -2,8 +2,16 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.messagingMode = {"TEST": 1, "PRODUCTION": 0, "ADHOC": 2};
 Countly.version = "18.08.1";
+var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+if (/android/i.test(userAgent)) {
+    Countly.isAndroid = true;
+    Countly.messagingMode = {"TEST": 2, "PRODUCTION": 0};
+}
+if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    Countly.isiOS = true;
+    Countly.messagingMode = {"TEST": 1, "PRODUCTION": 0, "ADHOC": 2};
+}
 
 // countly initialization
 Countly.init = function(serverUrl,appKey, deviceId){
@@ -97,11 +105,10 @@ Countly.sendPushToken = function(options, successCallback, failureCallback){
             android_token: options.token,
             ios_token: options.token
         };
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        if (/android/i.test(userAgent)) {
+        if (Countly.isAndroid) {
             delete data.ios_token;
         }
-        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        if (Countly.isiOS) {
             delete data.android_token;
         }
         Ajax.post('/i', data, successCallback);
