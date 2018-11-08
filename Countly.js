@@ -6,11 +6,11 @@ Countly.version = "18.08.1";
 var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 if (/android/i.test(userAgent)) {
     Countly.isAndroid = true;
-    Countly.messagingMode = {"TEST": 2, "PRODUCTION": 0};
+    Countly.messagingMode = {"DEVELOPMENT": 2, "PRODUCTION": 0};
 }
 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
     Countly.isiOS = true;
-    Countly.messagingMode = {"TEST": 1, "PRODUCTION": 0, "ADHOC": 2};
+    Countly.messagingMode = {"DEVELOPMENT": 1, "PRODUCTION": 0, "ADHOC": 2};
 }
 
 // countly initialization

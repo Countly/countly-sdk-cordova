@@ -170,14 +170,14 @@
     app.testAndroidPush = function() {
         Countly.sendPushToken({
             "token": "1234567890",
-            "messagingMode": Countly.messagingMode.PRODUCTION
+            "messagingMode": Countly.messagingMode.DEVELOPMENT
         });
     };
 
     app.testiOSPush = function() {
         Countly.sendPushToken({
             "token": "1234567890",
-            "messagingMode": Countly.messagingMode.PRODUCTION
+            "messagingMode": Countly.messagingMode.DEVELOPMENT
         });
     };
 
@@ -203,7 +203,7 @@
             alert('Token received: '+data.registrationId);
             Countly.sendPushToken({
                 "token": data.registrationId,
-                "messagingMode": Countly.messagingMode.TEST
+                "messagingMode": Countly.messagingMode.DEVELOPMENT
             });
         });
 
@@ -227,9 +227,10 @@
         push.on('error', function(e) {
             // e.message
         });
-        // Countly.messagingMode.TEST
+        // Countly.messagingMode.DEVELOPMENT
         // Countly.messagingMode.PRODUCTION
-        // Countly.mode = Countly.messagingMode.TEST;
+        // Countly.messagingMode.ADHOC
+        // Countly.mode = Countly.messagingMode.DEVELOPMENT;
         // Countly.Push.onRegisterPushNotification();
         // @depricated: The below commented method is depricated and no longer works.
         // Countly.initMessaging({
