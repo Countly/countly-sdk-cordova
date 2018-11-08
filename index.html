@@ -217,12 +217,12 @@
             // data.additionalData
         });
 
-        // Test android 8.0 and 9.0
-        push.subscribe('myTopic', function(n){
-            alert(JSON.stringify(n));
-        }, function(e){
-            alert(JSON.stringify(e));
-        });
+        // // Test android 8.0 and 9.0
+        // push.subscribe('myTopic', function(n){
+        //     alert(JSON.stringify(n));
+        // }, function(e){
+        //     alert(JSON.stringify(e));
+        // });
 
         push.on('error', function(e) {
             // e.message

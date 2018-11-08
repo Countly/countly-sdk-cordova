@@ -104,7 +104,7 @@ Countly.sendPushToken = function(options, successCallback, failureCallback){
         if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
             delete data.android_token;
         }
-        Ajax.get('/i', data, successCallback);
+        Ajax.post('/i', data, successCallback);
     
     }, failureCallback);
 
@@ -257,28 +257,20 @@ Countly.userData.setOnce = function(keyName, setOnce){
 };
 
 var Ajax = {};
-Ajax.get = function(url, data, cb) {
+Ajax.post = function(url, data, cb) {
     if(!data)
         data = {};
-    var queryString = Ajax.query(data);
-    if (queryString)
-        url += "?" + queryString;
-
     var http = new XMLHttpRequest();
-    http.onreadystatechange = function() {
-        if (http.readyState === 4)
-            cb(http.responseText);
-    };
-    http.open("GET", Ajax.ROOT_URL + url, true);
-    http.send();
-};
-Ajax.query = function(data) {
-    var queryString = "";
-    for (var key in data) {
-        queryString += (key + "=" + data[key] + "&");
+    http.open('POST', Ajax.ROOT_URL + url, true);
+    if(http.setRequestHeader){
+        http.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     }
-    return queryString;
+    http.onreadystatechange = function() {
+        if (http.readyState === 4){
+            cb(http.responseText);
+        }
+    };
+    http.send(JSON.stringify(data));
 };
-    
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
