@@ -51,7 +51,7 @@
         <button onclick="app.sendPushToken()" class="fluid ui button teal">Push Message</button>
         <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button>
         <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button>
-        <button onclick="app.changeDeviceId('123456')" class="fluid ui button">Change Device ID</button>
+        <button onclick="app.changeDeviceId()" class="fluid ui button">Change Device ID</button>
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
         <button onclick="app.addCrashLog()" class="fluid ui button">Send Crash Report</button>
@@ -185,12 +185,6 @@
     app.sendPushToken = function() {
 
         var push = PushNotification.init({
-            android: {
-                senderID: "881000050249"
-            },
-            browser: {
-                pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-            },
             ios: {
                 alert: "true",
                 badge: "true",
@@ -247,7 +241,7 @@
 
     /** 2017 **/
     app.changeDeviceId = function() {
-        Countly.changeDeviceId("123456");
+        Countly.changeDeviceId("123456", true);
     }
     app.enableParameterTamperingProtection = function() {
         Countly.enableParameterTamperingProtection("salt");
@@ -400,6 +394,7 @@
     cd www/
     rm index.html
     wget https://raw.githubusercontent.com/Countly/countly-sdk-js/master/index.html
+    cp /Users/mac-3/office/client/countly/plugins/countly-sdk-js/index.html ./index.html
     cd ..
 
     cordova platform add android --verbose

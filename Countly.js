@@ -164,8 +164,13 @@ Countly.setOptionalParametersForInitialization = function(options){
 Countly.setLocation = function(newDeviceID){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[newDeviceID.toString() || ""]);
 }
-Countly.changeDeviceId = function(newDeviceID){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","changeDeviceId",[newDeviceID.toString() || ""]);
+Countly.changeDeviceId = function(newDeviceID, onServer){
+    if(onServer !== true || onServer !== false){
+        onServer = true;
+    }
+    newDeviceID = newDeviceID.toString() || "";
+    onServer = onServer.toString();
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","changeDeviceId",[newDeviceID, onServer]);
 };
 
 Countly.isCrashReportingEnabled = false;

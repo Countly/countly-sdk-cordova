@@ -40,11 +40,12 @@ CountlyConfig* config = nil;
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
 
-    if(command.arguments.count == 3){
-        deviceID = [command.arguments objectAtIndex:2];
-        [Countly.sharedInstance setNewDeviceID:deviceID onServer:YES];   //replace and merge on server
+    // if(command.arguments.count == 3){
+    //     deviceID = [command.arguments objectAtIndex:2];
+    //     [Countly.sharedInstance setNewDeviceID:deviceID onServer:YES];   //replace and merge on server
 
-    }
+    // }
+    
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -208,7 +209,16 @@ CountlyConfig* config = nil;
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command
 {
     NSString* newDeviceID = [command.arguments objectAtIndex:0];
-    [Countly.sharedInstance setNewDeviceID:newDeviceID onServer:YES];
+    NSString* onServerString = [command.arguments objectAtIndex:1];
+    NSString* onServer = YES;
+
+    if ([onServerString  isEqual: @"true"]) {
+        onServer = YES;
+    }else{
+        onServer = NO;
+    }
+
+    [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: onServer];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"changeDeviceId!"];
