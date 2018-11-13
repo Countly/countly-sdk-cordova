@@ -284,21 +284,6 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success("userData_setOnce success!");
             return true;
         }
-
-
-        else if("onregistrationid".equals(action)){
-            String registrationId = args.getString(0);
-            Countly.CountlyMessagingMode mode = null;
-            if(args.getString(1).equals("1")){
-                mode = Countly.CountlyMessagingMode.TEST;
-            }
-            else{
-                mode = Countly.CountlyMessagingMode.PRODUCTION;
-            }
-            Countly.sharedInstance().onRegistrationId(registrationId,mode);
-            callbackContext.success("initMessaging success");
-            return true;
-        }
         else if("getDeviceID".equals(action)){
             callbackContext.success(Countly.sharedInstance().getDeviceID());
             return true;

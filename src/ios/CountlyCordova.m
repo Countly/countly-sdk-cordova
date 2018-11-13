@@ -147,32 +147,6 @@ CountlyConfig* config = nil;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-
-- (void)onregistrationid:(CDVInvokedUrlCommand*)command
-{
-    NSString* token = [command.arguments objectAtIndex:0];
-    NSString* messagingMode = [command.arguments objectAtIndex:1];
-    
-    if([messagingMode isEqual: @"1"]){
-        if(config == nil){
-            config = CountlyConfig.new;
-        }
-        config.isTestDevice = YES;
-        CountlyPushNotifications.sharedInstance.isTestDevice = YES;
-    
-    }else{
-        config.isTestDevice = NO;
-        CountlyPushNotifications.sharedInstance.isTestDevice = NO;
-    }
-    
-    //[CountlyConnectionManager.sharedInstance sendPushToken:token];
-
-    
-    CDVPluginResult* pluginResult = nil;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"onregistrationid!"];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
 - (void)getDeviceID:(CDVInvokedUrlCommand*)command
 {
     NSString* deviceID = Countly.sharedInstance.deviceID;
