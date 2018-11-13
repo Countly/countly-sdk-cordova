@@ -199,6 +199,9 @@ Countly.logException = function(exception, nonfatal, segments){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
 
+Countly.sendRating = function(rating){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendRating",[rating.toString()]);
+}
 Countly.startSession = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startSession",[]);
 }

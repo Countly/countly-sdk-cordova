@@ -288,6 +288,19 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success(Countly.sharedInstance().getDeviceID());
             return true;
         }
+        else if("sendRating".equals(action)){
+            String ratingString = args.getString(0);
+            int rating = Integer.parseInt(ratingString);
+
+            Map<String, String> segm = new HashMap<>();
+            segm.put("platform", "android");
+            segm.put("app_version", DeviceInfo.getAppVersion(context));
+            segm.put("rating", "" + rating);
+
+            Countly.sharedInstance().recordEvent("[CLY]_star_rating", segm, 1);
+            callbackContext.success("sendRating: "+ratingString);
+            return true;
+        }
         else if("recordView".equals(action)){
             String viewName = args.getString(0);
             Countly.sharedInstance().recordView(viewName);

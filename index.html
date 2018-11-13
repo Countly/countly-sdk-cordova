@@ -60,6 +60,8 @@
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
         <button onclick="app.addCrashLog()" class="fluid ui button">Send Crash Report</button>
+        <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button>
+
         <div class="ui horizontal divider">Other Methods End</div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
@@ -352,7 +354,10 @@
         }, 1000);
     }
 
-
+    app.sendRating = function(){
+        // Ratings can be from 1 - 5;
+        Countly.sendRating(5);
+    }
 
     app.addCrashLog = function() {
         Countly.enableCrashReporting();

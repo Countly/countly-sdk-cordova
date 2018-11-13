@@ -155,6 +155,26 @@ CountlyConfig* config = nil;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+
+- (void)sendRating:(CDVInvokedUrlCommand*)command
+{
+    NSString* ratingString = [command.arguments objectAtIndex:0];
+    int rating = [ratingString intValue];
+
+    if (rating != 0)
+    {
+        NSDictionary* segmentation =
+        @{
+            kCountlySRKeyPlatform: CountlyDeviceInfo.osName,
+            kCountlySRKeyAppVersion: CountlyDeviceInfo.appVersion,
+            kCountlySRKeyRating: @(rating)
+        };
+        [Countly.sharedInstance recordReservedEvent:kCountlyReservedEventStarRating segmentation:segmentation];
+    }
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sendRating!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
 - (void)start:(CDVInvokedUrlCommand*)command
 {
     [Countly.sharedInstance beginSession];
