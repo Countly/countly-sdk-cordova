@@ -209,16 +209,13 @@ CountlyConfig* config = nil;
 {
     NSString* newDeviceID = [command.arguments objectAtIndex:0];
     NSString* onServerString = [command.arguments objectAtIndex:1];
-    NSString* onServer = YES;
-
+    
     if ([onServerString  isEqual: @"true"]) {
-        onServer = YES;
+        [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: YES];
     }else{
-        onServer = NO;
+        [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: NO];
     }
-
-    [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: onServer];
-
+    
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"changeDeviceId!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
