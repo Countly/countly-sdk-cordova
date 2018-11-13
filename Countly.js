@@ -2,8 +2,16 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.messagingMode = {"TEST":"1","PRODUCTION":"0"};
-Countly.version = "18.08";
+Countly.version = "18.08.2";
+var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+if (/android/i.test(userAgent)) {
+    Countly.isAndroid = true;
+    Countly.messagingMode = {"DEVELOPMENT": 2, "PRODUCTION": 0};
+}
+if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    Countly.isiOS = true;
+    Countly.messagingMode = {"DEVELOPMENT": 1, "PRODUCTION": 0, "ADHOC": 2};
+}
 
 // countly initialization
 Countly.init = function(serverUrl,appKey, deviceId){
@@ -14,19 +22,14 @@ Countly.init = function(serverUrl,appKey, deviceId){
     args.push(appKey || "");
     if(deviceId){
         args.push(deviceId || "");
-    }
+    };
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
-}
-// @depricated
-Countly.initMessaging = function(options){
-    Countly.projectId = options.projectId;
-    Countly.messageMode = options.mode;
-    
-    var args = [];
-    args.push(options.registrationId || "");
-    args.push(options.mode || Countly.messagingMode.PRODUCTION);
-    args.push(options.projectId || "");
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
+    if(serverUrl.lastIndexOf('/') === serverUrl.length -1){
+        Ajax.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
+    }else{
+        Ajax.ROOT_URL = serverUrl; 
+    }
+    // For push notification, sending token using pure js method.
 }
 
 // countly sending various types of events
@@ -64,7 +67,7 @@ Countly.recordView = function(recordView){
 };
 
 // countly enable logger
-Countly.setLoggingEnabled = function(boolean){
+Countly.setLoggingEnabled = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setloggingenabled",[]);
 }
 
@@ -83,13 +86,41 @@ Countly.setUserData = function(options){
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setuserdata",args);
 }
+Countly.getDeviceID = function(successCallback, failureCallback){
+    cordova.exec(successCallback, failureCallback,"CountlyCordova","getDeviceID",[]);
 
-Countly.onRegistrationId = function(options){
-    var args = [];
-    args.push(options.registrationId || "");
-    args.push(options.mode);
-    args.push(options.projectId || "");
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
+}
+Countly.sendPushToken = function(options, successCallback, failureCallback){
+    successCallback = successCallback || Countly.onSuccess;
+    failureCallback = failureCallback || Countly.onError;
+    if(!Countly.appKey){
+        return failureCallback('Countly sdk is not initialized.')
+    }
+    Countly.getDeviceID(function(deviceId){
+        var data = {
+            device_id: deviceId, 
+            app_key: Countly.appKey, 
+            token_session: 1, 
+            test_mode: options.messagingMode,
+            android_token: options.token,
+            ios_token: options.token
+        };
+        if (Countly.isAndroid) {
+            delete data.ios_token;
+        }
+        if (Countly.isiOS) {
+            delete data.android_token;
+        }
+        Ajax.post('/i', data, successCallback);
+    
+    }, failureCallback);
+
+    // Old method
+    // var args = [];
+    // args.push(options.registrationId || "");
+    // args.push(options.mode || Countly.messagingMode.PRODUCTION);
+    // args.push(options.projectId || "");
+    // cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
 }
 // countly start for android
 Countly.start = function(){
@@ -115,9 +146,6 @@ Countly.onError = function(error){
      // alert("error");
      // alert(error);
 }
-Countly.demo = function(){
-
-}
 
 // 2017
 
@@ -136,8 +164,13 @@ Countly.setOptionalParametersForInitialization = function(options){
 Countly.setLocation = function(newDeviceID){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[newDeviceID.toString() || ""]);
 }
-Countly.changeDeviceId = function(newDeviceID){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","changeDeviceId",[newDeviceID.toString() || ""]);
+Countly.changeDeviceId = function(newDeviceID, onServer){
+    if(onServer !== true || onServer !== false){
+        onServer = true;
+    }
+    newDeviceID = newDeviceID.toString() || "";
+    onServer = onServer.toString();
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","changeDeviceId",[newDeviceID, onServer]);
 };
 
 Countly.isCrashReportingEnabled = false;
@@ -242,6 +275,21 @@ Countly.userData.setOnce = function(keyName, setOnce){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
 };
 
-
+var Ajax = {};
+Ajax.post = function(url, data, cb) {
+    if(!data)
+        data = {};
+    var http = new XMLHttpRequest();
+    http.open('POST', Ajax.ROOT_URL + url, true);
+    if(http.setRequestHeader){
+        http.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    }
+    http.onreadystatechange = function() {
+        if (http.readyState === 4){
+            cb(http.responseText);
+        }
+    };
+    http.send(JSON.stringify(data));
+};
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);

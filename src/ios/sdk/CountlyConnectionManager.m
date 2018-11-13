@@ -270,6 +270,7 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
 
 #pragma mark ---
 
+
 - (void)sendPushToken:(NSString *)token
 {
     typedef enum : NSInteger

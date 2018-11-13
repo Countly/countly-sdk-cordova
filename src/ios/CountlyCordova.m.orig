@@ -5,6 +5,7 @@
 #import "CountlyConfig.h"
 #import "CountlyPushNotifications.h"
 #import <Cordova/CDV.h>
+#import "CountlyCommon.h"
 
 CountlyConfig* config = nil;
 
@@ -165,7 +166,7 @@ CountlyConfig* config = nil;
         CountlyPushNotifications.sharedInstance.isTestDevice = NO;
     }
     
-    //[CountlyConnectionManager.sharedInstance sendPushToken:token];
+    [CountlyConnectionManager.sharedInstance sendPushToken:token];
 
     
     CDVPluginResult* pluginResult = nil;
@@ -208,6 +209,10 @@ CountlyConfig* config = nil;
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command
 {
     NSString* newDeviceID = [command.arguments objectAtIndex:0];
+<<<<<<< HEAD
+    BOOL onServer = NO;
+    [Countly.sharedInstance setNewDeviceID:newDeviceID onServer:onServer];
+=======
     NSString* onServerString = [command.arguments objectAtIndex:1];
     NSString* onServer = YES;
 
@@ -218,6 +223,7 @@ CountlyConfig* config = nil;
     }
 
     [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: onServer];
+>>>>>>> master
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"changeDeviceId!"];

@@ -7,6 +7,7 @@
 - (void)setloggingenabled:(CDVInvokedUrlCommand*)command;
 - (void)setuserdata:(CDVInvokedUrlCommand*)command;
 - (void)onregistrationid:(CDVInvokedUrlCommand*)command;
+- (void)getDeviceID:(CDVInvokedUrlCommand*)command;
 - (void)start:(CDVInvokedUrlCommand*)command;
 - (void)stop:(CDVInvokedUrlCommand*)command;
 - (void)recordView:(CDVInvokedUrlCommand*)command;

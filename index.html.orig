@@ -425,6 +425,30 @@
             }).catch(function(err) {});
         }
     })();
+<<<<<<< HEAD
+    /*
+    @dev instructions for personal modification
+
+    cordova plugin remove ly.count.cordova
+    cordova plugin add /Users/mac-3/office/client/countly/plugins/countly-sdk-js
+    
+    cordova create countly-demo-js ly.count.demo countly-demo-js
+    cd countly-demo-js
+
+    cordova plugin add https://github.com/Countly/countly-sdk-js.git
+
+    cd www/
+    rm index.html
+    wget https://raw.githubusercontent.com/Countly/countly-sdk-js/master/index.html
+    cd ..
+
+    cordova platform add android
+    cordova platform add ios
+
+    cordova build android
+    cordova build ios
+
+=======
 
     /*
     @dev instructions for personal modification
@@ -485,10 +509,12 @@
     cordova plugin remove ly.count.cordova
     cordova platform remove android
     cordova platform remove ios
+>>>>>>> master
 
 
     */
     </script>
+    
 </body>
 
 </html>

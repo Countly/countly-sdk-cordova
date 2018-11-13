@@ -2,7 +2,7 @@ Developer release notes.
 
 plugin.xml update version
 package.json update version 
-package.js update version
+package.js update version, update app.use version of meteor.js
 Countly.js update version 
 create tag / release based on the same version
 Sync Countly.js with ngCountly.js some angular customer depends on it.
@@ -10,7 +10,79 @@ Sync Countly.js with ngCountly.js some angular customer depends on it.
 Updating index.html should also update ionic/home.html 
 
 Making a new release on github, should also release on npm and meteor.
+Make sure all of them have the same versioning.
 
 Apply documentation to the sdk, for a newbie to understand.
 
 Provide callback to the user instead of handling the callback manually.
+
+Please review the documentation once the changes are made.
+
+npm publish
+meteor publish
+
+1.  Update both sdk to 18.08.1 Done 
+2.  review plugin.xml files Done
+   (ProxyActivity in xml file)
+   (review both code to confirm no outling files)
+   `Notification channels` there
+3.  Test push on android 8 and 9 version
+4.  Make a release on meteor community. Done
+
+Core SDK code modified
+
+
+Previously 
+----------
+
+
+- (void)sendPushToken:(NSString *)token
+{
+    typedef enum : NSInteger
+    {
+        CLYPushTokenModeProduction,
+        CLYPushTokenModeDevelopment,
+        CLYPushTokenModeAdHoc,
+    } CLYPushTokenMode;
+
+    int testMode;
+#ifdef DEBUG
+    testMode = CLYPushTokenModeDevelopment;
+#else
+    testMode = CountlyPushNotifications.sharedInstance.isTestDevice ? CLYPushTokenModeAdHoc : CLYPushTokenModeProduction;
+#endif
+
+    NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",
+                             kCountlyQSKeyPushTokenSession, @"1",
+                             kCountlyQSKeyPushTokeniOS, token,
+                             kCountlyQSKeyPushTestMode, testMode];
+
+    [CountlyPersistency.sharedInstance addToQueue:queryString];
+
+    [self proceedOnQueue];
+}
+
+Currently
+---------
+
+- (void)sendPushToken:(NSString *)token
+{
+    typedef enum : NSInteger
+    {
+        CLYPushTokenModeProduction,
+        CLYPushTokenModeDevelopment,
+        CLYPushTokenModeAdHoc,
+    } CLYPushTokenMode;
+
+    int testMode = CountlyPushNotifications.sharedInstance.isTestDevice;
+    
+
+    NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",
+                             kCountlyQSKeyPushTokenSession, @"1",
+                             kCountlyQSKeyPushTokeniOS, token,
+                             kCountlyQSKeyPushTestMode, testMode];
+
+    [CountlyPersistency.sharedInstance addToQueue:queryString];
+
+    [self proceedOnQueue];
+}
