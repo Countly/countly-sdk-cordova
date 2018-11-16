@@ -250,6 +250,7 @@
     app.sendPushToken = function() {
 
         var push = PushNotification.init({
+            android: {sound: true},
             ios: {
                 alert: "true",
                 badge: "true",
