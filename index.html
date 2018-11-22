@@ -83,10 +83,10 @@
         var deviceId = "" +Math.random();
         Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
         // setTimeout(function(){
-        //     Countly.getDeviceID(function(result){
-        //         alert(JSON.stringify(result));
-        //     }, function(error){
-        //         alert(JSON.stringify(error));
+        //     Countly.getDeviceID(function(deviceId){
+        //         console.log(deviceId);
+        //     }, function(getDeviceIDError){
+        //         console.log(getDeviceIDError);
         //     });
         // }, 3000);
     };
@@ -466,6 +466,7 @@
     rm config.xml
     cp ../../backup/config.xml ./
     cordova plugin add https://github.com/phonegap/phonegap-plugin-push.git --verbose
+    cordova plugin add /Users/mac-3/office/client/countly/plugins/phonegap-plugin-push --verbose
     cd platforms/ios/
     pod install
     cd ../..
