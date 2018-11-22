@@ -40,11 +40,11 @@ CountlyConfig* config = nil;
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
 
-    // if(command.arguments.count == 3){
-    //     deviceID = [command.arguments objectAtIndex:2];
-    //     [Countly.sharedInstance setNewDeviceID:deviceID onServer:YES];   //replace and merge on server
-
-    // }
+    // config.deviceID = deviceID; doesn't work so applied at patch temporarly.
+    if(command.arguments.count == 3){
+        deviceID = [command.arguments objectAtIndex:2];
+        [Countly.sharedInstance setNewDeviceID:deviceID onServer:YES];   //replace and merge on server
+    }
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
