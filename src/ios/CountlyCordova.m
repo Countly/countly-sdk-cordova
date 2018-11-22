@@ -22,6 +22,7 @@ CountlyConfig* config = nil;
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
     NSString* deviceID = @"";
+    
     if(config == nil){
         config = CountlyConfig.new;
     }
