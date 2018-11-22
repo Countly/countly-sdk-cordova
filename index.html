@@ -21,6 +21,7 @@
         <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
         <img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
         <button onclick="app.init()" class="fluid ui green button">Init</button>
+        <button onclick="app.initWithID()" class="fluid ui green button">Init with ID </button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
         <div class="ui horizontal divider">Events Start</div>
@@ -69,7 +70,15 @@
     </script>
     <script type="text/javascript">
     app = {};
+    function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+        for (var i = 0; i < 5; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
     app.init = function() {
         var deviceId = "" +Math.random();
         Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
@@ -81,6 +90,10 @@
         //     });
         // }, 3000);
     };
+    app.initWithID = function(){
+        Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e", makeid());
+
+    }
     app.test = function() {
         app.sendPushToken();
         app.sendSampleEvent();
@@ -474,6 +487,7 @@
 
     cordova run android --device --verbose
     cordova run ios --device --verbose
+    open ./platforms/ios/countly-demo-js.xcworkspace/
 
     debug
     cordova plugin remove phonegap-plugin-push --verbose
