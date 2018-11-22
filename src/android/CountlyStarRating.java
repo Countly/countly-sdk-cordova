@@ -76,6 +76,7 @@ public class CountlyStarRating {
         }
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        // This is a modifield code from the core sdk, as cordova don't use native ui.
         View dialogLayout = null; // inflater.inflate(R.layout.star_rating_layout, null);
         RatingBar ratingBar = null; // (RatingBar) dialogLayout.findViewById(R.id.ratingBar);
 
