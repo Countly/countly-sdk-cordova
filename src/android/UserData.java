@@ -144,7 +144,7 @@ public class UserData {
      * @param value String with value for the property
      */
     public void setProperty(String key, String value){
-        UserData.setCustomProperty(key, value);
+        UserData.modifyCustomData(key, value, "$set");
     }
 
     /**
@@ -322,6 +322,7 @@ public class UserData {
         if(custom == null)
             custom = new HashMap<>();
         custom.put(key, value);
+        isSynced = false;
     }
 
     /**
