@@ -461,23 +461,23 @@
     cordova create countly-demo-js com.countly.demo countly-demo-js
     cd countly-demo-js
 
-    cp ../../backup/google-services.json ./
-    cp ../../backup/GoogleService-Info.plist ./
+    cp ../../../plugins/config/google-services.json ./
+    cp ../../../plugins/config/GoogleService-Info.plist ./
     rm config.xml
-    cp ../../backup/config.xml ./
+    cp ../../../plugins/config/config.xml ./
     cordova plugin add https://github.com/phonegap/phonegap-plugin-push.git --verbose
-    cordova plugin add /Users/mac-3/office/client/countly/plugins/phonegap-plugin-push --verbose
+    cordova plugin add /Users/trinisoft/office/countly/plugins/phonegap-plugin-push --verbose
     cd platforms/ios/
     pod install
     cd ../..
 
     cordova plugin add https://github.com/Countly/countly-sdk-js.git
-    cordova plugin add /Users/mac-3/office/client/countly/plugins/countly-sdk-js
+    cordova plugin add /Users/trinisoft/office/countly/plugins/countly-sdk-js
     
     cd www/
     rm index.html
     wget https://raw.githubusercontent.com/Countly/countly-sdk-js/master/index.html
-    cp /Users/mac-3/office/client/countly/plugins/countly-sdk-js/index.html ./index.html
+    cp /Users/trinisoft/office/countly/plugins/countly-sdk-js/index.html ./index.html
     cd ..
 
     cordova platform add android --verbose
@@ -504,7 +504,7 @@
     ${SRCROOT}/Podfile.lock
     ${SRCROOT}/Pods/Manifest.lock
 
-    cordova plugin remove ly.count.cordova
+    cordova plugin remove countly-sdk-js
     cordova platform remove android
     cordova platform remove ios
 

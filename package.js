@@ -7,7 +7,7 @@ Package.describe({
 });
 
 Cordova.depends({
-  "ly.count.cordova": "https://github.com/Countly/countly-sdk-js/tarball/fc78daf627464b2e5b63ee945ca5b66d2314c322",
+  "countly-sdk-js": "https://github.com/Countly/countly-sdk-js/tarball/fc78daf627464b2e5b63ee945ca5b66d2314c322",
 });
 
 Package.onUse(function(api) {
