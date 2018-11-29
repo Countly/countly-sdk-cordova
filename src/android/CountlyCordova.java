@@ -46,10 +46,10 @@ public class CountlyCordova extends CordovaPlugin {
         else if ("changeDeviceId".equals(action)){
             String newDeviceID = args.getString(0);
             String onServerString = args.getString(1);
-            if("true".equals(onServerString)){
+            if("1".equals(onServerString)){
                 Countly.sharedInstance().changeDeviceId(newDeviceID);
             }else{
-                Countly.sharedInstance().changeDeviceId(null, newDeviceID);
+                Countly.sharedInstance().changeDeviceId(DeviceId.Type.DEVELOPER_SUPPLIED, newDeviceID);
             }
             callbackContext.success("changeDeviceId success!");
             return true;

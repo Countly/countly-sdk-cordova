@@ -185,8 +185,9 @@
     
     app.setCaptianAmericaData = function() {
         // example for setCaptianAmericaData
-        Countly.stop();
-        Countly.changeDeviceId("234567", false);
+        var deviceId = makeid();
+        Countly.changeDeviceId(deviceId, false);
+        
         var options = {};
         options.name = "Captian America";
         options.username = "captianamerica";
@@ -198,13 +199,14 @@
         options.gender = "M"; // "F"
         options.byear = 1989;
         Countly.setUserData(options);
-        Countly.start();
+                
     };
     
     app.setIronManData = function() {
         // example for setIronManData 
-        Countly.stop();
-        Countly.changeDeviceId("345678", false);
+        var deviceId = makeid();
+        Countly.changeDeviceId(deviceId, false);
+        
         var options = {};
         options.name = "Iron Man";
         options.username = "ironman";
@@ -220,9 +222,9 @@
     };
     
     app.setSpiderManData = function() {
-        // example for setSpiderManData
-        Countly.stop();
-        Countly.changeDeviceId("456789", false);
+        var deviceId = makeid();
+        Countly.changeDeviceId(deviceId, false);
+        
         var options = {};
         options.name = "Spider-Man";
         options.username = "spiderman";
