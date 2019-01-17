@@ -510,6 +510,42 @@
     cordova platform remove android
     cordova platform remove ios
 
+    -----------------------------------
+    Countly documentation on push plugin
+
+    Countly uses PhoneGap push plugin.
+    Here is the link: https://github.com/phonegap/phonegap-plugin-push/blob/master/docs/INSTALLATION.md
+
+    Please follow the instaltion guidelines for installing it in android and iOS.
+
+    Here is my steps / instruction.
+
+    Step 1: Go to https://firebase.google.com/
+    Step 2: Register / Login
+    Step 3: You should be here: https://console.firebase.google.com/
+    Step 4: Create / Select a project.
+    Step 5: Go to settings -> Project settings.
+    Step 6: Create an app for android, and for iOS
+    Step 7: Download the google-services.json for android and GoogleService-Info.plist for iOS.
+    Step 8: Place both files under your root project folder. i.e. above www folder.
+
+    Step 9: Put these tags in config.xml file
+        For Android
+        <platform name="android">
+            <resource-file src="google-services.json" target="app/google-services.json" />
+        </platform>
+        For iOS
+        <platform name="ios">
+            <resource-file src="GoogleService-Info.plist" />
+        </platform>
+
+    Step 10:  Install the push plugin
+            cordova plugin add phonegap-plugin-push@2.2.0
+            I was able to test android with the latest verion 2.2.0
+            I was able to test iOS with old version 1.9.0
+
+    Step 11:  Build the app, and test push notifications.
+    -----------------------------------
 
     */
     </script>
