@@ -62,10 +62,57 @@
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
         <button onclick="app.addCrashLog()" class="fluid ui button">Send Crash Report</button>
         <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button>
-
+        <button onclick="app.askForStarRating()" class="fluid ui button">Open rating modal</button>
         <div class="ui horizontal divider">Other Methods End</div>
+        <!-- Modal UI -->
+        <style>
+            .countly-modal.open{
+                display: block;
+            }
+            .countly-modal{
+                width: 80%;
+                height: auto;
+                position: fixed;
+                top: 10%;
+                left: 10%;
+                background-color: white;
+                border-radius: 20px;
+                z-index: 99;
+                border: 1px solid #e0e0e0;
+                text-align: center;
+                font-size: 2.5rem;
+                display: none;
+            }
+            .countly-modal div{
+                margin: 20px;
+            }
+            .countly-modal-header{
+                margin-top: 20px;
+            }
+            .countly-modal-divider{
+                position: relative;
+                margin: auto;
+                height: 1px;
+                border: 1px solid #e0e0e0;
+            }
+            .countly-modal-dismiss{
+                color: #47a9f4;
+            }
+            .countly-modal-submit{
+                display: none;
+                color: #47a9f4;
+            }
+        </style>
+        <div id="countly-rating-modal" class="countly-modal">
+            <div class="countly-modal-header">How would you rate the app?</div>
+            <div class="countly-modal-rating">&#x2605; &#x2606; &#x2606; &#x2606; &#x2606;</div>
+            <div class="countly-modal-divider"></div>
+            <div class="countly-modal-dismiss">Dismiss</div>
+            <div class="countly-modal-submit">Submit</div>
+        </div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="Countly.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stacktrace.js/2.0.0/stacktrace.min.js">
     </script>
     <script type="text/javascript">
@@ -374,6 +421,11 @@
         // Ratings can be from 1 - 5;
         Countly.sendRating(5);
     }
+    app.askForStarRating = function(){
+        Countly.askForStarRating(function(ratingResult){
+            console.log(ratingResult);
+        });
+    }
 
     app.addCrashLog = function() {
         Countly.enableCrashReporting();
@@ -540,10 +592,8 @@
         </platform>
 
     Step 10:  Install the push plugin
-            cordova plugin add phonegap-plugin-push@2.2.0
-            I was able to test android with the latest verion 2.2.0
-            I was able to test iOS with old version 1.9.0
-
+            cordova plugin add phonegap-plugin-push
+            
     Step 11:  Build the app, and test push notifications.
 
     https://drive.google.com/file/d/1xH6L5nI6hntfnbRis9VEOyTgy9C03Sqw/view?usp=sharing
