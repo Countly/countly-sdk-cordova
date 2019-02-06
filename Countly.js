@@ -286,11 +286,10 @@ Countly.sendRating = function(rating){
 }
 Countly.askForStarRating = function(callback){
     Countly.rating.callback = callback;
-    document.getElementById('countly-rating-modal').classList.add('open');
+    query('countly-rating-modal').classList.add('open');
 }
-document.getElementsByClassName('countly-modal-dismiss')[0].addEventListener('click', Countly.rating.closeModal);
 Countly.rating.closeModal = function(){
-    document.getElementById('countly-rating-modal').classList.remove('open');
+    query('countly-rating-modal').classList.remove('open');
     if(Countly.rating.callback){
         Countly.rating.callback({code: 1, msg: 'The star rating dialog was dismissed.'});
     }
@@ -302,6 +301,10 @@ Countly.rating.success = function(evt){
         Countly.rating.callback({code: 0, msg: 'The user rated the app.', rating: rating});
     }
 }
+function query(theQuery){
+    return document.getElementsByClassName(theQuery)[0];
+}
+query('countly-modal-dismiss').addEventListener('click', Countly.rating.closeModal);
 // Rating
 
 var Ajax = {};
