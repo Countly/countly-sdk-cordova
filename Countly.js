@@ -23,12 +23,12 @@ Countly.init = function(serverUrl,appKey, deviceId){
     if(deviceId){
         args.push(deviceId || "");
     };
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
     if(serverUrl.lastIndexOf('/') === serverUrl.length -1){
         Ajax.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
     }else{
         Ajax.ROOT_URL = serverUrl; 
     }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
     // For push notification, sending token using pure js method.
 }
 
@@ -104,7 +104,7 @@ Countly.sendPushToken = function(options, successCallback, failureCallback){
     Countly.getDeviceID(function(deviceId){
         var data = {
             device_id: deviceId, 
-            app_key: Countly.appKey, 
+            api_key: Countly.appKey, 
             token_session: 1, 
             test_mode: options.messagingMode,
             android_token: options.token,
@@ -368,6 +368,8 @@ Countly.rating.set = function(rating){
     }
 };
 // Rating
+
+
 
 var Ajax = {};
 Ajax.post = function(url, data, cb) {

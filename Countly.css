@@ -1,0 +1,41 @@
+.countly-modal.open{
+    display: block;
+}
+.countly-modal{
+    width: 80%;
+    height: auto;
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    background-color: white;
+    z-index: 99;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    font-size: 2rem;
+    display: none;
+}
+.countly-modal div{
+    margin: 20px;
+}
+.countly-modal-header{
+    margin-top: 20px;
+}
+.countly-modal-divider{
+    position: relative;
+    margin: auto;
+    height: 1px;
+    border: 1px solid #e0e0e0;
+}
+.countly-modal-dismiss{
+    color: #47a9f4;
+}
+.countly-modal-submit{
+    display: none;
+    color: #47a9f4;
+}
+.countly-rating-modal {
+    border-radius: 20px;
+}
+.countly-feedback-modal{
+    border-radius: 10px;
+}
