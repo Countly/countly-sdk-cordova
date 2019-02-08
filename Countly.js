@@ -49,13 +49,18 @@ Countly.sendEvent = function(options){
 
     if(options.eventName)
         args.push(options.eventName.toString());
-    if(options.eventCount)
+    if(options.eventCount){
         args.push(options.eventCount.toString());
-    if(options.eventSum)
+    }else{
+        args.push("1");
+    }
+    if(options.eventSum){
         args.push(options.eventSum.toString());
+    }
 
-    if(options.segments)
+    if(options.segments){
         segments = options.segments;
+    }
     for (var event in segments) {
         args.push(event);
         args.push(segments[event]);
