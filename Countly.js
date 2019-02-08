@@ -49,13 +49,18 @@ Countly.sendEvent = function(options){
 
     if(options.eventName)
         args.push(options.eventName.toString());
-    if(options.eventCount)
+    if(options.eventCount){
         args.push(options.eventCount.toString());
-    if(options.eventSum)
+    }else{
+        args.push("1");
+    }
+    if(options.eventSum){
         args.push(options.eventSum.toString());
+    }
 
-    if(options.segments)
+    if(options.segments){
         segments = options.segments;
+    }
     for (var event in segments) {
         args.push(event);
         args.push(segments[event]);
@@ -280,7 +285,8 @@ Countly.userData.setOnce = function(keyName, setOnce){
 // config
 Countly.rating = {
     starRatingMessage: "How would you rate the app?",
-    starRatingDismissButtonTitle: "Dismiss"
+    starRatingDismissButtonTitle: "Dismiss",
+    starRatingSubmitButtonTitle: "Submit",
 }
 // orginal method
 Countly.sendRating = function(rating){
@@ -342,6 +348,9 @@ Countly.rating.create = function(){
     style.type = 'text/css';
     style.appendChild(document.createTextNode(Countly.rating.css));
     document.head.appendChild(style);
+
+    query('countly-modal-dismiss').addEventListener('click', Countly.rating.closeModal);
+    query('countly-modal-submit').addEventListener('click', Countly.rating.send);
 }
 Countly.rating.set = function(rating){
     rating = Number(rating);
@@ -352,12 +361,11 @@ Countly.rating.set = function(rating){
     query('countly-modal-content').innerHTML = html;
     query('countly-modal-header').innerText = Countly.rating.starRatingMessage;
     query('countly-modal-dismiss').innerText = Countly.rating.starRatingDismissButtonTitle;
+    query('countly-modal-submit').innerText = Countly.rating.starRatingSubmitButtonTitle;
     var stars = document.getElementsByClassName('countly-rating-start');
     for(var i=0,il=stars.length;i<il;i++){
         stars[i].addEventListener('click', Countly.rating.success)
     }
-    query('countly-modal-dismiss').addEventListener('click', Countly.rating.closeModal);
-    query('countly-modal-submit').addEventListener('click', Countly.rating.send);
 };
 // Rating
 
