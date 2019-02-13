@@ -1,7 +1,7 @@
-.countly-modal.open{
+.countly-feedback.open{
     display: block;
 }
-.countly-modal{
+.countly-feedback{
     width: 80%;
     height: auto;
     position: fixed;
@@ -13,34 +13,40 @@
     text-align: center;
     font-size: 2rem;
     display: none;
+    font-family: 'Lato', sans-serif;
+    border-radius: 10px;
 }
-.countly-modal div{
+.countly-feedback div{
     margin: 20px;
 }
-.countly-modal-header{
+.countly-feedback-header{
     margin-top: 20px;
 }
-.countly-modal-divider{
+.countly-feedback-divider{
     position: relative;
     margin: auto;
     height: 1px;
     border: 0.1px solid #e0e0e0;
 }
-.countly-modal-dismiss{
+.countly-feedback-dismiss{
     color: #47a9f4;
 }
-.countly-modal-submit{
+.countly-feedback-submit{
     display: none;
     color: #47a9f4;
 }
-.countly-rating-modal {
-    border-radius: 20px;
-}
-.countly-feedback-modal{
-    border-radius: 10px;
-}
 
-.countly_footer_btn {
+.countly-feedback .countly-feedback-content span img{
+    height: 36px;
+    width: 36px;
+}
+.countly-feedback .countly-feedback-content p {
+    font-size: 24px;
+    text-align: left;
+    margin: 0px;
+    margin-left: 20px;
+}
+.countly-footer-btn {
     color: white;
     border-radius: 8px;
     background-color:#2EB52C;
@@ -48,11 +54,11 @@
     width: 170px;
     font-size:20px;
     border: white; 
-    margin-top: 0px !important;
+    margin: 0px !important;
 }
-.checkbox_style {
+.checkbox-style {
     font-size: 15px;
-     margin-top: 40px;
-      margin-right: 115px !important; 
-      margin-top: 50px !important;
+    margin-top: 40px;
+    margin-right: 115px !important; 
+    margin-top: 50px !important;
 }

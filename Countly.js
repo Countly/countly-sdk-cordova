@@ -299,11 +299,11 @@ Countly.askForStarRating = function(callback){
     Countly.rating.create();
     Countly.rating.set(0);
     Countly.rating.callback = callback;
-    query('countly-rating-modal').classList.add('open');
+    query('countly-rating').classList.add('open');
 }
 // closes the modal
 Countly.rating.closeModal = function(){
-    query('countly-rating-modal').classList.remove('open');
+    query('countly-rating').classList.remove('open');
     if(Countly.rating.callback){
         Countly.rating.callback({code: 1, msg: 'The star rating dialog was dismissed.'});
     }
@@ -313,15 +313,15 @@ Countly.rating.success = function(evt){
     var rating = evt.currentTarget.getAttribute('data-rating');
     Countly.rating.rating = rating;
     Countly.rating.set(rating);
-    query('countly-modal-dismiss').style.display = 'none';
-    query('countly-modal-submit').style.display = 'block';
+    query('countly-rating-dismiss').style.display = 'none';
+    query('countly-rating-submit').style.display = 'block';
 }
 // when user clicks the submits 
 Countly.rating.send = function(){
     var rating = Countly.rating.rating;
-    query('countly-modal-dismiss').style.display = 'block';
-    query('countly-modal-submit').style.display = 'none';
-    query('countly-rating-modal').classList.remove('open');
+    query('countly-rating-dismiss').style.display = 'block';
+    query('countly-rating-submit').style.display = 'none';
+    query('countly-rating').classList.remove('open');
     Countly.rating.set(0);
     Countly.sendRating(rating);
     if(Countly.rating.callback){
@@ -332,15 +332,15 @@ function query(theQuery){
     return document.getElementsByClassName(theQuery)[0];
 }
 // set's the star in the body
-Countly.rating.html = '<div class="countly-modal-header"></div><div class="countly-modal-content"></div><div class="countly-modal-divider"></div><div class="countly-modal-dismiss"></div><div class="countly-modal-submit">Submit</div>';
-Countly.rating.css = '.countly-modal.open{display:block}.countly-modal{width:80%;height:auto;position:fixed;top:10%;left:10%;background-color:#fff;border-radius:20px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-modal div{margin:20px}.countly-modal-header{margin-top:20px}.countly-modal-divider{position:relative;margin:auto;height:1px;border:1px solid #e0e0e0}.countly-modal-dismiss{color:#47a9f4}.countly-modal-submit{display:none;color:#47a9f4}';
+Countly.rating.html = '<div class="countly-rating-header"></div><div class="countly-rating-content"></div><div class="countly-rating-divider"></div><div class="countly-rating-dismiss"></div><div class="countly-rating-submit">Submit</div>';
+Countly.rating.css = '.countly-rating.open{display:block}.countly-rating{width:80%;height:auto;position:fixed;top:10%;left:10%;background-color:#fff;border-radius:20px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-rating div{margin:20px}.countly-rating-header{margin-top:20px}.countly-rating-divider{position:relative;margin:auto;height:0.1px;border:1px solid #e0e0e0}.countly-rating-dismiss{color:#47a9f4}.countly-rating-submit{display:none;color:#47a9f4}';
 Countly.rating.create = function(){
-    var div = query('countly-rating-modal');
+    var div = query('countly-rating');
     if(div){
         div.parentNode.removeChild(div);
     }
     div = document.createElement('div');
-    div.setAttribute('class', 'countly-modal countly-rating-modal');
+    div.setAttribute('class', 'countly-rating countly-rating');
     div.innerHTML = Countly.rating.html;
     document.body.appendChild(div);
 
@@ -349,8 +349,8 @@ Countly.rating.create = function(){
     style.appendChild(document.createTextNode(Countly.rating.css));
     document.head.appendChild(style);
 
-    query('countly-modal-dismiss').addEventListener('click', Countly.rating.closeModal);
-    query('countly-modal-submit').addEventListener('click', Countly.rating.send);
+    query('countly-rating-dismiss').addEventListener('click', Countly.rating.closeModal);
+    query('countly-rating-submit').addEventListener('click', Countly.rating.send);
 }
 Countly.rating.set = function(rating){
     rating = Number(rating);
@@ -358,10 +358,10 @@ Countly.rating.set = function(rating){
     for(var i=1;i<6;i++){
         html += '<span class="countly-rating-start" data-rating="' +i +'">' +(rating>=i?'&#x2605': '&#x2606;') +'</span>';
     }
-    query('countly-modal-content').innerHTML = html;
-    query('countly-modal-header').innerText = Countly.rating.starRatingMessage;
-    query('countly-modal-dismiss').innerText = Countly.rating.starRatingDismissButtonTitle;
-    query('countly-modal-submit').innerText = Countly.rating.starRatingSubmitButtonTitle;
+    query('countly-rating-content').innerHTML = html;
+    query('countly-rating-header').innerText = Countly.rating.starRatingMessage;
+    query('countly-rating-dismiss').innerText = Countly.rating.starRatingDismissButtonTitle;
+    query('countly-rating-submit').innerText = Countly.rating.starRatingSubmitButtonTitle;
     var stars = document.getElementsByClassName('countly-rating-start');
     for(var i=0,il=stars.length;i<il;i++){
         stars[i].addEventListener('click', Countly.rating.success)
