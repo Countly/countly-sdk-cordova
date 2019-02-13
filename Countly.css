@@ -24,7 +24,7 @@
     position: relative;
     margin: auto;
     height: 1px;
-    border: 1px solid #e0e0e0;
+    border: 0.1px solid #e0e0e0;
 }
 .countly-modal-dismiss{
     color: #47a9f4;
@@ -38,4 +38,21 @@
 }
 .countly-feedback-modal{
     border-radius: 10px;
+}
+
+.countly_footer_btn {
+    color: white;
+    border-radius: 8px;
+    background-color:#2EB52C;
+    height: 40px;
+    width: 170px;
+    font-size:20px;
+    border: white; 
+    margin-top: 0px !important;
+}
+.checkbox_style {
+    font-size: 15px;
+     margin-top: 40px;
+      margin-right: 115px !important; 
+      margin-top: 50px !important;
 }
