@@ -62,3 +62,7 @@
     margin-right: 115px !important; 
     margin-top: 50px !important;
 }
+
+a[target="_blank"] { 
+    background: white;
+}

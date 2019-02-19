@@ -331,6 +331,9 @@ Countly.rating.send = function(){
 function query(theQuery){
     return document.getElementsByClassName(theQuery)[0];
 }
+function getId(theID){
+    return document.getElementById(theID);
+}
 // set's the star in the body
 Countly.rating.html = '<div class="countly-rating-header"></div><div class="countly-rating-content"></div><div class="countly-rating-divider"></div><div class="countly-rating-dismiss"></div><div class="countly-rating-submit">Submit</div>';
 Countly.rating.css = '.countly-rating.open{display:block}.countly-rating{width:80%;height:auto;position:fixed;top:10%;left:10%;background-color:#fff;border-radius:20px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-rating div{margin:20px}.countly-rating-header{margin-top:20px}.countly-rating-divider{position:relative;margin:auto;height:0.1px;border:1px solid #e0e0e0}.countly-rating-dismiss{color:#47a9f4}.countly-rating-submit{display:none;color:#47a9f4}';
@@ -340,7 +343,7 @@ Countly.rating.create = function(){
         div.parentNode.removeChild(div);
     }
     div = document.createElement('div');
-    div.setAttribute('class', 'countly-rating countly-rating');
+    div.setAttribute('class', 'countly-rating');
     div.innerHTML = Countly.rating.html;
     document.body.appendChild(div);
 
@@ -369,7 +372,73 @@ Countly.rating.set = function(rating){
 };
 // Rating
 
+// Feedback
+Countly.feedback = {};
+Countly.feedback.config = {
+    headerText: '',
 
+}
+var feedback_data_example = {
+    "_id": "5b2ceb1b6b71e62eb22d6a46",
+    "popup_header_text": "Widget 1",
+    "popup_button_callout": "Submit feedback",
+    "popup_comment_callout": "Add comment",
+    "popup_thanks_message": "Thank you for your feedback",
+    "trigger_position": "center-left",
+    "trigger_bg_color": "132f1d",
+    "trigger_button_text": "Feedback",
+    "trigger_font_color": "#FFFFFF",
+    "target_devices": "[\"mobile\",\"desktop\",\"tablet\"]",
+    "target_page": "selected",
+    "target_pages": "[\"/\"]",
+    "is_active": "true"
+};
+Countly.feedback.create = function(){
+    
+}
+Countly.feedback.set = function(score){
+    score = Number(score);
+    var child = query('countly-feedback-content').childNodes;
+    for(var i=0; i<child.length; i++){
+        if(!child[i].nodeName !== 'SPAN'){
+            continue;
+        }
+        if(Number(child[i].getAttribute('data-score')) > child[i]){
+            child[i].style.backgroundColor = 'black';
+        }else{
+            child[i].style.backgroundColor = 'none';
+        }
+        console.log(query('countly-feedback-content').childNodes[i-1])
+    }
+}
+Countly.feedback.show = function(callback){
+    Countly.feedback.create();
+    Countly.feedback.set(0);
+    Countly.feedback.callback = callback;
+    query('countly-feedback').classList.add('open');
+}
+Countly.feedback.hide = function(){
+    query('countly-feedback').classList.remove('open');
+    if(Countly.feedback.callback){
+        Countly.feedback.callback({code: 1, msg: 'The feedback dialog was dismissed.'});
+    }
+}
+Countly.feedback.click = function(evt){
+    Countly.feedback.set(evt.currentTarget.getAttribute('data-score'));
+}
+Countly.feedback.send = function(){
+    let feedback_data = {
+        score: getId('countly-feedback-score').value,
+        comment: getId('countly-feedback-comment').value,
+        email: getId('countly-feedback-email').value,
+        isComment: getId('countly-feedback-isComment').value, 
+        isEmail: getId('countly-feedback-isEmail').value
+    };
+    return feedback_data;
+};
+query('countly-footer-btn').addEventListener('click', Countly.feedback.send);
+Countly.feedback.show();
+// Feedback
 
 var Ajax = {};
 Ajax.post = function(url, data, cb) {

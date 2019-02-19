@@ -77,26 +77,32 @@
         <div class="countly-feedback open">
             <div class="countly-feedback-header">What's your opinion about this page?</div>
             <div class="countly-feedback-content">
-                <span>
+                <span data-score="1">
                     <img src="https://try.count.ly/star-rating/images/star-rating/0_gray.svg"/>
                 </span>
-                <span>
+                <span data-score="2">
                     <img src="https://try.count.ly/star-rating/images/star-rating/1_gray.svg"/>
                 </span>
-                <span>
+                <span data-score="3">
                     <img src="https://try.count.ly/star-rating/images/star-rating/2_gray.svg"/>
                 </span>
-                <span>
+                <span data-score="4">
                     <img src="https://try.count.ly/star-rating/images/star-rating/3_gray.svg"/>
                 </span>
-                <span>
+                <span data-score="5">
                     <img src="https://try.count.ly/star-rating/images/star-rating/4_gray.svg"/>
                 </span>
                 <p>
-                    <input type="checkbox" name="comment" value="comment"> comment
+                    <input type="checkbox" name="commentCheckbox" value="comment" id="isComment"> 
+                    <span>comment</span>
+                    </br>
+                    <textarea rows="4" name="comment" id="countly-comment"></textarea>
                 </p>
                 <p>
-                    <input type="checkbox" name="vehicle2" value="email callout"> email callout
+                    <input type="checkbox" name="emailCheckbox" id="isEmail"> 
+                    <span>email callout</span>
+                    </br>
+                    <input type="text" name="email" id="countly-email">
                 </p>
                 <button class="countly-footer-btn">Button</button>
                 
