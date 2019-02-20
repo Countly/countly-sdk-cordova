@@ -258,8 +258,6 @@ post(url: string, data: any, cb: any) {
     if(!data)
         data = {};
     var http = new XMLHttpRequest();
-    console.log('Nicolson');
-    console.log(this.ROOT_URL + url);
     http.open('POST', this.ROOT_URL + url, true);
     if(http.setRequestHeader){
         http.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
