@@ -14,6 +14,7 @@ export class Countly {
 
 init(serverUrl: string, appKey: string, deviceId: string) {
     let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    this.messagingMode = {};
     if(/android/i.test(userAgent)) {
         this.isAndroid = true;
         this.messagingMode = { "DEVELOPMENT": 2, "PRODUCTION": 0 };
@@ -35,7 +36,7 @@ init(serverUrl: string, appKey: string, deviceId: string) {
     if(serverUrl.lastIndexOf('/') === serverUrl.length -1){
         this.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
     }else{
-        this.ROOT_URL = serverUrl; 
+        this.ROOT_URL = serverUrl;
     }
 }
 
@@ -105,9 +106,9 @@ sendPushToken(options: any, successCallback: any, failureCallback: any){
     }
     self.getDeviceID(function(deviceId){
         var data = {
-            device_id: deviceId, 
-            app_key: self.appKey, 
-            token_session: 1, 
+            device_id: deviceId,
+            app_key: self.appKey,
+            token_session: 1,
             test_mode: options.messagingMode,
             android_token: options.token,
             ios_token: options.token
@@ -139,7 +140,7 @@ stop() {
 // // countly deviceready for testing purpose
 deviceready = function () {
     this.ready = true;
-    //testing 
+    //testing
 }
 // // countly dummy success and error event
 onSuccess(result: any) {
