@@ -73,6 +73,8 @@
     <source-file src="src/ios/sdk/CountlyPushNotifications.m" />
     <source-file src="src/ios/sdk/CountlyNotificationService.h" />
     <source-file src="src/ios/sdk/CountlyNotificationService.m" />
+    <source-file src="src/ios/sdk/CountlyRemoteConfig.h" />
+    <source-file src="src/ios/sdk/CountlyRemoteConfig.m" />
     <header-file src="src/ios/CountlyCordova.h"/>
     <source-file src="src/ios/CountlyCordova.m"/>
 
@@ -124,8 +126,9 @@
     <source-file src="src/android/ReferrerReceiver.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/CountlyStarRating.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/RemoteConfig.java" target-dir="src/ly/count/android/sdk"/>
 
-  
+
     <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
     <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/>
 
