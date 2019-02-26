@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -433,14 +433,26 @@ public class CountlyStarRating {
                 deviceIsPhone = false;
             }
 
-            final String checkUrl = connectionQueue_.getServerURL() + "/o/feedback/widget?app_key=" + connectionQueue_.getAppKey() + "&widget_id=" + widgetId;
+            ConnectionProcessor cp = connectionQueue_.createConnectionProcessor();
+            URLConnection urlConnection;
+            try {
+                urlConnection = cp.urlConnectionForServerRequest("app_key=" + connectionQueue_.getAppKey() + "&widget_id=" + widgetId, "/o/feedback/widget?");
+            } catch (IOException e) {
+                if (Countly.sharedInstance().isLoggingEnabled()) {
+                    Log.e(Countly.TAG, "IOException while checking for rating widget availability :[" + e.toString() + "]");
+                }
+
+                if(devCallback != null){ devCallback.callback("Encountered problem while checking for rating widget availability"); }
+                return;
+            }
+
             final String ratingWidgetUrl = connectionQueue_.getServerURL() + "/feedback?widget_id=" + widgetId + "&device_id=" + connectionQueue_.getDeviceId().getId() + "&app_key=" + connectionQueue_.getAppKey();
 
             if (Countly.sharedInstance().isLoggingEnabled()) {
-                Log.d(Countly.TAG, "Check url: [" + checkUrl+ "], rating widget url :[" + ratingWidgetUrl + "]");
+                Log.d(Countly.TAG, "rating widget url :[" + ratingWidgetUrl + "]");
             }
 
-            (new RatingAvailabilityChecker()).execute(checkUrl, new InternalFeedbackRatingCallback() {
+            (new ImmediateRequestMaker()).execute(urlConnection, false, new InternalFeedbackRatingCallback() {
                 @Override
                 public void callback(JSONObject checkResponse) {
                     if(checkResponse == null){
@@ -510,23 +522,58 @@ public class CountlyStarRating {
     }
 
     /**
-     * Ascync task for checking the Rating dialog availability
+     * Ascync task for making immediate server requests
      */
-    private static class RatingAvailabilityChecker extends AsyncTask<Object, Void, JSONObject> {
+    protected static class ImmediateRequestMaker extends AsyncTask<Object, Void, JSONObject> {
         InternalFeedbackRatingCallback callback;
 
+        /**
+         * params fields:
+         * 0 - urlConnection
+         * 1 - requestShouldBeDelayed
+         * 2 - callback         *
+         */
         protected JSONObject doInBackground(Object... params) {
-            callback = (InternalFeedbackRatingCallback)params[1];
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.v(Countly.TAG, "Starting ImmediateRequestMaker request");
+            }
+            callback = (InternalFeedbackRatingCallback)params[2];
+            boolean requestShouldBeDelayed = (boolean)params[1];
 
             HttpURLConnection connection = null;
             BufferedReader reader = null;
+            boolean wasSuccess = true;
 
             try {
-                URL url = new URL((String)params[0]);
-                connection = (HttpURLConnection) url.openConnection();
+                if(requestShouldBeDelayed){
+                    //used in cases after something has to be done after a device id change
+                    if (Countly.sharedInstance().isLoggingEnabled()) {
+                        Log.v(Countly.TAG, "ImmediateRequestMaker request should be delayed, waiting for 10.5 seconds");
+                    }
+
+                    try {
+                        Thread.sleep(10500);
+                    } catch (InterruptedException e) {
+                        if (Countly.sharedInstance().isLoggingEnabled()) {
+                            Log.w(Countly.TAG, "While waiting for 10 seconds in ImmediateRequestMaker, sleep was interrupted");
+                        }
+                    }
+                }
+
+                connection = (HttpURLConnection)params[0];
                 connection.connect();
 
-                InputStream stream = connection.getInputStream();
+                InputStream stream;
+
+                try{
+                    //assume there will be no error
+                    stream = connection.getInputStream();
+                } catch (Exception ex){
+                    //in case of exception, assume there was a error in the request
+                    //and change streams
+                    stream = connection.getErrorStream();
+                    wasSuccess = false;
+                }
 
                 reader = new BufferedReader(new InputStreamReader(stream));
 
@@ -537,7 +584,14 @@ public class CountlyStarRating {
                     buffer.append(line+"\n");
                 }
 
-                return new JSONObject(buffer.toString());
+                if(wasSuccess) {
+                    return new JSONObject(buffer.toString());
+                } else {
+                    if (Countly.sharedInstance().isLoggingEnabled()) {
+                        Log.e(Countly.TAG, "Encountered problem while making a immediate server request, :[" + buffer.toString() + "]");
+                    }
+                    return null;
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {

@@ -23,6 +23,7 @@ package ly.count.android.sdk;
 
 import android.content.Context;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -51,6 +52,8 @@ public class ConnectionQueue {
     private Future<?> connectionProcessorFuture_;
     private DeviceId deviceId_;
     private SSLContext sslContext_;
+
+    private Map<String, String> requestHeaderCustomValues;
 
     // Getters are for unit testing
     String getAppKey() {
@@ -101,6 +104,10 @@ public class ConnectionQueue {
 
     public void setDeviceId(DeviceId deviceId) {
         this.deviceId_ = deviceId;
+    }
+
+    public void setRequestHeaderCustomValues(Map<String, String> headerCustomValues){
+        requestHeaderCustomValues = headerCustomValues;
     }
 
     /**
@@ -411,12 +418,8 @@ public class ConnectionQueue {
     private String prepareLocationData(CountlyStore cs, boolean canSendEmptyWithNoConsent){
         String data = "";
 
-        if(!Countly.sharedInstance().anyConsentGiven()){
-            //return data;
-        }
-
         if(canSendEmptyWithNoConsent && (cs.getLocationDisabled() || !Countly.sharedInstance().getConsent(Countly.CountlyFeatureNames.location))){
-            //if location is disabled or consent no given, send empty location info
+            //if location is disabled or consent not given, send empty location info
             //this way it is cleared server side and geoip is not used
             //do this only if allowed
             data += "&location=";
@@ -448,6 +451,30 @@ public class ConnectionQueue {
         return data;
     }
 
+    protected String prepareRemoteConfigRequest(String keysInclude, String keysExclude){
+        String data = prepareCommonRequestData()
+                + "&method=fetch_remote_config"
+                + "&device_id=" + ConnectionProcessor.urlEncodeString(deviceId_.getId());
+
+        if(Countly.sharedInstance().getConsent(Countly.CountlyFeatureNames.sessions)) {
+            //add session data if consent given
+            data += "&metrics=" + DeviceInfo.getMetrics(context_);
+        }
+
+        CountlyStore cs = getCountlyStore();
+        String locationData = prepareLocationData(cs, true);
+        data += locationData;
+
+        //add key filters
+        if(keysInclude != null){
+            data += "&keys=" +  ConnectionProcessor.urlEncodeString(keysInclude);
+        } else if(keysExclude != null) {
+            data += "&omit_keys=" + ConnectionProcessor.urlEncodeString(keysExclude);
+        }
+
+        return data;
+    }
+
     /**
      * Ensures that an executor has been created for ConnectionProcessor instances to be submitted to.
      */
@@ -466,8 +493,12 @@ public class ConnectionQueue {
     void tick() {
         if (!store_.isEmptyConnections() && (connectionProcessorFuture_ == null || connectionProcessorFuture_.isDone())) {
             ensureExecutor();
-            connectionProcessorFuture_ = executor_.submit(new ConnectionProcessor(serverURL_, store_, deviceId_, sslContext_));
+            connectionProcessorFuture_ = executor_.submit(createConnectionProcessor());
         }
+    }
+
+    public ConnectionProcessor createConnectionProcessor(){
+        return new ConnectionProcessor(serverURL_, store_, deviceId_, sslContext_, requestHeaderCustomValues);
     }
 
     // for unit testing

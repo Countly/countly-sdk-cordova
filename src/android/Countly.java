@@ -55,7 +55,7 @@ public class Countly {
     /**
      * Current version of the Count.ly Android SDK as a displayable string.
      */
-    public static final String COUNTLY_SDK_VERSION_STRING = "18.08.1";
+    public static final String COUNTLY_SDK_VERSION_STRING = "19.02";
     /**
      * Used as request meta data on every request
      */
@@ -154,6 +154,14 @@ public class Countly {
     protected boolean isAttributionEnabled = true;
 
     protected boolean isBeginSessionSent = false;
+
+    //remote config
+    //if set to true, it will automatically download remote configs on module startup
+    boolean remoteConfigAutomaticUpdateEnabled = false;
+    RemoteConfig.RemoteConfigCallback remoteConfigInitCallback = null;
+
+    //custom request header fields
+    Map<String, String> requestHeaderCustomValues;
 
     //GDPR
     protected boolean requiresConsent = false;
@@ -386,6 +394,7 @@ public class Countly {
             connectionQueue_.setAppKey(appKey);
             connectionQueue_.setCountlyStore(countlyStore);
             connectionQueue_.setDeviceId(deviceIdInstance);
+            connectionQueue_.setRequestHeaderCustomValues(requestHeaderCustomValues);
 
             eventQueue_ = new EventQueue(countlyStore);
 
@@ -425,6 +434,11 @@ public class Countly {
             if (Countly.sharedInstance().isLoggingEnabled()) {
                 Log.d(Countly.TAG, "Countly is initialized with the current consent state:");
                 checkAllConsent();
+            }
+
+            //update remote config values if automatic update is enabled
+            if(remoteConfigAutomaticUpdateEnabled && anyConsentGiven()){
+                RemoteConfig.updateRemoteConfigValues(context_, null, null, connectionQueue_, false, remoteConfigInitCallback);
             }
         }
 
@@ -716,6 +730,12 @@ public class Countly {
         connectionQueue_.endSession(roundedSecondsSinceLastSessionDurationUpdate(), connectionQueue_.getDeviceId().getId());
         connectionQueue_.getDeviceId().changeToId(context_, connectionQueue_.getCountlyStore(), type, deviceId);
         connectionQueue_.beginSession();
+
+        //update remote config values if automatic update is enabled
+        remoteConfigClearValues();
+        if(remoteConfigAutomaticUpdateEnabled && anyConsentGiven()){
+            RemoteConfig.updateRemoteConfigValues(context_, null, null, connectionQueue_, false, null);
+        }
     }
 
     /**
@@ -745,6 +765,13 @@ public class Countly {
         }
 
         connectionQueue_.changeDeviceId(deviceId, roundedSecondsSinceLastSessionDurationUpdate());
+
+        //update remote config values if automatic update is enabled
+        remoteConfigClearValues();
+        if(remoteConfigAutomaticUpdateEnabled && anyConsentGiven()){
+            //request should be delayed, because of the delayed server merge
+            RemoteConfig.updateRemoteConfigValues(context_, null, null, connectionQueue_, true,null);
+        }
     }
 
     /**
@@ -2340,6 +2367,121 @@ public class Countly {
         CountlyStarRating.showFeedbackPopup(widgetId, closeButtonText, activity, this, connectionQueue_, callback);
 
         return this;
+    }
+
+    /**
+     * If enable, will automatically download newest remote config values on init.
+     * @param enabled set true for enabling it
+     * @param callback callback called after the update was done
+     * @return
+     */
+    public synchronized Countly setRemoteConfigAutomaticDownload(boolean enabled, RemoteConfig.RemoteConfigCallback callback){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Setting if remote config Automatic download will be enabled, " + enabled);
+        }
+
+        remoteConfigAutomaticUpdateEnabled = enabled;
+        remoteConfigInitCallback = callback;
+        return this;
+    }
+
+    /**
+     * Manually update remote config values
+     * @param callback
+     */
+    public void remoteConfigUpdate(RemoteConfig.RemoteConfigCallback callback){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Manually calling to updateRemoteConfig");
+        }
+        if (!isInitialized()) {
+            throw new IllegalStateException("Countly.sharedInstance().init must be called before remoteConfigUpdate");
+        }
+        if(!anyConsentGiven()){ return; }
+        RemoteConfig.updateRemoteConfigValues(context_, null, null, connectionQueue_, false, callback);
+    }
+
+    /**
+     * Manual remote config update call. Will only update the keys provided.
+     * @param keysToInclude
+     * @param callback
+     */
+    public void updateRemoteConfigForKeysOnly(String[] keysToInclude, RemoteConfig.RemoteConfigCallback callback){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Manually calling to updateRemoteConfig with include keys");
+        }
+        if (!isInitialized()) {
+            throw new IllegalStateException("Countly.sharedInstance().init must be called before updateRemoteConfigForKeysOnly");
+        }
+        if(!anyConsentGiven()){
+            if(callback != null){ callback.callback("No consent given"); }
+            return;
+        }
+        if (keysToInclude == null && Countly.sharedInstance().isLoggingEnabled()) { Log.w(Countly.TAG,"updateRemoteConfigExceptKeys passed 'keys to include' array is null"); }
+        RemoteConfig.updateRemoteConfigValues(context_, keysToInclude, null, connectionQueue_, false, callback);
+    }
+
+    /**
+     * Manual remote config update call. Will update all keys except the ones provided
+     * @param keysToExclude
+     * @param callback
+     */
+    public void updateRemoteConfigExceptKeys(String[] keysToExclude, RemoteConfig.RemoteConfigCallback callback) {
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Manually calling to updateRemoteConfig with exclude keys");
+        }
+        if (!isInitialized()) {
+            throw new IllegalStateException("Countly.sharedInstance().init must be called before updateRemoteConfigExceptKeys");
+        }
+        if(!anyConsentGiven()){
+            if(callback != null){ callback.callback("No consent given"); }
+            return;
+        }
+        if (keysToExclude == null && Countly.sharedInstance().isLoggingEnabled()) { Log.w(Countly.TAG,"updateRemoteConfigExceptKeys passed 'keys to ignore' array is null"); }
+        RemoteConfig.updateRemoteConfigValues(context_, null, keysToExclude, connectionQueue_, false, callback);
+    }
+
+    /**
+     * Get the stored value for the provided remote config key
+     * @param key
+     * @return
+     */
+    public Object getRemoteConfigValueForKey(String key){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Calling remoteConfigValueForKey");
+        }
+        if (!isInitialized()) {
+            throw new IllegalStateException("Countly.sharedInstance().init must be called before remoteConfigValueForKey");
+        }
+        if(!anyConsentGiven()) { return null; }
+
+        return RemoteConfig.getValue(key, context_);
+    }
+
+    /**
+     * Clear all stored remote config values
+     */
+    public void remoteConfigClearValues(){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Calling remoteConfigClearValues");
+        }
+        if (!isInitialized()) {
+            throw new IllegalStateException("Countly.sharedInstance().init must be called before remoteConfigClearValues");
+        }
+
+        RemoteConfig.clearValueStore(context_);
+    }
+
+    /**
+     * Allows you to add custom header key/value pairs to each request
+     */
+    public void addCustomNetworkRequestHeaders(Map<String, String> headerValues){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Calling addCustomNetworkRequestHeaders");
+        }
+        requestHeaderCustomValues = headerValues;
+        if(connectionQueue_ != null){
+            connectionQueue_.setRequestHeaderCustomValues(requestHeaderCustomValues);
+        }
     }
 
     // for unit testing
