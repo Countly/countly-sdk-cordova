@@ -26,7 +26,7 @@ Countly.init = function(serverUrl,appKey, deviceId){
     if(serverUrl.lastIndexOf('/') === serverUrl.length -1){
         Ajax.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
     }else{
-        Ajax.ROOT_URL = serverUrl; 
+        Ajax.ROOT_URL = serverUrl;
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
     // For push notification, sending token using pure js method.
@@ -103,9 +103,9 @@ Countly.sendPushToken = function(options, successCallback, failureCallback){
     }
     Countly.getDeviceID(function(deviceId){
         var data = {
-            device_id: deviceId, 
-            api_key: Countly.appKey, 
-            token_session: 1, 
+            device_id: deviceId,
+            api_key: Countly.appKey,
+            token_session: 1,
             test_mode: options.messagingMode,
             android_token: options.token,
             ios_token: options.token
@@ -117,7 +117,7 @@ Countly.sendPushToken = function(options, successCallback, failureCallback){
             delete data.android_token;
         }
         Ajax.post('/i', data, successCallback);
-    
+
     }, failureCallback);
 
     // Old method
@@ -316,7 +316,7 @@ Countly.rating.success = function(evt){
     query('countly-rating-dismiss').style.display = 'none';
     query('countly-rating-submit').style.display = 'block';
 }
-// when user clicks the submits 
+// when user clicks the submits
 Countly.rating.send = function(){
     var rating = Countly.rating.rating;
     query('countly-rating-dismiss').style.display = 'block';
@@ -378,6 +378,32 @@ Countly.feedback.config = {
     headerText: '',
 
 }
+var chekedElement = document.getElementsByClassName("check-data");
+for(var i = 0; i< chekedElement.length; i++ ){
+    chekedElement[i].addEventListener('click', function(evt){
+        var selectedId = evt.target.getAttribute('data-id');
+        if(this.checked) {
+            getId(selectedId).style.display = "inline";
+        } else {
+            getId(selectedId).style.display = "none";
+        }
+    });
+}
+
+var emotion = document.getElementsByClassName("rating-emotion");
+for(var i = 0; i< emotion.length; i++ ){
+    emotion[i].addEventListener('click', function(evt){
+        for(var j = 0; j< emotion.length; j++ ){
+            var reSetSrcLink = emotion[j].getAttribute('src');
+            var reSetNewStrLink = reSetSrcLink.replace("color", "gray");
+            emotion[j].setAttribute('src', reSetNewStrLink);
+        }
+        var srcLink = evt.target.getAttribute('src');
+        var newStrLink = srcLink.replace("gray", "color");
+        evt.target.setAttribute('src', newStrLink);
+    });
+}
+
 var feedback_data_example = {
     "_id": "5b2ceb1b6b71e62eb22d6a46",
     "popup_header_text": "Widget 1",
@@ -394,7 +420,7 @@ var feedback_data_example = {
     "is_active": "true"
 };
 Countly.feedback.create = function(){
-    
+
 }
 Countly.feedback.set = function(score){
     score = Number(score);
@@ -428,12 +454,12 @@ Countly.feedback.click = function(evt){
 }
 Countly.feedback.send = function(){
     let feedback_data = {
-        score: getId('countly-feedback-score').value,
-        comment: getId('countly-feedback-comment').value,
-        email: getId('countly-feedback-email').value,
-        isComment: getId('countly-feedback-isComment').value, 
-        isEmail: getId('countly-feedback-isEmail').value
+        comment: getId("countly-comment").value,
+        email: getId("countly-email").value,
+        isComment: getId("commentCheckbox").checked,
+        score: 0
     };
+    console.log(feedback_data)
     return feedback_data;
 };
 query('countly-footer-btn').addEventListener('click', Countly.feedback.send);

@@ -77,35 +77,35 @@
         <div class="countly-feedback open">
             <div class="countly-feedback-header">What's your opinion about this page?</div>
             <div class="countly-feedback-content">
-                <span data-score="1">
-                    <img src="https://try.count.ly/star-rating/images/star-rating/0_gray.svg"/>
+                <span>
+                    <img class="rating-emotion" data-score="1" src="https://try.count.ly/star-rating/images/star-rating/0_gray.svg"/>
                 </span>
-                <span data-score="2">
-                    <img src="https://try.count.ly/star-rating/images/star-rating/1_gray.svg"/>
+                <span>
+                    <img class="rating-emotion" data-score="2" src="https://try.count.ly/star-rating/images/star-rating/1_gray.svg"/>
                 </span>
-                <span data-score="3">
-                    <img src="https://try.count.ly/star-rating/images/star-rating/2_gray.svg"/>
+                <span>
+                    <img class="rating-emotion" data-score="3" src="https://try.count.ly/star-rating/images/star-rating/2_gray.svg"/>
                 </span>
-                <span data-score="4">
-                    <img src="https://try.count.ly/star-rating/images/star-rating/3_gray.svg"/>
+                <span>
+                    <img class="rating-emotion" data-score="4" src="https://try.count.ly/star-rating/images/star-rating/3_gray.svg"/>
                 </span>
-                <span data-score="5">
-                    <img src="https://try.count.ly/star-rating/images/star-rating/4_gray.svg"/>
+                <span>
+                    <img class="rating-emotion" data-score="5" src="https://try.count.ly/star-rating/images/star-rating/4_gray.svg"/>
                 </span>
+
                 <p>
-                    <input type="checkbox" name="commentCheckbox" value="comment" id="isComment"> 
+                    <input type="checkbox" id="commentCheckbox" class="check-data" data-id="countly-comment">
                     <span>comment</span>
                     </br>
-                    <textarea rows="4" name="comment" id="countly-comment"></textarea>
+                    <textarea rows="4" name="comment" id="countly-comment" style="display:none;"></textarea>
                 </p>
                 <p>
-                    <input type="checkbox" name="emailCheckbox" id="isEmail"> 
+                    <input type="checkbox" class="check-data"  data-id="countly-email">
                     <span>email callout</span>
                     </br>
-                    <input type="text" name="email" id="countly-email">
+                    <input type="text" name="email" id="countly-email" style="display:none">
                 </p>
                 <button class="countly-footer-btn">Button</button>
-                
             </div>
             <div class="countly-feedback-divider"></div>
             <div class="countly-feedback-dismiss"><img src="https://try.count.ly/star-rating/images/star-rating/powered-by-countly.svg"/></div>
@@ -232,12 +232,12 @@
         options.byear = 1989;
         Countly.setUserData(options);
     };
-    
+
     app.setCaptianAmericaData = function() {
         // example for setCaptianAmericaData
         var deviceId = makeid();
         Countly.changeDeviceId(deviceId, false);
-        
+
         var options = {};
         options.name = "Captian America";
         options.username = "captianamerica";
@@ -249,14 +249,14 @@
         options.gender = "M"; // "F"
         options.byear = 1989;
         Countly.setUserData(options);
-                
+
     };
-    
+
     app.setIronManData = function() {
-        // example for setIronManData 
+        // example for setIronManData
         var deviceId = makeid();
         Countly.changeDeviceId(deviceId, false);
-        
+
         var options = {};
         options.name = "Iron Man";
         options.username = "ironman";
@@ -270,11 +270,11 @@
         Countly.setUserData(options);
         Countly.start();
     };
-    
+
     app.setSpiderManData = function() {
         var deviceId = makeid();
         Countly.changeDeviceId(deviceId, false);
-        
+
         var options = {};
         options.name = "Spider-Man";
         options.username = "spiderman";
@@ -288,10 +288,10 @@
         Countly.setUserData(options);
         Countly.start();
     };
-    
 
 
-    
+
+
     app.setloggingenabled = function() {
         // example for setLoggingEnabled
         Countly.setLoggingEnabled();
@@ -490,8 +490,8 @@
     app.userData.setOnce = function() {
         Countly.userData.setOnce("setOnce", 200);
     }
-    
-    
+
+
     // /** Use StackTrace to log all exceptions **/
     // (function(){
     //     if (window.StackTrace) {
@@ -506,7 +506,7 @@
     /*
     @dev instructions for personal modification
 
-    
+
     cordova -v
     8.1.2 (cordova-lib@8.1.1)
     countly -v
@@ -530,7 +530,7 @@
 
     cordova plugin add https://github.com/Countly/countly-sdk-js.git
     cordova plugin add /Users/trinisoft/office/countly/plugins/countly-sdk-js
-    
+
     cd www/
     rm index.html
     wget https://raw.githubusercontent.com/Countly/countly-sdk-js/master/index.html
@@ -596,7 +596,7 @@
 
     Step 10:  Install the push plugin
             cordova plugin add phonegap-plugin-push
-            
+
     Step 11:  Build the app, and test push notifications.
 
     https://drive.google.com/file/d/1xH6L5nI6hntfnbRis9VEOyTgy9C03Sqw/view?usp=sharing
