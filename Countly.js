@@ -375,8 +375,10 @@ Countly.rating.set = function(rating){
 // Feedback
 Countly.feedback = {};
 Countly.feedback.config = {
-    headerText: '',
-
+    popup_header_text: 'Header',
+    popup_email_callout: '',
+    popup_comment_callout: '',
+    popup_thanks_message: ''
 }
 var chekedElement = document.getElementsByClassName("check-data");
 for(var i = 0; i< chekedElement.length; i++ ){
