@@ -189,7 +189,7 @@ Countly.addCrashLog = function(crashLog){
 };
 Countly.logException = function(exception, nonfatal, segments){
     var exceptionString = "";
-    if (Array.isArray(exceptionString)) {
+    if (Array.isArray(exception)) {
         for(var i=0, il=exception.length; i<il; i++){
             if (typeof exception[i] === 'string') {
                 exceptionString += exception[i] + "\n";
@@ -200,7 +200,7 @@ Countly.logException = function(exception, nonfatal, segments){
                 exceptionString += "lineNumber: " +exception[i].lineNumber + "\n";
             }
         }
-    } else if (typeof exceptionString === "string") {
+    } else if (typeof exception === "string") {
         exceptionString = exception;
     }
 
