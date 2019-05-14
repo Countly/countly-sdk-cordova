@@ -158,16 +158,20 @@ Countly.onError = function(error){
 Countly.setOptionalParametersForInitialization = function(options){
 
     var args = [];
-    if(options.latitude && !options.latitude.match('.')){
+
+    options.latitude = String(options.latitude);
+    options.longitude = String(options.longitude);
+    if(options.latitude && !options.latitude.match('\\.')){
         options.latitude +=  ".00";
     }
-    if(options.longitude && !options.longitude.match('.')){
+    if(options.longitude && !options.longitude.match('\\.')){
         options.longitude +=  ".00";
     }
+
     args.push(options.city || "");
     args.push(options.country || "");
-    args.push(String(options.latitude) || "0.0");
-    args.push(String(options.longitude) || "0.0");
+    args.push(options.latitude || "0.0");
+    args.push(options.longitude || "0.0");
     args.push(String(options.ipAddress) || "0.0.0.0");
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setOptionalParametersForInitialization",args);
