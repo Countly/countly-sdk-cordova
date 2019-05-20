@@ -199,18 +199,27 @@ Countly.addCrashLog = function(crashLog){
 };
 Countly.logException = function(exception, nonfatal, segments){
     var exceptionString = "";
-    for(var i=0,il=exception.length;i<il;i++){
-        exceptionString += "columnNumber: " +exception[i].columnNumber +"\n";
-        exceptionString += "fileName: " +exception[i].fileName +"\n";
-        exceptionString += "functionName: " +exception[i].functionName +"\n";
-        exceptionString += "lineNumber: " +exception[i].lineNumber +"\n";
+    if (Array.isArray(exception)) {
+        for(var i=0, il=exception.length; i<il; i++){
+            if (typeof exception[i] === 'string') {
+                exceptionString += exception[i] + "\n";
+            } else {
+                exceptionString += "columnNumber: " +exception[i].columnNumber + "\n";
+                exceptionString += "fileName: " +exception[i].fileName + "\n";
+                exceptionString += "functionName: " +exception[i].functionName + "\n";
+                exceptionString += "lineNumber: " +exception[i].lineNumber + "\n";
+            }
+        }
+    } else if (typeof exception === "string") {
+        exceptionString = exception;
     }
+
     var args = [];
     args.push(exceptionString || "");
     args.push(nonfatal || false);
     for(var key in segments){
         args.push(key);
-        args.push(segments.toString());
+        args.push(segments[key].toString());
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
