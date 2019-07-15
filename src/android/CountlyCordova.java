@@ -17,7 +17,10 @@ import android.util.Log;
 import ly.count.android.sdk.Countly;
 
 public class CountlyCordova extends CordovaPlugin {
-
+    public enum CountlyMessagingMode {
+        TEST,
+        PRODUCTION,
+    }
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         Context context = this.cordova.getActivity().getApplicationContext();
         if ("init".equals(action)) {
@@ -98,8 +101,18 @@ public class CountlyCordova extends CordovaPlugin {
             Countly.sharedInstance().setCustomCrashSegments(segments);
 
             Countly.sharedInstance().logException(exception);
-            
+
             callbackContext.success("logException success!");
+            return true;
+        }else if ("sendPushToken".equals(action)) {
+            String token = args.getString(0);
+            int messagingMode = Integer.parseInt(args.getString(1));
+            if(messagingMode == 0){
+                Countly.sharedInstance().sendPushToken(token, Countly.CountlyMessagingMode.PRODUCTION);
+            }else{
+                Countly.sharedInstance().sendPushToken(token, Countly.CountlyMessagingMode.TEST);
+            }
+            callbackContext.success("setloggingenabled success!");
             return true;
         }
 

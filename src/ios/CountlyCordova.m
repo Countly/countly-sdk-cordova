@@ -22,18 +22,18 @@ CountlyConfig* config = nil;
     NSString* serverurl = [command.arguments objectAtIndex:0];
     NSString* appkey = [command.arguments objectAtIndex:1];
     NSString* deviceID = @"";
-    
+
     if(config == nil){
         config = CountlyConfig.new;
     }
     config.appKey = appkey;
     config.host = serverurl;
-    
+
     if(command.arguments.count == 3){
         deviceID = [command.arguments objectAtIndex:2];
         config.deviceID = deviceID;
     }
-    
+
     if (serverurl != nil && [serverurl length] > 0) {
         [[Countly sharedInstance] startWithConfig:config];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"initialized!"];
@@ -46,7 +46,7 @@ CountlyConfig* config = nil;
         deviceID = [command.arguments objectAtIndex:2];
         [Countly.sharedInstance setNewDeviceID:deviceID onServer:YES];   //replace and merge on server
     }
-    
+
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -210,13 +210,13 @@ CountlyConfig* config = nil;
 {
     NSString* newDeviceID = [command.arguments objectAtIndex:0];
     NSString* onServerString = [command.arguments objectAtIndex:1];
-    
+
     if ([onServerString  isEqual: @"true"]) {
         [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: YES];
     }else{
         [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: NO];
     }
-    
+
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"changeDeviceId!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -251,7 +251,7 @@ CountlyConfig* config = nil;
 
 - (void)endEvent:(CDVInvokedUrlCommand*)command
 {
-    
+
     NSString* eventType = [command.arguments objectAtIndex:0];
     CDVPluginResult* pluginResult = nil;
 
@@ -268,7 +268,7 @@ CountlyConfig* config = nil;
         int sumInt = [sumString intValue];
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
-        
+
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
     }
     else if ([eventType  isEqual: @"eventWithSegment"]){
@@ -294,7 +294,7 @@ CountlyConfig* config = nil;
             dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
         }
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
-        
+
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
     }
     else{
@@ -345,18 +345,30 @@ CountlyConfig* config = nil;
     NSArray *nsException = [execption componentsSeparatedByString:@"\n"];
 
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    
+
     for(int i=2,il=(int)command.arguments.count;i<il;i+=2){
         dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
     }
     [dict setObject:nonfatal forKey:@"nonfatal"];
 
     NSException* myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:dict];
-    
+
     [Countly.sharedInstance recordHandledException:myException withStackTrace: nsException];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"logException!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)sendPushToken:(CDVInvokedUrlCommand*)command
+{
+    NSString* token = [command.arguments objectAtIndex:0];
+    int messagingMode = [[command.arguments objectAtIndex:1] intValue];
+
+    [Countly.sharedInstance sendPushToken:token messagingMode: messagingMode];
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"sendPushToken!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 

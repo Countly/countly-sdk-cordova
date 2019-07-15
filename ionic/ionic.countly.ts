@@ -54,15 +54,20 @@ sendEvent(options: any) {
 
     args.push(eventType);
 
-    if (options.eventName)
+    if(options.eventName)
         args.push(options.eventName.toString());
-    if (options.eventCount)
+    if(options.eventCount){
         args.push(options.eventCount.toString());
-    if (options.eventSum)
+    }else{
+        args.push("1");
+    }
+    if(options.eventSum){
         args.push(options.eventSum.toString());
+    }
 
-    if (options.segments)
+    if(options.segments){
         segments = options.segments;
+    }
     for (var event in segments) {
         args.push(event);
         args.push(segments[event]);
@@ -97,37 +102,45 @@ setUserData(options: any) {
 getDeviceID(successCallback: any, failureCallback: any){
     cordova.exec(successCallback, failureCallback, "CountlyCordova", "getDeviceID", []);
 }
-sendPushToken(options: any, successCallback: any, failureCallback: any){
-    let self:any = this;
-    successCallback = successCallback || this.onSuccess;
-    failureCallback = failureCallback || this.onError;
-    if(!self.appKey){
-        return failureCallback('Countly sdk is not initialized.')
-    }
-    self.getDeviceID(function(deviceId){
-        var data = {
-            device_id: deviceId,
-            app_key: self.appKey,
-            token_session: 1,
-            test_mode: options.messagingMode,
-            android_token: options.token,
-            ios_token: options.token
-        };
-        if (self.isAndroid) {
-            delete data.ios_token;
-        }
-        if (self.isiOS) {
-            delete data.android_token;
-        }
-        self.post('/i', data, successCallback);
-    }, failureCallback);
-}
+// Depricated method.
+// sendPushToken(options: any, successCallback: any, failureCallback: any){
+//     let self:any = this;
+//     successCallback = successCallback || this.onSuccess;
+//     failureCallback = failureCallback || this.onError;
+//     if(!self.appKey){
+//         return failureCallback('Countly sdk is not initialized.')
+//     }
+//     self.getDeviceID(function(deviceId){
+//         var data = {
+//             device_id: deviceId,
+//             app_key: self.appKey,
+//             token_session: 1,
+//             test_mode: options.messagingMode,
+//             android_token: options.token,
+//             ios_token: options.token
+//         };
+//         if (self.isAndroid) {
+//             delete data.ios_token;
+//         }
+//         if (self.isiOS) {
+//             delete data.android_token;
+//         }
+//         self.post('/i', data, successCallback);
+//     }, failureCallback);
+// }
 onRegistrationId(options: any) {
     let args = [];
     args.push(options.registrationId || "");
     args.push(this.messagingMode || this.messagingMode.PRODUCTION);
     args.push(options.projectId || "");
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "onregistrationid", args);
+}
+
+sendPushToken(options: any) {
+    let args = [];
+    args.push(options.token || "");
+    args.push(options.messagingMode.toString() || this.messagingMode.PRODUCTION.toString());
+    cordova.exec(this.onSuccess,this.onError,"CountlyCordova","sendPushToken",args);
 }
 // // countly start for android
 start() {
@@ -153,10 +166,19 @@ onError(error: any) {
 setOptionalParametersForInitialization(options: any) {
 
     let args = [];
+    options.latitude = String(options.latitude);
+    options.longitude = String(options.longitude);
+    if(options.latitude && !options.latitude.match('\\.')){
+        options.latitude +=  ".00";
+    }
+    if(options.longitude && !options.longitude.match('\\.')){
+        options.longitude +=  ".00";
+    }
+
     args.push(options.city || "");
     args.push(options.country || "");
-    args.push(String(options.latitude) || "0.0");
-    args.push(String(options.longitude) || "0.0");
+    args.push(options.latitude || "0.0");
+    args.push(options.longitude || "0.0");
     args.push(String(options.ipAddress) || "0.0.0.0");
 
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "setOptionalParametersForInitialization", args);
@@ -164,10 +186,21 @@ setOptionalParametersForInitialization(options: any) {
 setLocation(newDeviceID: string) {
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "setLocation", [newDeviceID.toString() || ""]);
 }
-changeDeviceId(newDeviceID: string) {
-    cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "changeDeviceId", [newDeviceID.toString() || ""]);
+changeDeviceId(newDeviceID: string, onServer: Boolean) {
+    let onServerString = "";
+    if(onServer === false){
+        onServerString = "0";
+    }else{
+        onServerString = "1";
+    }
+    newDeviceID = newDeviceID.toString() || "";
+    cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "changeDeviceId", [newDeviceID, onServerString]);
 }
+
+isCrashReportingEnabled = false;
+
 enableCrashReporting() {
+    this.isCrashReportingEnabled = true;
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "enableCrashReporting", []);
 }
 
@@ -176,21 +209,38 @@ addCrashLog(crashLog) {
 }
 
 logException(exception: any, nonfatal: Boolean, segments: any) {
-    var exceptionstring = "";
-    for (var i = 0, il = exception.length; i < il; i++) {
-        exceptionstring += "columnNumber: " + exception[i].columnNumber + "\n";
-        exceptionstring += "fileName: " + exception[i].fileName + "\n";
-        exceptionstring += "functionName: " + exception[i].functionName + "\n";
-        exceptionstring += "lineNumber: " + exception[i].lineNumber + "\n";
+    var exceptionString = "";
+    if (Array.isArray(exception)) {
+        for(var i=0, il=exception.length; i<il; i++){
+            if (typeof exception[i] === 'string') {
+                exceptionString += exception[i] + "\n";
+            } else {
+                exceptionString += "columnNumber: " +exception[i].columnNumber + "\n";
+                exceptionString += "fileName: " +exception[i].fileName + "\n";
+                exceptionString += "functionName: " +exception[i].functionName + "\n";
+                exceptionString += "lineNumber: " +exception[i].lineNumber + "\n";
+            }
+        }
+    } else if (typeof exception === "string") {
+        exceptionString = exception;
     }
+
     var args = [];
-    args.push(exceptionstring || "");
+    args.push(exceptionString || "");
     args.push(nonfatal || false);
-    for (var key in segments) {
+    for(var key in segments){
         args.push(key);
-        args.push(segments.toString());
+        args.push(segments[key].toString());
     }
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "logException", args);
+}
+
+startSession(){
+    cordova.exec(this.onSuccess,this.onError,"CountlyCordova","startSession",[]);
+}
+
+endSession(){
+    cordova.exec(this.onSuccess,this.onError,"CountlyCordova","endSession",[]);
 }
 
 enableParameterTamperingProtection(salt: any) {
@@ -200,31 +250,34 @@ startEvent(eventName: string) {
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "startEvent", [eventName.toString() || ""]);
 }
 endEvent(options: any) {
-    if (typeof options === "string")
-        options = {
-            eventName: options
-        };
-    let args = [];
-    let eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
-    let segments = {};
+    if(typeof options === "string")
+        options = {eventName: options};
+    var args = [];
+    var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
+    var segments = {};
 
-    if (options.eventSum)
+    if(options.eventSum)
         eventType = "eventWithSum";
-    if (options.segments)
+    if(options.segments)
         eventType = "eventWithSegment";
-    if (options.segments && options.eventSum)
+    if(options.segments && options.eventSum)
         eventType = "eventWithSumSegment";
 
     args.push(eventType);
 
-    if (options.eventName)
-        args.push(options.eventName.toString());
-    if (options.eventCount)
-        args.push(options.eventCount.toString());
-    if (options.eventSum)
-        args.push(options.eventSum.toString());
+    if(!options.eventName)
+        options.eventName = "";
+    args.push(options.eventName.toString());
 
-    if (options.segments)
+    if(!options.eventCount)
+        options.eventCount = "1";
+    args.push(options.eventCount.toString());
+
+    if(!options.eventSum)
+        options.eventSum = "0";
+    args.push(options.eventSum.toString());
+
+    if(options.segments)
         segments = options.segments;
     for (var event in segments) {
         args.push(event);
