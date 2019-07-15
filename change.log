@@ -1,13 +1,14 @@
 Developer release notes.
 
 plugin.xml update version
-package.json update version 
+package.json update version
 package.js update version, update app.use version of meteor.js
-Countly.js update version 
+Countly.js update version
+ionic.countly.js update version
 create tag / release based on the same version
 Sync Countly.js with ngCountly.js some angular customer depends on it.
 
-Updating index.html should also update ionic/home.html 
+Updating index.html should also update ionic/home.html
 
 Making a new release on github, should also release on npm and meteor.
 Make sure all of them have the same versioning.
@@ -18,10 +19,10 @@ Provide callback to the user instead of handling the callback manually.
 
 Please review the documentation once the changes are made.
 
-npm publish
+npm publish --release
 meteor publish
 
-1.  Update both sdk to 18.08.1 Done 
+1.  Update both sdk to 18.08.1 Done
 2.  review plugin.xml files Done
    (ProxyActivity in xml file)
    (review both code to confirm no outling files)
@@ -32,7 +33,7 @@ meteor publish
 Core SDK code modified
 
 
-Previously 
+Previously
 ----------
 
 
@@ -75,7 +76,7 @@ Currently
     } CLYPushTokenMode;
 
     int testMode = CountlyPushNotifications.sharedInstance.isTestDevice;
-    
+
 
     NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",
                              kCountlyQSKeyPushTokenSession, @"1",

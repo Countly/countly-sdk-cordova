@@ -7,7 +7,7 @@ export class Countly {
     appKey: string;
     messagingMode: any;
     ready: Boolean;
-    version: "18.08.1";
+    version: "19.02.0";
     isAndroid: Boolean;
     isiOS: Boolean;
     ROOT_URL: string;
