@@ -76,6 +76,8 @@ public class CountlyStarRating {
         }
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        // View dialogLayout = inflater.inflate(R.layout.star_rating_layout, null);
+        // RatingBar ratingBar = dialogLayout.findViewById(R.id.ratingBar);
         // This is a modifield code from the core sdk, as cordova don't use native ui.
         View dialogLayout = null; // inflater.inflate(R.layout.star_rating_layout, null);
         RatingBar ratingBar = null; // (RatingBar) dialogLayout.findViewById(R.id.ratingBar);
@@ -577,11 +579,11 @@ public class CountlyStarRating {
 
                 reader = new BufferedReader(new InputStreamReader(stream));
 
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 String line = "";
 
                 while ((line = reader.readLine()) != null) {
-                    buffer.append(line+"\n");
+                    buffer.append(line).append("\n");
                 }
 
                 if(wasSuccess) {
