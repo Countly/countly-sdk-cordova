@@ -27,7 +27,7 @@ Countly.init = function(serverUrl,appKey, deviceId){
     if(serverUrl.lastIndexOf('/') === serverUrl.length -1){
         Ajax.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
     }else{
-        Ajax.ROOT_URL = serverUrl; 
+        Ajax.ROOT_URL = serverUrl;
     }
     // For push notification, sending token using pure js method.
 }
@@ -103,9 +103,9 @@ Countly.sendPushToken = function(options, successCallback, failureCallback){
     }
     Countly.getDeviceID(function(deviceId){
         var data = {
-            device_id: deviceId, 
-            app_key: Countly.appKey, 
-            token_session: 1, 
+            device_id: deviceId,
+            app_key: Countly.appKey,
+            token_session: 1,
             test_mode: options.messagingMode,
             android_token: options.token,
             ios_token: options.token
@@ -117,7 +117,7 @@ Countly.sendPushToken = function(options, successCallback, failureCallback){
             delete data.android_token;
         }
         Ajax.post('/i', data, successCallback);
-    
+
     }, failureCallback);
 
     // Old method
@@ -158,10 +158,20 @@ Countly.onError = function(error){
 Countly.setOptionalParametersForInitialization = function(options){
 
     var args = [];
+
+    options.latitude = String(options.latitude);
+    options.longitude = String(options.longitude);
+    if(options.latitude && !options.latitude.match('\\.')){
+        options.latitude +=  ".00";
+    }
+    if(options.longitude && !options.longitude.match('\\.')){
+        options.longitude +=  ".00";
+    }
+
     args.push(options.city || "");
     args.push(options.country || "");
-    args.push(String(options.latitude) || "0.0");
-    args.push(String(options.longitude) || "0.0");
+    args.push(options.latitude || "0.0");
+    args.push(options.longitude || "0.0");
     args.push(String(options.ipAddress) || "0.0.0.0");
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setOptionalParametersForInitialization",args);
@@ -189,18 +199,27 @@ Countly.addCrashLog = function(crashLog){
 };
 Countly.logException = function(exception, nonfatal, segments){
     var exceptionString = "";
-    for(var i=0,il=exception.length;i<il;i++){
-        exceptionString += "columnNumber: " +exception[i].columnNumber +"\n";
-        exceptionString += "fileName: " +exception[i].fileName +"\n";
-        exceptionString += "functionName: " +exception[i].functionName +"\n";
-        exceptionString += "lineNumber: " +exception[i].lineNumber +"\n";
+    if (Array.isArray(exception)) {
+        for(var i=0, il=exception.length; i<il; i++){
+            if (typeof exception[i] === 'string') {
+                exceptionString += exception[i] + "\n";
+            } else {
+                exceptionString += "columnNumber: " +exception[i].columnNumber + "\n";
+                exceptionString += "fileName: " +exception[i].fileName + "\n";
+                exceptionString += "functionName: " +exception[i].functionName + "\n";
+                exceptionString += "lineNumber: " +exception[i].lineNumber + "\n";
+            }
+        }
+    } else if (typeof exception === "string") {
+        exceptionString = exception;
     }
+
     var args = [];
     args.push(exceptionString || "");
     args.push(nonfatal || false);
     for(var key in segments){
         args.push(key);
-        args.push(segments.toString());
+        args.push(segments[key].toString());
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
@@ -316,7 +335,7 @@ Countly.rating.success = function(evt){
     query('countly-modal-dismiss').style.display = 'none';
     query('countly-modal-submit').style.display = 'block';
 }
-// when user clicks the submits 
+// when user clicks the submits
 Countly.rating.send = function(){
     var rating = Countly.rating.rating;
     query('countly-modal-dismiss').style.display = 'block';
