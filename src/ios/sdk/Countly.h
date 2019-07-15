@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param token The push token from Apple push server
  * @param messagingMode The messaging mode from either TEST, PRODUCTION or ADHOC.
  */
-- (void)sendPushToken:(NSString * _Nullable)token messagingMode:(int)messagingMode;
+- (void)sendPushToken:(NSString *)token messagingMode:(int)messagingMode;
 
 
 /**
