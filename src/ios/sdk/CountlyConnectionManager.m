@@ -294,6 +294,38 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
     [self proceedOnQueue];
 }
 
+#pragma mark ---
+
+- (void)sendPushTokenCustom:(NSString *)token messagingMode:(int)messagingMode
+{
+    typedef enum : NSInteger
+    {
+        CLYPushTokenModeProduction,
+        CLYPushTokenModeDevelopment,
+        CLYPushTokenModeAdHoc,
+    } CLYPushTokenMode;
+
+    int testMode;
+#ifdef DEBUG
+    testMode = CLYPushTokenModeDevelopment;
+#else
+    if(messagingMode == 0){
+        testMode = CLYPushTokenModeProduction;
+    }else{
+        testMode = CLYPushTokenModeAdHoc;
+    }
+#endif
+
+    NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",
+                             kCountlyQSKeyPushTokenSession, @"1",
+                             kCountlyQSKeyPushTokeniOS, token,
+                             kCountlyQSKeyPushTestMode, testMode];
+
+    [CountlyPersistency.sharedInstance addToQueue:queryString];
+
+    [self proceedOnQueue];
+}
+
 - (void)sendLocationInfo
 {
     NSString* location = CountlyLocationManager.sharedInstance.location.cly_URLEscaped;

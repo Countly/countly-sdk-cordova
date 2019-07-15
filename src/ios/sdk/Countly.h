@@ -38,6 +38,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setNewDeviceID:(NSString * _Nullable)deviceID onServer:(BOOL)onServer;
 
 /**
+ * Sends push token to countly server.
+ * @param token The push token from Apple push server
+ * @param messagingMode The messaging mode from either TEST, PRODUCTION or ADHOC.
+ */
+- (void)sendPushToken:(NSString * _Nullable)token messagingMode:(int)messagingMode;
+
+
+/**
  * Sets the value of the custom HTTP header field to be sent with every request if @c customHeaderFieldName is set on initial configuration.
  * @discussion If @c customHeaderFieldValue on initial configuration can not be set on app launch, this method can be used to do so later.
  * @discussion Requests not started due to missing @c customHeaderFieldValue since app launch will start hereafter.
