@@ -102,37 +102,45 @@ setUserData(options: any) {
 getDeviceID(successCallback: any, failureCallback: any){
     cordova.exec(successCallback, failureCallback, "CountlyCordova", "getDeviceID", []);
 }
-sendPushToken(options: any, successCallback: any, failureCallback: any){
-    let self:any = this;
-    successCallback = successCallback || this.onSuccess;
-    failureCallback = failureCallback || this.onError;
-    if(!self.appKey){
-        return failureCallback('Countly sdk is not initialized.')
-    }
-    self.getDeviceID(function(deviceId){
-        var data = {
-            device_id: deviceId,
-            app_key: self.appKey,
-            token_session: 1,
-            test_mode: options.messagingMode,
-            android_token: options.token,
-            ios_token: options.token
-        };
-        if (self.isAndroid) {
-            delete data.ios_token;
-        }
-        if (self.isiOS) {
-            delete data.android_token;
-        }
-        self.post('/i', data, successCallback);
-    }, failureCallback);
-}
+// Depricated method.
+// sendPushToken(options: any, successCallback: any, failureCallback: any){
+//     let self:any = this;
+//     successCallback = successCallback || this.onSuccess;
+//     failureCallback = failureCallback || this.onError;
+//     if(!self.appKey){
+//         return failureCallback('Countly sdk is not initialized.')
+//     }
+//     self.getDeviceID(function(deviceId){
+//         var data = {
+//             device_id: deviceId,
+//             app_key: self.appKey,
+//             token_session: 1,
+//             test_mode: options.messagingMode,
+//             android_token: options.token,
+//             ios_token: options.token
+//         };
+//         if (self.isAndroid) {
+//             delete data.ios_token;
+//         }
+//         if (self.isiOS) {
+//             delete data.android_token;
+//         }
+//         self.post('/i', data, successCallback);
+//     }, failureCallback);
+// }
 onRegistrationId(options: any) {
     let args = [];
     args.push(options.registrationId || "");
     args.push(this.messagingMode || this.messagingMode.PRODUCTION);
     args.push(options.projectId || "");
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "onregistrationid", args);
+}
+
+sendPushToken(options: any) {
+    let args = [];
+    args.push(options.token || "");
+    args.push(options.messagingMode.toString() || this.messagingMode.PRODUCTION.toString());
+    cordova.exec(this.onSuccess,this.onError,"CountlyCordova","sendPushToken",args);
 }
 // // countly start for android
 start() {

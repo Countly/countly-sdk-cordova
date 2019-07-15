@@ -702,6 +702,15 @@ public class Countly {
     }
 
     /**
+     * Custom event to send push token
+     * @param token
+     * @param messagingMode
+     */
+    public void sendPushToken(String token, CountlyMessagingMode messagingMode){
+        connectionQueue_.tokenSession(token, messagingMode);
+    }
+
+    /**
      * DON'T USE THIS!!!!
      */
     public void onRegistrationId(String registrationId, CountlyMessagingMode mode) {
