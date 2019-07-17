@@ -1,12 +1,13 @@
 declare var cordova: any;
 declare var window: any;
 
+var Countly_isReady = false;
+
 export class Countly {
 
     serverUrl: string;
     appKey: string;
     messagingMode: any;
-    ready: Boolean;
     version: "19.02.0";
     isAndroid: Boolean;
     isiOS: Boolean;
@@ -154,6 +155,9 @@ stop() {
 deviceready = function () {
     this.ready = true;
     //testing
+}
+isReady = function(){
+    return Countly_isReady;
 }
 // // countly dummy success and error event
 onSuccess(result: any) {
@@ -324,3 +328,8 @@ post(url: string, data: any, cb: any) {
     http.send(JSON.stringify(data));
 }
 }
+
+
+document.addEventListener('deviceready', function() {
+    Countly_isReady = true;
+}, false);
