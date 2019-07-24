@@ -247,7 +247,7 @@ addCrashLog(crashLog) {
 }
 
 logException(exception: any, nonfatal: Boolean, segments: any) {
-    this.addQueue("logException", exception, null)
+    this.addQueue("logException", exception, nonfatal )
     var exceptionString = "";
     if (Array.isArray(exception)) {
         for(var i=0, il=exception.length; i<il; i++){
@@ -331,7 +331,7 @@ endEvent(options: any) {
 }
 
 setProperty(keyName: string, keyValue: string) {
-    this.addQueue("setProperty", keyName, null)
+    this.addQueue("setProperty", keyName, keyValue)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_setProperty", [keyName.toString() || "", keyValue.toString() || ""]);
 }
 increment(keyName: string) {
@@ -339,28 +339,28 @@ increment(keyName: string) {
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_increment", [keyName.toString() || ""]);
 }
 incrementBy(keyName: string, keyIncrement: Number) {
-    this.addQueue("incrementBy", keyIncrement, null)
+    this.addQueue("incrementBy", keyName, keyIncrement)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_incrementBy", [keyName.toString() || "", keyIncrement.toString() || ""]);
 }
 multiply(keyName: string, multiplyValue: Number) {
-    this.addQueue("multiply", multiplyValue, null)
+    this.addQueue("multiply", keyName, multiplyValue)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_multiply", [keyName.toString() || "", multiplyValue.toString() || ""]);
 }
 saveMax(keyName: string, saveMax: Number) {
-    this.addQueue("saveMax", saveMax, null)
+    this.addQueue("saveMax", keyName, saveMax)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_saveMax", [keyName.toString() || "", saveMax.toString() || ""]);
 }
 saveMin(keyName: string, saveMin: Number) {
-    this.addQueue("saveMin",saveMin, null)
+    this.addQueue("saveMin",keyName, saveMin)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_saveMin", [keyName.toString() || "", saveMin.toString() || ""]);
 }
 setOnce(keyName: string, setOnce: Number) {
-    this.addQueue("setOnce", setOnce, null)
+    this.addQueue("setOnce", keyName, setOnce)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_setOnce", [keyName.toString() || "", setOnce.toString() || ""]);
 }
 Ajax:any = {};
 post(url: string, data: any, cb: any) {
-    this.addQueue("post", url, null)
+    this.addQueue("post", url, data)
     if(!data)
         data = {};
     var http = new XMLHttpRequest();
