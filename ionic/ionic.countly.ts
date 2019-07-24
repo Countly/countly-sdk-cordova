@@ -103,11 +103,13 @@ recordView(recordView: any) {
 
 // countly enable logger
 setLoggingEnabled() {
+    this.addQueue("setLoggingEnabled",null, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "setloggingenabled", []);
 }
 
 // countly sending user data
 setUserData(options: any) {
+    this.addQueue("setUserData", options, null)
     let args = [];
     args.push(options.name || "");
     args.push(options.username || "");
@@ -122,6 +124,7 @@ setUserData(options: any) {
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "setuserdata", args);
 }
 getDeviceID(successCallback: any, failureCallback: any){
+    this.addQueue("getDeviceID", successCallback, failureCallback)
     cordova.exec(successCallback, failureCallback, "CountlyCordova", "getDeviceID", []);
 }
 // Depricated method.
@@ -151,6 +154,7 @@ getDeviceID(successCallback: any, failureCallback: any){
 //     }, failureCallback);
 // }
 onRegistrationId(options: any) {
+    this.addQueue("onRegistrationId", options, null)
     let args = [];
     args.push(options.registrationId || "");
     args.push(this.messagingMode || this.messagingMode.PRODUCTION);
@@ -159,6 +163,7 @@ onRegistrationId(options: any) {
 }
 
 sendPushToken(options: any) {
+    this.addQueue("sendPushToken", options, null)
     let args = [];
     args.push(options.token || "");
     args.push(options.messagingMode.toString() || this.messagingMode.PRODUCTION.toString());
@@ -166,10 +171,12 @@ sendPushToken(options: any) {
 }
 // // countly start for android
 start() {
+    this.addQueue("start", null, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "start", []);
 }
 // // countly stop for android
 stop() {
+    this.addQueue("stop", null, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "stop", []);
 }
 // // countly deviceready for testing purpose
@@ -182,14 +189,16 @@ isReady = function(){
 }
 // // countly dummy success and error event
 onSuccess(result: any) {
+    this.addQueue("onSuccess", result, null)
     // alert(result);
 }
 onError(error: any) {
+    this.addQueue("onError", error, null)
     // alert("error");
     // alert(error);
 }
 setOptionalParametersForInitialization(options: any) {
-
+    this.addQueue("setOptionalParametersForInitialization", options, null)
     let args = [];
     options.latitude = String(options.latitude);
     options.longitude = String(options.longitude);
@@ -209,9 +218,11 @@ setOptionalParametersForInitialization(options: any) {
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "setOptionalParametersForInitialization", args);
 }
 setLocation(newDeviceID: string) {
+    this.addQueue("setLocation", newDeviceID, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "setLocation", [newDeviceID.toString() || ""]);
 }
 changeDeviceId(newDeviceID: string, onServer: Boolean) {
+    this.addQueue("changeDeviceId", newDeviceID, onServer)
     let onServerString = "";
     if(onServer === false){
         onServerString = "0";
@@ -225,15 +236,18 @@ changeDeviceId(newDeviceID: string, onServer: Boolean) {
 isCrashReportingEnabled = false;
 
 enableCrashReporting() {
+    this.addQueue("enableCrashReporting", null, null)
     this.isCrashReportingEnabled = true;
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "enableCrashReporting", []);
 }
 
 addCrashLog(crashLog) {
+    this.addQueue("addCrashLog", crashLog, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "addCrashLog", [crashLog || ""]);
 }
 
 logException(exception: any, nonfatal: Boolean, segments: any) {
+    this.addQueue("logException", exception, null)
     var exceptionString = "";
     if (Array.isArray(exception)) {
         for(var i=0, il=exception.length; i<il; i++){
@@ -261,20 +275,25 @@ logException(exception: any, nonfatal: Boolean, segments: any) {
 }
 
 startSession(){
+    this.addQueue("startSession", null, null)
     cordova.exec(this.onSuccess,this.onError,"CountlyCordova","startSession",[]);
 }
 
 endSession(){
+    this.addQueue("endSession", null, null)
     cordova.exec(this.onSuccess,this.onError,"CountlyCordova","endSession",[]);
 }
 
 enableParameterTamperingProtection(salt: any) {
+    this.addQueue("enableParameterTamperingProtection", salt, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "enableParameterTamperingProtection", [salt.toString() || ""]);
 }
 startEvent(eventName: string) {
+    this.addQueue("startEvent", eventName, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "startEvent", [eventName.toString() || ""]);
 }
 endEvent(options: any) {
+    this.addQueue("endEvent", options, null)
     if(typeof options === "string")
         options = {eventName: options};
     var args = [];
@@ -312,28 +331,36 @@ endEvent(options: any) {
 }
 
 setProperty(keyName: string, keyValue: string) {
+    this.addQueue("setProperty", keyName, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_setProperty", [keyName.toString() || "", keyValue.toString() || ""]);
 }
 increment(keyName: string) {
+    this.addQueue("increment", keyName, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_increment", [keyName.toString() || ""]);
 }
 incrementBy(keyName: string, keyIncrement: Number) {
+    this.addQueue("incrementBy", keyIncrement, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_incrementBy", [keyName.toString() || "", keyIncrement.toString() || ""]);
 }
 multiply(keyName: string, multiplyValue: Number) {
+    this.addQueue("multiply", multiplyValue, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_multiply", [keyName.toString() || "", multiplyValue.toString() || ""]);
 }
 saveMax(keyName: string, saveMax: Number) {
+    this.addQueue("saveMax", saveMax, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_saveMax", [keyName.toString() || "", saveMax.toString() || ""]);
 }
 saveMin(keyName: string, saveMin: Number) {
+    this.addQueue("saveMin",saveMin, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_saveMin", [keyName.toString() || "", saveMin.toString() || ""]);
 }
 setOnce(keyName: string, setOnce: Number) {
+    this.addQueue("setOnce", setOnce, null)
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "userData_setOnce", [keyName.toString() || "", setOnce.toString() || ""]);
 }
 Ajax:any = {};
 post(url: string, data: any, cb: any) {
+    this.addQueue("post", url, null)
     if(!data)
         data = {};
     var http = new XMLHttpRequest();
