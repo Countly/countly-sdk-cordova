@@ -2,7 +2,8 @@ declare var cordova: any;
 declare var window: any;
 
 var Countly_isReady = false;
-
+var queue = [];
+var isInit = false;
 export class Countly {
 
     serverUrl: string;
@@ -34,14 +35,29 @@ init(serverUrl: string, appKey: string, deviceId: string) {
         args.push(deviceId || "");
     }
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "init", args);
+    isInit = true;
     if(serverUrl.lastIndexOf('/') === serverUrl.length -1){
         this.ROOT_URL = serverUrl.substring(0, serverUrl.lastIndexOf("/"));
     }else{
         this.ROOT_URL = serverUrl;
     }
 }
-addQueue(arg1: any, arg2: any, arg3: any){
 
+sendQueue(){
+    var self = this;
+    queue.forEach(function(theMethod: any){
+        self[theMethod.name](theMethod.arg[0], theMethod.arg[1]);
+    });
+    queue = [];
+}
+
+addQueue(arg1: any, arg2: any, arg3: any){
+    if(!isInit){
+        queue.push({
+            name: arg1,
+            args: [arg2, arg3]
+        });
+    }
 }
 
 sendEvent(options: any) {
