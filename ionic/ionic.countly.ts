@@ -40,8 +40,12 @@ init(serverUrl: string, appKey: string, deviceId: string) {
         this.ROOT_URL = serverUrl;
     }
 }
+addQueue(arg1: any, arg2: any, arg3: any){
+
+}
 
 sendEvent(options: any) {
+    this.addQueue('sendEvent', options, null);
     let args = [];
     let eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
     let segments = {};
@@ -77,6 +81,7 @@ sendEvent(options: any) {
 }
 
 recordView(recordView: any) {
+    this.addQueue("recordView", recordView, null);
     cordova.exec(this.onSuccess, this.onError, "CountlyCordova", "recordView", [recordView || ""]);
 }
 
