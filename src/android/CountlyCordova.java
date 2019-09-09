@@ -332,6 +332,79 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success("setOptionalParametersForInitialization sent.");
             return true;
         }
+        else if("setRemoteConfigAutomaticDownload".equals(action)){
+            Countly.sharedInstance().setRemoteConfigAutomaticDownload(true, new RemoteConfig.RemoteConfigCallback() {
+                @Override
+                public void callback(String error) {
+                    if(error == null) {
+                        callbackContext.success(error);
+                    } else {
+                        callbackContext.success("Success");
+                    }
+                }
+            });
+
+            return true;
+        }
+        else if("remoteConfigUpdate".equals(action)){
+            Countly.sharedInstance().remoteConfigUpdate(new RemoteConfig.RemoteConfigCallback() {
+                @Override
+                public void callback(String error) {
+                    if(error == null) {
+                        callbackContext.success(error);
+                    } else {
+                        callbackContext.success("Success");
+                    }
+                }
+            });
+            return true;
+        }
+        else if("updateRemoteConfigForKeysOnly".equals(action)){
+            String[] keysOnly =  {};
+            for(int i=0,il=args.length();i<il;i++){
+                keysOnly[i] = args.getString(i);;
+            }
+
+            Countly.sharedInstance().updateRemoteConfigForKeysOnly(keysOnly, new RemoteConfig.RemoteConfigCallback() {
+                @Override
+                public void callback(String error) {
+                    if(error == null) {
+                        callbackContext.success(error);
+                    } else {
+                        callbackContext.success("Success");
+                    }
+                }
+            });
+            return true;
+        }
+        else if("updateRemoteConfigExceptKeys".equals(action)){
+            String[] exceptKeys=  {};
+            for(int i=0,il=args.length();i<il;i++){
+                exceptKeys[i] = args.getString(i);;
+            }
+
+            Countly.sharedInstance().updateRemoteConfigExceptKeys(exceptKeys, new RemoteConfig.RemoteConfigCallback() {
+                @Override
+                public void callback(String error) {
+                    if(error == null) {
+                        callbackContext.success(error);
+                    } else {
+                        callbackContext.success("Success");
+                    }
+                }
+            });
+            return true;
+        }
+        else if("remoteConfigClearValues".equals(action)){
+            Countly.sharedInstance().remoteConfigClearValues();
+            callbackContext.success("Success");
+            return true;
+        }
+        else if("getRemoteConfigValueForKey".equals(action)){
+            ;
+            callbackContext.success((String)Countly.sharedInstance().getRemoteConfigValueForKey(args.getString(0)));
+            return true;
+        }
         else{
             return false;
         }
