@@ -307,6 +307,27 @@ Countly.userData.setOnce = function(keyName, setOnce){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
 };
 
+// Remote config
+Countly.setRemoteConfigAutomaticDownload = function(onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","setRemoteConfigAutomaticDownload",[]);
+}
+Countly.remoteConfigUpdate = function(onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","remoteConfigUpdate",[]);
+}
+Countly.updateRemoteConfigForKeysOnly = function(keys, onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForKeysOnly",keys);
+}
+Countly.updateRemoteConfigExceptKeys = function(keys, onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigExceptKeys",keys);
+}
+Countly.remoteConfigClearValues = function(callback, onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","remoteConfigClearValues",[]);
+}
+Countly.getRemoteConfigValueForKey = function(key, onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","getRemoteConfigValueForKey",[key]);
+}
+// Remote config
+
 // Rating
 // config
 Countly.rating = {
