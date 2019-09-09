@@ -36,4 +36,11 @@
 - (void)userData_setOnce:(CDVInvokedUrlCommand*)command;
 - (void)setOptionalParametersForInitialization:(CDVInvokedUrlCommand*)command;
 
+- (void)setRemoteConfigAutomaticDownload:(CDVInvokedUrlCommand*)command;
+- (void)remoteConfigUpdate:(CDVInvokedUrlCommand*)command;
+- (void)updateRemoteConfigForKeysOnly:(CDVInvokedUrlCommand*)command;
+- (void)updateRemoteConfigExceptKeys:(CDVInvokedUrlCommand*)command;
+- (void)remoteConfigClearValues:(CDVInvokedUrlCommand*)command;
+- (void)getRemoteConfigValueForKey:(CDVInvokedUrlCommand*)command;
+
 @end
