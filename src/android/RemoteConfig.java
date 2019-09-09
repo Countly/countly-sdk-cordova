@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.util.Iterator;
 
@@ -51,6 +50,19 @@ public class RemoteConfig {
                 excludeArray.put(key);
             }
             keysExclude = excludeArray.toString();
+        }
+
+        if(connectionQueue_.getDeviceId().getId() == null){
+            //device ID is null, abort
+            if (Countly.sharedInstance().isLoggingEnabled()) {
+                Log.d(Countly.TAG, "RemoteConfig value update was aborted, deviceID is null");
+            }
+
+            if(callback != null){
+                callback.callback("Can't complete call, device ID is null");
+            }
+
+            return;
         }
 
         ConnectionProcessor cp = connectionQueue_.createConnectionProcessor();
@@ -117,6 +129,7 @@ public class RemoteConfig {
     protected static RemoteConfigValueStore loadConfig(Context context){
         CountlyStore cs = new CountlyStore(context);
         String rcvsString = cs.getRemoteConfigValues();
+        //noinspection UnnecessaryLocalVariable
         RemoteConfigValueStore rcvs = RemoteConfigValueStore.dataFromString(rcvsString);
         return rcvs;
     }

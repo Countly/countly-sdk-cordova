@@ -60,7 +60,7 @@ public class Countly {
     /**
      * Current version of the Count.ly Android SDK as a displayable string.
      */
-    public static final String COUNTLY_SDK_VERSION_STRING = "19.02.3";
+    public static final String COUNTLY_SDK_VERSION_STRING = "19.08";
     /**
      * Used as request meta data on every request
      */
@@ -160,7 +160,7 @@ public class Countly {
 
     protected boolean isBeginSessionSent = false;
 
-    //remote config
+    //remote config_
     //if set to true, it will automatically download remote configs on module startup
     boolean remoteConfigAutomaticUpdateEnabled = false;
     RemoteConfig.RemoteConfigCallback remoteConfigInitCallback = null;
@@ -181,6 +181,8 @@ public class Countly {
 
     Boolean delayedPushConsent = null;//if this is set, consent for push has to be set before finishing init and sending push changes
     boolean delayedLocationErasure = false;//if location needs to be cleared at the end of init
+
+    CountlyConfig config_ = null;
 
     public static class CountlyFeatureNames {
         public static final String sessions = "sessions";
@@ -247,6 +249,7 @@ public class Countly {
      * @return Countly instance for easy method chaining
      * @throws IllegalArgumentException if context, serverURL, appKey, or deviceID are invalid
      * @throws IllegalStateException if the Countly SDK has already been initialized
+     * @deprecated use {@link CountlyConfig} to pass data to init.
      */
     public Countly init(final Context context, final String serverURL, final String appKey) {
         return init(context, serverURL, appKey, null, OpenUDIDAdapter.isOpenUDIDAvailable() ? DeviceId.Type.OPEN_UDID : DeviceId.Type.ADVERTISING_ID);
@@ -262,6 +265,7 @@ public class Countly {
      * @return Countly instance for easy method chaining
      * @throws IllegalArgumentException if context, serverURL, appKey, or deviceID are invalid
      * @throws IllegalStateException if init has previously been called with different values during the same application instance
+     * @deprecated use {@link CountlyConfig} to pass data to init.
      */
     public Countly init(final Context context, final String serverURL, final String appKey, final String deviceID) {
         return init(context, serverURL, appKey, deviceID, null);
@@ -278,6 +282,7 @@ public class Countly {
      * @return Countly instance for easy method chaining
      * @throws IllegalArgumentException if context, serverURL, appKey, or deviceID are invalid
      * @throws IllegalStateException if init has previously been called with different values during the same application instance
+     * @deprecated use {@link CountlyConfig} to pass data to init.
      */
     public synchronized Countly init(final Context context, final String serverURL, final String appKey, final String deviceID, DeviceId.Type idMode) {
         return init(context, serverURL, appKey, deviceID, idMode, -1, null, null, null, null);
@@ -300,43 +305,74 @@ public class Countly {
      * @return Countly instance for easy method chaining
      * @throws IllegalArgumentException if context, serverURL, appKey, or deviceID are invalid
      * @throws IllegalStateException if init has previously been called with different values during the same application instance
+     * @deprecated use {@link CountlyConfig} to pass data to init.
      */
     public synchronized Countly init(final Context context, String serverURL, final String appKey, final String deviceID, DeviceId.Type idMode,
                                      int starRatingLimit, CountlyStarRating.RatingCallback starRatingCallback, String starRatingTextTitle, String starRatingTextMessage, String starRatingTextDismiss) {
+        CountlyConfig config = new CountlyConfig();
+        config.setContext(context).setServerURL(serverURL).setAppKey(appKey).setDeviceId(deviceID)
+                .setIdMode(idMode).setStarRatingLimit(starRatingLimit).setStarRatingCallback(starRatingCallback)
+                .setStarRatingTextTitle(starRatingTextTitle).setStarRatingTextMessage(starRatingTextMessage)
+                .setStarRatingTextDismiss(starRatingTextDismiss);
+        return init(config);
+    }
 
-        if (context == null) {
+    /**
+     * Initializes the Countly SDK. Call from your main Activity's onCreate() method.
+     * Must be called before other SDK methods can be used.
+     * @param config contains all needed information to init SDK
+     */
+    public synchronized Countly init(CountlyConfig config){
+
+        if (config.context == null) {
             throw new IllegalArgumentException("valid context is required in Countly init, but was provided 'null'");
         }
 
-        if (!isValidURL(serverURL)) {
+        if (!isValidURL(config.serverURL)) {
             throw new IllegalArgumentException("valid serverURL is required");
         }
-        if (serverURL.charAt(serverURL.length() - 1) == '/') {
+
+        if(config.loggingEnabled){
+            //enable logging before any potential logging calls
+            setLoggingEnabled(true);
+        }
+
+        if(config.enableUnhandledCrashReporting){
+            enableCrashReporting();
+        }
+
+        if (config.serverURL.charAt(config.serverURL.length() - 1) == '/') {
             if (Countly.sharedInstance().isLoggingEnabled()) {
                 Log.i(Countly.TAG, "Removing trailing '/' from provided server url");
             }
-            serverURL = serverURL.substring(0, serverURL.length() - 1);//removing trailing '/' from server url
+            config.serverURL = config.serverURL.substring(0, config.serverURL.length() - 1);//removing trailing '/' from server url
         }
 
-        if (appKey == null || appKey.length() == 0) {
+        if (config.appKey == null || config.appKey.length() == 0) {
             throw new IllegalArgumentException("valid appKey is required, but was provided either 'null' or empty String");
         }
-        if (deviceID != null && deviceID.length() == 0) {
-            throw new IllegalArgumentException("valid deviceID is required, but was provided either 'null' or empty String");
+
+        if (config.deviceID != null && config.deviceID.length() == 0) {
+            //device ID is provided but it's a empty string
+            throw new IllegalArgumentException("valid deviceID is required, but was provided as empty String");
         }
-        if (deviceID == null && idMode == null) {
-            if (OpenUDIDAdapter.isOpenUDIDAvailable()) idMode = DeviceId.Type.OPEN_UDID;
-            else if (AdvertisingIdAdapter.isAdvertisingIdAvailable()) idMode = DeviceId.Type.ADVERTISING_ID;
+        if (config.deviceID == null && config.idMode == null) {
+            //device ID was not provided and no preferred mode specified. Choosing defaults
+            if (OpenUDIDAdapter.isOpenUDIDAvailable()) config.idMode = DeviceId.Type.OPEN_UDID;
+            else if (AdvertisingIdAdapter.isAdvertisingIdAvailable()) config.idMode = DeviceId.Type.ADVERTISING_ID;
         }
-        if (deviceID == null && idMode == DeviceId.Type.OPEN_UDID && !OpenUDIDAdapter.isOpenUDIDAvailable()) {
+        if (config.deviceID == null && config.idMode == DeviceId.Type.OPEN_UDID && !OpenUDIDAdapter.isOpenUDIDAvailable()) {
+            //choosing OPEN_UDID as ID type, but it's not available on this device
             throw new IllegalArgumentException("valid deviceID is required because OpenUDID is not available");
         }
-        if (deviceID == null && idMode == DeviceId.Type.ADVERTISING_ID && !AdvertisingIdAdapter.isAdvertisingIdAvailable()) {
+        if (config.deviceID == null && config.idMode == DeviceId.Type.ADVERTISING_ID && !AdvertisingIdAdapter.isAdvertisingIdAvailable()) {
+            //choosing advertising ID as type, but it's available on this device
             throw new IllegalArgumentException("valid deviceID is required because Advertising ID is not available (you need to include Google Play services 4.0+ into your project)");
         }
-        if (eventQueue_ != null && (!connectionQueue_.getServerURL().equals(serverURL) ||
-                !connectionQueue_.getAppKey().equals(appKey) ||
-                !DeviceId.deviceIDEqualsNullSafe(deviceID, idMode, connectionQueue_.getDeviceId()) )) {
+        if (eventQueue_ != null && (!connectionQueue_.getServerURL().equals(config.serverURL) ||
+                !connectionQueue_.getAppKey().equals(config.appKey) ||
+                !DeviceId.deviceIDEqualsNullSafe(config.deviceID, config.idMode, connectionQueue_.getDeviceId()) )) {
+            //not sure if this needed
             throw new IllegalStateException("Countly cannot be reinitialized with different values");
         }
 
@@ -353,10 +389,10 @@ public class Countly {
             //|- - Service
             //|- - - IntentService
 
-            Class contextClass = context.getClass();
+            Class contextClass = config.context.getClass();
             Class contextSuperClass = contextClass.getSuperclass();
 
-            String contextText = "Provided Context [" + context.getClass().getSimpleName() + "]";
+            String contextText = "Provided Context [" + config.context.getClass().getSimpleName() + "]";
             if(contextSuperClass != null){
                 contextText += ", it's superclass: [" + contextSuperClass.getSimpleName() + "]";
             }
@@ -364,17 +400,40 @@ public class Countly {
             Log.d(Countly.TAG, contextText);
 
         }
-
-        // In some cases CountlyMessaging does some background processing, so it needs a way
-        // to start Countly on itself
-        if (MessagingAdapter.isMessagingAvailable()) {
-            MessagingAdapter.storeConfiguration(context, serverURL, appKey, deviceID, idMode);
+        //init view related things
+        if(config.enableViewTracking){
+            setViewTracking(true);
         }
 
+        if(config.autoTrackingUseShortName){
+            setAutoTrackingUseShortName(true);
+        }
+
+        //init other things
+        if(config.customNetworkRequestHeaders != null){
+            addCustomNetworkRequestHeaders(config.customNetworkRequestHeaders);
+        }
+
+        if(config.pushIntentAddMetadata){
+            setPushIntentAddMetadata(true);
+        }
+
+        if(config.enableRemoteConfigAutomaticDownload){
+            setRemoteConfigAutomaticDownload(config.enableRemoteConfigAutomaticDownload, config.remoteConfigCallback);
+        }
+
+        if(config.shouldRequireConsent){
+            setRequiresConsent(true);
+            setConsent(config.enabledFeatureNames, true);
+        }
+
+        if(config.httpPostForced){
+            setHttpPostForced(true);
+        }
 
         //set the star rating values
-        starRatingCallback_ = starRatingCallback;
-        CountlyStarRating.setStarRatingInitConfig(context, starRatingLimit, starRatingTextTitle, starRatingTextMessage, starRatingTextDismiss);
+        starRatingCallback_ = config.starRatingCallback;
+        CountlyStarRating.setStarRatingInitConfig(config.context, config.starRatingLimit, config.starRatingTextTitle, config.starRatingTextMessage, config.starRatingTextDismiss);
 
         //app crawler check
         checkIfDeviceIsAppCrawler();
@@ -382,25 +441,26 @@ public class Countly {
         // if we get here and eventQueue_ != null, init is being called again with the same values,
         // so there is nothing to do, because we are already initialized with those values
         if (eventQueue_ == null) {
-            final CountlyStore countlyStore = new CountlyStore(context);
+            config_ = config;
+            final CountlyStore countlyStore = new CountlyStore(config.context);
 
             DeviceId deviceIdInstance;
-            if (deviceID != null) {
-                deviceIdInstance = new DeviceId(countlyStore, deviceID);
+            if (config.deviceID != null) {
+                deviceIdInstance = new DeviceId(countlyStore, config.deviceID);
             } else {
-                deviceIdInstance = new DeviceId(countlyStore, idMode);
+                deviceIdInstance = new DeviceId(countlyStore, config.idMode);
             }
 
 
             if (Countly.sharedInstance().isLoggingEnabled()) {
                 Log.d(Countly.TAG, "Currently cached advertising ID [" + countlyStore.getCachedAdvertisingId() + "]");
             }
-            AdvertisingIdAdapter.cacheAdvertisingID(context, countlyStore);
+            AdvertisingIdAdapter.cacheAdvertisingID(config.context, countlyStore);
 
-            deviceIdInstance.init(context, countlyStore, true);
+            deviceIdInstance.init(config.context, countlyStore, true);
 
-            connectionQueue_.setServerURL(serverURL);
-            connectionQueue_.setAppKey(appKey);
+            connectionQueue_.setServerURL(config.serverURL);
+            connectionQueue_.setAppKey(config.appKey);
             connectionQueue_.setCountlyStore(countlyStore);
             connectionQueue_.setDeviceId(deviceIdInstance);
             connectionQueue_.setRequestHeaderCustomValues(requestHeaderCustomValues);
@@ -410,11 +470,11 @@ public class Countly {
             //do star rating related things
 
             if(getConsent(CountlyFeatureNames.starRating)) {
-                CountlyStarRating.registerAppSession(context, starRatingCallback_);
+                CountlyStarRating.registerAppSession(config.context, starRatingCallback_);
             }
         }
 
-        context_ = context.getApplicationContext();
+        context_ = config.context.getApplicationContext();
 
         // context is allowed to be changed on the second init call
         connectionQueue_.setContext(context_);
@@ -445,14 +505,14 @@ public class Countly {
                 checkAllConsent();
             }
 
-            //update remote config values if automatic update is enabled
+            //update remote config_ values if automatic update is enabled
             if(remoteConfigAutomaticUpdateEnabled && anyConsentGiven()){
                 RemoteConfig.updateRemoteConfigValues(context_, null, null, connectionQueue_, false, remoteConfigInitCallback);
             }
         }
 
         //check for previous native crash dumps
-        checkForNativeCrashDumps(context);
+        checkForNativeCrashDumps(config.context);
 
         return this;
     }
@@ -464,109 +524,6 @@ public class Countly {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public synchronized boolean isInitialized() {
         return eventQueue_ != null;
-    }
-
-    /**
-     * Initializes the Countly MessagingSDK. Call from your main Activity's onCreate() method.
-     * @param activity application activity which acts as a final destination for notifications
-     * @param activityClass application activity class which acts as a final destination for notifications
-     * @param projectID ProjectID for this app from Google API Console
-     * @param mode whether this app installation is a test release or production
-     * @return Countly instance for easy method chaining
-     * @throws IllegalStateException if no CountlyMessaging class is found (you need to use countly-messaging-sdk-android library instead of countly-sdk-android)
-     */
-    public Countly initMessaging(Activity activity, Class<? extends Activity> activityClass, String projectID, Countly.CountlyMessagingMode mode) {
-        return initMessaging(activity, activityClass, projectID, null, mode, false, -1, -1, -1);
-    }
-
-    /**
-     * Initializes the Countly MessagingSDK. Call from your main Activity's onCreate() method.
-     * @param activity application activity which acts as a final destination for notifications
-     * @param activityClass application activity class which acts as a final destination for notifications
-     * @param projectID ProjectID for this app from Google API Console
-     * @param mode whether this app installation is a test release or production
-     * @param customIconResId res id for custom icon override
-     * @return Countly instance for easy method chaining
-     * @throws IllegalStateException if no CountlyMessaging class is found (you need to use countly-messaging-sdk-android library instead of countly-sdk-android)
-     */
-    public Countly initMessaging(Activity activity, Class<? extends Activity> activityClass, String projectID, Countly.CountlyMessagingMode mode, int customIconResId) {
-        return initMessaging(activity, activityClass, projectID, null, mode, false, customIconResId, -1, -1);
-    }
-
-    /**
-     * Initializes the Countly MessagingSDK. Call from your main Activity's onCreate() method.
-     * @param activity application activity which acts as a final destination for notifications
-     * @param activityClass application activity class which acts as a final destination for notifications
-     * @param projectID ProjectID for this app from Google API Console
-     * @param mode whether this app installation is a test release or production
-     * @param disableUI don't display dialogs & notifications when receiving push notification
-     * @return Countly instance for easy method chaining
-     * @throws IllegalStateException if no CountlyMessaging class is found (you need to use countly-messaging-sdk-android library instead of countly-sdk-android)
-     */
-    public Countly initMessaging(Activity activity, Class<? extends Activity> activityClass, String projectID, Countly.CountlyMessagingMode mode, boolean disableUI) {
-        return initMessaging(activity, activityClass, projectID, null, mode, disableUI, -1, -1, -1);
-    }
-    /**
-     * Initializes the Countly MessagingSDK. Call from your main Activity's onCreate() method.
-     * @param activity application activity which acts as a final destination for notifications
-     * @param activityClass application activity class which acts as a final destination for notifications
-     * @param projectID ProjectID for this app from Google API Console
-     * @param buttonNames Strings to use when displaying Dialogs (uses new String[]{"Open", "Review"} by default)
-     * @param mode whether this app installation is a test release or production
-     * @return Countly instance for easy method chaining
-     * @throws IllegalStateException if no CountlyMessaging class is found (you need to use countly-messaging-sdk-android library instead of countly-sdk-android)
-     */
-    public synchronized Countly initMessaging(Activity activity, Class<? extends Activity> activityClass, String projectID, String[] buttonNames, Countly.CountlyMessagingMode mode) {
-        return initMessaging(activity, activityClass, projectID, buttonNames, mode, false, -1, -1, -1);
-    }
-
-    /**
-     * Initializes the Countly MessagingSDK. Call from your main Activity's onCreate() method.
-     * @param activity application activity which acts as a final destination for notifications
-     * @param activityClass application activity class which acts as a final destination for notifications
-     * @param projectID ProjectID for this app from Google API Console
-     * @param buttonNames Strings to use when displaying Dialogs (uses new String[]{"Open", "Review"} by default)
-     * @param mode whether this app installation is a test release or production
-     * @param disableUI don't display dialogs & notifications when receiving push notification
-     * @return Countly instance for easy method chaining
-     * @throws IllegalStateException if no CountlyMessaging class is found (you need to use countly-messaging-sdk-android library instead of countly-sdk-android)
-     */
-    public synchronized Countly initMessaging(Activity activity, Class<? extends Activity> activityClass, String projectID, String[] buttonNames, Countly.CountlyMessagingMode mode, boolean disableUI) {
-        return initMessaging(activity, activityClass, projectID, buttonNames, mode, disableUI, -1, -1, -1);
-    }
-
-    /**
-     * Initializes the Countly MessagingSDK. Call from your main Activity's onCreate() method.
-     * @param activity application activity which acts as a final destination for notifications
-     * @param activityClass application activity class which acts as a final destination for notifications
-     * @param projectID ProjectID for this app from Google API Console
-     * @param buttonNames Strings to use when displaying Dialogs (uses new String[]{"Open", "Review"} by default)
-     * @param mode whether this app installation is a test release or production
-     * @param disableUI don't display dialogs & notifications when receiving push notification
-     * @param customSmallIconResId res id for custom icon override
-     * @return Countly instance for easy method chaining
-     * @throws IllegalStateException if no CountlyMessaging class is found (you need to use countly-messaging-sdk-android library instead of countly-sdk-android)
-     */
-    public synchronized Countly initMessaging(Activity activity, Class<? extends Activity> activityClass, String projectID, String[] buttonNames, Countly.CountlyMessagingMode mode, boolean disableUI, int customSmallIconResId, int customLargeIconRes, int customAccentColor) {
-        try {
-            Class.forName("ly.count.android.sdk.messaging.CountlyPush");
-            throw new IllegalStateException("Please remove initMessaging() call, for FCM integration you need to use CountlyPush class");
-        } catch (ClassNotFoundException ignored) { }
-
-        if (mode != null && !MessagingAdapter.isMessagingAvailable()) {
-            throw new IllegalStateException("you need to include sdk-messaging library instead of sdk if you want to use Countly Messaging");
-        } else {
-            messagingMode_ = mode;
-            if (!MessagingAdapter.init(activity, activityClass, projectID, buttonNames, disableUI, customSmallIconResId, addMetadataToPushIntents, customLargeIconRes, customAccentColor)) {
-                throw new IllegalStateException("couldn't initialize Countly Messaging");
-            }
-        }
-
-        if (MessagingAdapter.isMessagingAvailable()) {
-            MessagingAdapter.storeConfiguration(connectionQueue_.getContext(), connectionQueue_.getServerURL(), connectionQueue_.getAppKey(), connectionQueue_.getDeviceId().getId(), connectionQueue_.getDeviceId().getType());
-        }
-
-        return this;
     }
 
     /**
@@ -702,15 +659,6 @@ public class Countly {
     }
 
     /**
-     * Custom event to send push token
-     * @param token
-     * @param messagingMode
-     */
-    public void sendPushToken(String token, CountlyMessagingMode messagingMode){
-        connectionQueue_.tokenSession(token, messagingMode);
-    }
-
-    /**
      * DON'T USE THIS!!!!
      */
     public void onRegistrationId(String registrationId, CountlyMessagingMode mode) {
@@ -729,14 +677,14 @@ public class Countly {
      */
     public void changeDeviceId(DeviceId.Type type, String deviceId) {
         if (Countly.sharedInstance().isLoggingEnabled()) {
-            Log.d(Countly.TAG, "Changing device ID");
+            Log.d(Countly.TAG, "Changing device ID with type and ID");
         }
         if (eventQueue_ == null) {
             throw new IllegalStateException("init must be called before changeDeviceId");
         }
-        if (activityCount_ == 0) {
-            throw new IllegalStateException("must call onStart before changeDeviceId");
-        }
+        //if (activityCount_ == 0) {
+//            throw new IllegalStateException("must call onStart before changeDeviceId");
+//        }
         if (type == null) {
             throw new IllegalStateException("type cannot be null");
         }
@@ -752,7 +700,7 @@ public class Countly {
         connectionQueue_.getDeviceId().changeToId(context_, connectionQueue_.getCountlyStore(), type, deviceId);
         connectionQueue_.beginSession();
 
-        //update remote config values if automatic update is enabled
+        //update remote config_ values if automatic update is enabled
         remoteConfigClearValues();
         if(remoteConfigAutomaticUpdateEnabled && anyConsentGiven()){
             RemoteConfig.updateRemoteConfigValues(context_, null, null, connectionQueue_, false, null);
@@ -766,14 +714,14 @@ public class Countly {
      */
     public void changeDeviceId(String deviceId) {
         if (Countly.sharedInstance().isLoggingEnabled()) {
-            Log.d(Countly.TAG, "Changing device ID");
+            Log.d(Countly.TAG, "Changing device ID with ID");
         }
-        if (eventQueue_ == null) {
+        if (!isInitialized()) {
             throw new IllegalStateException("init must be called before changeDeviceId");
         }
-        if (activityCount_ == 0) {
-            throw new IllegalStateException("must call onStart before changeDeviceId");
-        }
+        //if (activityCount_ == 0) {
+//            throw new IllegalStateException("must call onStart before changeDeviceId");
+//        }
         if (deviceId == null || "".equals(deviceId)) {
             throw new IllegalStateException("deviceId cannot be null or empty");
         }
@@ -787,7 +735,7 @@ public class Countly {
 
         connectionQueue_.changeDeviceId(deviceId, roundedSecondsSinceLastSessionDurationUpdate());
 
-        //update remote config values if automatic update is enabled
+        //update remote config_ values if automatic update is enabled
         remoteConfigClearValues();
         if(remoteConfigAutomaticUpdateEnabled && anyConsentGiven()){
             //request should be delayed, because of the delayed server merge
@@ -953,6 +901,7 @@ public class Countly {
     /**
      * Enable or disable automatic view tracking
      * @param enable boolean for the state of automatic view tracking
+     * @deprecated use CountlyConfig during init to set this
      * @return Returns link to Countly for call chaining
      */
     public synchronized Countly setViewTracking(boolean enable){
@@ -1244,7 +1193,7 @@ public class Countly {
 
     /**
      * Called during init to check if there are any crash dumps saved
-     * @param context
+     * @param context android context
      */
     protected synchronized void checkForNativeCrashDumps(Context context){
         Log.d(TAG, "Checking for native crash dumps");
@@ -1370,6 +1319,7 @@ public class Countly {
 
     /**
      * Enable crash reporting to send unhandled crash reports to server
+     * @deprecated use CountlyConfig during init to set this
      * @return Returns link to Countly for call chaining
      */
     public synchronized Countly enableCrashReporting() {
@@ -1549,6 +1499,7 @@ public class Countly {
     /**
      * Sets whether debug logging is turned on or off. Logging is disabled by default.
      * @param enableLogging true to enable logging, false to disable logging
+     * @deprecated use CountlyConfig during init to set this
      * @return Countly instance for easy method chaining
      */
     public synchronized Countly setLoggingEnabled(final boolean enableLogging) {
@@ -1615,7 +1566,7 @@ public class Countly {
      */
     private void reportViewDuration(){
         if (sharedInstance().isLoggingEnabled()) {
-            Log.d(Countly.TAG, "View [" + lastView + "] is getting closed, reporting duration: [" + String.valueOf(Countly.currentTimestamp() - lastViewStart) + "]");
+            Log.d(Countly.TAG, "View [" + lastView + "] is getting closed, reporting duration: [" + (Countly.currentTimestamp() - lastViewStart) + "], current timestamp: [" + Countly.currentTimestamp() + "], last views start: [" + lastViewStart + "]");
         }
 
         if(lastView != null && lastViewStart <= 0) {
@@ -1763,6 +1714,7 @@ public class Countly {
     /**
      * Utility method for testing validity of a URL.
      */
+    @SuppressWarnings("ConstantConditions")
     static boolean isValidURL(final String urlStr) {
         boolean validURL = false;
         if (urlStr != null && urlStr.length() > 0) {
@@ -1994,6 +1946,7 @@ public class Countly {
     /**
      * Set the override for forcing to use HTTP POST for all connections to the server
      * @param isItForced the flag for the new status, set "true" if you want it to be forced
+     * @deprecated use CountlyConfig during init to set this
      */
     public synchronized Countly setHttpPostForced(boolean isItForced) {
 
@@ -2087,6 +2040,11 @@ public class Countly {
         return connectionQueue_.getDeviceId().getType();
     }
 
+    /**
+     * @deprecated use CountlyConfig during init to set this
+     * @param shouldAddMetadata
+     * @return
+     */
     public synchronized Countly setPushIntentAddMetadata(boolean shouldAddMetadata) {
         if (Countly.sharedInstance().isLoggingEnabled()) {
             Log.d(Countly.TAG, "Setting if adding metadata to push intents: [" + shouldAddMetadata + "]");
@@ -2097,6 +2055,7 @@ public class Countly {
 
     /**
      * Set if automatic activity tracking should use short names
+     * @deprecated use CountlyConfig during init to set this
      * @param shouldUseShortName set true if you want short names
      */
     public synchronized Countly setAutoTrackingUseShortName(boolean shouldUseShortName) {
@@ -2119,6 +2078,11 @@ public class Countly {
         return this;
     }
 
+    /**
+     * @deprecated use CountlyConfig during init to set this
+     * @param shouldRequireConsent
+     * @return
+     */
     public synchronized Countly setRequiresConsent(boolean shouldRequireConsent){
         if (Countly.sharedInstance().isLoggingEnabled()) {
             Log.d(Countly.TAG, "Setting if consent should be required, [" + shouldRequireConsent + "]");
@@ -2237,10 +2201,16 @@ public class Countly {
      * Set the consent of a feature
      * @param featureNames feature names for which consent should be changed
      * @param isConsentGiven the consent value that should be set
+     * @deprecated use CountlyConfig during init to set this
      * @return Returns link to Countly for call chaining
      */
     public synchronized Countly setConsent(String[] featureNames, boolean isConsentGiven){
         final boolean isInit = isInitialized();//is the SDK initialized
+
+        if(!requiresConsent){
+            //if consent is not required, ignore all calls to it
+            return this;
+        }
 
         boolean previousSessionsConsent = false;
         if(featureConsentValues.containsKey(CountlyFeatureNames.sessions)){
@@ -2326,7 +2296,7 @@ public class Countly {
      */
     public synchronized Countly giveConsent(String[] featureNames){
         if (Countly.sharedInstance().isLoggingEnabled()) {
-            Log.d(Countly.TAG, "Giving consent for features named: [" + featureNames.toString() + "]");
+            Log.d(Countly.TAG, "Giving consent for features named: [" + Arrays.toString(featureNames) + "]");
         }
         setConsent(featureNames, true);
 
@@ -2340,7 +2310,7 @@ public class Countly {
      */
     public synchronized Countly removeConsent(String[] featureNames){
         if (Countly.sharedInstance().isLoggingEnabled()) {
-            Log.d(Countly.TAG, "Removing consent for features named: [" + featureNames.toString() + "]");
+            Log.d(Countly.TAG, "Removing consent for features named: [" + Arrays.toString(featureNames) + "]");
         }
 
         setConsent(featureNames, false);
@@ -2449,14 +2419,15 @@ public class Countly {
     }
 
     /**
-     * If enable, will automatically download newest remote config values on init.
+     * If enable, will automatically download newest remote config_ values on init.
+     * @deprecated use CountlyConfig during init to set this
      * @param enabled set true for enabling it
      * @param callback callback called after the update was done
      * @return
      */
     public synchronized Countly setRemoteConfigAutomaticDownload(boolean enabled, RemoteConfig.RemoteConfigCallback callback){
         if (Countly.sharedInstance().isLoggingEnabled()) {
-            Log.d(Countly.TAG, "Setting if remote config Automatic download will be enabled, " + enabled);
+            Log.d(Countly.TAG, "Setting if remote config_ Automatic download will be enabled, " + enabled);
         }
 
         remoteConfigAutomaticUpdateEnabled = enabled;
@@ -2465,7 +2436,7 @@ public class Countly {
     }
 
     /**
-     * Manually update remote config values
+     * Manually update remote config_ values
      * @param callback
      */
     public void remoteConfigUpdate(RemoteConfig.RemoteConfigCallback callback){
@@ -2480,7 +2451,7 @@ public class Countly {
     }
 
     /**
-     * Manual remote config update call. Will only update the keys provided.
+     * Manual remote config_ update call. Will only update the keys provided.
      * @param keysToInclude
      * @param callback
      */
@@ -2500,7 +2471,7 @@ public class Countly {
     }
 
     /**
-     * Manual remote config update call. Will update all keys except the ones provided
+     * Manual remote config_ update call. Will update all keys except the ones provided
      * @param keysToExclude
      * @param callback
      */
@@ -2520,7 +2491,7 @@ public class Countly {
     }
 
     /**
-     * Get the stored value for the provided remote config key
+     * Get the stored value for the provided remote config_ key
      * @param key
      * @return
      */
@@ -2537,7 +2508,7 @@ public class Countly {
     }
 
     /**
-     * Clear all stored remote config values
+     * Clear all stored remote config_ values
      */
     public void remoteConfigClearValues(){
         if (Countly.sharedInstance().isLoggingEnabled()) {
@@ -2552,6 +2523,7 @@ public class Countly {
 
     /**
      * Allows you to add custom header key/value pairs to each request
+     * @deprecated use CountlyConfig during init to set this
      */
     public void addCustomNetworkRequestHeaders(Map<String, String> headerValues){
         if (Countly.sharedInstance().isLoggingEnabled()) {
@@ -2563,6 +2535,68 @@ public class Countly {
         }
     }
 
+    /**
+     * Deletes all stored requests to server.
+     * This includes events, crashes, views, sessions, etc
+     * Call only if you don't need that information
+     */
+    public void flushRequestQueues(){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Calling flushRequestQueues");
+        }
+
+        if (!isInitialized()) {
+            throw new IllegalStateException("Countly.sharedInstance().init must be called before flushRequestQueues");
+        }
+
+        CountlyStore store = connectionQueue_.getCountlyStore();
+
+        int count = 0;
+
+        while (true) {
+            final String[] storedEvents = store.connections();
+            if (storedEvents == null || storedEvents.length == 0) {
+                // currently no data to send, we are done for now
+                break;
+            }
+            //remove stored data
+            store.removeConnection(storedEvents[0]);
+            count++;
+        }
+
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "flushRequestQueues removed [" + count + "] requests");
+        }
+    }
+
+    /**
+     * Countly will attempt to fulfill all stored requests on demand
+     */
+    public void doStoredRequests(){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Calling doStoredRequests");
+        }
+
+        if (!isInitialized()) {
+            throw new IllegalStateException("Countly.sharedInstance().init must be called before doStoredRequests");
+        }
+
+        connectionQueue_.tick();
+    }
+
+/*
+    public Countly offlineModeEnable(){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Calling offlineModeEnable");
+        }
+    }
+
+    public Countly offlineModeDisable(){
+        if (Countly.sharedInstance().isLoggingEnabled()) {
+            Log.d(Countly.TAG, "Calling offlineModeDisable");
+        }
+    }
+*/
     // for unit testing
     ConnectionQueue getConnectionQueue() { return connectionQueue_; }
     void setConnectionQueue(final ConnectionQueue connectionQueue) { connectionQueue_ = connectionQueue; }

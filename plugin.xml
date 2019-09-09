@@ -121,7 +121,6 @@
     <source-file src="src/android/DeviceInfo.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/Event.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/EventQueue.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/MessagingAdapter.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/OpenUDIDAdapter.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/ReferrerReceiver.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
