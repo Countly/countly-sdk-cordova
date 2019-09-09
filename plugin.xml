@@ -130,8 +130,6 @@
 
     <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
     <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/>
-
-    <source-file src="src/android/gradle/build-extras.gradle" target-dir="src/.." />
   </platform>
 
 </plugin>
