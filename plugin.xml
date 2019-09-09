@@ -126,6 +126,7 @@
     <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/CountlyStarRating.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/RemoteConfig.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/CountlyConfig.java" target-dir="src/ly/count/android/sdk"/>
 
 
     <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
