@@ -155,11 +155,6 @@
     [CountlyConnectionManager.sharedInstance proceedOnQueue];
 }
 
-- (void)sendPushToken:(NSString *)token messagingMode:(int)messagingMode
-{
-    [CountlyConnectionManager.sharedInstance sendPushTokenCustom:token messagingMode:messagingMode];
-}
-
 - (void)setNewDeviceID:(NSString *)deviceID onServer:(BOOL)onServer
 {
     if (!CountlyCommon.sharedInstance.hasStarted)
