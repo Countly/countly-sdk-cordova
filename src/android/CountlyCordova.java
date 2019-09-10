@@ -360,7 +360,7 @@ public class CountlyCordova extends CordovaPlugin {
             return true;
         }
         else if("updateRemoteConfigForKeysOnly".equals(action)){
-            String[] keysOnly =  {};
+            String[] keysOnly =  new String[ args.length() ];
             for(int i=0,il=args.length();i<il;i++){
                 keysOnly[i] = args.getString(i);;
             }
@@ -378,7 +378,7 @@ public class CountlyCordova extends CordovaPlugin {
             return true;
         }
         else if("updateRemoteConfigExceptKeys".equals(action)){
-            String[] exceptKeys=  {};
+            String[] exceptKeys =  new String[ args.length() ];
             for(int i=0,il=args.length();i<il;i++){
                 exceptKeys[i] = args.getString(i);;
             }

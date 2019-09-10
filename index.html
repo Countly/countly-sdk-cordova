@@ -7,6 +7,9 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="Countly.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stacktrace.js/2.0.0/stacktrace.min.js"></script>
     <style type="text/css">
     button {
         margin-top: 20px !important;
@@ -119,10 +122,6 @@
             <div class="countly-modal-submit"></div>
         </div>
     </div>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="Countly.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stacktrace.js/2.0.0/stacktrace.min.js">
-    </script>
     <script type="text/javascript">
     app = {};
     function makeid() {
@@ -533,7 +532,7 @@
         });
     }
     app.getRemoteConfigValueForKey = function(){
-        Countly.app.getRemoteConfigValueForKey(["name"], function(r){
+        Countly.getRemoteConfigValueForKey("name", function(r){
             alert(r)
         }, function(r){
             alert(r);
