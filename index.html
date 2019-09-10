@@ -572,9 +572,6 @@
     cp ../../../plugins/config/config.xml ./
     cordova plugin add https://github.com/phonegap/phonegap-plugin-push.git --verbose
     cordova plugin add /Users/trinisoft/office/countly/plugins/phonegap-plugin-push --verbose
-    cd platforms/ios/
-    pod install
-    cd ../..
 
     cordova plugin add https://github.com/Countly/countly-sdk-js.git
     cordova plugin add /Users/trinisoft/office/countly/plugins/countly-sdk-js
@@ -587,6 +584,9 @@
 
     cordova platform add android --verbose
     cordova platform add ios --verbose
+    cd platforms/ios/
+    pod install
+    cd ../..
 
     cordova build android --verbose
     cordova build ios --verbose

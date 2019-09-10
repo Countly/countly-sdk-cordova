@@ -337,9 +337,9 @@ public class CountlyCordova extends CordovaPlugin {
                 @Override
                 public void callback(String error) {
                     if(error == null) {
-                        callbackContext.success(error);
-                    } else {
                         callbackContext.success("Success");
+                    } else {
+                        callbackContext.error(error);
                     }
                 }
             });
@@ -351,9 +351,9 @@ public class CountlyCordova extends CordovaPlugin {
                 @Override
                 public void callback(String error) {
                     if(error == null) {
-                        callbackContext.success(error);
-                    } else {
                         callbackContext.success("Success");
+                    } else {
+                        callbackContext.error(error);
                     }
                 }
             });
@@ -369,9 +369,9 @@ public class CountlyCordova extends CordovaPlugin {
                 @Override
                 public void callback(String error) {
                     if(error == null) {
-                        callbackContext.success(error);
-                    } else {
                         callbackContext.success("Success");
+                    } else {
+                        callbackContext.error(error);
                     }
                 }
             });
@@ -387,9 +387,9 @@ public class CountlyCordova extends CordovaPlugin {
                 @Override
                 public void callback(String error) {
                     if(error == null) {
-                        callbackContext.success(error);
-                    } else {
                         callbackContext.success("Success");
+                    } else {
+                        callbackContext.error(error);
                     }
                 }
             });
@@ -401,8 +401,8 @@ public class CountlyCordova extends CordovaPlugin {
             return true;
         }
         else if("getRemoteConfigValueForKey".equals(action)){
-            ;
-            callbackContext.success((String)Countly.sharedInstance().getRemoteConfigValueForKey(args.getString(0)));
+            String result = (String)Countly.sharedInstance().getRemoteConfigValueForKey(args.getString(0));
+            callbackContext.success(result);
             return true;
         }
         else{
