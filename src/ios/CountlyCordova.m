@@ -558,6 +558,7 @@ CountlyConfig* config = nil;
 }
 - (void)remoteConfigClearValues:(CDVInvokedUrlCommand*)command
 {
+    [CountlyRemoteConfig.sharedInstance clearCachedRemoteConfig];
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Pending"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

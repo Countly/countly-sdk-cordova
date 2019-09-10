@@ -47,12 +47,20 @@
         <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
         <button onclick="app.userData.setProperty()" class="fluid ui button teal">UserData.setProperty</button>
         <button onclick="app.userData.increment()" class="fluid ui button teal">UserData.increment</button>
-        <button onclick="app.userData.incrementBy()" class="fluid ui button teal">UserData.incrementBy</button>
-        <button onclick="app.userData.multiply()" class="fluid ui button teal">UserData.multiply</button>
-        <button onclick="app.userData.saveMax()" class="fluid ui button teal">UserData.saveMax</button>
-        <button onclick="app.userData.saveMin()" class="fluid ui button teal">UserData.saveMin</button>
-        <button onclick="app.userData.setOnce()" class="fluid ui button teal">UserData.setOnce</button>
+        <button onclick="app.userData.incrementBy()" class="fluid ui button orange">UserData.incrementBy</button>
+        <button onclick="app.userData.multiply()" class="fluid ui button yellow">UserData.multiply</button>
+        <button onclick="app.userData.saveMax()" class="fluid ui button olive">UserData.saveMax</button>
+        <button onclick="app.userData.saveMin()" class="fluid ui button orange">UserData.saveMin</button>
+        <button onclick="app.userData.setOnce()" class="fluid ui button blue">UserData.setOnce</button>
         <div class="ui horizontal divider">User Methods End</div>
+        <div class="ui horizontal divider">Remote Config Methods Start</div>
+        <button onclick="app.setRemoteConfigAutomaticDownload()" class="fluid ui button black">Countly.setRemoteConfigAutomaticDownload</button>
+        <button onclick="app.remoteConfigUpdate()" class="fluid ui button grey">Countly.remoteConfigUpdate</button>
+        <button onclick="app.updateRemoteConfigForKeysOnly()" class="fluid ui button brown">Countly.updateRemoteConfigForKeysOnly</button>
+        <button onclick="app.updateRemoteConfigExceptKeys()" class="fluid ui button pink">Countly.updateRemoteConfigExceptKeys</button>
+        <button onclick="app.remoteConfigClearValues()" class="fluid ui button purple">Countly.remoteConfigClearValues</button>
+        <button onclick="app.getRemoteConfigValueForKey()" class="fluid ui button violet">Countly.getRemoteConfigValueForKey</button>
+        <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
         <button onclick="app.sendPushToken()" class="fluid ui button teal">Push Message</button>
         <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button>
@@ -229,12 +237,12 @@
         options.byear = 1989;
         Countly.setUserData(options);
     };
-    
+
     app.setCaptianAmericaData = function() {
         // example for setCaptianAmericaData
         var deviceId = makeid();
         Countly.changeDeviceId(deviceId, false);
-        
+
         var options = {};
         options.name = "Captian America";
         options.username = "captianamerica";
@@ -246,14 +254,14 @@
         options.gender = "M"; // "F"
         options.byear = 1989;
         Countly.setUserData(options);
-                
+
     };
-    
+
     app.setIronManData = function() {
-        // example for setIronManData 
+        // example for setIronManData
         var deviceId = makeid();
         Countly.changeDeviceId(deviceId, false);
-        
+
         var options = {};
         options.name = "Iron Man";
         options.username = "ironman";
@@ -267,11 +275,11 @@
         Countly.setUserData(options);
         Countly.start();
     };
-    
+
     app.setSpiderManData = function() {
         var deviceId = makeid();
         Countly.changeDeviceId(deviceId, false);
-        
+
         var options = {};
         options.name = "Spider-Man";
         options.username = "spiderman";
@@ -285,10 +293,10 @@
         Countly.setUserData(options);
         Countly.start();
     };
-    
 
 
-    
+
+
     app.setloggingenabled = function() {
         // example for setLoggingEnabled
         Countly.setLoggingEnabled();
@@ -487,8 +495,52 @@
     app.userData.setOnce = function() {
         Countly.userData.setOnce("setOnce", 200);
     }
-    
-    
+
+    // Remote config usage
+    app.setRemoteConfigAutomaticDownload = function(){
+        Countly.setRemoteConfigAutomaticDownload(function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.remoteConfigUpdate = function(){
+        Countly.remoteConfigUpdate(function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForKeysOnly = function(){
+        Countly.updateRemoteConfigForKeysOnly(["name"], function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigExceptKeys = function(){
+        Countly.updateRemoteConfigExceptKeys(["url"], function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.remoteConfigClearValues = function(){
+        Countly.remoteConfigClearValues(function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.getRemoteConfigValueForKey = function(){
+        Countly.app.getRemoteConfigValueForKey(["name"], function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    // Remote config usage
+
     // /** Use StackTrace to log all exceptions **/
     // (function(){
     //     if (window.StackTrace) {
@@ -503,7 +555,7 @@
     /*
     @dev instructions for personal modification
 
-    
+
     cordova -v
     8.1.2 (cordova-lib@8.1.1)
     countly -v
@@ -527,7 +579,7 @@
 
     cordova plugin add https://github.com/Countly/countly-sdk-js.git
     cordova plugin add /Users/trinisoft/office/countly/plugins/countly-sdk-js
-    
+
     cd www/
     rm index.html
     wget https://raw.githubusercontent.com/Countly/countly-sdk-js/master/index.html
@@ -593,7 +645,7 @@
 
     Step 10:  Install the push plugin
             cordova plugin add phonegap-plugin-push
-            
+
     Step 11:  Build the app, and test push notifications.
 
     https://drive.google.com/file/d/1xH6L5nI6hntfnbRis9VEOyTgy9C03Sqw/view?usp=sharing
