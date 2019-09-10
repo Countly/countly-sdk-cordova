@@ -500,9 +500,9 @@ CountlyConfig* config = nil;
     {
         CDVPluginResult* pluginResult = nil;
         if (!error){
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Error"];
-        } else {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Success"];
+        } else {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Error"];
         }
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     };
@@ -513,10 +513,9 @@ CountlyConfig* config = nil;
     {
         CDVPluginResult* pluginResult = nil;
         if (!error){
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Error"];
-
-        } else {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Success"];
+        } else {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Error"];
         }
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
@@ -532,9 +531,9 @@ CountlyConfig* config = nil;
     {
         CDVPluginResult* pluginResult = nil;
         if (!error){
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Error"];
-        } else {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Success"];
+        } else {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Error"];
         }
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
@@ -548,12 +547,12 @@ CountlyConfig* config = nil;
     [Countly.sharedInstance updateRemoteConfigExceptForKeys: *exceptKeys completionHandler:^(NSError * error)
      {
          CDVPluginResult* pluginResult = nil;
-         if (!error){
-             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Error"];
-         } else {
-             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Success"];
-         }
-         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        if (!error){
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Success"];
+        } else {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Error"];
+        }
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }];
 }
 - (void)remoteConfigClearValues:(CDVInvokedUrlCommand*)command
