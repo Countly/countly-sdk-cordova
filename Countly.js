@@ -411,10 +411,29 @@ Countly.rating.set = function(rating){
     query('countly-modal-submit').innerText = Countly.rating.starRatingSubmitButtonTitle;
     var stars = document.getElementsByClassName('countly-rating-start');
     for(var i=0,il=stars.length;i<il;i++){
-        stars[i].addEventListener('click', Countly.rating.success)
+        stars[i].addEventListener('click', Countly.rating.success);
     }
 };
 // Rating
+
+// Feedback
+Countly.feedback = {
+    title: "What's your opinion about this page?",
+    comment: "Add comment",
+    contact: "Contact me with e-mail",
+    submit: "Submit feedback"
+};
+Countly.sendFeedback = function(feedback){
+    var arg = [];
+    arg.push(feedback.rating || "");
+    arg.push(feedback.comment || "");
+    arg.push(feedback.email || "");
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendFeedback",arg);
+}
+Countly.askForFeedback = function(){
+
+};
+// Feedback
 
 var Ajax = {};
 Ajax.post = function(url, data, cb) {

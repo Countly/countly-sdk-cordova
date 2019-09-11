@@ -72,9 +72,12 @@
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
         <button onclick="app.addCrashLog()" class="fluid ui button">Send Crash Report</button>
+        <div class="ui horizontal divider">Other Methods End</div>
+        <div class="ui horizontal divider">Rating Methods Start</div>
         <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button>
         <button onclick="app.askForStarRating()" class="fluid ui button">Open rating modal</button>
-        <div class="ui horizontal divider">Other Methods End</div>
+        <button onclick="app.askForFeedback()" class="fluid ui button">Open feedback modal</button>
+        <div class="ui horizontal divider">Rating Methods End</div>
         <!-- Modal UI -->
         <style>
             .countly-modal.open{
@@ -428,9 +431,16 @@
         // Ratings can be from 1 - 5;
         Countly.sendRating(5);
     }
+
     app.askForStarRating = function(){
         Countly.askForStarRating(function(ratingResult){
             console.log(ratingResult);
+        });
+    }
+
+    app.askForFeedback = function(){
+        Countly.askForFeedback(function(feedback){
+            console.log(feedback);
         });
     }
 
