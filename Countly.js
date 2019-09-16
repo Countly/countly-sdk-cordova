@@ -441,15 +441,15 @@ Countly.feedback.closeModal = function () {
 };
 
 //set html in feedback modal
-Countly.feedback.html = '<div class="countly-modal-dismiss"></div><div align="center" class="countly-modal-header"></div><div class="countly-modal-content"></div><div class="leftSide"><button class="countly-modal-submit button" id="textVal"></button></div></div><div class="countly-modal-text"></div><div class="countly-modal-divider"></div><div class="countly-modal-footer"><img src="https://try.count.ly/star-rating/images/star-rating/powered-by-countly.svg"></img></div>';
-Countly.feedback.css = '.countly-modal.open{display:block}.countly-modal{position:fixed;top:10%;left:39%;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-modal div{margin:7px}.countly-modal-header{font-size:20px;width:95%;line-height:38px;margin-left:50px;}.countly-modal-divider{position:relative;margin:auto;height:1px;border:1px solid #e0e0e0}.countly-modal-dismiss{text-align:right;cursor:pointer;font-size:20px}.countly-modal-text{display:none;font-size:19px;padding:45px}.countly-modal-content{font-size:small}';
+Countly.feedback.html = '<div class="countly-feedback-modal-dismiss"></div><div align="center" class="countly-feedback-modal-header"></div><div class="countly-feedback-modal-content"></div><div><button class="countly-feedback-modal-submit button" id="textVal"></button></div></div><div class="countly-feedback-modal-text"></div><div class="countly-feedback-modal-divider"></div><div class="countly-feedback-modal-footer"><img src="assest/countly-sdk.js/footer-logo.svg"></img></div>';
+Countly.feedback.css = '.countly-main-modal.open{display:block}.countly-main-modal{position:fixed;top:10%;left:39%;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-main-modal div{margin:7px}.countly-feedback-modal-header{font-size:20px;width:95%;line-height:38px;margin-left:50px;}.countly-feedback-modal-divider{position:relative;margin:auto;height:1px;border:1px solid #e0e0e0}.countly-feedback-modal-dismiss{text-align:right;cursor:pointer;font-size:20px}.countly-feedback-modal-text{display:none;font-size:19px;padding:45px}.countly-feedback-modal-content{font-size:small}';
 Countly.feedback.create = function () {
     var div = query('countly-feedback-modal');
     if (div) {
         div.parentNode.removeChild(div);
     }
     div = document.createElement('div');
-    div.setAttribute('class', 'countly-modal countly-feedback-modal');
+    div.setAttribute('class', 'countly-main-modal countly-feedback-modal');
     div.innerHTML = Countly.feedback.html;
     document.body.appendChild(div);
 
@@ -458,7 +458,7 @@ Countly.feedback.create = function () {
     style.appendChild(document.createTextNode(Countly.feedback.css));
     document.head.appendChild(style);
 
-    query('countly-modal-dismiss').addEventListener('click', Countly.feedback.closeModal);
+    query('countly-feedback-modal-dismiss').addEventListener('click', Countly.feedback.closeModal);
 }
 
 //feedback emoji set
@@ -466,22 +466,22 @@ Countly.feedback.set = function (feedback) {
     feedback = Number(feedback);
     var html = '';
     var html1 = ''
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="0" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/0_gray.svg"</img><span class="tooltiptext">Very dissatisfied</span></div>';
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="1" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/1_gray.svg"</img><span class="tooltiptext">Somewhat dissatisfied</span></div>';
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="2" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/2_gray.svg"</img><span class="tooltiptext">Neither satisfied nor dissatisfied</span></div>';
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="3" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/3_gray.svg"</img><span class="tooltiptext">Somewhat satisfied</span></div>';
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="4" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/4_gray.svg"</img><span class="tooltiptext">Very satisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="0" style="block-size:28px;" src="assest/countly-sdk.js/0_gray.svg"</img><span class="tooltiptext">Very dissatisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="1" style="block-size:28px;" src="assest/countly-sdk.js/1_gray.svg"</img><span class="tooltiptext">Somewhat dissatisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="2" style="block-size:28px;" src="assest/countly-sdk.js/2_gray.svg"</img><span class="tooltiptext">Neither satisfied nor dissatisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="3" style="block-size:28px;" src="assest/countly-sdk.js/3_gray.svg"</img><span class="tooltiptext">Somewhat satisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="4" style="block-size:28px;" src="assest/countly-sdk.js/4_gray.svg"</img><span class="tooltiptext">Very satisfied</span></div>';
     html += '<br>'
     html += '<div align="left" style="margin-left:48px;margin-top:32px;"><input type="checkbox" id="commntAdd" name="comment" class="commentAdd pointer"> Add comment<br><textarea class="textArea" id="textArea" style="display:none;width:100%;height:60px;margin-top:10px;resize:none;border:1px solid #DBDBDB;outline:none;font-size:13px;border-radius:3px;"></textarea><br><input type="checkbox" name="e-mail" id="emailAdd" class="pointer" > Contact me via e-mail<input type="text" id="emailVal" class="emailVal" style="display:none;width:100%;outline:none;border:1px solid #DBDBDB;height:30px;margin-top:10px;line-height:20px;padding-left:2px;font-size:13px;border-radius:3px"></div>'
 
-    html1 += '<div><img style="height:2em" src="/home/trinisoft/office/node/countly-sdk-js/img/check-solid.svg"></img></div>';
+    html1 += '<div><img style="height:2em" src="assest/countly-sdk.js/check-solid.svg"></img></div>';
     html1 += Countly.feedback.starFeedbackSubmitText
 
-    query('countly-modal-content').innerHTML = html;
-    query('countly-modal-header').innerText = Countly.feedback.starFeedbackMessage;
-    query('countly-modal-dismiss').innerText = Countly.feedback.starFeedbackDismissButtonTitle;
-    query('countly-modal-text').innerHTML = html1;
-    query('countly-modal-submit').innerText = Countly.feedback.starFeedbackSubmitButtonTitle;
+    query('countly-feedback-modal-content').innerHTML = html;
+    query('countly-feedback-modal-header').innerText = Countly.feedback.starFeedbackMessage;
+    query('countly-feedback-modal-dismiss').innerText = Countly.feedback.starFeedbackDismissButtonTitle;
+    query('countly-feedback-modal-text').innerHTML = html1;
+    query('countly-feedback-modal-submit').innerText = Countly.feedback.starFeedbackSubmitButtonTitle;
 
     var commentCheck = document.getElementById('commntAdd');
     commentCheck.addEventListener('click', function () {
@@ -503,16 +503,19 @@ Countly.feedback.set = function (feedback) {
     var resultScore = '';
     var classname = document.getElementsByClassName("countly-feedback-start");
     var myFunction = function (evt) {
-        var default_img = "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_gray.svg";
+        // var default_img = "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_gray.svg";
+        var default_img = "assest/countly-sdk.js/" + evt.target.id + "_gray.svg";
         var current_img_src = evt.target.getAttribute('src');
         if (current_img_src === default_img) {
             Array.from(classname).forEach(function (element) {
                 // resultScore = '';
                 if (element.children[0].id !== evt.target.id) {
-                    var default_img = "https://try.count.ly/star-rating/images/star-rating/" + element.children[0].id + "_gray.svg";
+                    // var default_img = "https://try.count.ly/star-rating/images/star-rating/" + element.children[0].id + "_gray.svg";
+                    var default_img = "assest/countly-sdk.js/" + element.children[0].id + "_gray.svg";
                     element.children[0].setAttribute('src', default_img);
                 } else {
-                    evt.target.setAttribute('src', "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_color.svg");
+                    // evt.target.setAttribute('src', "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_color.svg");
+                    evt.target.setAttribute('src', "assest/countly-sdk.js/" + evt.target.id + "_color.svg");
                     resultScore = element.children[1].innerHTML;
                 }
             });
@@ -534,24 +537,28 @@ Countly.feedback.set = function (feedback) {
         resultData.email = emailVal;
         resultData.feedback = resultScore;
 
-        query('countly-modal-header').style.display = 'none';
-        query('countly-modal-content').style.display = 'none';
-        query('countly-modal-submit').style.display = 'none';
-        query('countly-modal-text').style.display = 'block';
-        query('countly-modal-text').style.display = 'block';
+        query('countly-feedback-modal-header').style.display = 'none';
+        query('countly-feedback-modal-content').style.display = 'none';
+        query('countly-feedback-modal-submit').style.display = 'none';
+        query('countly-feedback-modal-text').style.display = 'block';
+        query('countly-feedback-modal-text').style.display = 'block';
         if (Countly.feedback.callback) {
             Countly.feedback.callback({ code: 0, msg: 'user submit feedback', data: resultData });
+        } else {
+            Countly.feedback.callback({ code: 1, msg: 'Error to save data'})
         }
     })
 };
 
-// Countly.sendFeedback = function(feedback){
-//     var arg = [];
-//     arg.push(feedback.rating || "");
-//     arg.push(feedback.comment || "");
-//     arg.push(feedback.email || "");
-//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendFeedback",arg);
-// }
+Countly.sendFeedback = function(feedback){
+    var arg = [];
+    console.log(feedback);
+    arg.push(feedback.rating || "");
+    arg.push(feedback.comment || "");
+    arg.push(feedback.email || "");
+    arg.push(Countly.feedback || "");
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendFeedback",arg);
+}
 
 // FEEDBACK-WORK
 
