@@ -320,7 +320,7 @@ Countly.updateRemoteConfigForKeysOnly = function(keys, onSuccess, onError){
 Countly.updateRemoteConfigExceptKeys = function(keys, onSuccess, onError){
     cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigExceptKeys",keys);
 }
-Countly.remoteConfigClearValues = function(callback, onSuccess, onError){
+Countly.remoteConfigClearValues = function(onSuccess, onError){
     cordova.exec(onSuccess, onError,"CountlyCordova","remoteConfigClearValues",[]);
 }
 Countly.getRemoteConfigValueForKey = function(key, onSuccess, onError){
@@ -416,24 +416,144 @@ Countly.rating.set = function(rating){
 };
 // Rating
 
-// Feedback
+// FEEDBACK-WORK
 Countly.feedback = {
-    title: "What's your opinion about this page?",
-    comment: "Add comment",
-    contact: "Contact me with e-mail",
-    submit: "Submit feedback"
+    starFeedbackMessage: "What's your opinion about this page?",
+    starFeedbackDismissButtonTitle: "X",
+    starFeedbackSubmitButtonTitle: "Submit feedback",
+    starFeedbackSubmitText: "Thank you for your feedback"
 };
-Countly.sendFeedback = function(feedback){
-    var arg = [];
-    arg.push(feedback.rating || "");
-    arg.push(feedback.comment || "");
-    arg.push(feedback.email || "");
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendFeedback",arg);
-}
-Countly.askForFeedback = function(){
 
+//open modal for feedback
+Countly.askForFeedback = function (callback) {
+    Countly.feedback.create();
+    Countly.feedback.set(0);
+    Countly.feedback.callback = callback;
+    query('countly-feedback-modal').classList.add('open');
 };
-// Feedback
+
+//close modal feedback
+Countly.feedback.closeModal = function () {
+    query('countly-feedback-modal').classList.remove('open');
+    if (Countly.feedback.callback) {
+        Countly.feedback.callback({ code: 1, msg: 'modal close' });
+    }
+};
+
+//set html in feedback modal
+Countly.feedback.html = '<div class="countly-modal-dismiss"></div><div align="center" class="countly-modal-header"></div><div class="countly-modal-content"></div><div class="leftSide"><button class="countly-modal-submit button" id="textVal"></button></div></div><div class="countly-modal-text"></div><div class="countly-modal-divider"></div><div class="countly-modal-footer"><img src="https://try.count.ly/star-rating/images/star-rating/powered-by-countly.svg"></img></div>';
+Countly.feedback.css = '.countly-modal.open{display:block}.countly-modal{position:fixed;top:10%;left:39%;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-modal div{margin:7px}.countly-modal-header{font-size:20px;width:95%;line-height:38px;margin-left:50px;}.countly-modal-divider{position:relative;margin:auto;height:1px;border:1px solid #e0e0e0}.countly-modal-dismiss{text-align:right;cursor:pointer;font-size:20px}.countly-modal-text{display:none;font-size:19px;padding:45px}.countly-modal-content{font-size:small}';
+Countly.feedback.create = function () {
+    var div = query('countly-feedback-modal');
+    if (div) {
+        div.parentNode.removeChild(div);
+    }
+    div = document.createElement('div');
+    div.setAttribute('class', 'countly-modal countly-feedback-modal');
+    div.innerHTML = Countly.feedback.html;
+    document.body.appendChild(div);
+
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(Countly.feedback.css));
+    document.head.appendChild(style);
+
+    query('countly-modal-dismiss').addEventListener('click', Countly.feedback.closeModal);
+}
+
+//feedback emoji set
+Countly.feedback.set = function (feedback) {
+    feedback = Number(feedback);
+    var html = '';
+    var html1 = ''
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="0" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/0_gray.svg"</img><span class="tooltiptext">Very dissatisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="1" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/1_gray.svg"</img><span class="tooltiptext">Somewhat dissatisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="2" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/2_gray.svg"</img><span class="tooltiptext">Neither satisfied nor dissatisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="3" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/3_gray.svg"</img><span class="tooltiptext">Somewhat satisfied</span></div>';
+    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="4" style="block-size:28px;" src="https://try.count.ly/star-rating/images/star-rating/4_gray.svg"</img><span class="tooltiptext">Very satisfied</span></div>';
+    html += '<br>'
+    html += '<div align="left" style="margin-left:48px;margin-top:32px;"><input type="checkbox" id="commntAdd" name="comment" class="commentAdd pointer"> Add comment<br><textarea class="textArea" id="textArea" style="display:none;width:100%;height:60px;margin-top:10px;resize:none;border:1px solid #DBDBDB;outline:none;font-size:13px;border-radius:3px;"></textarea><br><input type="checkbox" name="e-mail" id="emailAdd" class="pointer" > Contact me via e-mail<input type="text" id="emailVal" class="emailVal" style="display:none;width:100%;outline:none;border:1px solid #DBDBDB;height:30px;margin-top:10px;line-height:20px;padding-left:2px;font-size:13px;border-radius:3px"></div>'
+
+    html1 += '<div><img style="height:2em" src="/home/trinisoft/office/node/countly-sdk-js/img/check-solid.svg"></img></div>';
+    html1 += Countly.feedback.starFeedbackSubmitText
+
+    query('countly-modal-content').innerHTML = html;
+    query('countly-modal-header').innerText = Countly.feedback.starFeedbackMessage;
+    query('countly-modal-dismiss').innerText = Countly.feedback.starFeedbackDismissButtonTitle;
+    query('countly-modal-text').innerHTML = html1;
+    query('countly-modal-submit').innerText = Countly.feedback.starFeedbackSubmitButtonTitle;
+
+    var commentCheck = document.getElementById('commntAdd');
+    commentCheck.addEventListener('click', function () {
+        if (commentCheck.checked) {
+            query('textArea').style.display = '';
+        } else {
+            query('textArea').style.display = 'none';
+        }
+    });
+
+    var emailCheck = document.getElementById('emailAdd');
+    emailCheck.addEventListener('click', function () {
+        if (emailCheck.checked) {
+            query('emailVal').style.display = '';
+        } else {
+            query('emailVal').style.display = 'none';
+        }
+    })
+    var resultScore = '';
+    var classname = document.getElementsByClassName("countly-feedback-start");
+    var myFunction = function (evt) {
+        var default_img = "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_gray.svg";
+        var current_img_src = evt.target.getAttribute('src');
+        if (current_img_src === default_img) {
+            Array.from(classname).forEach(function (element) {
+                // resultScore = '';
+                if (element.children[0].id !== evt.target.id) {
+                    var default_img = "https://try.count.ly/star-rating/images/star-rating/" + element.children[0].id + "_gray.svg";
+                    element.children[0].setAttribute('src', default_img);
+                } else {
+                    evt.target.setAttribute('src', "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_color.svg");
+                    resultScore = element.children[1].innerHTML;
+                }
+            });
+        } else {
+            evt.target.setAttribute('src', default_img);
+        }
+    };
+
+    Array.from(classname).forEach(function (element) {
+        element.addEventListener('click', myFunction);
+    });
+
+    var subBtn = document.getElementById('textVal');
+    subBtn.addEventListener('click', function () {
+        resultData = {};
+        var textVal = document.getElementById('textArea').value;
+        var emailVal = document.getElementById('emailVal').value;
+        resultData.comment = textVal;
+        resultData.email = emailVal;
+        resultData.feedback = resultScore;
+
+        query('countly-modal-header').style.display = 'none';
+        query('countly-modal-content').style.display = 'none';
+        query('countly-modal-submit').style.display = 'none';
+        query('countly-modal-text').style.display = 'block';
+        query('countly-modal-text').style.display = 'block';
+        if (Countly.feedback.callback) {
+            Countly.feedback.callback({ code: 0, msg: 'user submit feedback', data: resultData });
+        }
+    })
+};
+
+// Countly.sendFeedback = function(feedback){
+//     var arg = [];
+//     arg.push(feedback.rating || "");
+//     arg.push(feedback.comment || "");
+//     arg.push(feedback.email || "");
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendFeedback",arg);
+// }
+
+// FEEDBACK-WORK
 
 var Ajax = {};
 Ajax.post = function(url, data, cb) {
