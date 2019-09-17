@@ -441,13 +441,14 @@ Countly.feedback.closeModal = function () {
 };
 
 //set html in feedback modal
-Countly.feedback.html = '<div class="countly-feedback-modal-dismiss"></div><div align="center" class="countly-feedback-modal-header"></div><div class="countly-feedback-modal-content"></div><div><button class="countly-feedback-modal-submit button" id="textVal"></button></div></div><div class="countly-feedback-modal-text"></div><div class="countly-feedback-modal-divider"></div><div class="countly-feedback-modal-footer"><img src="assest/countly-sdk.js/footer-logo.svg"></img></div>';
-Countly.feedback.css = '.countly-main-modal.open{display:block}.countly-main-modal{position:fixed;top:10%;left:39%;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-main-modal div{margin:7px}.countly-feedback-modal-header{font-size:20px;width:95%;line-height:38px;margin-left:50px;}.countly-feedback-modal-divider{position:relative;margin:auto;height:1px;border:1px solid #e0e0e0}.countly-feedback-modal-dismiss{text-align:right;cursor:pointer;font-size:20px}.countly-feedback-modal-text{display:none;font-size:19px;padding:45px}.countly-feedback-modal-content{font-size:small}';
+Countly.feedback.html = '<div class="countly-feedback-modal-dismiss">X</div><iframe class="countly-feedback-modal-content" src="https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e"></iframe>';
+Countly.feedback.css = '.countly-main-modal.open{display:block}.countly-main-modal{position:fixed;top:10%;left:9px;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-main-modal div{margin:7px}.countly-feedback-modal-dismiss{display:block;text-align:right;cursor:pointer;font-size:20px}.countly-feedback-modal-content{font-size:small;height:438px;overflow:hidden;border:0px !important}';
 Countly.feedback.create = function () {
     var div = query('countly-feedback-modal');
     if (div) {
         div.parentNode.removeChild(div);
     }
+    url =
     div = document.createElement('div');
     div.setAttribute('class', 'countly-main-modal countly-feedback-modal');
     div.innerHTML = Countly.feedback.html;
@@ -462,93 +463,93 @@ Countly.feedback.create = function () {
 }
 
 //feedback emoji set
-Countly.feedback.set = function (feedback) {
-    feedback = Number(feedback);
-    var html = '';
-    var html1 = ''
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="0" style="block-size:28px;" src="assest/countly-sdk.js/0_gray.svg"</img><span class="tooltiptext">Very dissatisfied</span></div>';
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="1" style="block-size:28px;" src="assest/countly-sdk.js/1_gray.svg"</img><span class="tooltiptext">Somewhat dissatisfied</span></div>';
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="2" style="block-size:28px;" src="assest/countly-sdk.js/2_gray.svg"</img><span class="tooltiptext">Neither satisfied nor dissatisfied</span></div>';
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="3" style="block-size:28px;" src="assest/countly-sdk.js/3_gray.svg"</img><span class="tooltiptext">Somewhat satisfied</span></div>';
-    html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="4" style="block-size:28px;" src="assest/countly-sdk.js/4_gray.svg"</img><span class="tooltiptext">Very satisfied</span></div>';
-    html += '<br>'
-    html += '<div align="left" style="margin-left:48px;margin-top:32px;"><input type="checkbox" id="commntAdd" name="comment" class="commentAdd pointer"> Add comment<br><textarea class="textArea" id="textArea" style="display:none;width:100%;height:60px;margin-top:10px;resize:none;border:1px solid #DBDBDB;outline:none;font-size:13px;border-radius:3px;"></textarea><br><input type="checkbox" name="e-mail" id="emailAdd" class="pointer" > Contact me via e-mail<input type="text" id="emailVal" class="emailVal" style="display:none;width:100%;outline:none;border:1px solid #DBDBDB;height:30px;margin-top:10px;line-height:20px;padding-left:2px;font-size:13px;border-radius:3px"></div>'
+// Countly.feedback.set = function (feedback) {
+//     feedback = Number(feedback);
+//     var html = '';
+//     var html1 = ''
+//     html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="0" style="block-size:28px;" src="assest/countly-sdk.js/0_gray.svg"</img><span class="tooltiptext">Very dissatisfied</span></div>';
+//     html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="1" style="block-size:28px;" src="assest/countly-sdk.js/1_gray.svg"</img><span class="tooltiptext">Somewhat dissatisfied</span></div>';
+//     html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="2" style="block-size:28px;" src="assest/countly-sdk.js/2_gray.svg"</img><span class="tooltiptext">Neither satisfied nor dissatisfied</span></div>';
+//     html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="3" style="block-size:28px;" src="assest/countly-sdk.js/3_gray.svg"</img><span class="tooltiptext">Somewhat satisfied</span></div>';
+//     html += '<div class="tooltip countly-feedback-start" style="cursor:pointer;"><img id="4" style="block-size:28px;" src="assest/countly-sdk.js/4_gray.svg"</img><span class="tooltiptext">Very satisfied</span></div>';
+//     html += '<br>'
+//     html += '<div align="left" style="margin-left:48px;margin-top:32px;"><input type="checkbox" id="commntAdd" name="comment" class="commentAdd pointer"> Add comment<br><textarea class="textArea" id="textArea" style="display:none;width:100%;height:60px;margin-top:10px;resize:none;border:1px solid #DBDBDB;outline:none;font-size:13px;border-radius:3px;"></textarea><br><input type="checkbox" name="e-mail" id="emailAdd" class="pointer" > Contact me via e-mail<input type="text" id="emailVal" class="emailVal" style="display:none;width:100%;outline:none;border:1px solid #DBDBDB;height:30px;margin-top:10px;line-height:20px;padding-left:2px;font-size:13px;border-radius:3px"></div>'
 
-    html1 += '<div><img style="height:2em" src="assest/countly-sdk.js/check-solid.svg"></img></div>';
-    html1 += Countly.feedback.starFeedbackSubmitText
+//     html1 += '<div><img style="height:2em" src="assest/countly-sdk.js/check-solid.svg"></img></div>';
+//     html1 += Countly.feedback.starFeedbackSubmitText
 
-    query('countly-feedback-modal-content').innerHTML = html;
-    query('countly-feedback-modal-header').innerText = Countly.feedback.starFeedbackMessage;
-    query('countly-feedback-modal-dismiss').innerText = Countly.feedback.starFeedbackDismissButtonTitle;
-    query('countly-feedback-modal-text').innerHTML = html1;
-    query('countly-feedback-modal-submit').innerText = Countly.feedback.starFeedbackSubmitButtonTitle;
+//     query('countly-feedback-modal-content').innerHTML = html;
+//     query('countly-feedback-modal-header').innerText = Countly.feedback.starFeedbackMessage;
+//     query('countly-feedback-modal-dismiss').innerText = Countly.feedback.starFeedbackDismissButtonTitle;
+//     query('countly-feedback-modal-text').innerHTML = html1;
+//     query('countly-feedback-modal-submit').innerText = Countly.feedback.starFeedbackSubmitButtonTitle;
 
-    var commentCheck = document.getElementById('commntAdd');
-    commentCheck.addEventListener('click', function () {
-        if (commentCheck.checked) {
-            query('textArea').style.display = '';
-        } else {
-            query('textArea').style.display = 'none';
-        }
-    });
+//     var commentCheck = document.getElementById('commntAdd');
+//     commentCheck.addEventListener('click', function () {
+//         if (commentCheck.checked) {
+//             query('textArea').style.display = '';
+//         } else {
+//             query('textArea').style.display = 'none';
+//         }
+//     });
 
-    var emailCheck = document.getElementById('emailAdd');
-    emailCheck.addEventListener('click', function () {
-        if (emailCheck.checked) {
-            query('emailVal').style.display = '';
-        } else {
-            query('emailVal').style.display = 'none';
-        }
-    })
-    var resultScore = '';
-    var classname = document.getElementsByClassName("countly-feedback-start");
-    var myFunction = function (evt) {
-        // var default_img = "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_gray.svg";
-        var default_img = "assest/countly-sdk.js/" + evt.target.id + "_gray.svg";
-        var current_img_src = evt.target.getAttribute('src');
-        if (current_img_src === default_img) {
-            Array.from(classname).forEach(function (element) {
-                // resultScore = '';
-                if (element.children[0].id !== evt.target.id) {
-                    // var default_img = "https://try.count.ly/star-rating/images/star-rating/" + element.children[0].id + "_gray.svg";
-                    var default_img = "assest/countly-sdk.js/" + element.children[0].id + "_gray.svg";
-                    element.children[0].setAttribute('src', default_img);
-                } else {
-                    // evt.target.setAttribute('src', "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_color.svg");
-                    evt.target.setAttribute('src', "assest/countly-sdk.js/" + evt.target.id + "_color.svg");
-                    resultScore = element.children[1].innerHTML;
-                }
-            });
-        } else {
-            evt.target.setAttribute('src', default_img);
-        }
-    };
+//     var emailCheck = document.getElementById('emailAdd');
+//     emailCheck.addEventListener('click', function () {
+//         if (emailCheck.checked) {
+//             query('emailVal').style.display = '';
+//         } else {
+//             query('emailVal').style.display = 'none';
+//         }
+//     })
+//     var resultScore = '';
+//     var classname = document.getElementsByClassName("countly-feedback-start");
+//     var myFunction = function (evt) {
+//         // var default_img = "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_gray.svg";
+//         var default_img = "assest/countly-sdk.js/" + evt.target.id + "_gray.svg";
+//         var current_img_src = evt.target.getAttribute('src');
+//         if (current_img_src === default_img) {
+//             Array.from(classname).forEach(function (element) {
+//                 // resultScore = '';
+//                 if (element.children[0].id !== evt.target.id) {
+//                     // var default_img = "https://try.count.ly/star-rating/images/star-rating/" + element.children[0].id + "_gray.svg";
+//                     var default_img = "assest/countly-sdk.js/" + element.children[0].id + "_gray.svg";
+//                     element.children[0].setAttribute('src', default_img);
+//                 } else {
+//                     // evt.target.setAttribute('src', "https://try.count.ly/star-rating/images/star-rating/" + evt.target.id + "_color.svg");
+//                     evt.target.setAttribute('src', "assest/countly-sdk.js/" + evt.target.id + "_color.svg");
+//                     resultScore = element.children[1].innerHTML;
+//                 }
+//             });
+//         } else {
+//             evt.target.setAttribute('src', default_img);
+//         }
+//     };
 
-    Array.from(classname).forEach(function (element) {
-        element.addEventListener('click', myFunction);
-    });
+//     Array.from(classname).forEach(function (element) {
+//         element.addEventListener('click', myFunction);
+//     });
 
-    var subBtn = document.getElementById('textVal');
-    subBtn.addEventListener('click', function () {
-        resultData = {};
-        var textVal = document.getElementById('textArea').value;
-        var emailVal = document.getElementById('emailVal').value;
-        resultData.comment = textVal;
-        resultData.email = emailVal;
-        resultData.feedback = resultScore;
+//     var subBtn = document.getElementById('textVal');
+//     subBtn.addEventListener('click', function () {
+//         resultData = {};
+//         var textVal = document.getElementById('textArea').value;
+//         var emailVal = document.getElementById('emailVal').value;
+//         resultData.comment = textVal;
+//         resultData.email = emailVal;
+//         resultData.feedback = resultScore;
 
-        query('countly-feedback-modal-header').style.display = 'none';
-        query('countly-feedback-modal-content').style.display = 'none';
-        query('countly-feedback-modal-submit').style.display = 'none';
-        query('countly-feedback-modal-text').style.display = 'block';
-        query('countly-feedback-modal-text').style.display = 'block';
-        if (Countly.feedback.callback) {
-            Countly.feedback.callback({ code: 0, msg: 'user submit feedback', data: resultData });
-        } else {
-            Countly.feedback.callback({ code: 1, msg: 'Error to save data'})
-        }
-    })
-};
+//         query('countly-feedback-modal-header').style.display = 'none';
+//         query('countly-feedback-modal-content').style.display = 'none';
+//         query('countly-feedback-modal-submit').style.display = 'none';
+//         query('countly-feedback-modal-text').style.display = 'block';
+//         query('countly-feedback-modal-text').style.display = 'block';
+//         if (Countly.feedback.callback) {
+//             Countly.feedback.callback({ code: 0, msg: 'user submit feedback', data: resultData });
+//         } else {
+//             Countly.feedback.callback({ code: 1, msg: 'Error to save data'})
+//         }
+//     })
+// };
 
 Countly.sendFeedback = function(feedback){
     var arg = [];
@@ -565,9 +566,14 @@ Countly.sendFeedback = function(feedback){
 }
 
 Countly.askForFeedback = function(widgetId, callback){
-    cordova.exec(callback,function(error){callback({code: 1, error: error});},"CountlyCordova","askForFeedback",[widgetId.toString()]);
+    cordova.exec(function(url){
+        Countly.openFeedbackModal(url);
+    },function(error){callback({code: 1, error: error});},"CountlyCordova","askForFeedback",[widgetId.toString()]);
 }
-
+Countly.openFeedbackModal = function(url){
+    Countly.feedback.create();
+    query('countly-feedback-modal').classList.add('open');
+}
 // FEEDBACK-WORK
 
 var Ajax = {};
