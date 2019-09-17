@@ -516,16 +516,24 @@
         // Ratings can be from 1 - 5;
         Countly.sendRating(5);
     }
-
+    app.askForFeedback = function(){
+        Countly.askForFeedback("5d80915a31ec7124c86df698", function(url){
+            //
+            url = "https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e";
+            // open modal + close button with iframe.
+        });
+        // Countly.sendFeedback({
+        //     rating: 5,
+        //     email: "example@demo.com",
+        //     contact_me: true,
+        //     comment: "My comment...",
+        //     feedback: "My feedback",
+        //     widgetId: "5d80915a31ec7124c86df698",
+        // });
+    }
     app.askForStarRating = function(){
         Countly.askForStarRating(function(ratingResult){
             console.log(ratingResult);
-        });
-    }
-
-    app.askForFeedback = function(){
-        Countly.askForFeedback(function(feedback){
-            console.log(feedback);
         });
     }
 
