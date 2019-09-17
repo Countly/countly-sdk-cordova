@@ -553,11 +553,19 @@ Countly.feedback.set = function (feedback) {
 Countly.sendFeedback = function(feedback){
     var arg = [];
     console.log(feedback);
-    arg.push(feedback.rating || "");
-    arg.push(feedback.comment || "");
-    arg.push(feedback.email || "");
-    arg.push(Countly.feedback || "");
+    arg.push((feedback.rating || "").toString());
+    arg.push((feedback.comment || "").toString());
+    arg.push((feedback.email || "").toString());
+    arg.push((Countly.feedback || "").toString());
+    arg.push((Countly.widgetId || "").toString());
+    Countly.getFeedbackWidget(Countly.widgetId, function(result){
+        console.log(result);
+    });
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendFeedback",arg);
+}
+
+Countly.askForFeedback = function(widgetId, callback){
+    cordova.exec(callback,function(error){callback({code: 1, error: error});},"CountlyCordova","askForFeedback",[widgetId.toString()]);
 }
 
 // FEEDBACK-WORK

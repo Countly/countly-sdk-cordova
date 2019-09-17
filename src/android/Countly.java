@@ -2428,6 +2428,19 @@ public class Countly {
     }
 
     /**
+     * Get the feedback widget url (Nicolson Custom)
+     * @param widgetId ID that identifies this dialog
+     * @return
+     */
+    public String getFeedbackWidget(final String widgetId){
+        if (!isInitialized()) {
+            throw new IllegalStateException("Countly.sharedInstance().init must be called before showFeedbackPopup");
+        }
+        final String ratingWidgetUrl = connectionQueue_.getServerURL() + "/feedback?widget_id=" + widgetId + "&device_id=" + connectionQueue_.getDeviceId().getId() + "&app_key=" + connectionQueue_.getAppKey();
+        return ratingWidgetUrl;
+    }
+
+    /**
      * If enable, will automatically download newest remote config_ values on init.
      * @deprecated use CountlyConfig during init to set this
      * @param enabled set true for enabling it

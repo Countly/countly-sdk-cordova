@@ -405,6 +405,11 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success(result);
             return true;
         }
+        else if("askForFeedback".equals(action)){
+            String widgetId = args.getString(0);
+            callbackContext.success(Countly.sharedInstance().getFeedbackWidget(widgetId));
+            return true;
+        }
         else{
             return false;
         }
