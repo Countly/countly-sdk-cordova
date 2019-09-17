@@ -688,9 +688,7 @@
 //@nicolson custom code
 - (NSString *)getFeedbackWidget:(NSString *)widgetId{
 
-    NSString* const kCountlyOutputEndpoint      = @"/o";
     NSString* const kCountlyFeedbackEndpoint    = @"/feedback";
-    NSString* const kCountlyWidgetEndpoint      = @"/widget";
     NSString* const kCountlySRKeyWidgetID       = @"widget_id";
 
 
@@ -701,11 +699,10 @@
 
     queryString = [CountlyConnectionManager.sharedInstance appendChecksum:queryString];
 
-    NSString* URLString = [NSString stringWithFormat:@"%@%@%@%@?%@",
+    NSString* URLString = [NSString stringWithFormat:@"%@%@?%@",
                            CountlyConnectionManager.sharedInstance.host,
-                           kCountlyOutputEndpoint, kCountlyFeedbackEndpoint, kCountlyWidgetEndpoint,
+                           kCountlyFeedbackEndpoint,
                            queryString];
-
     return URLString;
 };
 #endif
