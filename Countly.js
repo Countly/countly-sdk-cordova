@@ -442,7 +442,7 @@ Countly.feedback.closeModal = function () {
 
 //set html in feedback modal
 Countly.feedback.html = '<div class="countly-feedback-modal-dismiss">X</div><iframe class="countly-feedback-modal-content" src="https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e"></iframe>';
-Countly.feedback.css = '.countly-main-modal.open{display:block}.countly-main-modal{position:fixed;top:10%;left:9px;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-main-modal div{margin:7px}.countly-feedback-modal-dismiss{display:block;text-align:right;cursor:pointer;font-size:20px}.countly-feedback-modal-content{font-size:small;height:438px;overflow:hidden;border:0px !important}';
+Countly.feedback.css = '.countly-main-modal.open{display:block}.countly-main-modal{margin-left:-150px;position:fixed;top:25%;left:48%;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-main-modal div{margin:7px}.countly-feedback-modal-dismiss{display:block;text-align:right;cursor:pointer;font-size:20px}.countly-feedback-modal-content{font-size:small;height:438px;overflow:hidden;border:0px !important}';
 Countly.feedback.create = function () {
     var div = query('countly-feedback-modal');
     if (div) {
