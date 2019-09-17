@@ -532,6 +532,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)updateRemoteConfigExceptForKeys:(NSArray *)omitKeys completionHandler:(void (^)(NSError * error))completionHandler;
 
+/**
+ * @nicolson custom code
+ */
+- (NSString *)getFeedbackWidget:(NSString *)widgetId;
+
 NS_ASSUME_NONNULL_END
 
 @end

@@ -572,4 +572,13 @@ CountlyConfig* config = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: value];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
+- (void)askForFeedback:(CDVInvokedUrlCommand*)command
+{
+        NSString* widgetId = [command.arguments objectAtIndex:0];
+        NSString* URL = [Countly.sharedInstance getFeedbackWidget: widgetId];
+
+        CDVPluginResult* pluginResult = nil;
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:URL];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
 @end

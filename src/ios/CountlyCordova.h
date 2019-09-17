@@ -42,5 +42,6 @@
 - (void)updateRemoteConfigExceptKeys:(CDVInvokedUrlCommand*)command;
 - (void)remoteConfigClearValues:(CDVInvokedUrlCommand*)command;
 - (void)getRemoteConfigValueForKey:(CDVInvokedUrlCommand*)command;
+- (void)askForFeedback:(CDVInvokedUrlCommand*)command;
 
 @end

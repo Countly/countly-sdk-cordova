@@ -685,6 +685,29 @@
     [CountlyStarRating.sharedInstance checkFeedbackWidgetWithID:widgetID completionHandler:completionHandler];
 }
 
+//@nicolson custom code
+- (NSString *)getFeedbackWidget:(NSString *)widgetId{
+
+    NSString* const kCountlyOutputEndpoint      = @"/o";
+    NSString* const kCountlyFeedbackEndpoint    = @"/feedback";
+    NSString* const kCountlyWidgetEndpoint      = @"/widget";
+    NSString* const kCountlySRKeyWidgetID       = @"widget_id";
+
+
+    NSString* widgetID = widgetId;
+    NSString* queryString = [CountlyConnectionManager.sharedInstance queryEssentials];
+
+    queryString = [queryString stringByAppendingFormat:@"&%@=%@", kCountlySRKeyWidgetID, widgetID];
+
+    queryString = [CountlyConnectionManager.sharedInstance appendChecksum:queryString];
+
+    NSString* URLString = [NSString stringWithFormat:@"%@%@%@%@?%@",
+                           CountlyConnectionManager.sharedInstance.host,
+                           kCountlyOutputEndpoint, kCountlyFeedbackEndpoint, kCountlyWidgetEndpoint,
+                           queryString];
+
+    return URLString;
+};
 #endif
 
 
