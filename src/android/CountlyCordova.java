@@ -297,6 +297,33 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success("userData_setOnce success!");
             return true;
         }
+        //setRequiresConsent
+        else if ("setRequiresConsent".equals(action)) {
+            
+            callbackContext.success("setRequiresConsent success!");
+            return true;
+        }
+        else if ("giveConsent".equals(action)) {
+            
+            callbackContext.success("giveConsent success!");
+            return true;
+        }
+        else if ("removeConsent".equals(action)) {
+            
+            callbackContext.success("removeConsent success!");
+            return true;
+        }
+        else if ("giveAllConsent".equals(action)) {
+            
+            callbackContext.success("giveAllConsent success!");
+            return true;
+        }
+        else if ("removeAllConsent".equals(action)) {
+            
+            callbackContext.success("removeAllConsent success!");
+            return true;
+        }
+
         else if("getDeviceID".equals(action)){
             callbackContext.success(Countly.sharedInstance().getDeviceID());
             return true;

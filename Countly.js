@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.version = "19.02.0";
+Countly.version = "19.3.0";
 var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 if (/android/i.test(userAgent)) {
     Countly.isAndroid = true;
@@ -306,6 +306,23 @@ Countly.userData.saveMin = function(keyName, saveMin){
 Countly.userData.setOnce = function(keyName, setOnce){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
 };
+
+//setRequiresConsent
+Countly.setRequiresConsent = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setRequiresConsent",[]);
+}
+Countly.giveConsent = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",[]);
+}
+Countly.removeConsent = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",[]);
+}
+Countly.giveAllConsent = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveAllConsent",[]);
+}
+Countly.removeAllConsent = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeAllConsent",[]);
+}
 
 // Remote config
 Countly.setRemoteConfigAutomaticDownload = function(onSuccess, onError){

@@ -116,6 +116,7 @@ CountlyConfig* config = nil;
 }
 - (void)setloggingenabled:(CDVInvokedUrlCommand*)command
 {
+    config.enableDebug = YES;
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setloggingenabled!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -194,7 +195,7 @@ CountlyConfig* config = nil;
 {
     [Countly.sharedInstance updateSession];
     CDVPluginResult* pluginResult = nil;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"stop!"];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"update!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -225,6 +226,7 @@ CountlyConfig* config = nil;
 - (void)setHttpPostForced:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
+    config.alwaysUsePOST = YES;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setHttpPostForced!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -269,7 +271,7 @@ CountlyConfig* config = nil;
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
 
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSum sent!"];
     }
     else if ([eventType  isEqual: @"eventWithSegment"]){
         NSString* eventName = [command.arguments objectAtIndex:1];
@@ -295,7 +297,7 @@ CountlyConfig* config = nil;
         }
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
 
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSegment sent!"];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSumSegment sent!"];
     }
     else{
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"none cases!"];
@@ -463,6 +465,55 @@ CountlyConfig* config = nil;
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"userData_setOnce!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setRequiresConsent:(CDVInvokedUrlCommand*)command
+{
+    if (config == nil){
+        config = CountlyConfig.new;
+    }
+    BOOL consentFlag = [[arguments objectAtIndex:0] boolValue];
+    config.requiresConsent = consentFlag;
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"setRequiresConsent!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)giveConsent:(CDVInvokedUrlCommand*)command
+{
+    [Countly.sharedInstance giveConsentForFeatures:arguments];
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"giveConsent!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)removeConsent:(CDVInvokedUrlCommand*)command
+{
+    [Countly.sharedInstance cancelConsentForFeatures:arguments];
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeConsent!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)giveAllConsent:(CDVInvokedUrlCommand*)command
+{
+    [Countly.sharedInstance giveConsentForAllFeatures];
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"giveAllConsent!"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)removeAllConsent:(CDVInvokedUrlCommand*)command
+{
+    [Countly.sharedInstance cancelConsentForAllFeatures];
+
+    CDVPluginResult* pluginResult = nil;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeAllConsent!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
