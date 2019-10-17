@@ -695,6 +695,7 @@
     cordova build ios --verbose
 
     cordova run android --device --verbose
+    adb -d logcat ly.count.demo:I *:S
     cordova run ios --device --verbose
     open ./platforms/ios/countly-demo-js.xcworkspace/
 
