@@ -144,6 +144,16 @@ Countly.stop = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","stop",[]);
 }
 
+// countly manualSessionHandling for android
+Countly.manualSessionHandling = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","manualSessionHandling",[]);
+}
+
+// countly manualSessionHandling for android
+Countly.manualSessionHandling = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","manualSessionHandling",[]);
+}
+
 // countly deviceready for testing purpose
 Countly.deviceready = function(){
     Countly.ready = true;
@@ -282,7 +292,47 @@ Countly.endEvent = function(options){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endEvent",args);
 };
 
+Countly.recordEvent = function(options){
+    if(typeof options === "string")
+        options = {eventName: options};
+    var args = [];
+    var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
+    var segments = {};
 
+    if(options.eventSum)
+        eventType = "eventWithSum";
+    if(options.segments)
+        eventType = "eventWithSegment";
+    if(options.segments && options.eventSum)
+        eventType = "eventWithSumSegment";
+    
+    args.push(eventType);
+
+    if(!options.eventName)
+        options.eventName = "";
+    args.push(options.eventName.toString());
+
+    if(!options.eventCount)
+        options.eventCount = "1";
+    args.push(options.eventCount.toString());
+
+    if(!options.eventSum)
+        options.eventSum = "0";
+    args.push(options.eventSum.toString());
+
+    if(options.segments)
+        segments = options.segments;
+    for (var event in segments) {
+        args.push(event);
+        args.push(segments[event]);
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
+};
+
+//askForNotificationPermission
+Countly.askForNotificationPermission = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
+}
 
 Countly.userData = {};
 Countly.userData.setProperty = function(keyName, keyValue){
@@ -305,6 +355,21 @@ Countly.userData.saveMin = function(keyName, saveMin){
 };
 Countly.userData.setOnce = function(keyName, setOnce){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
+};
+
+//pushUniqueValue
+Countly.userData.pushUniqueValue = function(type, pushUniqueValueString){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushUniqueValue",[type.toString() || "", pushUniqueValueString.toString() || ""]);
+};
+
+//pushValue
+Countly.userData.pushValue = function(type, pushValue){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushValue",[type.toString() || "", pushValue.toString() || ""]);
+};
+
+//pullValue
+Countly.userData.pullValue = function(type, pullValue){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pullValue",[type.toString() || "", pullValue.toString() || ""]);
 };
 
 //setRequiresConsent
@@ -592,6 +657,12 @@ Countly.openFeedbackModal = function(url){
     query('countly-feedback-modal').classList.add('open');
 }
 // FEEDBACK-WORK
+
+
+//setHttpPostForced
+Countly.setHttpPostForced = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setHttpPostForced",[]);
+}
 
 var Ajax = {};
 Ajax.post = function(url, data, cb) {
