@@ -192,7 +192,7 @@ CountlyConfig* config = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"start!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
-// change massageString stop to update
+
 - (void)update:(CDVInvokedUrlCommand*)command
 {
     [Countly.sharedInstance updateSession];
@@ -224,7 +224,7 @@ CountlyConfig* config = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"changeDeviceId!"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
-//add in java file 001
+
 - (void)setHttpPostForced:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
@@ -272,7 +272,7 @@ CountlyConfig* config = nil;
         int sumInt = [sumString intValue];
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
-        // change  massagestring eventWithSegment
+
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSum sent!"];
     }
     else if ([eventType  isEqual: @"eventWithSegment"]){
@@ -298,7 +298,7 @@ CountlyConfig* config = nil;
             dict[[command.arguments objectAtIndex:i]] = [command.arguments objectAtIndex:i+1];
         }
         [Countly.sharedInstance endEvent:eventName segmentation:dict count:countInt sum:sumInt];
-        // change  massagestring eventWithSegment
+
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"eventWithSumSegment sent!"];
     }
     else{
@@ -475,7 +475,7 @@ CountlyConfig* config = nil;
     if (config == nil){
         config = CountlyConfig.new;
     }
-    BOOL consentFlag = [[arguments objectAtIndex:0] boolValue];
+    BOOL consentFlag = [[command.arguments objectAtIndex:0] boolValue];
     config.requiresConsent = consentFlag;
 
     CDVPluginResult* pluginResult = nil;
@@ -485,7 +485,7 @@ CountlyConfig* config = nil;
 
 - (void)giveConsent:(CDVInvokedUrlCommand*)command
 {
-    [Countly.sharedInstance giveConsentForFeatures:arguments];
+    [Countly.sharedInstance giveConsentForFeatures:command.arguments];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"giveConsent!"];
@@ -494,7 +494,7 @@ CountlyConfig* config = nil;
 
 - (void)removeConsent:(CDVInvokedUrlCommand*)command
 {
-    [Countly.sharedInstance cancelConsentForFeatures:arguments];
+    [Countly.sharedInstance cancelConsentForFeatures:command.arguments];
 
     CDVPluginResult* pluginResult = nil;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"removeConsent!"];
