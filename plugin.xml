@@ -37,49 +37,15 @@
       </feature>
     </config-file>
 
-    <header-file src="src/ios/sdk/Countly.h"/>
-    <source-file src="src/ios/sdk/Countly.m"  />
-    <header-file src="src/ios/sdk/Countly_OpenUDID.h"/>
-    <source-file src="src/ios/sdk/Countly_OpenUDID.m" />
-    <header-file src="src/ios/sdk/CountlyAPM.h"/>
-    <source-file src="src/ios/sdk/CountlyAPM.m" />
-    <header-file src="src/ios/sdk/CountlyAPMNetworkLog.h"/>
-    <source-file src="src/ios/sdk/CountlyAPMNetworkLog.m"/>
-    <header-file src="src/ios/sdk/CountlyCommon.h"/>
-    <source-file src="src/ios/sdk/CountlyCommon.m" />
-    <header-file src="src/ios/sdk/CountlyConfig.h"/>
-    <source-file src="src/ios/sdk/CountlyConfig.m" />
-    <header-file src="src/ios/sdk/CountlyConnectionManager.h"/>
-    <source-file src="src/ios/sdk/CountlyConnectionManager.m" />
-    <header-file src="src/ios/sdk/CountlyConsentManager.h"/>
-    <source-file src="src/ios/sdk/CountlyConsentManager.m" />
-    <header-file src="src/ios/sdk/CountlyCrashReporter.h"/>
-    <source-file src="src/ios/sdk/CountlyCrashReporter.m" />
-    <header-file src="src/ios/sdk/CountlyDeviceInfo.h"/>
-    <source-file src="src/ios/sdk/CountlyDeviceInfo.m" />
-    <header-file src="src/ios/sdk/CountlyEvent.h"/>
-    <source-file src="src/ios/sdk/CountlyEvent.m" />
-    <header-file src="src/ios/sdk/CountlyLocationManager.h"/>
-    <source-file src="src/ios/sdk/CountlyLocationManager.m" />
-    <header-file src="src/ios/sdk/CountlyPersistency.h"/>
-    <source-file src="src/ios/sdk/CountlyPersistency.m" />
-    <header-file src="src/ios/sdk/CountlyStarRating.h"/>
-    <source-file src="src/ios/sdk/CountlyStarRating.m" />
-    <header-file src="src/ios/sdk/CountlyUserDetails.h"/>
-    <source-file src="src/ios/sdk/CountlyUserDetails.m" />
-    <header-file src="src/ios/sdk/CountlyViewTracking.h"/>
-    <source-file src="src/ios/sdk/CountlyViewTracking.m" />
-    <source-file src="src/ios/sdk/CountlyPushNotifications.h" />
-    <source-file src="src/ios/sdk/CountlyPushNotifications.m" />
-    <source-file src="src/ios/sdk/CountlyNotificationService.h" />
-    <source-file src="src/ios/sdk/CountlyNotificationService.m" />
-    <source-file src="src/ios/sdk/CountlyRemoteConfig.h" />
-    <source-file src="src/ios/sdk/CountlyRemoteConfig.m" />
     <header-file src="src/ios/CountlyCordova.h"/>
     <source-file src="src/ios/CountlyCordova.m"/>
+    <header-file src="src/ios/CountlyNative.h"/>
+    <source-file src="src/ios/CountlyNative.m"/>
 
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="OpenGLES.framework" weak="true" />
+    <framework src="Countly" type="podspec" spec="~> 19.08" />
+
   </platform>
 
   <!-- android -->

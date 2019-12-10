@@ -252,36 +252,36 @@ Countly.endSession = function(){
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
 }
-Countly.startEvent = function(eventName){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startEvent",[eventName.toString() || ""]);
+Countly.startEvent = function(key){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startEvent",[key.toString() || ""]);
 }
 Countly.endEvent = function(options){
     if(typeof options === "string")
-        options = {eventName: options};
+        options = {key: options};
     var args = [];
     var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
     var segments = {};
 
-    if(options.eventSum)
+    if(options.sum)
         eventType = "eventWithSum";
     if(options.segments)
         eventType = "eventWithSegment";
-    if(options.segments && options.eventSum)
+    if(options.segments && options.sum)
         eventType = "eventWithSumSegment";
 
     args.push(eventType);
 
-    if(!options.eventName)
-        options.eventName = "";
-    args.push(options.eventName.toString());
+    if(!options.key)
+        options.key = "";
+    args.push(options.key.toString());
 
-    if(!options.eventCount)
-        options.eventCount = "1";
-    args.push(options.eventCount.toString());
+    if(!options.count)
+        options.count = "1";
+    args.push(options.count.toString());
 
-    if(!options.eventSum)
-        options.eventSum = "0";
-    args.push(options.eventSum.toString());
+    if(!options.sum)
+        options.sum = "0";
+    args.push(options.sum.toString());
 
     if(options.segments)
         segments = options.segments;
@@ -294,31 +294,37 @@ Countly.endEvent = function(options){
 
 Countly.recordEvent = function(options){
     if(typeof options === "string")
-        options = {eventName: options};
+        options = {key: options};
     var args = [];
     var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
     var segments = {};
 
-    if(options.eventSum)
+    if(options.sum)
         eventType = "eventWithSum";
     if(options.segments)
         eventType = "eventWithSegment";
-    if(options.segments && options.eventSum)
+    if(options.segments && options.sum)
         eventType = "eventWithSumSegment";
-    
+    if(options.duration)
+        eventType = "eventWithSum_Segment_duration";
+
     args.push(eventType);
 
-    if(!options.eventName)
-        options.eventName = "";
-    args.push(options.eventName.toString());
+    if(!options.key)
+        options.key = "";
+    args.push(options.key.toString());
 
-    if(!options.eventCount)
-        options.eventCount = "1";
-    args.push(options.eventCount.toString());
+    if(!options.count)
+        options.count = "1";
+    args.push(options.count.toString());
 
-    if(!options.eventSum)
-        options.eventSum = "0";
-    args.push(options.eventSum.toString());
+    if(!options.sum)
+        options.sum = "0";
+    args.push(options.sum.toString());
+
+    if(!options.duration)
+        options.duration = "0";
+    args.push(options.duration.toString());
 
     if(options.segments)
         segments = options.segments;
