@@ -3,18 +3,17 @@
 #import "Countly.h"
 #import "CountlyCordova.h"
 #import "CountlyConfig.h"
-#import "CountlyPushNotifications.h"
+//#import "CountlyPushNotifications.h"
 #import <Cordova/CDV.h>
-#import "CountlyCommon.h"
+//#import "CountlyCommon.h"
 #import "CountlyNative.h"
 
-CountlyConfig* config = nil;
 CountlyNative* countlyNative = nil;
 
-@interface CountlyPushNotifications()
-- (void)sendToken;
-@property (nonatomic, strong) NSString* token;
-@end
+//@interface CountlyPushNotifications()
+//- (void)sendToken;
+//@property (nonatomic, strong) NSString* token;
+//@end
 
 @implementation CountlyCordova
 - (void)init:(CDVInvokedUrlCommand*)command

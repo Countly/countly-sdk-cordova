@@ -1,8 +1,8 @@
 #import "CountlyNative.h"
 #import "Countly.h"
 #import "CountlyConfig.h"
-#import "CountlyDeviceInfo.h"
-#import "CountlyRemoteConfig.h"
+//#import "CountlyDeviceInfo.h"
+//#import "CountlyRemoteConfig.h"
 //
 //@interface CountlyNative ()
 //{
@@ -104,24 +104,24 @@
         result(@"default!");
         
     }else if ([@"sendRating" isEqualToString:method]) {
-        NSString* ratingString = [command objectAtIndex:0];
-        int rating = [ratingString intValue];
-        NSString* const kCountlySRKeyPlatform       = @"platform";
-        NSString* const kCountlySRKeyAppVersion     = @"app_version";
-        NSString* const kCountlySRKeyRating         = @"rating";
-        NSString* const kCountlyReservedEventStarRating = @"[CLY]_star_rating";
-        
-        if (rating != 0)
-        {
-            NSDictionary* segmentation =
-            @{
-              kCountlySRKeyPlatform: CountlyDeviceInfo.osName,
-              kCountlySRKeyAppVersion: CountlyDeviceInfo.appVersion,
-              kCountlySRKeyRating: @(rating)
-              };
-            //            [Countly.sharedInstance recordReservedEvent:kCountlyReservedEventStarRating segmentation:segmentation];
-        }
-        result(@"sendRating!");
+//        NSString* ratingString = [command objectAtIndex:0];
+//        int rating = [ratingString intValue];
+//        NSString* const kCountlySRKeyPlatform       = @"platform";
+//        NSString* const kCountlySRKeyAppVersion     = @"app_version";
+//        NSString* const kCountlySRKeyRating         = @"rating";
+//        NSString* const kCountlyReservedEventStarRating = @"[CLY]_star_rating";
+//
+//        if (rating != 0)
+//        {
+//            NSDictionary* segmentation =
+//            @{
+//              kCountlySRKeyPlatform: CountlyDeviceInfo.osName,
+//              kCountlySRKeyAppVersion: CountlyDeviceInfo.appVersion,
+//              kCountlySRKeyRating: @(rating)
+//              };
+//            //            [Countly.sharedInstance recordReservedEvent:kCountlyReservedEventStarRating segmentation:segmentation];
+//        }
+//        result(@"sendRating!");
         
     }else if ([@"start" isEqualToString:method]) {
         [Countly.sharedInstance beginSession];
@@ -545,7 +545,7 @@
          }];
         
     }else if ([@"remoteConfigClearValues" isEqualToString:method]) {
-        [CountlyRemoteConfig.sharedInstance clearCachedRemoteConfig];
+//        [CountlyRemoteConfig.sharedInstance clearCachedRemoteConfig];
         result(@"Success!");
         
     }else if ([@"getRemoteConfigValueForKey" isEqualToString:method]) {

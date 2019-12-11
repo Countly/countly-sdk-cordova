@@ -59,10 +59,6 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest">
         <uses-permission android:name="android.permission.INTERNET"/>
-        <!-- These permissions might be for push plugin. -->
-        <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-        <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-        <uses-permission android:name="android.permission.WAKE_LOCK"/> -->
     </config-file>
 
 
@@ -75,8 +71,11 @@
     </config-file>
 
     <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/CountlyNative.java" target-dir="src/ly/count/android/sdk"/>
+    <framework src="ly.count.android:sdk:19.02.3" />
+    <framework src="ly.count.android:sdk-messaging-fcm:19.02.3" />
 
-    <source-file src="src/android/AdvertisingIdAdapter.java" target-dir="src/ly/count/android/sdk"/>
+    <!-- <source-file src="src/android/AdvertisingIdAdapter.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/CertificateTrustManager.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/ConnectionProcessor.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/ConnectionQueue.java" target-dir="src/ly/count/android/sdk"/>
@@ -96,7 +95,7 @@
 
 
     <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
-    <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/>
+    <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/> -->
   </platform>
 
 </plugin>

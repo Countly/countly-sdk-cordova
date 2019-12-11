@@ -299,40 +299,34 @@ Countly.recordEvent = function(options){
     var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
     var segments = {};
 
-    if(options.sum)
-        eventType = "eventWithSum";
-    if(options.segments)
-        eventType = "eventWithSegment";
-    if(options.segments && options.sum)
-        eventType = "eventWithSumSegment";
-    if(options.duration)
-        eventType = "eventWithSum_Segment_duration";
-
-    args.push(eventType);
-
-    if(!options.key)
-        options.key = "";
-    args.push(options.key.toString());
-
-    if(!options.count)
-        options.count = "1";
-    args.push(options.count.toString());
-
-    if(!options.sum)
-        options.sum = "0";
-    args.push(options.sum.toString());
-
-    if(!options.duration)
-        options.duration = "0";
-    args.push(options.duration.toString());
-
-    if(options.segments)
-        segments = options.segments;
-    for (var event in segments) {
-        args.push(event);
-        args.push(segments[event]);
-    }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
+    if(options["key"] == null){
+        options["key"] = "default";
+      }
+      args.add(options["key"].toString());
+  
+      if(options["count"] == null){
+        options["count"] = 1;
+      }
+      args.add(options["count"].toString());
+  
+      if(options["sum"] == null){
+        options["sum"] = "0";
+      }
+      args.add(options["sum"].toString());
+  
+      if(options["duration"] == null){
+        options["duration"] = "0";
+      }
+      args.add(options["duration"].toString());
+  
+      if(options["segmentation"] != null){
+        segmentation = options["segmentation"];
+        segmentation.forEach((k, v) => {
+          args.add(k.toString());
+          args.add(v.toString());
+        });
+      }
+     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
 };
 
 //askForNotificationPermission

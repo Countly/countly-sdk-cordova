@@ -136,7 +136,7 @@ public class CountlyCordova extends CordovaPlugin {
             countlyNative.remoteConfigUpdate(args, new CountlyNative.Callback() {
                 @Override
                 public void callback(String result) {
-                    callbackContext.success("Success");
+                    callbackContext.success(result);
                 }
             });
         }
@@ -144,7 +144,7 @@ public class CountlyCordova extends CordovaPlugin {
             countlyNative.updateRemoteConfigForKeysOnly(args, new CountlyNative.Callback() {
                 @Override
                 public void callback(String result) {
-                    callbackContext.success("Success");
+                    callbackContext.success(result);
                 }
             });
         }
