@@ -33,43 +33,43 @@ Countly.init = function(serverUrl,appKey, deviceId){
 }
 
 // countly sending various types of events
-Countly.sendEvent = function(options){
-    var args = [];
-    var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
-    var segments = {};
+// Countly.sendEvent = function(options){
+//     var args = [];
+//     var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
+//     var segments = {};
 
-    if(options.eventSum)
-        eventType = "eventWithSum";
-    if(options.segments)
-        eventType = "eventWithSegment";
-    if(options.segments && options.eventSum)
-        eventType = "eventWithSumSegment";
+//     if(options.eventSum)
+//         eventType = "eventWithSum";
+//     if(options.segments)
+//         eventType = "eventWithSegment";
+//     if(options.segments && options.eventSum)
+//         eventType = "eventWithSumSegment";
 
-    args.push(eventType);
+//     args.push(eventType);
 
-    if(options.eventName)
-        args.push(options.eventName.toString());
-    if(options.eventCount){
-        args.push(options.eventCount.toString());
-    }else{
-        args.push("1");
-    }
-    if(options.eventSum){
-        args.push(options.eventSum.toString());
-    }
+//     if(options.eventName)
+//         args.push(options.eventName.toString());
+//     if(options.eventCount){
+//         args.push(options.eventCount.toString());
+//     }else{
+//         args.push("1");
+//     }
+//     if(options.eventSum){
+//         args.push(options.eventSum.toString());
+//     }
 
-    if(options.segments){
-        segments = options.segments;
-    }
-    for (var event in segments) {
-        args.push(event);
-        args.push(segments[event]);
-    }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","event",args);
-}
-Countly.recordView = function(recordView){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",[recordView || ""]);
-};
+//     if(options.segments){
+//         segments = options.segments;
+//     }
+//     for (var event in segments) {
+//         args.push(event);
+//         args.push(segments[event]);
+//     }
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","event",args);
+// }
+// Countly.recordView = function(recordView){
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",[recordView || ""]);
+// };
 
 // countly enable logger
 Countly.setLoggingEnabled = function(){
@@ -91,18 +91,18 @@ Countly.setUserData = function(options){
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setuserdata",args);
 }
-Countly.getDeviceID = function(successCallback, failureCallback){
-    cordova.exec(successCallback, failureCallback,"CountlyCordova","getDeviceID",[]);
+// Countly.getDeviceID = function(successCallback, failureCallback){
+//     cordova.exec(successCallback, failureCallback,"CountlyCordova","getDeviceID",[]);
 
-}
-Countly.sendPushToken = function(options){
+// }
+// Countly.sendPushToken = function(options){
     // successCallback = successCallback || Countly.onSuccess;
     // failureCallback = failureCallback || Countly.onError;
 
-    var args = [];
-    args.push(options.token || "");
-    args.push(options.messagingMode.toString() || Countly.messagingMode.PRODUCTION.toString());
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendPushToken",args);
+    // var args = [];
+    // args.push(options.token || "");
+    // args.push(options.messagingMode.toString() || Countly.messagingMode.PRODUCTION.toString());
+    // cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendPushToken",args);
 
     // Second Old method
     // if(!Countly.appKey){
@@ -133,7 +133,7 @@ Countly.sendPushToken = function(options){
     // args.push(options.mode || Countly.messagingMode.PRODUCTION);
     // args.push(options.projectId || "");
     // cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","onregistrationid",args);
-}
+// }
 // countly start for android
 Countly.start = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","start",[]);
@@ -149,9 +149,25 @@ Countly.manualSessionHandling = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","manualSessionHandling",[]);
 }
 
-// countly manualSessionHandling for android
-Countly.manualSessionHandling = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","manualSessionHandling",[]);
+// countly updateSessionPeriod for android
+Countly.updateSessionPeriod = function(updateSessionPeriod){
+    
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","updateSessionPeriod",[updateSessionPeriod.toString()]);
+}
+
+// countly eventSendThreshold for android
+Countly.eventSendThreshold = function(eventSendThreshold){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","eventSendThreshold",[eventSendThreshold.toString()]);
+}
+
+// countly storedRequestsLimit for android
+Countly.storedRequestsLimit = function(storedRequestsLimit){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","storedRequestsLimit",[storedRequestsLimit]);
+}
+
+// countly askForNotificationPermission for android
+Countly.askForNotificationPermission = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
 }
 
 // countly deviceready for testing purpose
@@ -296,34 +312,32 @@ Countly.recordEvent = function(options){
     if(typeof options === "string")
         options = {key: options};
     var args = [];
-    var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
-    var segments = {};
-
-    if(options["key"] == null){
+    
+    if(!options["key"]){
         options["key"] = "default";
       }
-      args.add(options["key"].toString());
+      args.push(options["key"].toString());
   
-      if(options["count"] == null){
+      if(!options["count"]){
         options["count"] = 1;
       }
-      args.add(options["count"].toString());
+      args.push(options["count"].toString());
   
-      if(options["sum"] == null){
+      if(!options["sum"]){
         options["sum"] = "0";
       }
-      args.add(options["sum"].toString());
+      args.push(options["sum"].toString());
   
-      if(options["duration"] == null){
+      if(!options["duration"]){
         options["duration"] = "0";
       }
-      args.add(options["duration"].toString());
+      args.push(options["duration"].toString());
   
-      if(options["segmentation"] != null){
+      if(!options["segmentation"]){
         segmentation = options["segmentation"];
         segmentation.forEach((k, v) => {
-          args.add(k.toString());
-          args.add(v.toString());
+          args.push(k.toString());
+          args.push(v.toString());
         });
       }
      cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
@@ -425,124 +439,126 @@ Countly.sendRating = function(rating){
 // ui related methods
 // opens the modal
 Countly.askForStarRating = function(callback){
-    Countly.rating.create();
-    Countly.rating.set(0);
-    Countly.rating.callback = callback;
-    query('countly-rating-modal').classList.add('open');
+    cordova.exec(onSuccess, onError,"CountlyCordova","askForStarRating",[]);
+
+    // Countly.rating.create();
+    // Countly.rating.set(0);
+    // Countly.rating.callback = callback;
+    // query('countly-rating-modal').classList.add('open');
 }
-// closes the modal
-Countly.rating.closeModal = function(){
-    query('countly-rating-modal').classList.remove('open');
-    if(Countly.rating.callback){
-        Countly.rating.callback({code: 1, msg: 'The star rating dialog was dismissed.'});
-    }
-};
-// when user selects a star
-Countly.rating.success = function(evt){
-    var rating = evt.currentTarget.getAttribute('data-rating');
-    Countly.rating.rating = rating;
-    Countly.rating.set(rating);
-    query('countly-modal-dismiss').style.display = 'none';
-    query('countly-modal-submit').style.display = 'block';
-}
-// when user clicks the submits
-Countly.rating.send = function(){
-    var rating = Countly.rating.rating;
-    query('countly-modal-dismiss').style.display = 'block';
-    query('countly-modal-submit').style.display = 'none';
-    query('countly-rating-modal').classList.remove('open');
-    Countly.rating.set(0);
-    Countly.sendRating(rating);
-    if(Countly.rating.callback){
-        Countly.rating.callback({code: 0, msg: 'The user rated the app.', rating: rating});
-    }
-}
-function query(theQuery){
-    return document.getElementsByClassName(theQuery)[0];
-}
-// set's the star in the body
-Countly.rating.html = '<div class="countly-modal-header"></div><div class="countly-modal-content"></div><div class="countly-modal-divider"></div><div class="countly-modal-dismiss"></div><div class="countly-modal-submit">Submit</div>';
-Countly.rating.css = '.countly-modal.open{display:block}.countly-modal{width:80%;height:auto;position:fixed;top:10%;left:10%;background-color:#fff;border-radius:20px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-modal div{margin:20px}.countly-modal-header{margin-top:20px}.countly-modal-divider{position:relative;margin:auto;height:1px;border:1px solid #e0e0e0}.countly-modal-dismiss{color:#47a9f4}.countly-modal-submit{display:none;color:#47a9f4}';
-Countly.rating.create = function(){
-    var div = query('countly-rating-modal');
-    if(div){
-        div.parentNode.removeChild(div);
-    }
-    div = document.createElement('div');
-    div.setAttribute('class', 'countly-modal countly-rating-modal');
-    div.innerHTML = Countly.rating.html;
-    document.body.appendChild(div);
+// // closes the modal
+// Countly.rating.closeModal = function(){
+//     query('countly-rating-modal').classList.remove('open');
+//     if(Countly.rating.callback){
+//         Countly.rating.callback({code: 1, msg: 'The star rating dialog was dismissed.'});
+//     }
+// };
+// // when user selects a star
+// Countly.rating.success = function(evt){
+//     var rating = evt.currentTarget.getAttribute('data-rating');
+//     Countly.rating.rating = rating;
+//     Countly.rating.set(rating);
+//     query('countly-modal-dismiss').style.display = 'none';
+//     query('countly-modal-submit').style.display = 'block';
+// }
+// // when user clicks the submits
+// Countly.rating.send = function(){
+//     var rating = Countly.rating.rating;
+//     query('countly-modal-dismiss').style.display = 'block';
+//     query('countly-modal-submit').style.display = 'none';
+//     query('countly-rating-modal').classList.remove('open');
+//     Countly.rating.set(0);
+//     Countly.sendRating(rating);
+//     if(Countly.rating.callback){
+//         Countly.rating.callback({code: 0, msg: 'The user rated the app.', rating: rating});
+//     }
+// }
+// function query(theQuery){
+//     return document.getElementsByClassName(theQuery)[0];
+// }
+// // set's the star in the body
+// Countly.rating.html = '<div class="countly-modal-header"></div><div class="countly-modal-content"></div><div class="countly-modal-divider"></div><div class="countly-modal-dismiss"></div><div class="countly-modal-submit">Submit</div>';
+// Countly.rating.css = '.countly-modal.open{display:block}.countly-modal{width:80%;height:auto;position:fixed;top:10%;left:10%;background-color:#fff;border-radius:20px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-modal div{margin:20px}.countly-modal-header{margin-top:20px}.countly-modal-divider{position:relative;margin:auto;height:1px;border:1px solid #e0e0e0}.countly-modal-dismiss{color:#47a9f4}.countly-modal-submit{display:none;color:#47a9f4}';
+// Countly.rating.create = function(){
+//     var div = query('countly-rating-modal');
+//     if(div){
+//         div.parentNode.removeChild(div);
+//     }
+//     div = document.createElement('div');
+//     div.setAttribute('class', 'countly-modal countly-rating-modal');
+//     div.innerHTML = Countly.rating.html;
+//     document.body.appendChild(div);
 
-    var style = document.createElement('style');
-    style.type = 'text/css';
-    style.appendChild(document.createTextNode(Countly.rating.css));
-    document.head.appendChild(style);
+//     var style = document.createElement('style');
+//     style.type = 'text/css';
+//     style.appendChild(document.createTextNode(Countly.rating.css));
+//     document.head.appendChild(style);
 
-    query('countly-modal-dismiss').addEventListener('click', Countly.rating.closeModal);
-    query('countly-modal-submit').addEventListener('click', Countly.rating.send);
-}
-Countly.rating.set = function(rating){
-    rating = Number(rating);
-    var html = '';
-    for(var i=1;i<6;i++){
-        html += '<span class="countly-rating-start" data-rating="' +i +'">' +(rating>=i?'&#x2605': '&#x2606;') +'</span>';
-    }
-    query('countly-modal-content').innerHTML = html;
-    query('countly-modal-header').innerText = Countly.rating.starRatingMessage;
-    query('countly-modal-dismiss').innerText = Countly.rating.starRatingDismissButtonTitle;
-    query('countly-modal-submit').innerText = Countly.rating.starRatingSubmitButtonTitle;
-    var stars = document.getElementsByClassName('countly-rating-start');
-    for(var i=0,il=stars.length;i<il;i++){
-        stars[i].addEventListener('click', Countly.rating.success);
-    }
-};
-// Rating
+//     query('countly-modal-dismiss').addEventListener('click', Countly.rating.closeModal);
+//     query('countly-modal-submit').addEventListener('click', Countly.rating.send);
+// }
+// Countly.rating.set = function(rating){
+//     rating = Number(rating);
+//     var html = '';
+//     for(var i=1;i<6;i++){
+//         html += '<span class="countly-rating-start" data-rating="' +i +'">' +(rating>=i?'&#x2605': '&#x2606;') +'</span>';
+//     }
+//     query('countly-modal-content').innerHTML = html;
+//     query('countly-modal-header').innerText = Countly.rating.starRatingMessage;
+//     query('countly-modal-dismiss').innerText = Countly.rating.starRatingDismissButtonTitle;
+//     query('countly-modal-submit').innerText = Countly.rating.starRatingSubmitButtonTitle;
+//     var stars = document.getElementsByClassName('countly-rating-start');
+//     for(var i=0,il=stars.length;i<il;i++){
+//         stars[i].addEventListener('click', Countly.rating.success);
+//     }
+// };
+// // Rating
 
-// FEEDBACK-WORK
-Countly.feedback = {
-    starFeedbackMessage: "What's your opinion about this page?",
-    starFeedbackDismissButtonTitle: "X",
-    starFeedbackSubmitButtonTitle: "Submit feedback",
-    starFeedbackSubmitText: "Thank you for your feedback"
-};
+// // FEEDBACK-WORK
+// Countly.feedback = {
+//     starFeedbackMessage: "What's your opinion about this page?",
+//     starFeedbackDismissButtonTitle: "X",
+//     starFeedbackSubmitButtonTitle: "Submit feedback",
+//     starFeedbackSubmitText: "Thank you for your feedback"
+// };
 
-//open modal for feedback
-Countly.askForFeedback = function (callback) {
-    Countly.feedback.create();
-    Countly.feedback.set(0);
-    Countly.feedback.callback = callback;
-    query('countly-feedback-modal').classList.add('open');
-};
+// //open modal for feedback
+// Countly.askForFeedback = function (callback) {
+//     Countly.feedback.create();
+//     Countly.feedback.set(0);
+//     Countly.feedback.callback = callback;
+//     query('countly-feedback-modal').classList.add('open');
+// };
 
-//close modal feedback
-Countly.feedback.closeModal = function () {
-    query('countly-feedback-modal').classList.remove('open');
-    if (Countly.feedback.callback) {
-        Countly.feedback.callback({ code: 1, msg: 'modal close' });
-    }
-};
+// //close modal feedback
+// Countly.feedback.closeModal = function () {
+//     query('countly-feedback-modal').classList.remove('open');
+//     if (Countly.feedback.callback) {
+//         Countly.feedback.callback({ code: 1, msg: 'modal close' });
+//     }
+// };
 
-//set html in feedback modal
-Countly.feedback.html = '<div class="countly-feedback-modal-dismiss">X</div><iframe class="countly-feedback-modal-content" src="https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e"></iframe>';
-Countly.feedback.css = '.countly-main-modal.open{display:block}.countly-main-modal{margin-left:-150px;position:fixed;top:25%;left:48%;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-main-modal div{margin:7px}.countly-feedback-modal-dismiss{display:block;text-align:right;cursor:pointer;font-size:20px}.countly-feedback-modal-content{font-size:small;height:438px;overflow:hidden;border:0px !important}';
-Countly.feedback.create = function () {
-    var div = query('countly-feedback-modal');
-    if (div) {
-        div.parentNode.removeChild(div);
-    }
-    url =
-    div = document.createElement('div');
-    div.setAttribute('class', 'countly-main-modal countly-feedback-modal');
-    div.innerHTML = Countly.feedback.html;
-    document.body.appendChild(div);
+// //set html in feedback modal
+// Countly.feedback.html = '<div class="countly-feedback-modal-dismiss">X</div><iframe class="countly-feedback-modal-content" src="https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e"></iframe>';
+// Countly.feedback.css = '.countly-main-modal.open{display:block}.countly-main-modal{margin-left:-150px;position:fixed;top:25%;left:48%;background-color:#fff;border-radius:5px;z-index:99;border:1px solid #e0e0e0;text-align:center;font-size:2.5rem;display:none}.countly-main-modal div{margin:7px}.countly-feedback-modal-dismiss{display:block;text-align:right;cursor:pointer;font-size:20px}.countly-feedback-modal-content{font-size:small;height:438px;overflow:hidden;border:0px !important}';
+// Countly.feedback.create = function () {
+//     var div = query('countly-feedback-modal');
+//     if (div) {
+//         div.parentNode.removeChild(div);
+//     }
+//     url =
+//     div = document.createElement('div');
+//     div.setAttribute('class', 'countly-main-modal countly-feedback-modal');
+//     div.innerHTML = Countly.feedback.html;
+//     document.body.appendChild(div);
 
-    var style = document.createElement('style');
-    style.type = 'text/css';
-    style.appendChild(document.createTextNode(Countly.feedback.css));
-    document.head.appendChild(style);
+//     var style = document.createElement('style');
+//     style.type = 'text/css';
+//     style.appendChild(document.createTextNode(Countly.feedback.css));
+//     document.head.appendChild(style);
 
-    query('countly-feedback-modal-dismiss').addEventListener('click', Countly.feedback.closeModal);
-}
+//     query('countly-feedback-modal-dismiss').addEventListener('click', Countly.feedback.closeModal);
+// }
 
 //feedback emoji set
 // Countly.feedback.set = function (feedback) {
@@ -631,30 +647,28 @@ Countly.feedback.create = function () {
 //             Countly.feedback.callback({ code: 1, msg: 'Error to save data'})
 //         }
 //     })
-// };
+// // };
 
-Countly.sendFeedback = function(feedback){
-    var arg = [];
-    console.log(feedback);
-    arg.push((feedback.rating || "").toString());
-    arg.push((feedback.comment || "").toString());
-    arg.push((feedback.email || "").toString());
-    arg.push((Countly.feedback || "").toString());
-    arg.push((Countly.widgetId || "").toString());
-    Countly.getFeedbackWidget(Countly.widgetId, function(result){
-        console.log(result);
-    });
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendFeedback",arg);
-}
+// Countly.sendFeedback = function(feedback){
+//     var arg = [];
+//     console.log(feedback);
+//     arg.push((feedback.rating || "").toString());
+//     arg.push((feedback.comment || "").toString());
+//     arg.push((feedback.email || "").toString());
+//     arg.push((Countly.feedback || "").toString());
+//     arg.push((Countly.widgetId || "").toString());
+//     Countly.getFeedbackWidget(Countly.widgetId, function(result){
+//         console.log(result);
+//     });
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendFeedback",arg);
+// }
+// Countly.openFeedbackModal = function(url){
+//     Countly.feedback.create();
+//     query('countly-feedback-modal').classList.add('open');
+// }
 
-Countly.askForFeedback = function(widgetId, callback){
-    cordova.exec(function(url){
-        Countly.openFeedbackModal(url);
-    },function(error){callback({code: 1, error: error});},"CountlyCordova","askForFeedback",[widgetId.toString()]);
-}
-Countly.openFeedbackModal = function(url){
-    Countly.feedback.create();
-    query('countly-feedback-modal').classList.add('open');
+Countly.askForFeedback = function(widgetId){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForFeedback",[widgetId]);
 }
 // FEEDBACK-WORK
 

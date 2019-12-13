@@ -27,6 +27,13 @@
         <button onclick="app.initWithID()" class="fluid ui green button">Init with ID </button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
+
+        <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button>
+
+        <button onclick="app.updateSessionPeriod()" class="fluid ui CornflowerBlue button">Update Session Period</button>
+        <button onclick="app.eventSendThreshold()" class="fluid ui CornflowerBlue button">Event Send Threshold</button>
+        <button onclick="app.storedRequestsLimit()" class="fluid ui CornflowerBlue button">Stored Requests Limit</button>
+
         <div class="ui horizontal divider">Events Start</div>
         <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
         <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
@@ -55,6 +62,9 @@
         <button onclick="app.userData.saveMax()" class="fluid ui button olive">UserData.saveMax</button>
         <button onclick="app.userData.saveMin()" class="fluid ui button orange">UserData.saveMin</button>
         <button onclick="app.userData.setOnce()" class="fluid ui button blue">UserData.setOnce</button>
+        <button onclick="app.userData.pushUniqueValue()" class="fluid ui button olive">UserData.pushUniqueValue</button>
+        <button onclick="app.userData.pushValue()" class="fluid ui button orange">UserData.pushValue</button>
+        <button onclick="app.userData.pullValue()" class="fluid ui button blue">UserData.pullValue</button>
         <div class="ui horizontal divider">User Methods End</div>
         <div class="ui horizontal divider">Remote Config Methods Start</div>
         <button onclick="app.setRemoteConfigAutomaticDownload()" class="fluid ui button black">Countly.setRemoteConfigAutomaticDownload</button>
@@ -65,6 +75,7 @@
         <button onclick="app.getRemoteConfigValueForKey()" class="fluid ui button violet">Countly.getRemoteConfigValueForKey</button>
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
+        <button onclick="app.askForNotificationPermission()" class="fluid ui button teal">askForNotificationPermission</button>
         <button onclick="app.sendPushToken()" class="fluid ui button teal">Push Message</button>
         <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button>
         <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button>
@@ -258,6 +269,23 @@
     app.start = function() {
         Countly.start();
     }
+
+    app.manualSessionHandling = function() {
+        Countly.manualSessionHandling();
+    }
+
+    app.updateSessionPeriod = function() {
+        Countly.updateSessionPeriod(15);
+    }
+
+    app.eventSendThreshold = function() {
+        Countly.eventSendThreshold(1);
+    }
+
+    app.storedRequestsLimit = function() {
+        Countly.storedRequestsLimit(1);
+    }
+
     app.stop = function() {
         Countly.stop();
     }
@@ -515,6 +543,11 @@
         // Tesing purpose only
 
     }
+
+    app.askForNotificationPermission = function() {
+        Countly.askForNotificationPermission();
+    }
+
     app.recordView = function(viewName) {
         Countly.recordView(viewName);
     }
@@ -574,11 +607,12 @@
         Countly.sendRating(5);
     }
     app.askForFeedback = function(){
-        Countly.askForFeedback("5dee3bd61059396ae5b899fe", function(url){
-            //
-            url = "https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e";
-            // open modal + close button with iframe.
-        });
+        Countly.askForFeedback("5dee3bd61059396ae5b899fe");
+        // , function(url){
+        //     //
+        //     url = "https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e";
+        //     // open modal + close button with iframe.
+        // }
         // Countly.sendFeedback({
         //     rating: 5,
         //     email: "example@demo.com",
@@ -653,6 +687,15 @@
     }
     app.userData.setOnce = function() {
         Countly.userData.setOnce("setOnce", 200);
+    }
+    app.userData.pushUniqueValue = function() {
+        Countly.userData.pushUniqueValue("pushUniqueValue", "morning");
+    }
+    app.userData.pushValue = function() {
+        Countly.userData.pushValue("pushValue", "morning");
+    }
+    app.userData.pullValue = function() {
+        Countly.userData.pullValue("pullValue", "morning");
     }
 
     // Remote config usage

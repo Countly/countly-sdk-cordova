@@ -228,12 +228,12 @@ public class CountlyNative {
     }
 
     public String updateSessionPeriod(JSONArray args){
-        //              Countly.sharedInstance().updateSessionPeriod();
+        // Countly.sharedInstance().updateSessionPeriod(Integer.parseInt(args.getString(0)));
         return "default";
     }
 
     public String eventSendThreshold(JSONArray args){
-        //              Countly.sharedInstance().updateSessionPeriod();
+        // Countly.sharedInstance().updateSessionPeriod(Integer.parseInt(args.getString(0)));
         return "default";
     }
 

@@ -74,17 +74,17 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
-- (void)getDeviceID:(CDVInvokedUrlCommand*)command
-{
-    if(countlyNative == nil){
-        countlyNative = CountlyNative.new;
-    }
-    [countlyNative onCall: @"getDeviceID" commandString: command.arguments callback: ^(NSString * theResult)
-     {
-         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
-         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-     }];
-}
+// - (void)getDeviceID:(CDVInvokedUrlCommand*)command
+// {
+//     if(countlyNative == nil){
+//         countlyNative = CountlyNative.new;
+//     }
+//     [countlyNative onCall: @"getDeviceID" commandString: command.arguments callback: ^(NSString * theResult)
+//      {
+//          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+//          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//      }];
+// }
 
 
 - (void)sendRating:(CDVInvokedUrlCommand*)command
@@ -291,17 +291,17 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
-- (void)sendPushToken:(CDVInvokedUrlCommand*)command
-{
-    if(countlyNative == nil){
-        countlyNative = CountlyNative.new;
-    }
-    [countlyNative onCall: @"sendPushToken" commandString: command.arguments callback: ^(NSString * theResult)
-     {
-         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
-         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-     }];
-}
+// - (void)sendPushToken:(CDVInvokedUrlCommand*)command
+// {
+//     if(countlyNative == nil){
+//         countlyNative = CountlyNative.new;
+//     }
+//     [countlyNative onCall: @"sendPushToken" commandString: command.arguments callback: ^(NSString * theResult)
+//      {
+//          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+//          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//      }];
+// }
 
 - (void)askForNotificationPermission:(CDVInvokedUrlCommand*)command
 {

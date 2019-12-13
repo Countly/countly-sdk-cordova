@@ -58,18 +58,38 @@ public class CountlyCordova extends CordovaPlugin {
         else if ("start".equals(action)) {
             callbackContext.success(countlyNative.start(args));
         }
+        else if ("manualSessionHandling".equals(action)) {
+            callbackContext.success(countlyNative.manualSessionHandling(args));
+        }
         else if ("stop".equals(action)) {
             callbackContext.success(countlyNative.stop(args));
         }
+        else if ("updateSessionPeriod".equals(action)) {
+            callbackContext.success(countlyNative.updateSessionPeriod(args));
+        }
+        else if ("eventSendThreshold".equals(action)) {
+            callbackContext.success(countlyNative.eventSendThreshold(args));
+        }
+        else if ("storedRequestsLimit".equals(action)) {
+            callbackContext.success(countlyNative.storedRequestsLimit(args));
+        }
+
+        else if ("askForNotificationPermission".equals(action)) {
+            callbackContext.success(countlyNative.askForNotificationPermission(args));
+        }
+
         else if("startEvent".equals(action)){
             callbackContext.success(countlyNative.startEvent(args));
         }
         else if("endEvent".equals(action)){
             callbackContext.success(countlyNative.endEvent(args));
         }
-        else if ("event".equals(action)) {
+        else if("recordEvent".equals(action)){
             callbackContext.success(countlyNative.recordEvent(args));
         }
+        // else if ("event".equals(action)) {
+        //     callbackContext.success(countlyNative.recordEvent(args));
+        // }
         else if ("setloggingenabled".equals(action)) {
             callbackContext.success(countlyNative.setLoggingEnabled(args));
         }
@@ -98,6 +118,15 @@ public class CountlyCordova extends CordovaPlugin {
         else if ("userData_setOnce".equals(action)) {
             callbackContext.success(countlyNative.userData_setOnce(args));
         }
+        else if ("userData_pushUniqueValue".equals(action)) {
+            callbackContext.success(countlyNative.userData_pushUniqueValue(args));
+        }
+        else if ("userData_pushValue".equals(action)) {
+            callbackContext.success(countlyNative.userData_pushValue(args));
+        }
+        else if ("userData_pullValue".equals(action)) {
+            callbackContext.success(countlyNative.userData_pullValue(args));
+        }
         //setRequiresConsent
         else if ("setRequiresConsent".equals(action)) {
             callbackContext.success(countlyNative.setRequiresConsent(args));
@@ -109,7 +138,7 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success(countlyNative.removeConsent(args));
         }
         else if ("giveAllConsent".equals(action)) {
-            callbackContext.success(countlyNative.removeConsent(args));
+            callbackContext.success(countlyNative.giveConsent(args));
         }
         else if ("removeAllConsent".equals(action)) {
             callbackContext.success(countlyNative.removeConsent(args));
@@ -164,6 +193,15 @@ public class CountlyCordova extends CordovaPlugin {
         }
         else if("askForFeedback".equals(action)){
             countlyNative.askForFeedback(args, new CountlyNative.Callback() {
+                @Override
+                public void callback(String result) {
+                    callbackContext.success(result);
+                }
+            });
+        }
+        
+        else if("askForStarRating".equals(action)){
+            countlyNative.askForStarRating(args, new CountlyNative.Callback() {
                 @Override
                 public void callback(String result) {
                     callbackContext.success(result);

@@ -140,11 +140,11 @@
         result(@"stop!");
         
     }else if ([@"updateSessionPeriod" isEqualToString:method]) {
-        config.updateSessionPeriod = 15;
+        config.updateSessionPeriod = [[command objectAtIndex:0] intValue];
         result(@"updateSessionPeriod!");
         
     }else if ([@"eventSendThreshold" isEqualToString:method]) {
-        config.eventSendThreshold = 1;
+        config.eventSendThreshold = [[command objectAtIndex:0] intValue];
         result(@"eventSendThreshold!");
         
     }else if ([@"storedRequestsLimit" isEqualToString:method]) {
