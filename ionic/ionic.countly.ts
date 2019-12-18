@@ -9,7 +9,7 @@ export class Countly {
     serverUrl: string;
     appKey: string;
     messagingMode: any;
-    version: "19.3.0";
+    version: "19.3.1";
     isAndroid: Boolean;
     isiOS: Boolean;
     ROOT_URL: string;
