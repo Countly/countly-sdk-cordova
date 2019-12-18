@@ -620,7 +620,7 @@ CountlyConfig* config = nil;
         value = @"Default Value";
     }
     CDVPluginResult* pluginResult = nil;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: value];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: [value stringValue]];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command

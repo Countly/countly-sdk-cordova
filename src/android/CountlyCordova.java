@@ -299,27 +299,27 @@ public class CountlyCordova extends CordovaPlugin {
         }
         //setRequiresConsent
         else if ("setRequiresConsent".equals(action)) {
-            
+
             callbackContext.success("setRequiresConsent success!");
             return true;
         }
         else if ("giveConsent".equals(action)) {
-            
+
             callbackContext.success("giveConsent success!");
             return true;
         }
         else if ("removeConsent".equals(action)) {
-            
+
             callbackContext.success("removeConsent success!");
             return true;
         }
         else if ("giveAllConsent".equals(action)) {
-            
+
             callbackContext.success("giveAllConsent success!");
             return true;
         }
         else if ("removeAllConsent".equals(action)) {
-            
+
             callbackContext.success("removeAllConsent success!");
             return true;
         }
@@ -428,7 +428,7 @@ public class CountlyCordova extends CordovaPlugin {
             return true;
         }
         else if("getRemoteConfigValueForKey".equals(action)){
-            String result = (String)Countly.sharedInstance().getRemoteConfigValueForKey(args.getString(0));
+            String result = (String)Countly.sharedInstance().getRemoteConfigValueForKey(args.getString(0)).toString();
             callbackContext.success(result);
             return true;
         }
