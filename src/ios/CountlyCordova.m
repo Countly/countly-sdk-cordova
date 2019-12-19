@@ -619,8 +619,14 @@ CountlyConfig* config = nil;
     if(!value){
         value = @"Default Value";
     }
+    NSString *theType = NSStringFromClass([value class]);
     CDVPluginResult* pluginResult = nil;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: [value stringValue]];
+    if([theType isEqualToString:@"NSTaggedPointerString"]){
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: value];
+    }else{
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: [value stringValue]];
+    }
+
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command
