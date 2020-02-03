@@ -132,6 +132,7 @@
         result(@"update!");
         
     }else if ([@"manualSessionHandling" isEqualToString:method]) {
+        // NSString* manualSessionHandling = [command objectAtIndex:0];
         config.manualSessionHandling = YES;
         result(@"manualSessionHandling!");
         
@@ -148,6 +149,7 @@
         result(@"eventSendThreshold!");
         
     }else if ([@"storedRequestsLimit" isEqualToString:method]) {
+        // NSString* storedRequestsLimit = [command objectAtIndex:0];
         config.storedRequestsLimit = 1;
         result(@"storedRequestsLimit!");
         

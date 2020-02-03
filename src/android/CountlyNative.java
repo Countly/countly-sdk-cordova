@@ -218,7 +218,7 @@ public class CountlyNative {
     }
 
     public String manualSessionHandling(JSONArray args){
-        //              Countly.sharedInstance().manualSessionHandling();
+        Countly.sharedInstance().manualSessionHandling();
         return "deafult";
     }
 
@@ -228,17 +228,20 @@ public class CountlyNative {
     }
 
     public String updateSessionPeriod(JSONArray args){
-        // Countly.sharedInstance().updateSessionPeriod(Integer.parseInt(args.getString(0)));
+        String updateSessionPeriod = args.getString(0);
+        Countly.sharedInstance().updateSessionPeriod(Integer.parseInt(args.getString(0)));
         return "default";
     }
 
     public String eventSendThreshold(JSONArray args){
-        // Countly.sharedInstance().updateSessionPeriod(Integer.parseInt(args.getString(0)));
+        String eventSendThreshold = args.getString(0);
+        Countly.sharedInstance().eventSendThreshold(Integer.parseInt(args.getString(0)));
         return "default";
     }
 
     public String storedRequestsLimit(JSONArray args){
-        //              Countly.sharedInstance().storedRequestsLimit();
+        String storedRequestsLimit = args.getString(0);
+        Countly.sharedInstance().storedRequestsLimit(storedRequestsLimit);
         return "default";
     }
 

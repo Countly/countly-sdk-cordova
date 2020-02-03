@@ -8,7 +8,6 @@
     <meta name="msapplication-tap-highlight" content="no" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="Countly.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stacktrace.js/2.0.0/stacktrace.min.js"></script>
     <style type="text/css">
     button {
@@ -234,7 +233,7 @@
     }
     app.init = function() {
         var deviceId = "" +Math.random();
-        Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
+        Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
         // setTimeout(function(){
         //     Countly.getDeviceID(function(deviceId){
         //         console.log(deviceId);
@@ -244,7 +243,7 @@
         // }, 3000);
     };
     app.initWithID = function(){
-        Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e", makeid());
+        Countly.init("https://trinisoft.count.ly", "0e8a00e8c0139f0b2ac6919f718a13821575db28c0e2971e05ec55a0af8be0e55da05a404bb23c3e", makeid());
 
     }
     app.test = function() {
