@@ -22,68 +22,13 @@ Please review the documentation once the changes are made.
 npm publish --release
 meteor publish
 
-1.  Update both sdk to 18.08.1 Done
-2.  review plugin.xml files Done
+1.  Update both sdk to 18.08.1
+2.  review plugin.xml files
    (ProxyActivity in xml file)
    (review both code to confirm no outling files)
    `Notification channels` there
 3.  Test push on android 8 and 9 version
-4.  Make a release on meteor community. Done
+4.  Make a release on meteor community.
 
-Core SDK code modified
-
-
-Previously
-----------
-
-
-- (void)sendPushToken:(NSString *)token
-{
-    typedef enum : NSInteger
-    {
-        CLYPushTokenModeProduction,
-        CLYPushTokenModeDevelopment,
-        CLYPushTokenModeAdHoc,
-    } CLYPushTokenMode;
-
-    int testMode;
-#ifdef DEBUG
-    testMode = CLYPushTokenModeDevelopment;
-#else
-    testMode = CountlyPushNotifications.sharedInstance.isTestDevice ? CLYPushTokenModeAdHoc : CLYPushTokenModeProduction;
-#endif
-
-    NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",
-                             kCountlyQSKeyPushTokenSession, @"1",
-                             kCountlyQSKeyPushTokeniOS, token,
-                             kCountlyQSKeyPushTestMode, testMode];
-
-    [CountlyPersistency.sharedInstance addToQueue:queryString];
-
-    [self proceedOnQueue];
-}
-
-Currently
----------
-
-- (void)sendPushToken:(NSString *)token
-{
-    typedef enum : NSInteger
-    {
-        CLYPushTokenModeProduction,
-        CLYPushTokenModeDevelopment,
-        CLYPushTokenModeAdHoc,
-    } CLYPushTokenMode;
-
-    int testMode = CountlyPushNotifications.sharedInstance.isTestDevice;
-
-
-    NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@&%@=%@&%@=%d",
-                             kCountlyQSKeyPushTokenSession, @"1",
-                             kCountlyQSKeyPushTokeniOS, token,
-                             kCountlyQSKeyPushTestMode, testMode];
-
-    [CountlyPersistency.sharedInstance addToQueue:queryString];
-
-    [self proceedOnQueue];
-}
+Change quest to Gorkem
+1. Change header "Phonegap, Icenium & Meteor" -> "Cordova" to keep it simple
