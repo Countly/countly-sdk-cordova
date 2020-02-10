@@ -88,137 +88,6 @@
         <button onclick="app.askForStarRating()" class="fluid ui button">Open rating modal</button>
         <button onclick="app.askForFeedback()" class="fluid ui button">Open feedback modal</button>
         <div class="ui horizontal divider">Rating Methods End</div>
-        <!-- Modal UI -->
-        <style>
-            /* .countly-modal.open{
-                display: block;
-            }
-            .countly-modal{
-                width: 80%;
-                height: auto;
-                position: fixed;
-                top: 10%;
-                left: 10%;
-                background-color: white;
-                border-radius: 20px;
-                z-index: 99;
-                border: 1px solid #e0e0e0;
-                text-align: center;
-                font-size: 2rem;
-                display: none;
-            }
-            .countly-modal div{
-                margin: 20px;
-            }
-            .countly-modal-header{
-                margin-top: 20px;
-            }
-            .countly-modal-divider{
-                position: relative;
-                margin: auto;
-                height: 1px;
-                border: 1px solid #e0e0e0;
-            }
-            .countly-modal-dismiss{
-                color: #47a9f4;
-            }
-            .countly-modal-submit{
-                display: none;
-                color: #47a9f4;
-            } */
-
-              /* For FeedBack modal */
-            /* for tooltip */
-            .tooltip {
-                position: relative;
-                display: inline-block;
-            }
-
-            .tooltip .tooltiptext {
-                visibility: hidden;
-                width: auto;
-                background-color: black;
-                color: #fff;
-                text-align: center;
-                font-size: 15px;
-                border-radius: 6px;
-                padding: 5px 0;
-
-                position: absolute;
-                z-index: 1;
-                bottom: 100%;
-                left: 50%;
-                margin-left: -60px;
-            }
-
-
-            /* .pointer {
-                cursor: pointer;
-            } */
-
-            .tooltip:hover .tooltiptext {
-                visibility: visible;
-            }
-
-            /* button  */
-            .countly-feedback-button {
-                background-color: #4CAF50;
-                border: none;
-                color: white;
-                font-family: 'Lato', sans-serif;
-                padding: 9px 10px;
-                text-align: center;
-                border-radius: 3px;
-                text-decoration: none;
-                font-size: 13px;
-                margin: 4px 2px;
-                cursor: pointer;
-                width: 60%;
-            }
-
-            /* for close icon */
-            .close {
-                position: absolute;
-                right: 32px;
-                top: 32px;
-                width: 32px;
-                height: 32px;
-                opacity: 0.3;
-            }
-
-            /* for text area */
-            /* .textareaClass {
-                width: 100%;
-                height: 60px;
-                margin-top: 10px;
-                resize: none;
-                border: 1px solid #DBDBDB;
-                outline: none;
-                font-size: 13px;
-                border-radius: 3px;
-            } */
-
-            /* for email */
-            /* .emailClass {
-                width: 100%;
-                outline: none;
-                border: 1px solid #DBDBDB;
-                height: 30px;
-                margin-top: 10px;
-                line-height: 20px;
-                padding-left: 2px;
-                font-size: 13px;
-                border-radius: 3px;
-            } */
-            /* for FeedBack modal */
-        </style>
-        <!-- <div class="countly-modal countly-rating-modal">
-            <div class="countly-modal-header"></div>
-            <div class="countly-modal-content"></div>
-            <div class="countly-modal-divider"></div>
-            <div class="countly-modal-dismiss"></div>
-            <div class="countly-modal-submit"></div>
-        </div> -->
     </div>
     <script type="text/javascript">
     app = {};
@@ -290,48 +159,6 @@
         app.eventWithSegment();
         app.eventWithSumSegment();
     }
-    // app.basicEvent = function() {
-    //     // example for basic event
-    //     var events = {
-    //         "eventName": "basic_event",
-    //         "eventCount": 1
-    //     };
-    //     Countly.sendEvent(events);
-    // }
-    // app.eventWithSum = function() {
-    //     // example for event with sum
-    //     var events = {
-    //         "eventName": "event_sum",
-    //         "eventCount": 1,
-    //         "eventSum": "0.99"
-    //     };
-    //     Countly.sendEvent(events);
-    // }
-    // app.eventWithSegment = function() {
-    //     // example for event with segment
-    //     var events = {
-    //         "eventName": "event_segment",
-    //         "eventCount": 1
-    //     };
-    //     events.segments = {
-    //         "Country": "Turkey",
-    //         "Age": "28"
-    //     };
-    //     Countly.sendEvent(events);
-    // }
-    // app.eventWithSum_Segment = function() {
-    //     // example for event with segment and sum
-    //     var events = {
-    //         "eventName": "event_segment_sum",
-    //         "eventCount": 1,
-    //         "eventSum": "0.99"
-    //     };
-    //     events.segments = {
-    //         "Country": "Turkey",
-    //         "Age": "28"
-    //     };
-    //     Countly.sendEvent(events);
-    // }
 
     app.basicEvent = function() {
         // example for basic event
@@ -356,11 +183,11 @@
             "key": "Event With Segment",
             "count": 1
         };
-        event["segmentation"] = {
+        event.segmentation = {
             "Country": "Turkey",
             "Age": "28"
         };
-        Countly.recordEvent(event);        
+        Countly.recordEvent(event);
     }
     app.eventWithSumSegment = function() {
         // example for event with segment and sum
@@ -369,7 +196,7 @@
             "count": 1,
             "sum": "0.99"
         };
-        event["segmentation"] = {
+        event.segmentation = {
             "Country": "Turkey",
             "Age": "28"
         };
@@ -383,7 +210,7 @@
             "sum": "0.99",
             "duration":"0"
         };
-        event["segmentation"] = {
+        event.segmentation = {
             "Country": "Turkey",
             "Age": "28"
         };
@@ -602,19 +429,6 @@
     }
     app.askForFeedback = function(){
         Countly.askForFeedback("5e391ef47975d006a22532c0");
-        // , function(url){
-        //     //
-        //     url = "https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e";
-        //     // open modal + close button with iframe.
-        // }
-        // Countly.sendFeedback({
-        //     rating: 5,
-        //     email: "example@demo.com",
-        //     contact_me: true,
-        //     comment: "My comment...",
-        //     feedback: "My feedback",
-        //     widgetId: "5d80915a31ec7124c86df698",
-        // });
     }
     app.askForStarRating = function(){
         Countly.askForStarRating(function(ratingResult){

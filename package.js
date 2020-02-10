@@ -1,6 +1,6 @@
 Package.describe({
   name: 'countly:countly-sdk-js',
-  version: '19.3.0', // Meteor doesn't go with 18.08.1
+  version: '19.8.0', // Meteor doesn't go with 18.08.1
   summary: 'Countly is an innovative, real-time, open source mobile analytics and push notifications platform.',
   git: 'https://github.com/Countly/countly-sdk-js.git',
   documentation: 'README.md'
