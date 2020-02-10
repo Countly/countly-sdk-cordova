@@ -217,33 +217,25 @@ public class CountlyNative {
         return "started";
     }
 
-    public String manualSessionHandling(JSONArray args){
-        Countly.sharedInstance().manualSessionHandling();
-        return "deafult";
-    }
 
     public String stop(JSONArray args){
         Countly.sharedInstance().onStop();
         return "stoped";
     }
 
-    public String updateSessionPeriod(JSONArray args){
-        String updateSessionPeriod = args.getString(0);
-        Countly.sharedInstance().updateSessionPeriod(Integer.parseInt(args.getString(0)));
-        return "default";
-    }
+
 
     public String eventSendThreshold(JSONArray args){
-        String eventSendThreshold = args.getString(0);
-        Countly.sharedInstance().eventSendThreshold(Integer.parseInt(args.getString(0)));
-        return "default";
+        try {
+            int eventSendThreshold = Integer.parseInt(args.getString(0));
+            Countly.sharedInstance().setEventQueueSizeToSend(eventSendThreshold);
+            return "default";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
     }
 
-    public String storedRequestsLimit(JSONArray args){
-        String storedRequestsLimit = args.getString(0);
-        Countly.sharedInstance().storedRequestsLimit(storedRequestsLimit);
-        return "default";
-    }
+
 
     public String startEvent(JSONArray args){
         try {
@@ -742,7 +734,6 @@ public class CountlyNative {
     }
 
     public String askForStarRating(JSONArray args){
-        // Countly.sharedInstance().(context, 5);
         Countly.sharedInstance().showStarRating(activity, null);
         return "askForStarRating success.";
     }

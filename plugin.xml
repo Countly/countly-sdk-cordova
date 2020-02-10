@@ -74,28 +74,6 @@
     <source-file src="src/android/CountlyNative.java" target-dir="src/ly/count/android/sdk"/>
     <framework src="ly.count.android:sdk:19.02.3" />
     <framework src="ly.count.android:sdk-messaging-fcm:19.02.3" />
-
-    <!-- <source-file src="src/android/AdvertisingIdAdapter.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CertificateTrustManager.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/ConnectionProcessor.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/ConnectionQueue.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/Countly.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CountlyStore.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CrashDetails.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/DeviceId.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/DeviceInfo.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/Event.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/EventQueue.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/OpenUDIDAdapter.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/ReferrerReceiver.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CountlyStarRating.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/RemoteConfig.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CountlyConfig.java" target-dir="src/ly/count/android/sdk"/>
-
-
-    <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
-    <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/> -->
   </platform>
 
 </plugin>

@@ -58,24 +58,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if ("start".equals(action)) {
             callbackContext.success(countlyNative.start(args));
         }
-        else if ("manualSessionHandling".equals(action)) {
-            callbackContext.success(countlyNative.manualSessionHandling(args));
-        }
-        else if ("stop".equals(action)) {
-            callbackContext.success(countlyNative.stop(args));
-        }
-        else if ("updateSessionPeriod".equals(action)) {
-            callbackContext.success(countlyNative.updateSessionPeriod(args));
-        }
-        else if ("eventSendThreshold".equals(action)) {
-            callbackContext.success(countlyNative.eventSendThreshold(args));
-        }
-        else if ("storedRequestsLimit".equals(action)) {
-            callbackContext.success(countlyNative.storedRequestsLimit(args));
-        }
 
         else if ("askForNotificationPermission".equals(action)) {
-            callbackContext.success(countlyNative.askForNotificationPermission(args));
+            // callbackContext.success(countlyNative.askForNotificationPermission(args));
         }
 
         else if("startEvent".equals(action)){
@@ -191,17 +176,11 @@ public class CountlyCordova extends CordovaPlugin {
         else if("getRemoteConfigValueForKey".equals(action)){
             callbackContext.success(countlyNative.getRemoteConfigValueForKey(args));
         }
+        else if("askForStarRating".equals(action)){
+            callbackContext.success(countlyNative.askForStarRating(args));
+        }
         else if("askForFeedback".equals(action)){
             countlyNative.askForFeedback(args, new CountlyNative.Callback() {
-                @Override
-                public void callback(String result) {
-                    callbackContext.success(result);
-                }
-            });
-        }
-        
-        else if("askForStarRating".equals(action)){
-            countlyNative.askForStarRating(args, new CountlyNative.Callback() {
                 @Override
                 public void callback(String result) {
                     callbackContext.success(result);

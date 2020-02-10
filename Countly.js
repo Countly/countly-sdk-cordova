@@ -67,9 +67,9 @@ Countly.init = function(serverUrl,appKey, deviceId){
 //     }
 //     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","event",args);
 // }
-// Countly.recordView = function(recordView){
-//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",[recordView || ""]);
-// };
+Countly.recordView = function(recordView){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",[recordView || ""]);
+};
 
 // countly enable logger
 Countly.setLoggingEnabled = function(){
@@ -335,10 +335,10 @@ Countly.recordEvent = function(options){
   
       if(!options["segmentation"]){
         segmentation = options["segmentation"];
-        segmentation.forEach((k, v) => {
-          args.push(k.toString());
-          args.push(v.toString());
-        });
+        // segmentation.forEach((k, v) => {
+        //   args.push(k.toString());
+        //   args.push(v.toString());
+        // });
       }
      cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
 };
@@ -439,7 +439,7 @@ Countly.sendRating = function(rating){
 // ui related methods
 // opens the modal
 Countly.askForStarRating = function(callback){
-    cordova.exec(onSuccess, onError,"CountlyCordova","askForStarRating",[]);
+    cordova.exec(Countly.onSuccess, Countly.onError,"CountlyCordova","askForStarRating",[]);
 
     // Countly.rating.create();
     // Countly.rating.set(0);
