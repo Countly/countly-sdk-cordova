@@ -272,38 +272,27 @@ Countly.startEvent = function(key){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startEvent",[key.toString() || ""]);
 }
 Countly.endEvent = function(options){
-    if(typeof options === "string")
-        options = {key: options};
     var args = [];
-    var eventType = "event"; //event, eventWithSum, eventWithSegment, eventWithSumSegment
-    var segments = {};
-
-    if(options.sum)
-        eventType = "eventWithSum";
-    if(options.segments)
-        eventType = "eventWithSegment";
-    if(options.segments && options.sum)
-        eventType = "eventWithSumSegment";
-
-    args.push(eventType);
-
-    if(!options.key)
-        options.key = "";
+    if(!options.key){
+        options.key = "default";
+    }
     args.push(options.key.toString());
-
-    if(!options.count)
-        options.count = "1";
+  
+    if(!options.count){
+        options.count = 1;
+    }
     args.push(options.count.toString());
-
-    if(!options.sum)
+  
+    if(!options.sum){
         options.sum = "0";
+    }
     args.push(options.sum.toString());
-
-    if(options.segments)
-        segments = options.segments;
-    for (var event in segments) {
-        args.push(event);
-        args.push(segments[event]);
+  
+    if(!options.segmentation){
+        for(var key in options.segmentation){
+            args.push(key);
+            args.push(options.segmentation[key]);
+        }
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endEvent",args);
 };
