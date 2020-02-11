@@ -73,7 +73,7 @@ public class CountlyNative {
             }
 
             Countly.sharedInstance().onStart(activity);
-            return "initialized!";
+            return "initialized: success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -206,7 +206,7 @@ public class CountlyNative {
             }else{
                 pushTokenType = Countly.CountlyMessagingMode.PRODUCTION;
             }
-            return "pushTokenType";
+            return "pushTokenType: success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -214,13 +214,13 @@ public class CountlyNative {
 
     public String start(JSONArray args){
         Countly.sharedInstance().onStart(activity);
-        return "started";
+        return "started: success";
     }
 
 
     public String stop(JSONArray args){
         Countly.sharedInstance().onStop();
-        return "stoped";
+        return "stoped: success";
     }
 
 
@@ -339,7 +339,7 @@ public class CountlyNative {
             String keyName = args.getString(0);
             Countly.userData.increment(keyName);
             Countly.userData.save();
-            return "theMessage";
+            return "userData_increment: success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -446,7 +446,7 @@ public class CountlyNative {
         try {
             Boolean consentFlag = args.getBoolean(0);
             Countly.sharedInstance().setRequiresConsent(consentFlag);
-            return "setRequiresConsent";
+            return "setRequiresConsent: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -458,35 +458,35 @@ public class CountlyNative {
             List<String> features = new ArrayList<>();
             for (int i = 0; i < args.length(); i++) {
                 consent = args.getString(i);
-                if (validConsentFeatureNames.contains("sessions") && consent.equals("sessions")) {
+                if (consent.equals("sessions")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
                 }
-                if (validConsentFeatureNames.contains("events") && consent.equals("events")) {
+                if (consent.equals("events")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
                 }
-                if (validConsentFeatureNames.contains("views") && consent.equals("views")) {
+                if (consent.equals("views")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
                 }
-                if (validConsentFeatureNames.contains("location") && consent.equals("location")) {
+                if (consent.equals("location")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
                 }
-                if (validConsentFeatureNames.contains("crashes") && consent.equals("crashes")) {
+                if (consent.equals("crashes")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
                 }
-                if (validConsentFeatureNames.contains("attribution") && consent.equals("attribution")) {
+                if (consent.equals("attribution")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
                 }
-                if (validConsentFeatureNames.contains("users") && consent.equals("users")) {
+                if (consent.equals("users")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
                 }
-                if (validConsentFeatureNames.contains("push") && consent.equals("push")) {
+                if (consent.equals("push")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
                 }
-                if (validConsentFeatureNames.contains("starRating") && consent.equals("starRating")) {
+                if (consent.equals("starRating")) {
                     Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
                 }
             }
-            return "giveConsent";
+            return "giveConsent: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -498,42 +498,41 @@ public class CountlyNative {
             List<String> features = new ArrayList<>();
             for (int i = 0; i < args.length(); i++) {
                 consent = args.getString(i);
-                if (validConsentFeatureNames.contains("sessions") && consent.equals("sessions")) {
+                if (consent.equals("sessions")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
                 }
-                if (validConsentFeatureNames.contains("events") && consent.equals("events")) {
+                if (consent.equals("events")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
                 }
-                if (validConsentFeatureNames.contains("views") && consent.equals("views")) {
+                if (consent.equals("views")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
                 }
-                if (validConsentFeatureNames.contains("location") && consent.equals("location")) {
+                if (consent.equals("location")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
                 }
-                if (validConsentFeatureNames.contains("crashes") && consent.equals("crashes")) {
+                if (consent.equals("crashes")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
                 }
-                if (validConsentFeatureNames.contains("attribution") && consent.equals("attribution")) {
+                if (consent.equals("attribution")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
                 }
-                if (validConsentFeatureNames.contains("users") && consent.equals("users")) {
+                if (consent.equals("users")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
                 }
-                if (validConsentFeatureNames.contains("push") && consent.equals("push")) {
+                if (consent.equals("push")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
                 }
-                if (validConsentFeatureNames.contains("starRating") && consent.equals("starRating")) {
+                if (consent.equals("starRating")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
                 }
             }
-            return "removeConsent";
+            return "removeConsent: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
     }
 
     public String giveAllConsent(JSONArray args){
-        //              Countly.sharedInstance().giveConsent(validConsentFeatureNames.toArray(new String[validConsentFeatureNames.size()]));
         Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
         Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
         Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
@@ -543,13 +542,10 @@ public class CountlyNative {
         Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
         Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
         Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
-
-        return "giveAllConsent";
+        return "giveAllConsent: Success";
     }
 
     public String removeAllConsent(JSONArray args){
-        //              Countly.sharedInstance().removeConsent(validConsentFeatureNames.toArray(new String[validConsentFeatureNames.size()]));
-
         Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
         Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
         Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
@@ -559,8 +555,7 @@ public class CountlyNative {
         Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
         Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
         Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
-
-        return "removeAllConsent";
+        return "removeAllConsent: Success";
     }
 
     public String sendRating(JSONArray args){
@@ -634,11 +629,10 @@ public class CountlyNative {
                 }
             }
         });
-        return "default";
+        return "setRemoteConfigAutomaticDownload: Success";
     }
 
     public String remoteConfigUpdate(JSONArray args ,final Callback theCallback){
-
         Countly.sharedInstance().remoteConfigUpdate(new RemoteConfig.RemoteConfigCallback() {
             @Override
             public void callback(String error) {
@@ -649,7 +643,7 @@ public class CountlyNative {
                 }
             }
         });
-        return "default";
+        return "remoteConfigUpdate: success";
     }
 
     public String updateRemoteConfigForKeysOnly(JSONArray args, final Callback theCallback){
@@ -670,7 +664,7 @@ public class CountlyNative {
                     }
                 }
             });
-            return "default";
+            return "updateRemoteConfigForKeysOnly: success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -693,7 +687,7 @@ public class CountlyNative {
                     }
                 }
             });
-            return "default";
+            return "updateRemoteConfigExceptKeys: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -727,7 +721,7 @@ public class CountlyNative {
                     }
                 }
             });
-            return "theMessage";
+            return "askForFeedback: success";
         }catch (JSONException jsonException){
             theCallback.callback(jsonException.toString());
             return jsonException.toString();
