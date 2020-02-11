@@ -219,34 +219,34 @@ Countly.recordEvent = function(options){
         options = {key: options};
     var args = [];
 
-    if(!options["key"]){
-        options["key"] = "default";
-      }
-      args.push(options["key"].toString());
+    if(!options.key){
+        options.key = "default";
+    }
+    args.push(options.key.toString());
 
-      if(!options["count"]){
-        options["count"] = 1;
-      }
-      args.push(options["count"].toString());
+    if(!options.count){
+        options.count = 1;
+    }
+    args.push(options.count.toString());
 
-      if(!options["sum"]){
-        options["sum"] = "0";
-      }
-      args.push(options["sum"].toString());
+    if(!options.sum){
+        options.sum = "0";
+    }
+    args.push(options.sum.toString());
 
-      if(!options["duration"]){
-        options["duration"] = "0";
-      }
-      args.push(options["duration"].toString());
+    if(!options.duration){
+        options.duration = "0";
+    }
+    args.push(options.duration.toString());
 
-      if(!options["segmentation"]){
-        segmentation = options["segmentation"];
+    if(!options.segmentation){
+        segmentation = options.segmentation;
         // segmentation.forEach((k, v) => {
         //   args.push(k.toString());
         //   args.push(v.toString());
         // });
-      }
-     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
 };
 
 //askForNotificationPermission
@@ -278,8 +278,8 @@ Countly.userData.setOnce = function(keyName, setOnce){
 };
 
 //pushUniqueValue
-Countly.userData.pushUniqueValue = function(type, pushUniqueValueString){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushUniqueValue",[type.toString() || "", pushUniqueValueString.toString() || ""]);
+Countly.userData.pushUniqueValue = function(key, value){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushUniqueValue",[key.toString() || "", value.toString() || ""]);
 };
 
 //pushValue
