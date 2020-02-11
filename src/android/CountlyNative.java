@@ -729,6 +729,7 @@ public class CountlyNative {
             });
             return "theMessage";
         }catch (JSONException jsonException){
+            theCallback.callback(jsonException.toString());
             return jsonException.toString();
         }
     }

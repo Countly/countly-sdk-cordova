@@ -348,8 +348,8 @@ Countly.askForStarRating = function(callback){
     cordova.exec(Countly.onSuccess, Countly.onError,"CountlyCordova","askForStarRating",[]);
 }
 
-Countly.askForFeedback = function(widgetId){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForFeedback",[widgetId]);
+Countly.askForFeedback = function(widgetId, buttonText){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForFeedback",[widgetId, buttonText || ""]);
 }
 // FEEDBACK-WORK
 

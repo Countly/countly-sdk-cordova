@@ -428,7 +428,7 @@
         Countly.sendRating(5);
     }
     app.askForFeedback = function(){
-        Countly.askForFeedback("5e4254507975d006a22535fc");
+        Countly.askForFeedback("5e4254507975d006a22535fc", "Close");
     }
     app.askForStarRating = function(){
         Countly.askForStarRating(function(ratingResult){
@@ -503,7 +503,7 @@
         Countly.userData.pushValue("pushValue", "morning");
     }
     app.userData.pullValue = function() {
-        Countly.userData.pullValue("pullValue", "morning");
+        Countly.userData.pullValue("pushValue", "morning");
     }
 
     // Remote config usage
