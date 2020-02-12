@@ -225,15 +225,15 @@ public class CountlyNative {
 
 
 
-    public String eventSendThreshold(JSONArray args){
-        try {
-            int eventSendThreshold = Integer.parseInt(args.getString(0));
-            Countly.sharedInstance().setEventQueueSizeToSend(eventSendThreshold);
-            return "default";
-        }catch (JSONException jsonException){
-            return jsonException.toString();
-        }
-    }
+    // public String eventSendThreshold(JSONArray args){
+    //     try {
+    //         int eventSendThreshold = Integer.parseInt(args.getString(0));
+    //         Countly.sharedInstance().setEventQueueSizeToSend(eventSendThreshold);
+    //         return "default";
+    //     }catch (JSONException jsonException){
+    //         return jsonException.toString();
+    //     }
+    // }
 
 
 
@@ -558,22 +558,22 @@ public class CountlyNative {
         return "removeAllConsent: Success";
     }
 
-    public String sendRating(JSONArray args){
-        try {
-            String ratingString = args.getString(0);
-            int rating = Integer.parseInt(ratingString);
+    // public String sendRating(JSONArray args){
+    //     try {
+    //         String ratingString = args.getString(0);
+    //         int rating = Integer.parseInt(ratingString);
 
-            Map<String, String> segm = new HashMap<>();
-            segm.put("platform", "android");
-            // segm.put("app_version", DeviceInfo.getAppVersion(context));
-            segm.put("rating", "" + rating);
+    //         Map<String, String> segm = new HashMap<>();
+    //         segm.put("platform", "android");
+    //         // segm.put("app_version", DeviceInfo.getAppVersion(context));
+    //         segm.put("rating", "" + rating);
 
-            Countly.sharedInstance().recordEvent("[CLY]_star_rating", segm, 1);
-            return "sendRating: " + ratingString;
-        }catch (JSONException jsonException){
-            return jsonException.toString();
-        }
-    }
+    //         Countly.sharedInstance().recordEvent("[CLY]_star_rating", segm, 1);
+    //         return "sendRating: " + ratingString;
+    //     }catch (JSONException jsonException){
+    //         return jsonException.toString();
+    //     }
+    // }
 
     public String recordView(JSONArray args){
         try {

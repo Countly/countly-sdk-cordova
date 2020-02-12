@@ -103,7 +103,7 @@
         NSString* deviceID = Countly.sharedInstance.deviceID;
         result(@"default!");
         
-    }else if ([@"sendRating" isEqualToString:method]) {
+    // }else if ([@"sendRating" isEqualToString:method]) {
 //        NSString* ratingString = [command objectAtIndex:0];
 //        int rating = [ratingString intValue];
 //        NSString* const kCountlySRKeyPlatform       = @"platform";
@@ -131,27 +131,27 @@
         [Countly.sharedInstance updateSession];
         result(@"update!");
         
-    }else if ([@"manualSessionHandling" isEqualToString:method]) {
-        // NSString* manualSessionHandling = [command objectAtIndex:0];
-        config.manualSessionHandling = YES;
-        result(@"manualSessionHandling!");
+    // }else if ([@"manualSessionHandling" isEqualToString:method]) {
+    //     // NSString* manualSessionHandling = [command objectAtIndex:0];
+    //     config.manualSessionHandling = YES;
+    //     result(@"manualSessionHandling!");
         
     }else if ([@"stop" isEqualToString:method]) {
         [Countly.sharedInstance endSession];
         result(@"stop!");
         
-    }else if ([@"updateSessionPeriod" isEqualToString:method]) {
-        config.updateSessionPeriod = [[command objectAtIndex:0] intValue];
-        result(@"updateSessionPeriod!");
+    // }else if ([@"updateSessionPeriod" isEqualToString:method]) {
+    //     config.updateSessionPeriod = [[command objectAtIndex:0] intValue];
+    //     result(@"updateSessionPeriod!");
         
-    }else if ([@"eventSendThreshold" isEqualToString:method]) {
-        config.eventSendThreshold = [[command objectAtIndex:0] intValue];
-        result(@"eventSendThreshold!");
+    // }else if ([@"eventSendThreshold" isEqualToString:method]) {
+    //     config.eventSendThreshold = [[command objectAtIndex:0] intValue];
+    //     result(@"eventSendThreshold!");
         
-    }else if ([@"storedRequestsLimit" isEqualToString:method]) {
-        // NSString* storedRequestsLimit = [command objectAtIndex:0];
-        config.storedRequestsLimit = 1;
-        result(@"storedRequestsLimit!");
+    // }else if ([@"storedRequestsLimit" isEqualToString:method]) {
+    //     // NSString* storedRequestsLimit = [command objectAtIndex:0];
+    //     config.storedRequestsLimit = 1;
+    //     result(@"storedRequestsLimit!");
         
     }else if ([@"changeDeviceId" isEqualToString:method]) {
         NSString* newDeviceID = [command objectAtIndex:0];
@@ -234,7 +234,7 @@
         [Countly.sharedInstance recordHandledException:myException withStackTrace: nsException];
         result(@"logException!");
         
-    }else if ([@"sendPushToken" isEqualToString:method]) {
+    // }else if ([@"sendPushToken" isEqualToString:method]) {
         // NSString* token = [command objectAtIndex:0];
         // int messagingMode = [[command objectAtIndex:1] intValue];
         

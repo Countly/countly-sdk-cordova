@@ -62,25 +62,25 @@ Countly.stop = function(){
 }
 
 // countly manualSessionHandling for android
-Countly.manualSessionHandling = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","manualSessionHandling",[]);
-}
+// Countly.manualSessionHandling = function(){
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","manualSessionHandling",[]);
+// }
 
 // countly updateSessionPeriod for android
-Countly.updateSessionPeriod = function(updateSessionPeriod){
+// Countly.updateSessionPeriod = function(updateSessionPeriod){
 
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","updateSessionPeriod",[updateSessionPeriod.toString()]);
-}
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","updateSessionPeriod",[updateSessionPeriod.toString()]);
+// }
 
 // countly eventSendThreshold for android
-Countly.eventSendThreshold = function(eventSendThreshold){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","eventSendThreshold",[eventSendThreshold.toString()]);
-}
+// Countly.eventSendThreshold = function(eventSendThreshold){
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","eventSendThreshold",[eventSendThreshold.toString()]);
+// }
 
 // countly storedRequestsLimit for android
-Countly.storedRequestsLimit = function(storedRequestsLimit){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","storedRequestsLimit",[storedRequestsLimit]);
-}
+// Countly.storedRequestsLimit = function(storedRequestsLimit){
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","storedRequestsLimit",[storedRequestsLimit]);
+// }
 
 // countly askForNotificationPermission for android
 Countly.askForNotificationPermission = function(){
@@ -328,6 +328,19 @@ Countly.remoteConfigClearValues = function(onSuccess, onError){
 Countly.getRemoteConfigValueForKey = function(key, onSuccess, onError){
     cordova.exec(onSuccess, onError,"CountlyCordova","getRemoteConfigValueForKey",[key]);
 }
+
+Countly.updateRemoteConfigForbooleanValueOnly = function(key, onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForbooleanValueOnly",[key]);
+}
+Countly.updateRemoteConfigForfloatValueOnly = function(key, onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForfloatValueOnly",[key]);
+}
+Countly.updateRemoteConfigForintegerValueOnly = function(key, onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForintegerValueOnly",[key]);
+}
+Countly.updateRemoteConfigForstringValueOnly = function(key, onSuccess, onError){
+    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForstringValueOnly",[key]);
+}
 // Remote config
 
 // Rating
@@ -338,9 +351,9 @@ Countly.rating = {
     starRatingSubmitButtonTitle: "Submit",
 }
 // orginal method
-Countly.sendRating = function(rating){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendRating",[rating.toString()]);
-}
+// Countly.sendRating = function(rating){
+//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendRating",[rating.toString()]);
+// }
 
 // ui related methods
 // opens the modal

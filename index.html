@@ -27,11 +27,10 @@
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
 
-        <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button>
-
+        <!-- <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button> 
         <button onclick="app.updateSessionPeriod()" class="fluid ui CornflowerBlue button">Update Session Period</button>
         <button onclick="app.eventSendThreshold()" class="fluid ui CornflowerBlue button">Event Send Threshold</button>
-        <button onclick="app.storedRequestsLimit()" class="fluid ui CornflowerBlue button">Stored Requests Limit</button>
+        <button onclick="app.storedRequestsLimit()" class="fluid ui CornflowerBlue button">Stored Requests Limit</button> -->
 
         <div class="ui horizontal divider">Events Start</div>
         <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
@@ -72,19 +71,25 @@
         <button onclick="app.updateRemoteConfigExceptKeys()" class="fluid ui button pink">Countly.updateRemoteConfigExceptKeys</button>
         <button onclick="app.remoteConfigClearValues()" class="fluid ui button purple">Countly.remoteConfigClearValues</button>
         <button onclick="app.getRemoteConfigValueForKey()" class="fluid ui button violet">Countly.getRemoteConfigValueForKey</button>
+
+        <button onclick="app.updateRemoteConfigForbooleanValueOnly()" class="fluid ui button violet">Countly.updateRemoteConfigForbooleanValueOnly</button>
+        <button onclick="app.updateRemoteConfigForfloatValueOnly()" class="fluid ui button violet">Countly.updateRemoteConfigForfloatValueOnly</button>
+        <button onclick="app.updateRemoteConfigForintegerValueOnly()" class="fluid ui button violet">Countly.updateRemoteConfigForintegerValueOnly</button>
+        <button onclick="app.updateRemoteConfigForstringValueOnly()" class="fluid ui button violet">Countly.updateRemoteConfigForstringValueOnly</button>
+
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
         <button onclick="app.askForNotificationPermission()" class="fluid ui button teal">askForNotificationPermission</button>
-        <button onclick="app.sendPushToken()" class="fluid ui button teal">Push Message</button>
-        <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button>
-        <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button>
+        <!-- <button onclick="app.sendPushToken()" class="fluid ui button teal">Push Message</button> -->
+        <!-- <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button> -->
+        <!-- <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button> -->
         <button onclick="app.changeDeviceId()" class="fluid ui button">Change Device ID</button>
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
         <button onclick="app.addCrashLog()" class="fluid ui button">Send Crash Report</button>
         <div class="ui horizontal divider">Other Methods End</div>
         <div class="ui horizontal divider">Rating Methods Start</div>
-        <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button>
+        <!-- <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button> -->
         <button onclick="app.askForStarRating()" class="fluid ui button">Open rating modal</button>
         <button onclick="app.askForFeedback()" class="fluid ui button">Open feedback modal</button>
         <div class="ui horizontal divider">Rating Methods End</div>
@@ -110,10 +115,10 @@
         Countly.eventSendThreshold(1);
         Countly.setLoggingEnabled();
     }
-    app.test = function() {
-        app.sendPushToken();
-        app.sendSampleEvent();
-    }
+    // app.test = function() {
+    //     app.sendPushToken();
+    //     app.sendSampleEvent();
+    // }
 
     app.setOptionalParametersForInitialization = function() {
         Countly.setOptionalParametersForInitialization({
@@ -133,21 +138,21 @@
         Countly.start();
     }
 
-    app.manualSessionHandling = function() {
-        Countly.manualSessionHandling();
-    }
+    // app.manualSessionHandling = function() {
+    //     Countly.manualSessionHandling();
+    // }
 
-    app.updateSessionPeriod = function() {
-        Countly.updateSessionPeriod(15);
-    }
+    // app.updateSessionPeriod = function() {
+    //     Countly.updateSessionPeriod(15);
+    // }
 
-    app.eventSendThreshold = function() {
-        Countly.eventSendThreshold(1);
-    }
+    // app.eventSendThreshold = function() {
+    //     Countly.eventSendThreshold(1);
+    // }
 
-    app.storedRequestsLimit = function() {
-        Countly.storedRequestsLimit(1);
-    }
+    // app.storedRequestsLimit = function() {
+    //     Countly.storedRequestsLimit(1);
+    // }
 
     app.stop = function() {
         Countly.stop();
@@ -295,75 +300,75 @@
         Countly.setLoggingEnabled();
     }
 
-    app.testAndroidPush = function() {
-        Countly.sendPushToken({
-            "token": "1234567890",
-            "messagingMode": Countly.messagingMode.DEVELOPMENT
-        });
-    };
+    // app.testAndroidPush = function() {
+    //     Countly.sendPushToken({
+    //         "token": "1234567890",
+    //         "messagingMode": Countly.messagingMode.DEVELOPMENT
+    //     });
+    // };
 
-    app.testiOSPush = function() {
-        Countly.sendPushToken({
-            "token": "1234567890",
-            "messagingMode": Countly.messagingMode.DEVELOPMENT
-        });
-    };
+    // app.testiOSPush = function() {
+    //     Countly.sendPushToken({
+    //         "token": "1234567890",
+    //         "messagingMode": Countly.messagingMode.DEVELOPMENT
+    //     });
+    // };
 
 
-    app.sendPushToken = function() {
+    // app.sendPushToken = function() {
 
-        var push = PushNotification.init({
-            android: {sound: true},
-            ios: {
-                alert: "true",
-                badge: "true",
-                sound: "true"
-            },
-            windows: {}
-        });
+    //     var push = PushNotification.init({
+    //         android: {sound: true},
+    //         ios: {
+    //             alert: "true",
+    //             badge: "true",
+    //             sound: "true"
+    //         },
+    //         windows: {}
+    //     });
 
-        push.on('registration', function(data) {
-            alert('Token received: '+data.registrationId);
-            Countly.sendPushToken({
-                "token": data.registrationId,
-                "messagingMode": Countly.messagingMode.DEVELOPMENT
-            });
-        });
+    //     push.on('registration', function(data) {
+    //         alert('Token received: '+data.registrationId);
+    //         Countly.sendPushToken({
+    //             "token": data.registrationId,
+    //             "messagingMode": Countly.messagingMode.DEVELOPMENT
+    //         });
+    //     });
 
-        push.on('notification', function(data) {
-            alert(JSON.stringify(data));
-            // data.message,
-            // data.title,
-            // data.count,
-            // data.sound,
-            // data.image,
-            // data.additionalData
-        });
+    //     push.on('notification', function(data) {
+    //         alert(JSON.stringify(data));
+    //         // data.message,
+    //         // data.title,
+    //         // data.count,
+    //         // data.sound,
+    //         // data.image,
+    //         // data.additionalData
+    //     });
 
-        // // Test android 8.0 and 9.0
-        // push.subscribe('myTopic', function(n){
-        //     alert(JSON.stringify(n));
-        // }, function(e){
-        //     alert(JSON.stringify(e));
-        // });
+    //     // // Test android 8.0 and 9.0
+    //     // push.subscribe('myTopic', function(n){
+    //     //     alert(JSON.stringify(n));
+    //     // }, function(e){
+    //     //     alert(JSON.stringify(e));
+    //     // });
 
-        push.on('error', function(e) {
-            // e.message
-        });
-        // Countly.messagingMode.DEVELOPMENT
-        // Countly.messagingMode.PRODUCTION
-        // Countly.messagingMode.ADHOC
-        // Countly.mode = Countly.messagingMode.DEVELOPMENT;
-        // Countly.Push.onRegisterPushNotification();
-        // @depricated: The below commented method is depricated and no longer works.
-        // Countly.initMessaging({
-        //     "messageMode": Countly.messagingMode.TEST,
-        //     "projectId": "881000050249"
-        // });
+    //     push.on('error', function(e) {
+    //         // e.message
+    //     });
+    //     // Countly.messagingMode.DEVELOPMENT
+    //     // Countly.messagingMode.PRODUCTION
+    //     // Countly.messagingMode.ADHOC
+    //     // Countly.mode = Countly.messagingMode.DEVELOPMENT;
+    //     // Countly.Push.onRegisterPushNotification();
+    //     // @depricated: The below commented method is depricated and no longer works.
+    //     // Countly.initMessaging({
+    //     //     "messageMode": Countly.messagingMode.TEST,
+    //     //     "projectId": "881000050249"
+    //     // });
 
-        // Tesing purpose only
+    //     // Tesing purpose only
 
-    }
+    // }
 
     app.askForNotificationPermission = function() {
         Countly.askForNotificationPermission();
@@ -423,10 +428,10 @@
         }, 1000);
     }
 
-    app.sendRating = function(){
-        // Ratings can be from 1 - 5;
-        Countly.sendRating(5);
-    }
+    // app.sendRating = function(){
+    //     // Ratings can be from 1 - 5;
+    //     Countly.sendRating(5);
+    // }
     app.askForFeedback = function(){
         Countly.askForFeedback("5e4254507975d006a22535fc", "Close");
     }
@@ -544,6 +549,35 @@
     }
     app.getRemoteConfigValueForKey = function(){
         Countly.getRemoteConfigValueForKey("name", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+
+    app.updateRemoteConfigForbooleanValueOnly = function(){
+        Countly.updateRemoteConfigForbooleanValueOnly(["booleanValue"], function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForfloatValueOnly = function(){
+        Countly.updateRemoteConfigForfloatValueOnly(["floatValue"], function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForintegerValueOnly = function(){
+        Countly.updateRemoteConfigForintegerValueOnly(["integerValue"], function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForstringValueOnly = function(){
+        Countly.updateRemoteConfigForstringValueOnly(["stringValue"], function(r){
             alert(r)
         }, function(r){
             alert(r);
