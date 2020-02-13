@@ -23,16 +23,10 @@
     "cordova-ios",
     "cordova-android"
   ],
-  "engines": {
-
-  },
+  "engines": {},
   "author": "Trinisoft Technologies Pvt. Ltd.",
   "license": "MIT",
-  "scripts": {
-
-  },
-  "devDependencies": {
-  },
-  "dependencies": {
-  }
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {}
 }
