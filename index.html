@@ -70,12 +70,11 @@
         <button onclick="app.updateRemoteConfigForKeysOnly()" class="fluid ui button brown">Countly.updateRemoteConfigForKeysOnly</button>
         <button onclick="app.updateRemoteConfigExceptKeys()" class="fluid ui button pink">Countly.updateRemoteConfigExceptKeys</button>
         <button onclick="app.remoteConfigClearValues()" class="fluid ui button purple">Countly.remoteConfigClearValues</button>
-        <button onclick="app.getRemoteConfigValueForKey()" class="fluid ui button violet">Countly.getRemoteConfigValueForKey</button>
-
-        <button onclick="app.updateRemoteConfigForbooleanValueOnly()" class="fluid ui button violet">Countly.updateRemoteConfigForbooleanValueOnly</button>
-        <button onclick="app.updateRemoteConfigForfloatValueOnly()" class="fluid ui button violet">Countly.updateRemoteConfigForfloatValueOnly</button>
-        <button onclick="app.updateRemoteConfigForintegerValueOnly()" class="fluid ui button violet">Countly.updateRemoteConfigForintegerValueOnly</button>
-        <button onclick="app.updateRemoteConfigForstringValueOnly()" class="fluid ui button violet">Countly.updateRemoteConfigForstringValueOnly</button>
+        
+        <button onclick="app.updateRemoteConfigForbooleanValueOnly()" class="fluid ui button orange">Boolean Test</button>
+        <button onclick="app.updateRemoteConfigForfloatValueOnly()" class="fluid ui button yellow">Float Test</button>
+        <button onclick="app.updateRemoteConfigForintegerValueOnly()" class="fluid ui button blue">Integer Test</button>
+        <button onclick="app.updateRemoteConfigForstringValueOnly()" class="fluid ui button green">String Test</button>
 
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
@@ -556,28 +555,28 @@
     }
 
     app.updateRemoteConfigForbooleanValueOnly = function(){
-        Countly.updateRemoteConfigForbooleanValueOnly(["booleanValue"], function(r){
+        Countly.getRemoteConfigValueForKey("booleanValue", function(r){
             alert(r)
         }, function(r){
             alert(r);
         });
     }
     app.updateRemoteConfigForfloatValueOnly = function(){
-        Countly.updateRemoteConfigForfloatValueOnly(["floatValue"], function(r){
+        Countly.getRemoteConfigValueForKey("floatValue", function(r){
             alert(r)
         }, function(r){
             alert(r);
         });
     }
     app.updateRemoteConfigForintegerValueOnly = function(){
-        Countly.updateRemoteConfigForintegerValueOnly(["integerValue"], function(r){
+        Countly.getRemoteConfigValueForKey("integerValue", function(r){
             alert(r)
         }, function(r){
             alert(r);
         });
     }
     app.updateRemoteConfigForstringValueOnly = function(){
-        Countly.updateRemoteConfigForstringValueOnly(["stringValue"], function(r){
+        Countly.getRemoteConfigValueForKey("stringValue", function(r){
             alert(r)
         }, function(r){
             alert(r);

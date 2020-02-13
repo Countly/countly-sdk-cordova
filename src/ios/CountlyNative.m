@@ -555,8 +555,12 @@
         if(!value){
             value = @"Default Value";
         }
-        result(value);
-        
+        NSString *theType = NSStringFromClass([value class]);
+        if([theType isEqualToString:@"NSTaggedPointerString"]){
+            result(value);
+        }else{
+            result([value stringValue]);
+        }
     }else if ([@"askForFeedback" isEqualToString:method]) {
         NSString* widgetId = [command objectAtIndex:0];
         [Countly.sharedInstance presentFeedbackWidgetWithID:widgetId completionHandler:^(NSError* error){

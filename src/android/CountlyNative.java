@@ -700,7 +700,7 @@ public class CountlyNative {
 
     public String getRemoteConfigValueForKey(JSONArray args){
         try {
-            String getRemoteConfigValueForKeyResult = (String) Countly.sharedInstance().getRemoteConfigValueForKey(args.getString(0));
+            String getRemoteConfigValueForKeyResult = Countly.sharedInstance().getRemoteConfigValueForKey(args.getString(0)).toString();
             return getRemoteConfigValueForKeyResult;
         }catch (JSONException jsonException){
             return jsonException.toString();

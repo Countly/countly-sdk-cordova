@@ -328,19 +328,6 @@ Countly.remoteConfigClearValues = function(onSuccess, onError){
 Countly.getRemoteConfigValueForKey = function(key, onSuccess, onError){
     cordova.exec(onSuccess, onError,"CountlyCordova","getRemoteConfigValueForKey",[key]);
 }
-
-Countly.updateRemoteConfigForbooleanValueOnly = function(key, onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForbooleanValueOnly",[key]);
-}
-Countly.updateRemoteConfigForfloatValueOnly = function(key, onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForfloatValueOnly",[key]);
-}
-Countly.updateRemoteConfigForintegerValueOnly = function(key, onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForintegerValueOnly",[key]);
-}
-Countly.updateRemoteConfigForstringValueOnly = function(key, onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForstringValueOnly",[key]);
-}
 // Remote config
 
 // Rating
