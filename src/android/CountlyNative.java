@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import android.os.Build;
 import android.app.NotificationManager;
 import android.app.NotificationChannel;
-//import ly.count.android.sdk.messaging.CountlyPush;
-//
-//import com.google.firebase.iid.FirebaseInstanceId;
-//import com.google.firebase.iid.InstanceIdResult;
-//import com.google.android.gms.tasks.Task;
-//import com.google.android.gms.tasks.OnCompleteListener;
-//import com.google.firebase.FirebaseApp;
+import ly.count.android.sdk.messaging.CountlyPush;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.FirebaseApp;
 
 public class CountlyNative {
 
@@ -170,33 +170,33 @@ public class CountlyNative {
         }
     }
 
-//    public String askForNotificationPermission(JSONArray args){
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            String channelName = "Default Name";
-//            String channelDescription = "Default Description";
-//            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-//            if (notificationManager != null) {
-//                NotificationChannel channel = new NotificationChannel(CountlyPush.CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-//                channel.setDescription(channelDescription);
-//                notificationManager.createNotificationChannel(channel);
-//            }
-//        }
-//        CountlyPush.init(activity.getApplication(), pushTokenType);
-//        FirebaseApp.initializeApp(context);
-//        FirebaseInstanceId.getInstance().getInstanceId()
-//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                    @Override
-//                    public void onComplete(Task<InstanceIdResult> task) {
-//                        if (!task.isSuccessful()) {
-//                            Log.w("Tag", "getInstanceId failed", task.getException());
-//                            return;
-//                        }
-//                        String token = task.getResult().getToken();
-//                        CountlyPush.onTokenRefresh(token);
-//                    }
-//                });
-//        return "askForNotificationPermission";
-//    }
+   public String askForNotificationPermission(JSONArray args){
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+           String channelName = "Default Name";
+           String channelDescription = "Default Description";
+           NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+           if (notificationManager != null) {
+               NotificationChannel channel = new NotificationChannel(CountlyPush.CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+               channel.setDescription(channelDescription);
+               notificationManager.createNotificationChannel(channel);
+           }
+       }
+       CountlyPush.init(activity.getApplication(), pushTokenType);
+       FirebaseApp.initializeApp(context);
+       FirebaseInstanceId.getInstance().getInstanceId()
+               .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                   @Override
+                   public void onComplete(Task<InstanceIdResult> task) {
+                       if (!task.isSuccessful()) {
+                           Log.w("Tag", "getInstanceId failed", task.getException());
+                           return;
+                       }
+                       String token = task.getResult().getToken();
+                       CountlyPush.onTokenRefresh(token);
+                   }
+               });
+       return "askForNotificationPermission";
+   }
 
     public String pushTokenType(JSONArray args){
         try {

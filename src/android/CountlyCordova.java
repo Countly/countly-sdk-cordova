@@ -60,7 +60,10 @@ public class CountlyCordova extends CordovaPlugin {
         }
 
         else if ("askForNotificationPermission".equals(action)) {
-            // callbackContext.success(countlyNative.askForNotificationPermission(args));
+            callbackContext.success(countlyNative.askForNotificationPermission(args));
+        }
+        else if ("pushTokenType".equals(action)) {
+            callbackContext.success(countlyNative.pushTokenType(args));
         }
 
         else if("startEvent".equals(action)){
@@ -131,7 +134,7 @@ public class CountlyCordova extends CordovaPlugin {
 
         // else if("sendRating".equals(action)){
         //     callbackContext.success(countlyNative.sendRating(args));
-        }
+        // }
         else if("recordView".equals(action)){
             callbackContext.success(countlyNative.recordView(args));
         }

@@ -1,4 +1,4 @@
-package ly.count.dart.countly_flutter;
+package ly.count.android.sdk;
 
 import android.content.Intent;
 import android.util.Log;
@@ -38,7 +38,7 @@ public class CountlyMessagingService extends FirebaseMessagingService {
             notificationIntent = new Intent(getApplicationContext(), getApplication().getClass());
         }
 
-        Boolean result = CountlyPush.displayMessage(getApplicationContext(), message, R.drawable.ic_message, notificationIntent);
+        Boolean result = CountlyPush.displayMessage(getApplicationContext(), message, R.mipmap.ic_launcher, notificationIntent);
         if (result == null) {
             Log.i(TAG, "Message wasn't sent from Countly server, so it cannot be handled by Countly SDK");
         } else if (result) {
