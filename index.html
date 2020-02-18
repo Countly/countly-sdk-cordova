@@ -8,7 +8,6 @@
     <meta name="msapplication-tap-highlight" content="no" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="Countly.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stacktrace.js/2.0.0/stacktrace.min.js"></script>
     <style type="text/css">
     button {
@@ -27,11 +26,17 @@
         <button onclick="app.initWithID()" class="fluid ui green button">Init with ID </button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
+
+        <!-- <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button> 
+        <button onclick="app.updateSessionPeriod()" class="fluid ui CornflowerBlue button">Update Session Period</button>
+        <button onclick="app.eventSendThreshold()" class="fluid ui CornflowerBlue button">Event Send Threshold</button>
+        <button onclick="app.storedRequestsLimit()" class="fluid ui CornflowerBlue button">Stored Requests Limit</button> -->
+
         <div class="ui horizontal divider">Events Start</div>
         <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
         <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
         <button onclick="app.eventWithSegment()" class="fluid ui button">Event with Segment</button>
-        <button onclick="app.eventWithSum_Segment()" class="fluid ui button">Even with Sum and Segment</button>
+        <button onclick="app.eventWithSumSegment()" class="fluid ui button">Even with Sum and Segment</button>
         <button onclick="app.event()" class="fluid ui black button">All Events</button>
         <button onclick="app.endEventBasic()" class="fluid ui button">Timed event: Start / Stop</button>
         <button onclick="app.endEventWithSum()" class="fluid ui button">Timed event Sum: Start / Stop</button>
@@ -50,165 +55,43 @@
         <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
         <button onclick="app.userData.setProperty()" class="fluid ui button teal">UserData.setProperty</button>
         <button onclick="app.userData.increment()" class="fluid ui button teal">UserData.increment</button>
-        <button onclick="app.userData.incrementBy()" class="fluid ui button orange">UserData.incrementBy</button>
-        <button onclick="app.userData.multiply()" class="fluid ui button yellow">UserData.multiply</button>
-        <button onclick="app.userData.saveMax()" class="fluid ui button olive">UserData.saveMax</button>
-        <button onclick="app.userData.saveMin()" class="fluid ui button orange">UserData.saveMin</button>
-        <button onclick="app.userData.setOnce()" class="fluid ui button blue">UserData.setOnce</button>
+        <button onclick="app.userData.incrementBy()" class="fluid ui button teal">UserData.incrementBy</button>
+        <button onclick="app.userData.multiply()" class="fluid ui button teal">UserData.multiply</button>
+        <button onclick="app.userData.saveMax()" class="fluid ui button teal">UserData.saveMax</button>
+        <button onclick="app.userData.saveMin()" class="fluid ui button teal">UserData.saveMin</button>
+        <button onclick="app.userData.setOnce()" class="fluid ui button teal">UserData.setOnce</button>
+        <button onclick="app.userData.pushUniqueValue()" class="fluid ui button teal">UserData.pushUniqueValue</button>
+        <button onclick="app.userData.pushValue()" class="fluid ui button teal">UserData.pushValue</button>
+        <button onclick="app.userData.pullValue()" class="fluid ui button teal">UserData.pullValue</button>
         <div class="ui horizontal divider">User Methods End</div>
         <div class="ui horizontal divider">Remote Config Methods Start</div>
-        <button onclick="app.setRemoteConfigAutomaticDownload()" class="fluid ui button black">Countly.setRemoteConfigAutomaticDownload</button>
-        <button onclick="app.remoteConfigUpdate()" class="fluid ui button grey">Countly.remoteConfigUpdate</button>
-        <button onclick="app.updateRemoteConfigForKeysOnly()" class="fluid ui button brown">Countly.updateRemoteConfigForKeysOnly</button>
-        <button onclick="app.updateRemoteConfigExceptKeys()" class="fluid ui button pink">Countly.updateRemoteConfigExceptKeys</button>
-        <button onclick="app.remoteConfigClearValues()" class="fluid ui button purple">Countly.remoteConfigClearValues</button>
-        <button onclick="app.getRemoteConfigValueForKey()" class="fluid ui button violet">Countly.getRemoteConfigValueForKey</button>
+        <button onclick="app.setRemoteConfigAutomaticDownload()" class="fluid ui button blue">Countly.setRemoteConfigAutomaticDownload</button>
+        <button onclick="app.remoteConfigUpdate()" class="fluid ui button blue">Countly.remoteConfigUpdate</button>
+        <button onclick="app.updateRemoteConfigForKeysOnly()" class="fluid ui button blue">Countly.updateRemoteConfigForKeysOnly</button>
+        <button onclick="app.updateRemoteConfigExceptKeys()" class="fluid ui button blue">Countly.updateRemoteConfigExceptKeys</button>
+        <button onclick="app.remoteConfigClearValues()" class="fluid ui button blue">Countly.remoteConfigClearValues</button>
+        
+        <button onclick="app.updateRemoteConfigForbooleanValueOnly()" class="fluid ui button blue">Boolean Test</button>
+        <button onclick="app.updateRemoteConfigForfloatValueOnly()" class="fluid ui button blue">Float Test</button>
+        <button onclick="app.updateRemoteConfigForintegerValueOnly()" class="fluid ui button blue">Integer Test</button>
+        <button onclick="app.updateRemoteConfigForstringValueOnly()" class="fluid ui button blue">String Test</button>
+
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
-        <button onclick="app.sendPushToken()" class="fluid ui button teal">Push Message</button>
-        <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button>
-        <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button>
-        <button onclick="app.changeDeviceId()" class="fluid ui button">Change Device ID</button>
-        <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button">Enable Parameter Tapmering Protection</button>
-        <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button">City, State, and Location</button>
-        <button onclick="app.addCrashLog()" class="fluid ui button">Send Crash Report</button>
+        <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
+        <!-- <button onclick="app.sendPushToken()" class="fluid ui button teal">Push Message</button> -->
+        <!-- <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button> -->
+        <!-- <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button> -->
+        <button onclick="app.changeDeviceId()" class="fluid ui button yellow">Change Device ID</button>
+        <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button yellow">Enable Parameter Tapmering Protection</button>
+        <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button yellow">City, State, and Location</button>
+        <button onclick="app.addCrashLog()" class="fluid ui button yellow">Send Crash Report</button>
         <div class="ui horizontal divider">Other Methods End</div>
         <div class="ui horizontal divider">Rating Methods Start</div>
-        <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button>
-        <button onclick="app.askForStarRating()" class="fluid ui button">Open rating modal</button>
-        <button onclick="app.askForFeedback()" class="fluid ui button">Open feedback modal</button>
+        <!-- <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button> -->
+        <button onclick="app.askForStarRating()" class="fluid ui button orange">Open rating modal</button>
+        <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
         <div class="ui horizontal divider">Rating Methods End</div>
-        <!-- Modal UI -->
-        <style>
-            /* .countly-modal.open{
-                display: block;
-            }
-            .countly-modal{
-                width: 80%;
-                height: auto;
-                position: fixed;
-                top: 10%;
-                left: 10%;
-                background-color: white;
-                border-radius: 20px;
-                z-index: 99;
-                border: 1px solid #e0e0e0;
-                text-align: center;
-                font-size: 2rem;
-                display: none;
-            }
-            .countly-modal div{
-                margin: 20px;
-            }
-            .countly-modal-header{
-                margin-top: 20px;
-            }
-            .countly-modal-divider{
-                position: relative;
-                margin: auto;
-                height: 1px;
-                border: 1px solid #e0e0e0;
-            }
-            .countly-modal-dismiss{
-                color: #47a9f4;
-            }
-            .countly-modal-submit{
-                display: none;
-                color: #47a9f4;
-            } */
-
-              /* For FeedBack modal */
-            /* for tooltip */
-            .tooltip {
-                position: relative;
-                display: inline-block;
-            }
-
-            .tooltip .tooltiptext {
-                visibility: hidden;
-                width: auto;
-                background-color: black;
-                color: #fff;
-                text-align: center;
-                font-size: 15px;
-                border-radius: 6px;
-                padding: 5px 0;
-
-                position: absolute;
-                z-index: 1;
-                bottom: 100%;
-                left: 50%;
-                margin-left: -60px;
-            }
-
-
-            /* .pointer {
-                cursor: pointer;
-            } */
-
-            .tooltip:hover .tooltiptext {
-                visibility: visible;
-            }
-
-            /* button  */
-            .countly-feedback-button {
-                background-color: #4CAF50;
-                border: none;
-                color: white;
-                font-family: 'Lato', sans-serif;
-                padding: 9px 10px;
-                text-align: center;
-                border-radius: 3px;
-                text-decoration: none;
-                font-size: 13px;
-                margin: 4px 2px;
-                cursor: pointer;
-                width: 60%;
-            }
-
-            /* for close icon */
-            .close {
-                position: absolute;
-                right: 32px;
-                top: 32px;
-                width: 32px;
-                height: 32px;
-                opacity: 0.3;
-            }
-
-            /* for text area */
-            /* .textareaClass {
-                width: 100%;
-                height: 60px;
-                margin-top: 10px;
-                resize: none;
-                border: 1px solid #DBDBDB;
-                outline: none;
-                font-size: 13px;
-                border-radius: 3px;
-            } */
-
-            /* for email */
-            /* .emailClass {
-                width: 100%;
-                outline: none;
-                border: 1px solid #DBDBDB;
-                height: 30px;
-                margin-top: 10px;
-                line-height: 20px;
-                padding-left: 2px;
-                font-size: 13px;
-                border-radius: 3px;
-            } */
-            /* for FeedBack modal */
-        </style>
-        <!-- <div class="countly-modal countly-rating-modal">
-            <div class="countly-modal-header"></div>
-            <div class="countly-modal-content"></div>
-            <div class="countly-modal-divider"></div>
-            <div class="countly-modal-dismiss"></div>
-            <div class="countly-modal-submit"></div>
-        </div> -->
     </div>
     <script type="text/javascript">
     app = {};
@@ -222,24 +105,19 @@
         return text;
     }
     app.init = function() {
-        var deviceId = "" +Math.random();
-        Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e");
-        // setTimeout(function(){
-        //     Countly.getDeviceID(function(deviceId){
-        //         console.log(deviceId);
-        //     }, function(getDeviceIDError){
-        //         console.log(getDeviceIDError);
-        //     });
-        // }, 3000);
+        Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
+        Countly.eventSendThreshold(1);
+        Countly.setLoggingEnabled();
     };
     app.initWithID = function(){
-        Countly.init("https://try.count.ly", "0e8a00e8c01395a0af8be0e55da05a404bb23c3e", makeid());
-
+        Countly.init("https://trinisoft.count.ly", "0e8a00e8c0139f0b2ac6919f718a13821575db28c0e2971e05ec55a0af8be0e55da05a404bb23c3e", makeid());
+        Countly.eventSendThreshold(1);
+        Countly.setLoggingEnabled();
     }
-    app.test = function() {
-        app.sendPushToken();
-        app.sendSampleEvent();
-    }
+    // app.test = function() {
+    //     app.sendPushToken();
+    //     app.sendSampleEvent();
+    // }
 
     app.setOptionalParametersForInitialization = function() {
         Countly.setOptionalParametersForInitialization({
@@ -258,6 +136,23 @@
     app.start = function() {
         Countly.start();
     }
+
+    // app.manualSessionHandling = function() {
+    //     Countly.manualSessionHandling();
+    // }
+
+    // app.updateSessionPeriod = function() {
+    //     Countly.updateSessionPeriod(15);
+    // }
+
+    // app.eventSendThreshold = function() {
+    //     Countly.eventSendThreshold(1);
+    // }
+
+    // app.storedRequestsLimit = function() {
+    //     Countly.storedRequestsLimit(1);
+    // }
+
     app.stop = function() {
         Countly.stop();
     }
@@ -266,49 +161,64 @@
         app.basicEvent();
         app.eventWithSum();
         app.eventWithSegment();
-        app.eventWithSum_Segment();
+        app.eventWithSumSegment();
     }
+
     app.basicEvent = function() {
         // example for basic event
-        var events = {
-            "eventName": "basic_event",
-            "eventCount": 1
+        var event = {
+            "key": "Basic Event",
+            "count": 1
         };
-        Countly.sendEvent(events);
+        Countly.recordEvent(event);
     }
     app.eventWithSum = function() {
         // example for event with sum
-        var events = {
-            "eventName": "event_sum",
-            "eventCount": 1,
-            "eventSum": "0.99"
+        var event = {
+            "key": "Event With Sum",
+            "count": 1,
+            "sum": "0.99",
         };
-        Countly.sendEvent(events);
+        Countly.recordEvent(event);
     }
     app.eventWithSegment = function() {
         // example for event with segment
-        var events = {
-            "eventName": "event_segment",
-            "eventCount": 1
+        var event = {
+            "key": "Event With Segment",
+            "count": 1
         };
-        events.segments = {
+        event.segmentation = {
             "Country": "Turkey",
             "Age": "28"
         };
-        Countly.sendEvent(events);
+        Countly.recordEvent(event);
     }
-    app.eventWithSum_Segment = function() {
+    app.eventWithSumSegment = function() {
         // example for event with segment and sum
-        var events = {
-            "eventName": "event_segment_sum",
-            "eventCount": 1,
-            "eventSum": "0.99"
+        var event = {
+            "key": "Event With Sum And Segment",
+            "count": 1,
+            "sum": "0.99"
         };
-        events.segments = {
+        event.segmentation = {
             "Country": "Turkey",
             "Age": "28"
         };
-        Countly.sendEvent(events);
+        Countly.recordEvent(event);
+    }
+    app.eventWithSumSegment_duration = function() {
+        // example for event with segment and sum
+        var event = {
+            "key": "Event With Sum And Segment duration",
+            "count": 1,
+            "sum": "0.99",
+            "duration":"0"
+        };
+        event.segmentation = {
+            "Country": "Turkey",
+            "Age": "28"
+        };
+        Countly.recordEvent(event);
     }
     app.setUserData = function() {
         // example for setUserData
@@ -389,75 +299,80 @@
         Countly.setLoggingEnabled();
     }
 
-    app.testAndroidPush = function() {
-        Countly.sendPushToken({
-            "token": "1234567890",
-            "messagingMode": Countly.messagingMode.DEVELOPMENT
-        });
-    };
+    // app.testAndroidPush = function() {
+    //     Countly.sendPushToken({
+    //         "token": "1234567890",
+    //         "messagingMode": Countly.messagingMode.DEVELOPMENT
+    //     });
+    // };
 
-    app.testiOSPush = function() {
-        Countly.sendPushToken({
-            "token": "1234567890",
-            "messagingMode": Countly.messagingMode.DEVELOPMENT
-        });
-    };
+    // app.testiOSPush = function() {
+    //     Countly.sendPushToken({
+    //         "token": "1234567890",
+    //         "messagingMode": Countly.messagingMode.DEVELOPMENT
+    //     });
+    // };
 
 
-    app.sendPushToken = function() {
+    // app.sendPushToken = function() {
 
-        var push = PushNotification.init({
-            android: {sound: true},
-            ios: {
-                alert: "true",
-                badge: "true",
-                sound: "true"
-            },
-            windows: {}
-        });
+    //     var push = PushNotification.init({
+    //         android: {sound: true},
+    //         ios: {
+    //             alert: "true",
+    //             badge: "true",
+    //             sound: "true"
+    //         },
+    //         windows: {}
+    //     });
 
-        push.on('registration', function(data) {
-            alert('Token received: '+data.registrationId);
-            Countly.sendPushToken({
-                "token": data.registrationId,
-                "messagingMode": Countly.messagingMode.DEVELOPMENT
-            });
-        });
+    //     push.on('registration', function(data) {
+    //         alert('Token received: '+data.registrationId);
+    //         Countly.sendPushToken({
+    //             "token": data.registrationId,
+    //             "messagingMode": Countly.messagingMode.DEVELOPMENT
+    //         });
+    //     });
 
-        push.on('notification', function(data) {
-            alert(JSON.stringify(data));
-            // data.message,
-            // data.title,
-            // data.count,
-            // data.sound,
-            // data.image,
-            // data.additionalData
-        });
+    //     push.on('notification', function(data) {
+    //         alert(JSON.stringify(data));
+    //         // data.message,
+    //         // data.title,
+    //         // data.count,
+    //         // data.sound,
+    //         // data.image,
+    //         // data.additionalData
+    //     });
 
-        // // Test android 8.0 and 9.0
-        // push.subscribe('myTopic', function(n){
-        //     alert(JSON.stringify(n));
-        // }, function(e){
-        //     alert(JSON.stringify(e));
-        // });
+    //     // // Test android 8.0 and 9.0
+    //     // push.subscribe('myTopic', function(n){
+    //     //     alert(JSON.stringify(n));
+    //     // }, function(e){
+    //     //     alert(JSON.stringify(e));
+    //     // });
 
-        push.on('error', function(e) {
-            // e.message
-        });
-        // Countly.messagingMode.DEVELOPMENT
-        // Countly.messagingMode.PRODUCTION
-        // Countly.messagingMode.ADHOC
-        // Countly.mode = Countly.messagingMode.DEVELOPMENT;
-        // Countly.Push.onRegisterPushNotification();
-        // @depricated: The below commented method is depricated and no longer works.
-        // Countly.initMessaging({
-        //     "messageMode": Countly.messagingMode.TEST,
-        //     "projectId": "881000050249"
-        // });
+    //     push.on('error', function(e) {
+    //         // e.message
+    //     });
+    //     // Countly.messagingMode.DEVELOPMENT
+    //     // Countly.messagingMode.PRODUCTION
+    //     // Countly.messagingMode.ADHOC
+    //     // Countly.mode = Countly.messagingMode.DEVELOPMENT;
+    //     // Countly.Push.onRegisterPushNotification();
+    //     // @depricated: The below commented method is depricated and no longer works.
+    //     // Countly.initMessaging({
+    //     //     "messageMode": Countly.messagingMode.TEST,
+    //     //     "projectId": "881000050249"
+    //     // });
 
-        // Tesing purpose only
+    //     // Tesing purpose only
 
+    // }
+
+    app.askForNotificationPermission = function() {
+        Countly.askForNotificationPermission();
     }
+
     app.recordView = function(viewName) {
         Countly.recordView(viewName);
     }
@@ -473,13 +388,13 @@
     app.endEventBasic = function() {
         Countly.startEvent("Timed Event");
         setTimeout(function() {
-            Countly.endEvent({ "eventName": "Timed Event" });
+            Countly.endEvent({ "key": "Timed Event" });
         }, 1000);
     }
     app.endEventWithSum = function() {
         Countly.startEvent("Timed Event With Sum");
         setTimeout(function() {
-            Countly.endEvent({ "eventName": "Timed Event With Sum", "eventSum": "0.99" });
+            Countly.endEvent({ "key": "Timed Event With Sum", "sum": "0.99" });
         }, 1000);
     }
     app.endEventWithSegment = function() {
@@ -487,7 +402,7 @@
         setTimeout(function() {
 
             var events = {
-                "eventName": "Timed Event With Segment"
+                "key": "Timed Event With Segment"
             };
             events.segments = {
                 "Country": "Turkey",
@@ -500,9 +415,9 @@
         Countly.startEvent("Timed Event With Segment, Sum and Count");
         setTimeout(function() {
             var events = {
-                "eventName": "Timed Event With Segment, Sum and Count",
-                "eventCount": 1,
-                "eventSum": "0.99"
+                "key": "Timed Event With Segment, Sum and Count",
+                "count": 1,
+                "sum": "0.99"
             };
             events.segments = {
                 "Country": "Turkey",
@@ -512,24 +427,12 @@
         }, 1000);
     }
 
-    app.sendRating = function(){
-        // Ratings can be from 1 - 5;
-        Countly.sendRating(5);
-    }
+    // app.sendRating = function(){
+    //     // Ratings can be from 1 - 5;
+    //     Countly.sendRating(5);
+    // }
     app.askForFeedback = function(){
-        Countly.askForFeedback("5d80915a31ec7124c86df698", function(url){
-            //
-            url = "https://try.count.ly/feedback?widget_id=5d80915a31ec7124c86df698&device_id=a02cee5e35b6b8e8&app_key=0e8a00e8c01395a0af8be0e55da05a404bb23c3e";
-            // open modal + close button with iframe.
-        });
-        // Countly.sendFeedback({
-        //     rating: 5,
-        //     email: "example@demo.com",
-        //     contact_me: true,
-        //     comment: "My comment...",
-        //     feedback: "My feedback",
-        //     widgetId: "5d80915a31ec7124c86df698",
-        // });
+        Countly.askForFeedback("5e4254507975d006a22535fc", "Close");
     }
     app.askForStarRating = function(){
         Countly.askForStarRating(function(ratingResult){
@@ -597,6 +500,15 @@
     app.userData.setOnce = function() {
         Countly.userData.setOnce("setOnce", 200);
     }
+    app.userData.pushUniqueValue = function() {
+        Countly.userData.pushUniqueValue("pushUniqueValue", "morning");
+    }
+    app.userData.pushValue = function() {
+        Countly.userData.pushValue("pushValue", "morning");
+    }
+    app.userData.pullValue = function() {
+        Countly.userData.pullValue("pushValue", "morning");
+    }
 
     // Remote config usage
     app.setRemoteConfigAutomaticDownload = function(){
@@ -636,6 +548,35 @@
     }
     app.getRemoteConfigValueForKey = function(){
         Countly.getRemoteConfigValueForKey("name", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+
+    app.updateRemoteConfigForbooleanValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("booleanValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForfloatValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("floatValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForintegerValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("integerValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForstringValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("stringValue", function(r){
             alert(r)
         }, function(r){
             alert(r);

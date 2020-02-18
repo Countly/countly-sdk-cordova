@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="countly-sdk-js" version="19.3">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="countly-sdk-js" version="19.8.0">
 
   <name>Countly</name>
 
@@ -37,49 +37,15 @@
       </feature>
     </config-file>
 
-    <header-file src="src/ios/sdk/Countly.h"/>
-    <source-file src="src/ios/sdk/Countly.m"  />
-    <header-file src="src/ios/sdk/Countly_OpenUDID.h"/>
-    <source-file src="src/ios/sdk/Countly_OpenUDID.m" />
-    <header-file src="src/ios/sdk/CountlyAPM.h"/>
-    <source-file src="src/ios/sdk/CountlyAPM.m" />
-    <header-file src="src/ios/sdk/CountlyAPMNetworkLog.h"/>
-    <source-file src="src/ios/sdk/CountlyAPMNetworkLog.m"/>
-    <header-file src="src/ios/sdk/CountlyCommon.h"/>
-    <source-file src="src/ios/sdk/CountlyCommon.m" />
-    <header-file src="src/ios/sdk/CountlyConfig.h"/>
-    <source-file src="src/ios/sdk/CountlyConfig.m" />
-    <header-file src="src/ios/sdk/CountlyConnectionManager.h"/>
-    <source-file src="src/ios/sdk/CountlyConnectionManager.m" />
-    <header-file src="src/ios/sdk/CountlyConsentManager.h"/>
-    <source-file src="src/ios/sdk/CountlyConsentManager.m" />
-    <header-file src="src/ios/sdk/CountlyCrashReporter.h"/>
-    <source-file src="src/ios/sdk/CountlyCrashReporter.m" />
-    <header-file src="src/ios/sdk/CountlyDeviceInfo.h"/>
-    <source-file src="src/ios/sdk/CountlyDeviceInfo.m" />
-    <header-file src="src/ios/sdk/CountlyEvent.h"/>
-    <source-file src="src/ios/sdk/CountlyEvent.m" />
-    <header-file src="src/ios/sdk/CountlyLocationManager.h"/>
-    <source-file src="src/ios/sdk/CountlyLocationManager.m" />
-    <header-file src="src/ios/sdk/CountlyPersistency.h"/>
-    <source-file src="src/ios/sdk/CountlyPersistency.m" />
-    <header-file src="src/ios/sdk/CountlyStarRating.h"/>
-    <source-file src="src/ios/sdk/CountlyStarRating.m" />
-    <header-file src="src/ios/sdk/CountlyUserDetails.h"/>
-    <source-file src="src/ios/sdk/CountlyUserDetails.m" />
-    <header-file src="src/ios/sdk/CountlyViewTracking.h"/>
-    <source-file src="src/ios/sdk/CountlyViewTracking.m" />
-    <source-file src="src/ios/sdk/CountlyPushNotifications.h" />
-    <source-file src="src/ios/sdk/CountlyPushNotifications.m" />
-    <source-file src="src/ios/sdk/CountlyNotificationService.h" />
-    <source-file src="src/ios/sdk/CountlyNotificationService.m" />
-    <source-file src="src/ios/sdk/CountlyRemoteConfig.h" />
-    <source-file src="src/ios/sdk/CountlyRemoteConfig.m" />
     <header-file src="src/ios/CountlyCordova.h"/>
     <source-file src="src/ios/CountlyCordova.m"/>
+    <header-file src="src/ios/CountlyNative.h"/>
+    <source-file src="src/ios/CountlyNative.m"/>
 
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="OpenGLES.framework" weak="true" />
+    <framework src="Countly" type="podspec" spec="~> 19.08" />
+
   </platform>
 
   <!-- android -->
@@ -93,10 +59,6 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest">
         <uses-permission android:name="android.permission.INTERNET"/>
-        <!-- These permissions might be for push plugin. -->
-        <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-        <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-        <uses-permission android:name="android.permission.WAKE_LOCK"/> -->
     </config-file>
 
 
@@ -109,28 +71,9 @@
     </config-file>
 
     <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/sdk"/>
-
-    <source-file src="src/android/AdvertisingIdAdapter.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CertificateTrustManager.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/ConnectionProcessor.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/ConnectionQueue.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/Countly.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CountlyStore.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CrashDetails.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/DeviceId.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/DeviceInfo.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/Event.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/EventQueue.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/OpenUDIDAdapter.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/ReferrerReceiver.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/UserData.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CountlyStarRating.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/RemoteConfig.java" target-dir="src/ly/count/android/sdk"/>
-    <source-file src="src/android/CountlyConfig.java" target-dir="src/ly/count/android/sdk"/>
-
-
-    <source-file src="src/android/OpenUDID_manager.java" target-dir="src/org/openudid/"/>
-    <source-file src="src/android/OpenUDID_service.java" target-dir="src/org/openudid/"/>
+    <source-file src="src/android/CountlyNative.java" target-dir="src/ly/count/android/sdk"/>
+    <framework src="ly.count.android:sdk:19.02.3" />
+    <framework src="ly.count.android:sdk-messaging-fcm:19.02.3" />
   </platform>
 
 </plugin>
