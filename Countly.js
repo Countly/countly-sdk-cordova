@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.version = "19.8.0";
+Countly.version = "19.8.1";
 var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 if (/android/i.test(userAgent)) {
     Countly.isAndroid = true;
@@ -197,17 +197,17 @@ Countly.endEvent = function(options){
         options.key = "default";
     }
     args.push(options.key.toString());
-  
+
     if(!options.count){
         options.count = 1;
     }
     args.push(options.count.toString());
-  
+
     if(!options.sum){
         options.sum = "0";
     }
     args.push(options.sum.toString());
-  
+
     if(!options.segmentation){
         for(var key in options.segmentation){
             args.push(key);
