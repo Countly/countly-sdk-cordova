@@ -235,10 +235,14 @@
         result(@"logException!");
 
     }else if ([@"sendPushToken" isEqualToString:method]) {
-        NSString* token = [command objectAtIndex:0];
-        int messagingMode = [[command objectAtIndex:1] intValue];
-
-        [Countly.sharedInstance sendPushToken:token messagingMode: messagingMode];
+        if(config != nil){
+            NSString* token = [command objectAtIndex:0];
+            int messagingMode = [[command objectAtIndex:1] intValue];
+            NSString *urlString = [ @"" stringByAppendingFormat:@"%@?device_id=%@&app_key=%@&token_session=1&test_mode=%d&ios_token=%@", config.host, [Countly.sharedInstance deviceID], config.appKey, messagingMode, token];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+            [request setHTTPMethod:@"GET"];
+            [request setURL:[NSURL URLWithString:urlString]];
+        }
         result(@"sendPushToken!");
 
     }else if ([@"askForNotificationPermission" isEqualToString:method]) {
