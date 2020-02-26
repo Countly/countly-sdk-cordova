@@ -353,6 +353,14 @@ Countly.askForFeedback = function(widgetId, buttonText){
 }
 // FEEDBACK-WORK
 
+// Push Notification
+Countly.sendPushToken = function(options){
+    var args = [];
+    args.push(options.token || "");
+    args.push(options.messagingMode.toString() || Countly.messagingMode.PRODUCTION.toString());
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendPushToken",args);
+}
+// Push Notification
 
 //setHttpPostForced
 Countly.setHttpPostForced = function(){

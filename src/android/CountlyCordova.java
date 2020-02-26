@@ -187,6 +187,9 @@ public class CountlyCordova extends CordovaPlugin {
                 }
             });
         }
+        else if("sendPushToken".equals(action)){
+            callbackContext.success(countlyNative.sendPushToken(args));
+        }
         else{
             return false;
         }
