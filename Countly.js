@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.version = "19.8.1";
+Countly.version = "19.8.2";
 var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 if (/android/i.test(userAgent)) {
     Countly.isAndroid = true;
@@ -356,6 +356,14 @@ Countly.askForFeedback = function(widgetId, buttonText){
 }
 // FEEDBACK-WORK
 
+// Push Notification
+Countly.sendPushToken = function(options){
+    var args = [];
+    args.push(options.token || "");
+    args.push(options.messagingMode.toString() || Countly.messagingMode.PRODUCTION.toString());
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendPushToken",args);
+}
+// Push Notification
 
 //setHttpPostForced
 Countly.setHttpPostForced = function(){

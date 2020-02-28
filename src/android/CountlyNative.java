@@ -733,7 +733,21 @@ public class CountlyNative {
         return "askForStarRating success.";
     }
 
-
+    public String sendPushToken(JSONArray args){
+        try {
+            ConnectionQueue connectionQueue_ = Countly.sharedInstance().getConnectionQueue();
+            String token = args.getString(0);
+            int messagingMode = Integer.parseInt(args.getString(1));
+            if(messagingMode == 0){
+                connectionQueue_.tokenSession(token, Countly.CountlyMessagingMode.PRODUCTION);
+            }else{
+                connectionQueue_.tokenSession(token, Countly.CountlyMessagingMode.TEST);
+            }
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+        return "sendPushToken success.";
+    }
 
 
 }

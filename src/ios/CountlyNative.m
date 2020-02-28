@@ -21,28 +21,28 @@
     CountlyConfig* config = nil;
 
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
-    
+
     if(config == nil){
         config = CountlyConfig.new;
     }
-    
+
     if([@"init" isEqualToString:method]){
-        
+
         NSString* serverurl = [command  objectAtIndex:0];
         NSString* appkey = [command objectAtIndex:1];
         NSString* deviceID = @"";
-        
+
         config.appKey = appkey;
         config.host = serverurl;
-        
+
         config.sendPushTokenAlways = YES;
         config.features = @[CLYCrashReporting, CLYPushNotifications, CLYAutoViewTracking];
-        
+
         if(command.count == 3){
             deviceID = [command objectAtIndex:2];
             config.deviceID = deviceID;
         }
-        
+
         if (serverurl != nil && [serverurl length] > 0) {
             [[Countly sharedInstance] startWithConfig:config];
             result(@"initialized.");
@@ -58,7 +58,7 @@
         NSString* durationString = [command objectAtIndex:1];
         int duration = [durationString intValue];
         NSMutableDictionary *segmentation = [[NSMutableDictionary alloc] init];
-        
+
         if((int)command.count > 4){
             for(int i=4,il=(int)command.count;i<il;i+=2){
                 segmentation[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
@@ -75,7 +75,7 @@
     }else if ([@"setLoggingEnabled" isEqualToString:method]) {
         config.enableDebug = YES;
         result(@"setLoggingEnabled!");
-        
+
     }else if ([@"setuserdata" isEqualToString:method]) {
         NSString* name = [command objectAtIndex:0];
         NSString* username = [command objectAtIndex:1];
@@ -86,7 +86,7 @@
         //NSString* picturePath = [command objectAtIndex:6];
         NSString* gender = [command objectAtIndex:7];
         NSString* byear = [command objectAtIndex:8];
-        
+
         Countly.user.name = name;
         Countly.user.username = username;
         Countly.user.email = email;
@@ -95,14 +95,14 @@
         Countly.user.pictureURL = picture;
         Countly.user.gender = gender;
         Countly.user.birthYear = @([byear integerValue]);
-        
+
         [Countly.user save];
         result(@"setuserdata!");
-        
+
     }else if ([@"getDeviceID" isEqualToString:method]) {
         NSString* deviceID = Countly.sharedInstance.deviceID;
         result(@"default!");
-        
+
     // }else if ([@"sendRating" isEqualToString:method]) {
 //        NSString* ratingString = [command objectAtIndex:0];
 //        int rating = [ratingString intValue];
@@ -122,72 +122,72 @@
 //            //            [Countly.sharedInstance recordReservedEvent:kCountlyReservedEventStarRating segmentation:segmentation];
 //        }
 //        result(@"sendRating!");
-        
+
     }else if ([@"start" isEqualToString:method]) {
         [Countly.sharedInstance beginSession];
         result(@"start!");
-        
+
     }else if ([@"update" isEqualToString:method]) {
         [Countly.sharedInstance updateSession];
         result(@"update!");
-        
+
     // }else if ([@"manualSessionHandling" isEqualToString:method]) {
     //     // NSString* manualSessionHandling = [command objectAtIndex:0];
     //     config.manualSessionHandling = YES;
     //     result(@"manualSessionHandling!");
-        
+
     }else if ([@"stop" isEqualToString:method]) {
         [Countly.sharedInstance endSession];
         result(@"stop!");
-        
+
     // }else if ([@"updateSessionPeriod" isEqualToString:method]) {
     //     config.updateSessionPeriod = [[command objectAtIndex:0] intValue];
     //     result(@"updateSessionPeriod!");
-        
+
     // }else if ([@"eventSendThreshold" isEqualToString:method]) {
     //     config.eventSendThreshold = [[command objectAtIndex:0] intValue];
     //     result(@"eventSendThreshold!");
-        
+
     // }else if ([@"storedRequestsLimit" isEqualToString:method]) {
     //     // NSString* storedRequestsLimit = [command objectAtIndex:0];
     //     config.storedRequestsLimit = 1;
     //     result(@"storedRequestsLimit!");
-        
+
     }else if ([@"changeDeviceId" isEqualToString:method]) {
         NSString* newDeviceID = [command objectAtIndex:0];
         NSString* onServerString = [command objectAtIndex:1];
-        
+
         if ([onServerString  isEqual: @"1"]) {
             [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: YES];
         }else{
             [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: NO];
         }
-        
+
         result(@"changeDeviceId!");
-        
+
     }else if ([@"setHttpPostForced" isEqualToString:method]) {
         config.alwaysUsePOST = YES;
         result(@"setHttpPostForced!");
-        
+
     }else if ([@"enableParameterTamperingProtection" isEqualToString:method]) {
         NSString* salt = [command objectAtIndex:0];
         config.secretSalt = salt;
         result(@"enableParameterTamperingProtection!");
-        
+
     }else if ([@"startEvent" isEqualToString:method]) {
         NSString* eventName = [command objectAtIndex:0];
         [Countly.sharedInstance startEvent:eventName];
         result(@"startEvent!");
-        
+
     }else if ([@"endEvent" isEqualToString:method]) {
-        
+
         NSString* key = [command objectAtIndex:0];
         NSString* countString = [command objectAtIndex:1];
         int count = [countString intValue];
         NSString* sumString = [command objectAtIndex:2];
         float sum = [sumString floatValue];
         NSMutableDictionary *segmentation = [[NSMutableDictionary alloc] init];
-        
+
         if((int)command.count > 3){
             for(int i=3,il=(int)command.count;i<il;i+=2){
                 segmentation[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
@@ -200,50 +200,54 @@
     }else if ([@"setLocation" isEqualToString:method]) {
         NSString* latitudeString = [command objectAtIndex:0];
         NSString* longitudeString = [command objectAtIndex:1];
-        
+
         double latitudeDouble = [latitudeString doubleValue];
         double longitudeDouble = [longitudeString doubleValue];
-        
+
         config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
-        
+
         result(@"setLocation!");
-        
+
     }else if ([@"enableCrashReporting" isEqualToString:method]) {
         // config.features = @[CLYCrashReporting];
         result(@"enableCrashReporting!");
-        
+
     }else if ([@"addCrashLog" isEqualToString:method]) {
         NSString* record = [command objectAtIndex:0];
         [Countly.sharedInstance recordCrashLog: record];
         result(@"addCrashLog!");
-        
+
     }else if ([@"logException" isEqualToString:method]) {
         NSString* execption = [command objectAtIndex:0];
         NSString* nonfatal = [command objectAtIndex:1];
         NSArray *nsException = [execption componentsSeparatedByString:@"\n"];
-        
+
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        
+
         for(int i=2,il=(int)command.count;i<il;i+=2){
             dict[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
         }
         [dict setObject:nonfatal forKey:@"nonfatal"];
-        
+
         NSException* myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:dict];
-        
+
         [Countly.sharedInstance recordHandledException:myException withStackTrace: nsException];
         result(@"logException!");
-        
-    // }else if ([@"sendPushToken" isEqualToString:method]) {
-        // NSString* token = [command objectAtIndex:0];
-        // int messagingMode = [[command objectAtIndex:1] intValue];
-        
-        // [Countly.sharedInstance sendPushToken:token messagingMode: messagingMode];
-        // result(@"sendPushToken!");
-        
+
+    }else if ([@"sendPushToken" isEqualToString:method]) {
+        if(config != nil){
+            NSString* token = [command objectAtIndex:0];
+            int messagingMode = [[command objectAtIndex:1] intValue];
+            NSString *urlString = [ @"" stringByAppendingFormat:@"%@?device_id=%@&app_key=%@&token_session=1&test_mode=%d&ios_token=%@", config.host, [Countly.sharedInstance deviceID], config.appKey, messagingMode, token];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+            [request setHTTPMethod:@"GET"];
+            [request setURL:[NSURL URLWithString:urlString]];
+        }
+        result(@"sendPushToken!");
+
     }else if ([@"askForNotificationPermission" isEqualToString:method]) {
         UNAuthorizationOptions authorizationOptions = UNAuthorizationOptionProvisional;
-        
+
         [Countly.sharedInstance askForNotificationPermissionWithOptions:authorizationOptions completionHandler:^(BOOL granted, NSError *error)
          {
              NSLog(@"granted: %d", granted);
@@ -265,101 +269,101 @@
     }else if ([@"userData_setProperty" isEqualToString:method]) {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
-        
+
         [Countly.user set:keyName value:keyValue];
         [Countly.user save];
-        
+
         result(@"userData_setProperty!");
-        
+
     }else if ([@"userData_increment" isEqualToString:method]) {
         NSString* keyName = [command objectAtIndex:0];
-        
+
         [Countly.user increment:keyName];
         [Countly.user save];
-        
+
         result(@"userData_increment!");
-        
+
     }else if ([@"userData_incrementBy" isEqualToString:method]) {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
         int keyValueInteger = [keyValue intValue];
-        
+
         [Countly.user incrementBy:keyName value:[NSNumber numberWithInt:keyValueInteger]];
         [Countly.user save];
-        
+
         result(@"userData_incrementBy!");
-        
+
     }else if ([@"userData_multiply" isEqualToString:method]) {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
         int keyValueInteger = [keyValue intValue];
-        
+
         [Countly.user multiply:keyName value:[NSNumber numberWithInt:keyValueInteger]];
         [Countly.user save];
-        
+
         result(@"userData_multiply!");
-        
+
     }else if ([@"userData_saveMax" isEqualToString:method]) {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
         int  keyValueInteger = [keyValue intValue];
-        
+
         [Countly.user max:keyName value:[NSNumber numberWithInt:keyValueInteger]];
         [Countly.user save];
         result(@"userData_saveMax!");
-        
+
     }else if ([@"userData_saveMin" isEqualToString:method]) {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
         int keyValueInteger = [keyValue intValue];
-        
+
         [Countly.user min:keyName value:[NSNumber numberWithInt:keyValueInteger]];
         [Countly.user save];
-        
+
         result(@"userData_saveMin!");
-        
+
     }else if ([@"userData_setOnce" isEqualToString:method]) {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
-        
+
         [Countly.user setOnce:keyName value:keyValue];
         [Countly.user save];
-        
+
         result(@"userData_setOnce!");
-        
+
     }else if ([@"userData_pushUniqueValue" isEqualToString:method]) {
         NSString* type = [command objectAtIndex:0];
         NSString* pushUniqueValueString = [command objectAtIndex:1];
-        
+
         [Countly.user pushUnique:type value:pushUniqueValueString];
         [Countly.user save];
-        
+
         result(@"userData_pushUniqueValue!");
-        
+
     }else if ([@"userData_pushValue" isEqualToString:method]) {
         NSString* type = [command objectAtIndex:0];
         NSString* pushValue = [command objectAtIndex:1];
-        
+
         [Countly.user push:type value:pushValue];
         [Countly.user save];
-        
+
         result(@"userData_pushValue!");
-        
+
     }else if ([@"userData_pullValue" isEqualToString:method]) {
         NSString* type = [command objectAtIndex:0];
         NSString* pullValue = [command objectAtIndex:1];
-        
+
         [Countly.user pull:type value:pullValue];
         [Countly.user save];
-        
+
         result(@"userData_pullValue!");
-        
+
         //setRequiresConsent
     }else if ([@"setRequiresConsent" isEqualToString:method]) {
         BOOL consentFlag = [[command objectAtIndex:0] boolValue];
         config.requiresConsent = consentFlag;
         result(@"setRequiresConsent!");
-        
+
     }else if ([@"giveConsent" isEqualToString:method]) {
         NSString* consent = @"";
         // NSMutableDictionary *giveConsentAll = [[NSMutableDictionary alloc] init];
@@ -396,11 +400,11 @@
                 [Countly.sharedInstance giveConsentForFeature:CLYConsentAppleWatch];
             }
         }
-        
-        
+
+
         NSString *resultString = @"giveConsent for: ";
         result(@"giveConsent!");
-        
+
     }else if ([@"removeConsent" isEqualToString:method]) {
         NSString* consent = @"";
         //        NSMutableDictionary *removeConsent = [[NSMutableDictionary alloc] init];
@@ -437,13 +441,13 @@
                 [Countly.sharedInstance cancelConsentForFeature:CLYConsentAppleWatch];
             }
         }
-        
+
         NSString *resultString = @"removeConsent for: ";
         result(@"removeConsent!");
-        
+
     }else if ([@"giveAllConsent" isEqualToString:method]) {
         //        [Countly.sharedInstance giveConsentForAllFeatures];
-        
+
         [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentEvents];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentUserDetails];
@@ -454,10 +458,10 @@
         [Countly.sharedInstance giveConsentForFeature:CLYConsentStarRating];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentAppleWatch];
         result(@"giveAllConsent!");
-        
+
     }else if ([@"removeAllConsent" isEqualToString:method]) {
         //        [Countly.sharedInstance cancelConsentForAllFeatures];
-        
+
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentEvents];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentUserDetails];
@@ -468,23 +472,23 @@
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentStarRating];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentAppleWatch];
         result(@"removeAllConsent!");
-        
+
     }else if ([@"setOptionalParametersForInitialization" isEqualToString:method]) {
         NSString* city = [command objectAtIndex:0];
         NSString* country = [command objectAtIndex:1];
-        
+
         NSString* latitudeString = [command objectAtIndex:2];
         NSString* longitudeString = [command objectAtIndex:3];
         NSString* ipAddress = [command objectAtIndex:3];
-        
+
         double latitudeDouble = [latitudeString doubleValue];
         double longitudeDouble = [longitudeString doubleValue];
-        
+
         [Countly.sharedInstance recordLocation:(CLLocationCoordinate2D){latitudeDouble,longitudeDouble}];
         [Countly.sharedInstance recordCity:city andISOCountryCode:country];
         [Countly.sharedInstance recordIP:ipAddress];
         result(@"setOptionalParametersForInitialization!");
-        
+
     }else if ([@"setRemoteConfigAutomaticDownload" isEqualToString:method]) {
         config.enableRemoteConfig = YES;
         config.remoteConfigCompletionHandler = ^(NSError * error)
@@ -495,7 +499,7 @@
                 result([@"Error :" stringByAppendingString: error.localizedDescription]);
             }
         };
-        
+
     }else if ([@"remoteConfigUpdate" isEqualToString:method]) {
         [Countly.sharedInstance updateRemoteConfigWithCompletionHandler:^(NSError * error)
          {
@@ -505,14 +509,14 @@
                  result([@"Error :" stringByAppendingString: error.localizedDescription]);
              }
          }];
-        
+
     }else if ([@"updateRemoteConfigForKeysOnly" isEqualToString:method]) {
         NSMutableArray *randomSelection = [[NSMutableArray alloc] init];
         for (int i = 0; i < (int)command.count; i++){
             [randomSelection addObject:[command objectAtIndex:i]];
         }
         NSArray *keysOnly = [randomSelection copy];
-        
+
         // NSArray * keysOnly[] = {};
         // for(int i=0,il=(int)command.count;i<il;i++){
         //     keysOnly[i] = [command objectAtIndex:i];
@@ -525,14 +529,14 @@
                  result([@"Error :" stringByAppendingString: error.localizedDescription]);
              }
          }];
-        
+
     }else if ([@"updateRemoteConfigExceptKeys" isEqualToString:method]) {
         NSMutableArray *randomSelection = [[NSMutableArray alloc] init];
         for (int i = 0; i < (int)command.count; i++){
             [randomSelection addObject:[command objectAtIndex:i]];
         }
         NSArray *exceptKeys = [randomSelection copy];
-        
+
         // NSArray * exceptKeys[] = {};
         // for(int i=0,il=(int)command.count;i<il;i++){
         //     exceptKeys[i] = [command objectAtIndex:i];
@@ -545,11 +549,11 @@
                  result([@"Error :" stringByAppendingString: error.localizedDescription]);
              }
          }];
-        
+
     }else if ([@"remoteConfigClearValues" isEqualToString:method]) {
 //        [CountlyRemoteConfig.sharedInstance clearCachedRemoteConfig];
         result(@"Success!");
-        
+
     }else if ([@"getRemoteConfigValueForKey" isEqualToString:method]) {
         id value = [Countly.sharedInstance remoteConfigValueForKey:[command objectAtIndex:0]];
         if(!value){
@@ -572,7 +576,7 @@
                 result(@"Feedback widget presented successfully");
             }
         }];
-        
+
     }else if ([@"askForStarRating" isEqualToString:method]) {
         [Countly.sharedInstance askForStarRating:^(NSInteger rating){
             result([NSString stringWithFormat: @"Rating:%d", (int)rating]);

@@ -27,7 +27,7 @@
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
 
-        <!-- <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button> 
+        <!-- <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button>
         <button onclick="app.updateSessionPeriod()" class="fluid ui CornflowerBlue button">Update Session Period</button>
         <button onclick="app.eventSendThreshold()" class="fluid ui CornflowerBlue button">Event Send Threshold</button>
         <button onclick="app.storedRequestsLimit()" class="fluid ui CornflowerBlue button">Stored Requests Limit</button> -->
@@ -70,7 +70,7 @@
         <button onclick="app.updateRemoteConfigForKeysOnly()" class="fluid ui button blue">Countly.updateRemoteConfigForKeysOnly</button>
         <button onclick="app.updateRemoteConfigExceptKeys()" class="fluid ui button blue">Countly.updateRemoteConfigExceptKeys</button>
         <button onclick="app.remoteConfigClearValues()" class="fluid ui button blue">Countly.remoteConfigClearValues</button>
-        
+
         <button onclick="app.updateRemoteConfigForbooleanValueOnly()" class="fluid ui button blue">Boolean Test</button>
         <button onclick="app.updateRemoteConfigForfloatValueOnly()" class="fluid ui button blue">Float Test</button>
         <button onclick="app.updateRemoteConfigForintegerValueOnly()" class="fluid ui button blue">Integer Test</button>
@@ -79,7 +79,7 @@
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
         <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
-        <!-- <button onclick="app.sendPushToken()" class="fluid ui button teal">Push Message</button> -->
+        <button onclick="app.sendPushToken()" class="fluid ui button teal">Send Push Token</button>
         <!-- <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button> -->
         <!-- <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button> -->
         <button onclick="app.changeDeviceId()" class="fluid ui button yellow">Change Device ID</button>
@@ -316,60 +316,37 @@
     // };
 
 
-    // app.sendPushToken = function() {
+    app.sendPushToken = function() {
 
-    //     var push = PushNotification.init({
-    //         android: {sound: true},
-    //         ios: {
-    //             alert: "true",
-    //             badge: "true",
-    //             sound: "true"
-    //         },
-    //         windows: {}
-    //     });
+        var push = PushNotification.init({
+            android: {sound: true},
+            ios: {
+                alert: "true",
+                badge: "true",
+                sound: "true"
+            },
+            windows: {}
+        });
 
-    //     push.on('registration', function(data) {
-    //         alert('Token received: '+data.registrationId);
-    //         Countly.sendPushToken({
-    //             "token": data.registrationId,
-    //             "messagingMode": Countly.messagingMode.DEVELOPMENT
-    //         });
-    //     });
+        push.on('registration', function(data) {
+            alert('Token received: '+data.registrationId);
+            Countly.sendPushToken({
+                "token": data.registrationId,
+                "messagingMode": Countly.messagingMode.DEVELOPMENT
+            });
+        });
 
-    //     push.on('notification', function(data) {
-    //         alert(JSON.stringify(data));
-    //         // data.message,
-    //         // data.title,
-    //         // data.count,
-    //         // data.sound,
-    //         // data.image,
-    //         // data.additionalData
-    //     });
+        push.on('notification', function(data) {
+            alert(JSON.stringify(data));
+        });
 
-    //     // // Test android 8.0 and 9.0
-    //     // push.subscribe('myTopic', function(n){
-    //     //     alert(JSON.stringify(n));
-    //     // }, function(e){
-    //     //     alert(JSON.stringify(e));
-    //     // });
-
-    //     push.on('error', function(e) {
-    //         // e.message
-    //     });
-    //     // Countly.messagingMode.DEVELOPMENT
-    //     // Countly.messagingMode.PRODUCTION
-    //     // Countly.messagingMode.ADHOC
-    //     // Countly.mode = Countly.messagingMode.DEVELOPMENT;
-    //     // Countly.Push.onRegisterPushNotification();
-    //     // @depricated: The below commented method is depricated and no longer works.
-    //     // Countly.initMessaging({
-    //     //     "messageMode": Countly.messagingMode.TEST,
-    //     //     "projectId": "881000050249"
-    //     // });
-
-    //     // Tesing purpose only
-
-    // }
+        push.on('error', function(e) {
+            // e.message
+        });
+        // Countly.messagingMode.DEVELOPMENT
+        // Countly.messagingMode.PRODUCTION
+        // Countly.messagingMode.ADHOC
+    }
 
     app.askForNotificationPermission = function() {
         Countly.askForNotificationPermission();
