@@ -60,6 +60,10 @@ Countly.start = function(){
 Countly.stop = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","stop",[]);
 }
+// countly halt for android
+Countly.halt = function(){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","halt",[]);
+}
 
 // countly manualSessionHandling for android
 // Countly.manualSessionHandling = function(){
@@ -177,17 +181,10 @@ Countly.logException = function(exception, nonfatal, segments){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
 
-Countly.startSession = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startSession",[]);
-}
-
-Countly.endSession = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endSession",[]);
-}
-
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
 }
+
 Countly.startEvent = function(key){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startEvent",[key.toString() || ""]);
 }

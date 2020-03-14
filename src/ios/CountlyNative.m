@@ -127,6 +127,12 @@
         [Countly.sharedInstance beginSession];
         result(@"start!");
 
+    }else if ([@"stop" isEqualToString:method]) {
+        [Countly.sharedInstance endSession];
+        result(@"stop!");
+    }else if ([@"halt" isEqualToString:method]) { // This method is not implemented in iOS SDK
+        // [Countly.sharedInstance endSession];
+        result(@"No implemntation for halt!");
     }else if ([@"update" isEqualToString:method]) {
         [Countly.sharedInstance updateSession];
         result(@"update!");
@@ -135,10 +141,6 @@
     //     // NSString* manualSessionHandling = [command objectAtIndex:0];
     //     config.manualSessionHandling = YES;
     //     result(@"manualSessionHandling!");
-
-    }else if ([@"stop" isEqualToString:method]) {
-        [Countly.sharedInstance endSession];
-        result(@"stop!");
 
     // }else if ([@"updateSessionPeriod" isEqualToString:method]) {
     //     config.updateSessionPeriod = [[command objectAtIndex:0] intValue];

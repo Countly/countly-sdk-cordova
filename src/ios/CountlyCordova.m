@@ -111,6 +111,31 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
+
+- (void)stop:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"stop" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
+
+- (void)halt:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"halt" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
 - (void)update:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
@@ -135,17 +160,6 @@ CountlyNative* countlyNative = nil;
 //      }];
 // }
 
-- (void)stop:(CDVInvokedUrlCommand*)command
-{
-    if(countlyNative == nil){
-        countlyNative = CountlyNative.new;
-    }
-    [countlyNative onCall: @"stop" commandString: command.arguments callback: ^(NSString * theResult)
-     {
-         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
-         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-     }];
-}
 
 // - (void)updateSessionPeriod:(CDVInvokedUrlCommand*)command
 // {

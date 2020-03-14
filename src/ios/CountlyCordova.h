@@ -11,6 +11,7 @@
 - (void)sendRating:(CDVInvokedUrlCommand*)command;
 - (void)start:(CDVInvokedUrlCommand*)command;
 - (void)update:(CDVInvokedUrlCommand*)command;
+- (void)halt:(CDVInvokedUrlCommand*)command;
 - (void)manualSessionHandling:(CDVInvokedUrlCommand*)command;
 - (void)stop:(CDVInvokedUrlCommand*)command;
 - (void)updateSessionPeriod:(CDVInvokedUrlCommand*)command;

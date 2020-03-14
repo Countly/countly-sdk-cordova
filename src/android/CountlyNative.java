@@ -217,10 +217,14 @@ public class CountlyNative {
         return "started: success";
     }
 
-
     public String stop(JSONArray args){
         Countly.sharedInstance().onStop();
         return "stoped: success";
+    }
+
+    public String halt(JSONArray args){
+        Countly.sharedInstance().halt();
+        return "halt: success";
     }
 
 
