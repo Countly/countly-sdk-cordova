@@ -130,6 +130,10 @@
         });
     };
 
+    app.setLocation = function() {
+        Countly.setLocation();
+    };
+
     app.event = function() {
         setInterval(function() {
             app.sendSampleEvent();
@@ -157,6 +161,10 @@
 
     app.stop = function() {
         Countly.stop();
+    }
+
+    app.halt = function() {
+        Countly.halt();
     }
 
     app.sendSampleEvent = function() {
@@ -487,6 +495,28 @@
     }
     app.userData.pullValue = function() {
         Countly.userData.pullValue("pushValue", "morning");
+    }
+
+//setRequiresConsent
+    app.setRequiresConsent = function() {
+        Countly.setRequiresConsent(true);
+    }
+
+    app.giveConsent = function() {
+        Countly.giveConsent(["events", "views", "star-rating", "crashes"]);
+    }
+    app.removeConsent = function() {
+        Countly.removeConsent(["events", "views", "star-rating", "crashes"]);
+    }
+    app.giveAllConsent = function() {
+        Countly.giveAllConsent();
+    }
+    app.removeAllConsent = function() {
+        Countly.removeAllConsent();
+    }
+
+    app.giveConsentSessions = function() {
+        Countly.giveConsent(["sessions"]);
     }
 
     // Remote config usage
