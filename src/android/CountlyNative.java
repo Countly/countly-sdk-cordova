@@ -448,7 +448,11 @@ public class CountlyNative {
 
     public String setRequiresConsent(JSONArray args){
         try {
-            Boolean consentFlag = args.getBoolean(0);
+            String consentFlagString = args.getString(0);
+            Boolean consentFlag = false;
+            if (consentFlagString.equals("1")) {
+                consentFlag = true;
+            }
             Countly.sharedInstance().setRequiresConsent(consentFlag);
             return "setRequiresConsent: Success";
         }catch (JSONException jsonException){

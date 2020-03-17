@@ -63,6 +63,35 @@
         <button onclick="app.userData.pushUniqueValue()" class="fluid ui button teal">UserData.pushUniqueValue</button>
         <button onclick="app.userData.pushValue()" class="fluid ui button teal">UserData.pushValue</button>
         <button onclick="app.userData.pullValue()" class="fluid ui button teal">UserData.pullValue</button>
+        <!-- Consent Button -->
+
+        <button onclick="app.setRequiresConsent()" class="fluid ui button blue">Init Consent</button>
+        <button onclick="app.giveMultipleConsent()" class="fluid ui button blue">Give multiple consent</button>
+        <button onclick="app.removeMultipleConsent()" class="fluid ui button blue">Remove multiple consent</button>
+        <button onclick="app.giveAllConsent()" class="fluid ui button blue">Give all Consent</button>
+        <button onclick="app.removeAllConsent()" class="fluid ui button blue">Remove all Consent</button>
+
+        <button onclick="app.giveConsentSessions()" class="fluid ui button blue">Give Consent Sessions</button>
+        <button onclick="app.giveConsentEvents()" class="fluid ui button blue">Give Consent Events</button>
+        <button onclick="app.giveConsentViews()" class="fluid ui button blue">Give Consent Views</button>
+        <button onclick="app.giveConsentLocation()" class="fluid ui button blue">Give Consent Location</button>
+        <button onclick="app.giveConsentCrashes()" class="fluid ui button blue">Give Consent Crashes</button>
+        <button onclick="app.giveConsentAttribution()" class="fluid ui button blue">Give Consent Attribution</button>
+        <button onclick="app.giveConsentUsers()" class="fluid ui button blue">Give Consent Users</button>
+        <button onclick="app.giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
+        <button onclick="app.giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
+
+        <button onclick="app.removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
+        <button onclick="app.removeConsentEvents()" class="fluid ui button blue">Remove Consent Events</button>
+        <button onclick="app.removeConsentViews()" class="fluid ui button blue">Remove Consent Views</button>
+        <button onclick="app.removeConsentLocation()" class="fluid ui button blue">Remove Consent Location</button>
+        <button onclick="app.removeConsentCrashes()" class="fluid ui button blue">Remove Consent Crashes</button>
+        <button onclick="app.removeConsentAttribution()" class="fluid ui button blue">Remove Consent Attribution</button>
+        <button onclick="app.removeConsentUsers()" class="fluid ui button blue">Remove Consent Users</button>
+        <button onclick="app.removeConsentPush()" class="fluid ui button blue">Remove Consent Push</button>
+        <button onclick="app.removeConsentStarRating()" class="fluid ui button blue">Remove Consent starRating</button>
+
+        <!-- Consent Button -->
         <div class="ui horizontal divider">User Methods End</div>
         <div class="ui horizontal divider">Remote Config Methods Start</div>
         <button onclick="app.setRemoteConfigAutomaticDownload()" class="fluid ui button blue">Countly.setRemoteConfigAutomaticDownload</button>
@@ -131,7 +160,7 @@
     };
 
     app.setLocation = function() {
-        Countly.setLocation();
+        Countly.setLocation("28.006324","-82.7166183");
     };
 
     app.event = function() {
@@ -356,6 +385,10 @@
         // Countly.messagingMode.ADHOC
     }
 
+    app.setHttpPostForced = function() {
+        Countly.setHttpPostForced(true);
+    }
+
     app.askForNotificationPermission = function() {
         Countly.askForNotificationPermission();
     }
@@ -502,10 +535,10 @@
         Countly.setRequiresConsent(true);
     }
 
-    app.giveConsent = function() {
+    app.giveMultipleConsent = function() {
         Countly.giveConsent(["events", "views", "star-rating", "crashes"]);
     }
-    app.removeConsent = function() {
+    app.removeMultipleConsent = function() {
         Countly.removeConsent(["events", "views", "star-rating", "crashes"]);
     }
     app.giveAllConsent = function() {
@@ -517,6 +550,58 @@
 
     app.giveConsentSessions = function() {
         Countly.giveConsent(["sessions"]);
+    }
+    app.giveConsentEvents = function() {
+        Countly.giveConsent(["events"]);
+    }
+    app.giveConsentViews = function() {
+        Countly.giveConsent(["views"]);
+    }
+    app.giveConsentLocation = function() {
+        Countly.giveConsent(["location"]);
+    }
+    app.giveConsentCrashes = function() {
+        Countly.giveConsent(["crashes"]);
+    }
+    app.giveConsentAttribution = function() {
+        Countly.giveConsent(["attribution"]);
+    }
+    app.giveConsentUsers = function() {
+        Countly.giveConsent(["users"]);
+    }
+    app.giveConsentPush = function() {
+        Countly.giveConsent(["push"]);
+    }
+    app.giveConsentStarRating = function() {
+        Countly.giveConsent(["star-rating"]);
+    }
+
+    app.removeConsentSessions = function() {
+        Countly.removeConsent(["sessions"]);
+    }
+    app.removeConsentEvents = function() {
+        Countly.removeConsent(["events"]);
+    }
+    app.removeConsentViews = function() {
+        Countly.removeConsent(["views"]);
+    }
+    app.removeConsentLocation = function() {
+        Countly.removeConsent(["location"]);
+    }
+    app.removeConsentCrashes = function() {
+        Countly.removeConsent(["crashes"]);
+    }
+    app.removeConsentAttribution = function() {
+        Countly.removeConsent(["attribution"]);
+    }
+    app.removeConsentUsers = function() {
+        Countly.removeConsent(["users"]);
+    }
+    app.removeConsentPush = function() {
+        Countly.removeConsent(["push"]);
+    }
+    app.removeConsentStarRating = function() {
+        Countly.removeConsent(["star-rating"]);
     }
 
     // Remote config usage

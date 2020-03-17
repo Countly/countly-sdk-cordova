@@ -133,8 +133,8 @@ Countly.setOptionalParametersForInitialization = function(options){
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setOptionalParametersForInitialization",args);
 }
-Countly.setLocation = function(newDeviceID){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[newDeviceID.toString() || ""]);
+Countly.setLocation = function(latitude, longitude){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[latitude, longitude]);
 }
 Countly.changeDeviceId = function(newDeviceID, onServer){
     if(onServer === false){
@@ -293,20 +293,21 @@ Countly.userData.pullValue = function(type, pullValue){
 };
 
 //setRequiresConsent
-Countly.setRequiresConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setRequiresConsent",[]);
+Countly.consents = ["events", "views", "star-rating", "crashes"];
+Countly.setRequiresConsent = function(boolean){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setRequiresConsent",[boolean == true?"1": "0"]);
 }
-Countly.giveConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",[]);
+Countly.giveConsent = function(consent){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",consent);
 }
-Countly.removeConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",[]);
+Countly.removeConsent = function(consent){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",consent);
 }
 Countly.giveAllConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveAllConsent",[]);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",Countly.consents);
 }
 Countly.removeAllConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeAllConsent",[]);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",Countly.consents);
 }
 
 // Remote config

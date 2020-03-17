@@ -448,27 +448,26 @@
         result(@"removeConsent!");
 
     }else if ([@"giveAllConsent" isEqualToString:method]) {
-        //        [Countly.sharedInstance giveConsentForAllFeatures];
-
         [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentEvents];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentUserDetails];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentCrashReporting];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
+        [Countly.sharedInstance giveConsentForFeature:CLYConsentLocation];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentViewTracking];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentAttribution];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentStarRating];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentAppleWatch];
+        
         result(@"giveAllConsent!");
 
     }else if ([@"removeAllConsent" isEqualToString:method]) {
-        //        [Countly.sharedInstance cancelConsentForAllFeatures];
-
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentEvents];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentUserDetails];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentCrashReporting];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentPushNotifications];
+        [Countly.sharedInstance cancelConsentForFeature:CLYConsentLocation];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentViewTracking];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentAttribution];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentStarRating];
