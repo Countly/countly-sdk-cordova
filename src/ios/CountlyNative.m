@@ -377,23 +377,23 @@
             if([@"events" isEqualToString:consent]){
                 [Countly.sharedInstance giveConsentForFeature:CLYConsentEvents];
             }
-            if([@"users" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentUserDetails];
-            }
-            if([@"crashes" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentCrashReporting];
-            }
-            if([@"push" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
+            if([@"views" isEqualToString:consent]){
+                [Countly.sharedInstance giveConsentForFeature:CLYConsentViewTracking];
             }
             if([@"location" isEqualToString:consent]){
                 [Countly.sharedInstance giveConsentForFeature:CLYConsentLocation];
             }
-            if([@"views" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentViewTracking];
+            if([@"crashes" isEqualToString:consent]){
+                [Countly.sharedInstance giveConsentForFeature:CLYConsentCrashReporting];
             }
             if([@"attribution" isEqualToString:consent]){
                 [Countly.sharedInstance giveConsentForFeature:CLYConsentAttribution];
+            }
+            if([@"users" isEqualToString:consent]){
+                [Countly.sharedInstance giveConsentForFeature:CLYConsentUserDetails];
+            }
+            if([@"push" isEqualToString:consent]){
+                [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
             }
             if([@"star-rating" isEqualToString:consent]){
                 [Countly.sharedInstance giveConsentForFeature:CLYConsentStarRating];
@@ -418,23 +418,23 @@
             if([@"events" isEqualToString:consent]){
                 [Countly.sharedInstance cancelConsentForFeature:CLYConsentEvents];
             }
-            if([@"users" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentUserDetails];
-            }
-            if([@"crashes" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentCrashReporting];
-            }
-            if([@"push" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentPushNotifications];
+            if([@"views" isEqualToString:consent]){
+                [Countly.sharedInstance cancelConsentForFeature:CLYConsentViewTracking];
             }
             if([@"location" isEqualToString:consent]){
                 [Countly.sharedInstance cancelConsentForFeature:CLYConsentLocation];
             }
-            if([@"views" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentViewTracking];
+            if([@"crashes" isEqualToString:consent]){
+                [Countly.sharedInstance cancelConsentForFeature:CLYConsentCrashReporting];
             }
             if([@"attribution" isEqualToString:consent]){
                 [Countly.sharedInstance cancelConsentForFeature:CLYConsentAttribution];
+            }
+            if([@"users" isEqualToString:consent]){
+                [Countly.sharedInstance cancelConsentForFeature:CLYConsentUserDetails];
+            }
+            if([@"push" isEqualToString:consent]){
+                [Countly.sharedInstance cancelConsentForFeature:CLYConsentPushNotifications];
             }
             if([@"star-rating" isEqualToString:consent]){
                 [Countly.sharedInstance cancelConsentForFeature:CLYConsentStarRating];

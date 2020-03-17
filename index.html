@@ -26,6 +26,7 @@
         <button onclick="app.initWithID()" class="fluid ui green button">Init with ID </button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
+        <button onclick="app.halt()" class="fluid ui red button">Halt</button>
 
         <!-- <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button>
         <button onclick="app.updateSessionPeriod()" class="fluid ui CornflowerBlue button">Update Session Period</button>
@@ -80,6 +81,7 @@
         <button onclick="app.giveConsentUsers()" class="fluid ui button blue">Give Consent Users</button>
         <button onclick="app.giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
         <button onclick="app.giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
+        <button onclick="app.giveConsentAppleWatch()" class="fluid ui button blue">Give Consent AppleWatch</button>
 
         <button onclick="app.removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
         <button onclick="app.removeConsentEvents()" class="fluid ui button blue">Remove Consent Events</button>
@@ -90,6 +92,7 @@
         <button onclick="app.removeConsentUsers()" class="fluid ui button blue">Remove Consent Users</button>
         <button onclick="app.removeConsentPush()" class="fluid ui button blue">Remove Consent Push</button>
         <button onclick="app.removeConsentStarRating()" class="fluid ui button blue">Remove Consent starRating</button>
+        <button onclick="app.removeConsentAppleWatch()" class="fluid ui button blue">Remove Consent AppleWatch</button>
 
         <!-- Consent Button -->
         <div class="ui horizontal divider">User Methods End</div>
@@ -109,11 +112,13 @@
         <div class="ui horizontal divider">Other Methods Start</div>
         <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
         <button onclick="app.sendPushToken()" class="fluid ui button teal">Send Push Token</button>
+        <button onclick="app.setHttpPostForced()" class="fluid ui button teal">SetHttpPostForced</button>
         <!-- <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button> -->
         <!-- <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button> -->
         <button onclick="app.changeDeviceId()" class="fluid ui button yellow">Change Device ID</button>
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button yellow">Enable Parameter Tapmering Protection</button>
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button yellow">City, State, and Location</button>
+        <button onclick="app.setLocation()" class="fluid ui button yellow">SetLocation</button>
         <button onclick="app.addCrashLog()" class="fluid ui button yellow">Send Crash Report</button>
         <div class="ui horizontal divider">Other Methods End</div>
         <div class="ui horizontal divider">Rating Methods Start</div>
@@ -575,6 +580,9 @@
     app.giveConsentStarRating = function() {
         Countly.giveConsent(["star-rating"]);
     }
+    app.giveConsentAppleWatch = function() {
+        Countly.giveConsent(["AppleWatch"]);
+    }
 
     app.removeConsentSessions = function() {
         Countly.removeConsent(["sessions"]);
@@ -602,6 +610,9 @@
     }
     app.removeConsentStarRating = function() {
         Countly.removeConsent(["star-rating"]);
+    }
+    app.removeConsentAppleWatch = function() {
+        Countly.giveConsent(["AppleWatch"]);
     }
 
     // Remote config usage

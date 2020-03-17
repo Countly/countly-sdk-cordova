@@ -293,7 +293,7 @@ Countly.userData.pullValue = function(type, pullValue){
 };
 
 //setRequiresConsent
-Countly.consents = ["events", "views", "star-rating", "crashes"];
+Countly.consents = ["sessions", "events", "views", "location", "crashes", "attribution", "users", "push", "star-rating","AppleWatch"];
 Countly.setRequiresConsent = function(boolean){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setRequiresConsent",[boolean == true?"1": "0"]);
 }
@@ -364,8 +364,8 @@ Countly.sendPushToken = function(options){
 // Push Notification
 
 //setHttpPostForced
-Countly.setHttpPostForced = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setHttpPostForced",[]);
+Countly.setHttpPostForced = function(boolean){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setHttpPostForced",[boolean == true?"1": "0"]);
 }
 
 window.Countly = Countly;
