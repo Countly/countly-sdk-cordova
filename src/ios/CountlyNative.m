@@ -168,7 +168,15 @@
         result(@"changeDeviceId!");
 
     }else if ([@"setHttpPostForced" isEqualToString:method]) {
-        config.alwaysUsePOST = YES;
+        NSString* isEnabled = [command objectAtIndex:0];
+        int enabled = [isEnabled intValue];
+        if ([enabled  isEqual: @"0"]) {
+            [Countly.sharedInstance enabled: YES];
+        }else{
+            [Countly.sharedInstance enabled: NO];
+        }
+
+        // config.alwaysUsePOST = YES;
         result(@"setHttpPostForced!");
 
     }else if ([@"enableParameterTamperingProtection" isEqualToString:method]) {
