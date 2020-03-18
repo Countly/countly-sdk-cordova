@@ -29,7 +29,7 @@
 - (void)logException:(CDVInvokedUrlCommand*)command;
 - (void)sendPushToken:(CDVInvokedUrlCommand*)command;
 //- (void)askForNotificationPermission:(CDVInvokedUrlCommand*)command;
-//- (void)pushTokenType:(CDVInvokedUrlCommand*)command;
+- (void)pushTokenType:(CDVInvokedUrlCommand*)command;
 
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command;
 - (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command;

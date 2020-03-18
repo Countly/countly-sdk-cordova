@@ -107,6 +107,7 @@
         <button onclick="app.updateRemoteConfigForfloatValueOnly()" class="fluid ui button blue">Float Test</button>
         <button onclick="app.updateRemoteConfigForintegerValueOnly()" class="fluid ui button blue">Integer Test</button>
         <button onclick="app.updateRemoteConfigForstringValueOnly()" class="fluid ui button blue">String Test</button>
+        <button onclick="app.updateRemoteConfigForjsonValueOnly()" class="fluid ui button blue">JSON Test</button>
 
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
@@ -139,13 +140,13 @@
         return text;
     }
     app.init = function() {
-        Countly.pushTokenType(Countly.messagingMode["TEST"]);
+        Countly.pushTokenType(Countly.messagingMode.TEST);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
         // Countly.eventSendThreshold(1);
         Countly.setLoggingEnabled();
     };
     app.initWithID = function(){
-        Countly.pushTokenType(Countly.messagingMode["TEST"]);
+        Countly.pushTokenType(Countly.messagingMode.TEST);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
         // Countly.eventSendThreshold(1);
         Countly.setLoggingEnabled();
@@ -687,6 +688,14 @@
             alert(r);
         });
     }
+    app.updateRemoteConfigForjsonValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("jsonValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+
     // Remote config usage
 
     // /** Use StackTrace to log all exceptions **/
