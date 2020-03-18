@@ -570,6 +570,26 @@
         NSString *theType = NSStringFromClass([value class]);
         if([theType isEqualToString:@"NSTaggedPointerString"]){
             result(value);
+        } else if([theType isEqualToString:@"__NSSingleEntryDictionaryI"]){
+            NSDictionary *dictionaryOrArrayToOutput = (NSDictionary *) value;
+            NSError *error;
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionaryOrArrayToOutput options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                                 error:&error];
+
+            if (!jsonData) {
+                NSLog(@"Got an error: %@", error);
+                result(error);
+            } else {
+                NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                result(jsonString);
+            }
+        }else if([theType isEqualToString:@"__NSCFBoolean"]){
+            NSString *boolean = [value stringValue];
+            if([boolean isEqualToString:@"1"]){
+                result(@"true");
+            }else{
+                result(@"false");
+            }
         }else{
             result([value stringValue]);
         }
