@@ -34,7 +34,7 @@
 
         config.appKey = appkey;
         config.host = serverurl;
-
+        Countly.sharedInstance.isAutoViewTrackingActive = NO;
         config.sendPushTokenAlways = YES;
         config.features = @[CLYCrashReporting, CLYPushNotifications, CLYAutoViewTracking];
 
