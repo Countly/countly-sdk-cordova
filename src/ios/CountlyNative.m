@@ -169,11 +169,10 @@
 
     }else if ([@"setHttpPostForced" isEqualToString:method]) {
         NSString* isEnabled = [command objectAtIndex:0];
-        int enabled = [isEnabled intValue];
-        if ([enabled  isEqual: @"0"]) {
-            [Countly.sharedInstance enabled: YES];
+        if ([isEnabled  isEqual: @"1"]) {
+            config.alwaysUsePOST = YES;
         }else{
-            [Countly.sharedInstance enabled: NO];
+            config.alwaysUsePOST = NO;
         }
 
         // config.alwaysUsePOST = YES;
@@ -466,7 +465,7 @@
         [Countly.sharedInstance giveConsentForFeature:CLYConsentAttribution];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentStarRating];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentAppleWatch];
-        
+
         result(@"giveAllConsent!");
 
     }else if ([@"removeAllConsent" isEqualToString:method]) {

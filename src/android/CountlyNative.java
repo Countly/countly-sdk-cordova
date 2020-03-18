@@ -533,9 +533,6 @@ public class CountlyNative {
                 if (consent.equals("starRating")) {
                     Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
                 }
-                if (consent.equals("AppleWatch")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.AppleWatch});
-                }
             }
             return "removeConsent: Success";
         }catch (JSONException jsonException){
