@@ -205,10 +205,10 @@ Countly.endEvent = function(options){
     }
     args.push(options.sum.toString());
 
-    if(options.segmentation){
-        for(var key in options.segmentation){
+    if(options.segments){
+        for(var key in options.segments){
             args.push(key);
-            args.push(options.segmentation[key]);
+            args.push(options.segments[key]);
         }
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endEvent",args);
@@ -239,10 +239,10 @@ Countly.recordEvent = function(options){
     }
     args.push(options.duration.toString());
 
-    if(options.segmentation){
-        for(var key in options.segmentation){
+    if(options.segments){
+        for(var key in options.segments){
             args.push(key);
-            args.push(options.segmentation[key]);
+            args.push(options.segments[key]);
         }
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
