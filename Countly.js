@@ -205,7 +205,7 @@ Countly.endEvent = function(options){
     }
     args.push(options.sum.toString());
 
-    if(!options.segmentation){
+    if(options.segmentation){
         for(var key in options.segmentation){
             args.push(key);
             args.push(options.segmentation[key]);
@@ -239,12 +239,11 @@ Countly.recordEvent = function(options){
     }
     args.push(options.duration.toString());
 
-    if(!options.segmentation){
-        segmentation = options.segmentation;
-        // segmentation.forEach((k, v) => {
-        //   args.push(k.toString());
-        //   args.push(v.toString());
-        // });
+    if(options.segmentation){
+        for(var key in options.segmentation){
+            args.push(key);
+            args.push(options.segmentation[key]);
+        }
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
 };
