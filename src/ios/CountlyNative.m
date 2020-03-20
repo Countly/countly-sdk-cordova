@@ -255,6 +255,7 @@
         result(@"sendPushToken!");
 
     }else if ([@"askForNotificationPermission" isEqualToString:method]) {
+        // [Countly.sharedInstance askForNotificationPermission];
         UNAuthorizationOptions authorizationOptions = UNAuthorizationOptionProvisional;
 
         [Countly.sharedInstance askForNotificationPermissionWithOptions:authorizationOptions completionHandler:^(BOOL granted, NSError *error)
@@ -262,18 +263,17 @@
              NSLog(@"granted: %d", granted);
              NSLog(@"error: %@", error);
          }];
-        // [Countly.sharedInstance askForNotificationPermission];
         result(@"askForNotificationPermission!");
     }else if ([@"pushTokenType" isEqualToString:method]) {
-        //            config.sendPushTokenAlways = YES;
-        //            NSString* tokenType = [command objectAtIndex:0];
-        //            if([tokenType isEqualToString: @"1"]){
-        //                config.pushTestMode = @"CLYPushTestModeDevelopment";
-        //            }else if([tokenType isEqualToString: @"2"]){
-        //                config.pushTestMode = @"CLYPushTestModeTestFlightOrAdHoc";
-        //            }else{
-        //
-        //            }
+        config.sendPushTokenAlways = YES;
+        NSString* tokenType = [command objectAtIndex:0];
+        if([tokenType isEqualToString: @"1"]){
+            config.pushTestMode = @"CLYPushTestModeDevelopment";
+        }
+        else if([tokenType isEqualToString: @"2"]){
+            config.pushTestMode = @"CLYPushTestModeTestFlightOrAdHoc";
+        }else{
+        }
         result(@"pushTokenType!");
     }else if ([@"userData_setProperty" isEqualToString:method]) {
         NSString* keyName = [command objectAtIndex:0];

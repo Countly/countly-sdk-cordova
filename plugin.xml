@@ -46,6 +46,20 @@
     <framework src="OpenGLES.framework" weak="true" />
     <framework src="Countly" type="podspec" spec="~> 19.08" />
 
+    <!-- Push notification -->
+    <config-file target="*-Debug.plist" parent="aps-environment">
+        <string>development</string>
+    </config-file>
+
+    <config-file target="*-Release.plist" parent="aps-environment">
+        <string>production</string>
+    </config-file>
+    <config-file target="*-Info.plist" parent="UIBackgroundModes">
+      <array>
+        <string>remote-notification</string>
+      </array>
+    </config-file>
+
   </platform>
 
   <!-- android -->
