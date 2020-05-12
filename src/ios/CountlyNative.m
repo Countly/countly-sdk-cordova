@@ -72,9 +72,9 @@
         NSString* recordView = [command objectAtIndex:0];
         [Countly.sharedInstance recordView:recordView];
         result(@"recordView Sent!");
-    }else if ([@"setLoggingEnabled" isEqualToString:method]) {
+    }else if ([@"setloggingenabled" isEqualToString:method]) {
         config.enableDebug = YES;
-        result(@"setLoggingEnabled!");
+        result(@"setloggingenabled!");
 
     }else if ([@"setuserdata" isEqualToString:method]) {
         NSString* name = [command objectAtIndex:0];
@@ -613,7 +613,8 @@
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
     }
     else {
-        result(@"FlutterMethodNotImplemented");
+        NSLog(@"Countly Bridge Method Not Implemented %@", method);
+        result(@"Countly Bridge Method Not Implemented");
     }
 }
 

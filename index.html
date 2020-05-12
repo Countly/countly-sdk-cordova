@@ -141,15 +141,15 @@
     }
     app.init = function() {
         Countly.pushTokenType(Countly.messagingMode.TEST);
+        Countly.setLoggingEnabled();
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
         // Countly.eventSendThreshold(1);
-        Countly.setLoggingEnabled();
     };
     app.initWithID = function(){
         Countly.pushTokenType(Countly.messagingMode.TEST);
+        Countly.setLoggingEnabled();
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
         // Countly.eventSendThreshold(1);
-        Countly.setLoggingEnabled();
     }
     // app.test = function() {
     //     app.sendPushToken();
