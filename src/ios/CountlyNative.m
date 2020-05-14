@@ -35,8 +35,7 @@
         config.appKey = appkey;
         config.host = serverurl;
         Countly.sharedInstance.isAutoViewTrackingActive = NO;
-        config.sendPushTokenAlways = YES;
-        config.features = @[CLYCrashReporting, CLYPushNotifications, CLYAutoViewTracking];
+        config.features = @[CLYCrashReporting, CLYPushNotifications];
 
         if(command.count == 3){
             deviceID = [command objectAtIndex:2];
@@ -55,7 +54,7 @@
         int count = [countString intValue];
         NSString* sumString = [command objectAtIndex:2];
         float sum = [sumString floatValue];
-        NSString* durationString = [command objectAtIndex:1];
+        NSString* durationString = [command objectAtIndex:3];
         int duration = [durationString intValue];
         NSMutableDictionary *segmentation = [[NSMutableDictionary alloc] init];
 
@@ -260,17 +259,11 @@
         result(@"sendPushToken!");
 
     }else if ([@"askForNotificationPermission" isEqualToString:method]) {
-        // [Countly.sharedInstance askForNotificationPermission];
-        UNAuthorizationOptions authorizationOptions = UNAuthorizationOptionProvisional;
-
-        [Countly.sharedInstance askForNotificationPermissionWithOptions:authorizationOptions completionHandler:^(BOOL granted, NSError *error)
-         {
-             NSLog(@"granted: %d", granted);
-             NSLog(@"error: %@", error);
-         }];
-        result(@"askForNotificationPermission!");
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [Countly.sharedInstance askForNotificationPermission];
+            result(@"askForNotificationPermission!");
+        });
     }else if ([@"pushTokenType" isEqualToString:method]) {
-        config.sendPushTokenAlways = YES;
         NSString* tokenType = [command objectAtIndex:0];
         if([tokenType isEqualToString: @"1"]){
             config.pushTestMode = @"CLYPushTestModeDevelopment";
