@@ -188,6 +188,11 @@
         [Countly.sharedInstance startEvent:eventName];
         result(@"startEvent!");
 
+    }else if ([@"cancelEvent" isEqualToString:method]) {
+        NSString* eventName = [command objectAtIndex:0];
+        [Countly.sharedInstance cancelEvent:eventName];
+        result(@"cancelEvent!");
+
     }else if ([@"endEvent" isEqualToString:method]) {
 
         NSString* key = [command objectAtIndex:0];

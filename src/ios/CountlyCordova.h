@@ -34,6 +34,7 @@
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command;
 - (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command;
 - (void)startEvent:(CDVInvokedUrlCommand*)command;
+- (void)cancelEvent:(CDVInvokedUrlCommand*)command;
 - (void)endEvent:(CDVInvokedUrlCommand*)command;
 
 - (void)userData_setProperty:(CDVInvokedUrlCommand*)command;

@@ -245,7 +245,16 @@ public class CountlyNative {
         try {
             String startEvent = args.getString(0);
             Countly.sharedInstance().startEvent(startEvent);
-            return "default";
+            return "startEvent";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+    public String cancelEvent(JSONArray args){
+        try {
+            String cancelEvent = args.getString(0);
+            Countly.sharedInstance().cancelEvent(cancelEvent);
+            return "cancelEvent";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }

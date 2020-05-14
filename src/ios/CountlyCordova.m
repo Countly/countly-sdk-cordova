@@ -245,6 +245,18 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
+- (void)cancelEvent:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"cancelEvent" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
 - (void)endEvent:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){

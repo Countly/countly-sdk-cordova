@@ -188,6 +188,9 @@ Countly.enableParameterTamperingProtection = function(salt){
 Countly.startEvent = function(key){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startEvent",[key.toString() || ""]);
 }
+Countly.cancelEvent = function(key){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","cancelEvent",[key.toString() || ""]);
+}
 Countly.endEvent = function(options){
     var args = [];
     if(!options.key){
