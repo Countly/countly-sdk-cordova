@@ -33,10 +33,7 @@ public class CountlyMessagingService extends FirebaseMessagingService {
             return;
         }
 
-        Intent notificationIntent = null;
-        if (message.has("anotherActivity")) {
-            notificationIntent = new Intent(getApplicationContext(), getApplication().getClass());
-        }
+        Intent notificationIntent = new Intent(getApplicationContext(), getApplication().getClass());
 
         Boolean result = CountlyPush.displayMessage(getApplicationContext(), message, getApplicationContext().getApplicationInfo().icon, notificationIntent);
         if (result == null) {

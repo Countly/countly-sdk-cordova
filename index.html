@@ -43,6 +43,8 @@
         <button onclick="app.endEventWithSum()" class="fluid ui button">Timed event Sum: Start / Stop</button>
         <button onclick="app.endEventWithSegment()" class="fluid ui button">Timed event Segment: Start / Stop</button>
         <button onclick="app.endEventWithSumSegment()" class="fluid ui button">Timed event Sum Segment: Start / Stop</button>
+        <button onclick="app.startEventX()" class="fluid ui button">Start Event X</button>
+        <button onclick="app.cancelEventX()" class="fluid ui button">Cancel Event X</button>
         <div class="ui horizontal divider">Events End</div>
         <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
         <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
@@ -452,7 +454,12 @@
             Countly.endEvent(events);
         }, 1000);
     }
-
+    app.startEventX = function(){
+        Countly.startEvent("Event X");
+    }
+    app.cancelEventX = function(){
+        Countly.cancelEvent("Event X");
+    }
     // app.sendRating = function(){
     //     // Ratings can be from 1 - 5;
     //     Countly.sendRating(5);
