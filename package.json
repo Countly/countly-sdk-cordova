@@ -1,7 +1,7 @@
 {
   "name": "countly-sdk-js",
   "description": "Analytics.",
-  "version": "19.9.3",
+  "version": "20.4",
   "homepage": "https://github.com/Countly/countly-sdk-js#readme",
   "repository": {
     "type": "git",
