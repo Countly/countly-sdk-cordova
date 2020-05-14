@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="countly-sdk-js" version="20.4">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="countly-sdk-js" version="20.4.0">
 
   <name>Countly</name>
 
@@ -44,8 +44,14 @@
 
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="OpenGLES.framework" weak="true" />
-    <framework src="Countly" type="podspec" spec="~> 20.04" />
-
+    <podspec>
+         <config>
+             <source url="https://github.com/CocoaPods/Specs.git"/>
+         </config>
+         <pods use-frameworks="true">
+             <pod name="Countly" spec="~> 20.04" />
+         </pods>
+    </podspec>
     <!-- Push notification -->
     <config-file target="*-Debug.plist" parent="aps-environment">
         <string>development</string>
@@ -96,8 +102,8 @@
             </intent-filter>
         </service>
     </config-file>
-    <dependency id="cordova-support-google-services" version="~1.3.1"/>
-    <framework src="com.google.firebase:firebase-messaging:20.0.0" />
+    <dependency id="cordova-support-google-services" version="~1.4.0"/>
+    <framework src="com.google.firebase:firebase-messaging:20.1.7" />
     <source-file src="src/android/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk"/>
   </platform>
 

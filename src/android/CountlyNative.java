@@ -33,10 +33,11 @@ import com.google.firebase.FirebaseApp;
 
 public class CountlyNative {
 
-    private Countly.CountlyMessagingMode pushTokenType = Countly.CountlyMessagingMode.PRODUCTION;
+    private Countly.CountlyMessagingMode pushTokenTypeVariable = Countly.CountlyMessagingMode.PRODUCTION;
     private Context context;
     private Activity activity;
     private Boolean isDebug = false;
+    private CountlyConfig config = new CountlyConfig();
     private final Set<String> validConsentFeatureNames = new HashSet<String>(Arrays.asList(
             Countly.CountlyFeatureNames.sessions,
             Countly.CountlyFeatureNames.events,
@@ -61,17 +62,20 @@ public class CountlyNative {
         try {
             String serverUrl = args.getString(0);
             String appKey = args.getString(1);
+            this.config.setContext(context);
+            this.config.setServerURL((serverUrl));
+            this.config.setAppKey(appKey);
             if (args.length() == 2) {
-                Countly.sharedInstance().init(context, serverUrl, appKey, null, DeviceId.Type.OPEN_UDID);
             } else if (args.length() == 3) {
                 String yourDeviceID = args.getString(2);
-                Countly.sharedInstance()
-                        .init(context, serverUrl, appKey, yourDeviceID, null);
+                if(yourDeviceID.equals("TemporaryDeviceID")){
+                    this.config.enableTemporaryDeviceIdMode();
+                }else{
+                    this.config.setDeviceId(yourDeviceID);
+                }
             } else {
-                Countly.sharedInstance()
-                        .init(context, serverUrl, appKey, null, DeviceId.Type.ADVERTISING_ID);
             }
-
+            Countly.sharedInstance().init(this.config);
             Countly.sharedInstance().onStart(activity);
             return "initialized: success";
         }catch (JSONException jsonException){
@@ -99,13 +103,11 @@ public class CountlyNative {
         try {
             int isEnabled = Integer.parseInt(args.getString(0));
             if (isEnabled == 1) {
-                isDebug = true;
-                Countly.sharedInstance().setHttpPostForced(true);
+                this.config.setHttpPostForced(true);
             } else {
-                isDebug = false;
-                Countly.sharedInstance().setHttpPostForced(false);
+                this.config.setHttpPostForced(false);
             }
-            return "setHttpPostForced This method doesn't exists!";
+            return "setHttpPostForced";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -114,8 +116,8 @@ public class CountlyNative {
     public String enableParameterTamperingProtection(JSONArray args){
         try {
             String salt = args.getString(0);
-            Countly.sharedInstance().enableParameterTamperingProtection(salt);
-            return "enableParameterTamperingProtection success!";
+            this.config.setParameterTamperingProtectionSalt(salt);
+            return "setParameterTamperingProtectionSalt success!";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -134,15 +136,27 @@ public class CountlyNative {
     }
 
     public String enableCrashReporting(JSONArray args){
-        Countly.sharedInstance().enableCrashReporting();
+        this.config.enableCrashReporting();
         return "enableCrashReporting success!";
     }
 
     public String addCrashLog(JSONArray args){
         try {
             String record = args.getString(0);
-            Countly.sharedInstance().addCrashBreadcrumb(record);
+            Countly.sharedInstance().crashes().addCrashBreadcrumb(record);
             return "addCrashLog success";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+    public String setCustomCrashSegments(JSONArray args){
+        try {
+            HashMap<String, Object> segments = new HashMap<String, Object>();
+            for (int i = 0, il = args.length(); i < il; i += 2) {
+                segments.put(args.getString(i), args.getString(i + 1));
+            }
+            this.config.setCustomCrashSegment(segments);
+            return "setCustomCrashSegments";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -152,18 +166,7 @@ public class CountlyNative {
         try {
             String exceptionString = args.getString(0);
             Exception exception = new Exception(exceptionString);
-
-            Boolean nonfatal = args.getBoolean(1);
-
-            HashMap<String, String> segments = new HashMap<String, String>();
-            for (int i = 2, il = args.length(); i < il; i += 2) {
-                segments.put(args.getString(i), args.getString(i + 1));
-            }
-            segments.put("nonfatal", nonfatal.toString());
-            Countly.sharedInstance().setCustomCrashSegments(segments);
-
-            Countly.sharedInstance().logException(exception);
-
+            Countly.sharedInstance().crashes().recordHandledException(exception);
             return "logException success!";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -181,7 +184,7 @@ public class CountlyNative {
                notificationManager.createNotificationChannel(channel);
            }
        }
-       CountlyPush.init(activity.getApplication(), pushTokenType);
+       CountlyPush.init(activity.getApplication(), pushTokenTypeVariable);
        FirebaseApp.initializeApp(context);
        FirebaseInstanceId.getInstance().getInstanceId()
                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -202,9 +205,9 @@ public class CountlyNative {
         try {
             String tokenType = args.getString(0);
             if("2".equals(tokenType)){
-                pushTokenType = Countly.CountlyMessagingMode.TEST;
+                pushTokenTypeVariable = Countly.CountlyMessagingMode.TEST;
             }else{
-                pushTokenType = Countly.CountlyMessagingMode.PRODUCTION;
+                pushTokenTypeVariable = Countly.CountlyMessagingMode.PRODUCTION;
             }
             return "pushTokenType: success";
         }catch (JSONException jsonException){
@@ -244,7 +247,7 @@ public class CountlyNative {
     public String startEvent(JSONArray args){
         try {
             String startEvent = args.getString(0);
-            Countly.sharedInstance().startEvent(startEvent);
+            Countly.sharedInstance().events().startEvent(startEvent);
             return "startEvent";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -253,7 +256,7 @@ public class CountlyNative {
     public String cancelEvent(JSONArray args){
         try {
             String cancelEvent = args.getString(0);
-            Countly.sharedInstance().cancelEvent(cancelEvent);
+            Countly.sharedInstance().events().cancelEvent(cancelEvent);
             return "cancelEvent";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -265,13 +268,13 @@ public class CountlyNative {
             String key = args.getString(0);
             int count = Integer.parseInt(args.getString(1));
             float sum = Float.valueOf(args.getString(2)); // new Float(args.getString(2)).floatValue();
-            HashMap<String, String> segmentation = new HashMap<String, String>();
+            HashMap<String, Object> segmentation = new HashMap<String, Object>();
             if (args.length() > 3) {
                 for (int i = 3, il = args.length(); i < il; i += 2) {
                     segmentation.put(args.getString(i), args.getString(i + 1));
                 }
             }
-            Countly.sharedInstance().endEvent(key, segmentation, count, sum);
+            Countly.sharedInstance().events().endEvent(key, segmentation, count, sum);
             return "endEvent for:" + key;
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -284,13 +287,13 @@ public class CountlyNative {
             int count = Integer.parseInt(args.getString(1));
             float sum = Float.valueOf(args.getString(2)); // new Float(args.getString(2)).floatValue();
             int duration = Integer.parseInt(args.getString(3));
-            HashMap<String, String> segmentation = new HashMap<String, String>();
+            HashMap<String, Object> segmentation = new HashMap<String, Object>();
             if (args.length() > 4) {
                 for (int i = 4, il = args.length(); i < il; i += 2) {
                     segmentation.put(args.getString(i), args.getString(i + 1));
                 }
             }
-            Countly.sharedInstance().recordEvent(key, segmentation, count, sum, duration);
+            Countly.sharedInstance().events().recordEvent(key, segmentation, count, sum, duration);
             return "recordEvent for: " + key;
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -301,9 +304,11 @@ public class CountlyNative {
         try {
             String loggingEnable = args.getString(0);
             if (loggingEnable.equals("true")) {
-                Countly.sharedInstance().setLoggingEnabled(true);
+                isDebug = true;
+                this.config.setLoggingEnabled(true);
             } else {
-                Countly.sharedInstance().setLoggingEnabled(false);
+                isDebug = false;
+                this.config.setLoggingEnabled(false);
             }
             return "setLoggingEnabled success!";
         }catch (JSONException jsonException){
@@ -462,7 +467,7 @@ public class CountlyNative {
             if (consentFlagString.equals("1")) {
                 consentFlag = true;
             }
-            Countly.sharedInstance().setRequiresConsent(consentFlag);
+            this.config.setRequiresConsent(consentFlag);
             return "setRequiresConsent: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -476,31 +481,31 @@ public class CountlyNative {
             for (int i = 0; i < args.length(); i++) {
                 consent = args.getString(i);
                 if (consent.equals("sessions")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
                 }
                 if (consent.equals("events")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
                 }
                 if (consent.equals("views")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
                 }
                 if (consent.equals("location")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
                 }
                 if (consent.equals("crashes")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
                 }
                 if (consent.equals("attribution")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
                 }
                 if (consent.equals("users")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
                 }
                 if (consent.equals("push")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
                 }
                 if (consent.equals("starRating")) {
-                    Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
                 }
             }
             return "giveConsent: Success";
@@ -516,31 +521,31 @@ public class CountlyNative {
             for (int i = 0; i < args.length(); i++) {
                 consent = args.getString(i);
                 if (consent.equals("sessions")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
                 }
                 if (consent.equals("events")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
                 }
                 if (consent.equals("views")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
                 }
                 if (consent.equals("location")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
                 }
                 if (consent.equals("crashes")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
                 }
                 if (consent.equals("attribution")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
                 }
                 if (consent.equals("users")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
                 }
                 if (consent.equals("push")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
                 }
                 if (consent.equals("starRating")) {
-                    Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
                 }
             }
             return "removeConsent: Success";
@@ -550,28 +555,28 @@ public class CountlyNative {
     }
 
     public String giveAllConsent(JSONArray args){
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
-        Countly.sharedInstance().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
+        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
         return "giveAllConsent: Success";
     }
 
     public String removeAllConsent(JSONArray args){
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
-        Countly.sharedInstance().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
+        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
         return "removeAllConsent: Success";
     }
 
@@ -595,7 +600,7 @@ public class CountlyNative {
     public String recordView(JSONArray args){
         try {
             String viewName = args.getString(0);
-            Countly.sharedInstance().recordView(viewName);
+            Countly.sharedInstance().views().recordView(viewName);
             return "View name sent: " + viewName;
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -636,7 +641,7 @@ public class CountlyNative {
     }
 
     public String setRemoteConfigAutomaticDownload(JSONArray args, final Callback theCallback){
-        Countly.sharedInstance().setRemoteConfigAutomaticDownload(true, new RemoteConfig.RemoteConfigCallback() {
+        this.config.setRemoteConfigAutomaticDownload(true, new RemoteConfig.RemoteConfigCallback() {
             @Override
             public void callback(String error) {
                 if (error == null) {
@@ -650,7 +655,7 @@ public class CountlyNative {
     }
 
     public String remoteConfigUpdate(JSONArray args ,final Callback theCallback){
-        Countly.sharedInstance().remoteConfigUpdate(new RemoteConfig.RemoteConfigCallback() {
+        Countly.sharedInstance().remoteConfig().update(new RemoteConfigCallback() {
             @Override
             public void callback(String error) {
                 if (error == null) {
@@ -670,8 +675,7 @@ public class CountlyNative {
                 keysOnly[i] = args.getString(i);
                 ;
             }
-
-            Countly.sharedInstance().updateRemoteConfigForKeysOnly(keysOnly, new RemoteConfig.RemoteConfigCallback() {
+            Countly.sharedInstance().remoteConfig().updateForKeysOnly(keysOnly, new RemoteConfigCallback() {
                 @Override
                 public void callback(String error) {
                     if (error == null) {
@@ -693,8 +697,7 @@ public class CountlyNative {
             for (int i = 0, il = args.length(); i < il; i++) {
                 exceptKeys[i] = args.getString(i);
             }
-
-            Countly.sharedInstance().updateRemoteConfigExceptKeys(exceptKeys, new RemoteConfig.RemoteConfigCallback() {
+            Countly.sharedInstance().remoteConfig().updateExceptKeys(exceptKeys, new RemoteConfigCallback() {
                 @Override
                 public void callback(String error) {
                     if (error == null) {
@@ -711,13 +714,13 @@ public class CountlyNative {
     }
 
     public String remoteConfigClearValues(JSONArray args){
-        Countly.sharedInstance().remoteConfigClearValues();
+        Countly.sharedInstance().remoteConfig().clearStoredValues();
         return "remoteConfigClearValues: success";
     }
 
     public String getRemoteConfigValueForKey(JSONArray args){
         try {
-            String getRemoteConfigValueForKeyResult = Countly.sharedInstance().getRemoteConfigValueForKey(args.getString(0)).toString();
+            String getRemoteConfigValueForKeyResult = Countly.sharedInstance().remoteConfig().getValueForKey(args.getString(0)).toString();
             return getRemoteConfigValueForKeyResult;
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -728,7 +731,7 @@ public class CountlyNative {
         try {
             String widgetId = args.getString(0);
             String closeButtonText = args.getString(1);
-            Countly.sharedInstance().showFeedbackPopup(widgetId, closeButtonText, activity, new CountlyStarRating.FeedbackRatingCallback() {
+            Countly.sharedInstance().ratings().showFeedbackPopup(widgetId, closeButtonText, activity, new FeedbackRatingCallback(){
                 @Override
                 public void callback(String error) {
                     if (error != null) {
@@ -746,7 +749,7 @@ public class CountlyNative {
     }
 
     public String askForStarRating(JSONArray args){
-        Countly.sharedInstance().showStarRating(activity, null);
+        Countly.sharedInstance().ratings().showStarRating(activity, null);
         return "askForStarRating success.";
     }
 
