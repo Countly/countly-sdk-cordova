@@ -606,9 +606,11 @@
         }];
 
     }else if ([@"askForStarRating" isEqualToString:method]) {
-        [Countly.sharedInstance askForStarRating:^(NSInteger rating){
-            result([NSString stringWithFormat: @"Rating:%d", (int)rating]);
-        }];
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [Countly.sharedInstance askForStarRating:^(NSInteger rating){
+                result([NSString stringWithFormat: @"Rating:%d", (int)rating]);
+            }];
+        });
     }else if ([@"getPlatformVersion" isEqualToString:method]) {
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
     }
