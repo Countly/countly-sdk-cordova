@@ -110,6 +110,8 @@
         <button onclick="app.updateRemoteConfigForintegerValueOnly()" class="fluid ui button blue">Integer Test</button>
         <button onclick="app.updateRemoteConfigForstringValueOnly()" class="fluid ui button blue">String Test</button>
         <button onclick="app.updateRemoteConfigForjsonValueOnly()" class="fluid ui button blue">JSON Test</button>
+        <button onclick="app.updateRemoteConfigForjsonStringValueOnly()" class="fluid ui button blue">Array String Test</button>
+        <button onclick="app.updateRemoteConfigForjsonNumberValueOnly()" class="fluid ui button blue">Array Number Test</button>
 
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
@@ -697,6 +699,20 @@
     }
     app.updateRemoteConfigForjsonValueOnly = function(){
         Countly.getRemoteConfigValueForKey("jsonValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForjsonStringValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("arrayStringValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForjsonNumberValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("arrayNumberValue", function(r){
             alert(r)
         }, function(r){
             alert(r);

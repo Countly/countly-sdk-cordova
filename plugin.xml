@@ -45,12 +45,12 @@
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="OpenGLES.framework" weak="true" />
     <podspec>
-         <config>
-             <source url="https://github.com/CocoaPods/Specs.git"/>
-         </config>
-         <pods use-frameworks="true">
-             <pod name="Countly" spec="~> 20.04" />
-         </pods>
+      <config>
+        <source url="https://github.com/CocoaPods/Specs.git"/>
+      </config>
+      <pods use-frameworks="true">
+        <pod name="Countly" spec="~> 19.08" />
+      </pods>
     </podspec>
     <!-- Push notification -->
     <config-file target="*-Debug.plist" parent="aps-environment">
