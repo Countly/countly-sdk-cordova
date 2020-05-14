@@ -75,6 +75,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if("startEvent".equals(action)){
             callbackContext.success(countlyNative.startEvent(args));
         }
+        else if("cancelEvent".equals(action)){
+            callbackContext.success(countlyNative.cancelEvent(args));
+        }
         else if("endEvent".equals(action)){
             callbackContext.success(countlyNative.endEvent(args));
         }
