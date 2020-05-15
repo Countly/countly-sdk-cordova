@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="countly-sdk-js" version="20.4.0">
+
+  <name>Countly</name>
+
+  <description>
+    Countly is an innovative, real-time, open source mobile analytics application. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.
+  </description>
+
+  <author>Trinisoft Technologies Pvt. Ltd.</author>
+
+  <license>Open source with different licensing terms.</license>
+
+  <keywords>Event, Mobile analytical</keywords>
+
+  <repo>https://github.com/Countly/countly-sdk-js.git</repo>
+
+  <issue>https://github.com/Countly/countly-sdk-js/issues</issue>
+
+  <engines>
+    <engine name="cordova" version=">=3.0.0"/>
+    <engine name="cordova-android" version=">=3.0.0"/>
+    <engine name="cordova-ios" version=">=3.0.0"/>
+  </engines>
+
+  <js-module src="Countly.js" name="Countly">
+    <clobbers target="window.plugins.Countly" />
+  </js-module>
+
+  <!-- ios -->
+  <platform name="ios">
+
+    <config-file target="config.xml" parent="/*">
+      <feature name="CountlyCordova">
+        <param name="ios-package" value="CountlyCordova"/>
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/CountlyCordova.h"/>
+    <source-file src="src/ios/CountlyCordova.m"/>
+    <header-file src="src/ios/CountlyNative.h"/>
+    <source-file src="src/ios/CountlyNative.m"/>
+
+    <framework src="CoreTelephony.framework" weak="true" />
+    <framework src="OpenGLES.framework" weak="true" />
+    <!-- <framework src="Countly" spec="~> 19.08" type="podspec" /> -->
+    <podspec>
+      <config>
+        <source url="https://github.com/CocoaPods/Specs.git"/>
+      </config>
+      <pods use-frameworks="true">
+        <pod name="Countly" spec="~> 19.08" />
+      </pods>
+    </podspec>
+    <!-- Push notification -->
+    <config-file target="*-Debug.plist" parent="aps-environment">
+        <string>development</string>
+    </config-file>
+
+    <config-file target="*-Release.plist" parent="aps-environment">
+        <string>production</string>
+    </config-file>
+    <config-file target="*-Info.plist" parent="UIBackgroundModes">
+      <array>
+        <string>remote-notification</string>
+      </array>
+    </config-file>
+
+  </platform>
+
+  <!-- android -->
+  <platform name="android">
+
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="CountlyCordova">
+        <param name="android-package" value="ly.count.android.sdk.CountlyCordova" />
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest">
+        <uses-permission android:name="android.permission.INTERNET"/>
+    </config-file>
+
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <service android:name="org.openudid.OpenUDID_service">
+            <intent-filter>
+                <action android:name="org.openudid.GETUDID" />
+            </intent-filter>
+        </service>
+    </config-file>
+
+    <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/sdk"/>
+    <source-file src="src/android/CountlyNative.java" target-dir="src/ly/count/android/sdk"/>
+    <framework src="ly.count.android:sdk:20.04" />
+
+    <!-- Push notification -->
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <service android:name="ly.count.android.sdk.CountlyMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </config-file>
+    <dependency id="cordova-support-google-services" version="~1.4.0"/>
+    <framework src="com.google.firebase:firebase-messaging:20.1.7" />
+    <source-file src="src/android/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk"/>
+  </platform>
+
+</plugin>

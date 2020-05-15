@@ -1,0 +1,22 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.countly.demo"
+    },
+    "countly-sdk-js": {
+      "PACKAGE_NAME": "com.countly.demo"
+    }
+  },
+  "dependent_plugins": {
+    "cordova-support-google-services": {
+      "PACKAGE_NAME": "com.countly.demo"
+    }
+  }
+}
