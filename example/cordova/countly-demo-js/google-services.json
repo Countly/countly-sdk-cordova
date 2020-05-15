@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "881000050249",
+    "firebase_url": "https://folkloric-union-86811.firebaseio.com",
+    "project_id": "folkloric-union-86811",
+    "storage_bucket": "folkloric-union-86811.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881000050249:android:de2270f1d998eee6",
+        "android_client_info": {
+          "package_name": "com.countly.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881000050249-v7c6s4k5bm9h2d3vkguio0urbegp1hc5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvznrYsNRZ_Vm28-CZF-XR5c80W7uxdwc"
+        },
+        {
+          "current_key": "AIzaSyAC4V9pgJBio5omzRWFavmRTlAbloTIBj4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
