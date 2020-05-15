@@ -16,7 +16,7 @@
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
     "cordova-support-google-services": "^1.4.0",
-    "countly-sdk-js": "file:../../../plugins/countly-sdk-js"
+    "countly-sdk-js": "file:./plugins/countly-sdk-js"
   },
   "cordova": {
     "plugins": {

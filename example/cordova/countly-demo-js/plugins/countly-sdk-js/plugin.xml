@@ -44,7 +44,6 @@
 
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="OpenGLES.framework" weak="true" />
-    <!-- <framework src="Countly" spec="~> 19.08" type="podspec" /> -->
     <podspec>
       <config>
         <source url="https://github.com/CocoaPods/Specs.git"/>
