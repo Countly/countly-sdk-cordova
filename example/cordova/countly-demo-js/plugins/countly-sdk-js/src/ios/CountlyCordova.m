@@ -50,12 +50,12 @@ CountlyNative* countlyNative = nil;
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }];
 }
-- (void)setloggingenabled:(CDVInvokedUrlCommand*)command
+- (void)setLoggingEnabled:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
         countlyNative = CountlyNative.new;
     }
-    [countlyNative onCall: @"setloggingenabled" commandString: command.arguments callback: ^(NSString * theResult)
+    [countlyNative onCall: @"setLoggingEnabled" commandString: command.arguments callback: ^(NSString * theResult)
      {
          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

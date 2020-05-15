@@ -87,7 +87,7 @@ public class CountlyCordova extends CordovaPlugin {
         // else if ("event".equals(action)) {
         //     callbackContext.success(countlyNative.recordEvent(args));
         // }
-        else if ("setloggingenabled".equals(action)) {
+        else if ("setLoggingEnabled".equals(action)) {
             callbackContext.success(countlyNative.setLoggingEnabled(args));
         }
 
