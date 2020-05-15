@@ -115,6 +115,8 @@
 
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
+        <button onclick="app.setloggingenabled()" class="fluid ui button teal">Enable Debug Mode</button>
+        <button onclick="app.setloggingdisabled()" class="fluid ui button teal">Disable Debug Mode</button>
         <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
         <button onclick="app.sendPushToken()" class="fluid ui button teal">Send Push Token</button>
         <button onclick="app.setHttpPostForced()" class="fluid ui button teal">SetHttpPostForced</button>
@@ -145,13 +147,13 @@
     }
     app.init = function() {
         Countly.pushTokenType(Countly.messagingMode.TEST);
-        Countly.setLoggingEnabled();
+        Countly.setLoggingEnabled(true);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
         // Countly.eventSendThreshold(1);
     };
     app.initWithID = function(){
         Countly.pushTokenType(Countly.messagingMode.TEST);
-        Countly.setLoggingEnabled();
+        Countly.setLoggingEnabled(true);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
         // Countly.eventSendThreshold(1);
     }
@@ -345,9 +347,12 @@
 
     app.setloggingenabled = function() {
         // example for setLoggingEnabled
-        Countly.setLoggingEnabled();
+        Countly.setLoggingEnabled(true);
     }
-
+    app.setloggingdisabled = function() {
+        // example for setLoggingEnabled
+        Countly.setLoggingEnabled(false);
+    }
     // app.testAndroidPush = function() {
     //     Countly.sendPushToken({
     //         "token": "1234567890",

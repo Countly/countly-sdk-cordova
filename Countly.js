@@ -3,6 +3,7 @@ Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
 Countly.version = "20.04";
+Countly.isDebug = false;
 var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 if (/android/i.test(userAgent)) {
     Countly.isAndroid = true;
@@ -31,7 +32,8 @@ Countly.recordView = function(recordView){
 };
 
 // countly enable logger
-Countly.setLoggingEnabled = function(){
+Countly.setLoggingEnabled = function(isDebug){
+    Countly.isDebug = isDebug;
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setloggingenabled",[]);
 }
 
@@ -102,11 +104,16 @@ Countly.deviceready = function(){
 
 // countly dummy success and error event
 Countly.onSuccess = function(result){
-    // alert(result);
+    if(Countly.isDebug){
+        console.log("Countly.onSuccess");
+        console.log(result);
+    }
 }
 Countly.onError = function(error){
-     // alert("error");
-     // alert(error);
+    if(Countly.isDebug){
+        console.log("Countly.onError");
+        console.log(error);
+    }
 }
 
 // 2017
