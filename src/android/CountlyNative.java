@@ -84,7 +84,7 @@ public class CountlyNative {
         }
     }
 
-    public String log(String method, JSONArray, args){
+    public void log(String method, JSONArray args){
         if(isDebug){
             Log.i("Countly Native", "Method: "+method);
             Log.i("Countly Native", "Arguments: "+args.toString());
