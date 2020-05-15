@@ -24,8 +24,8 @@
       "countly-sdk-js": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   },
   "devDependencies": {
