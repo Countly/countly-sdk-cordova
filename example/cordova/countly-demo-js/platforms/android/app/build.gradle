@@ -294,8 +294,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
-    implementation "ly.count.android:sdk:19.09.2"
-    implementation "ly.count.android:sdk:20.04"
+    implementation "ly.count.android:sdk:20.04.1"
     implementation "com.google.firebase:firebase-messaging:20.1.7"
     // SUB-PROJECT DEPENDENCIES END
 }
