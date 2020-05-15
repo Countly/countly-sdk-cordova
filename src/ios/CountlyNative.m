@@ -21,6 +21,10 @@
     CountlyConfig* config = nil;
     Boolean isDebug = false;
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
+    if(isDebug == true){
+        NSLog(@"Countly Native method : %@", method);
+        NSLog(@"Countly Native arguments : %@", command);
+    }
 
     if(config == nil){
         config = CountlyConfig.new;
