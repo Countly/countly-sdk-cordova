@@ -60,6 +60,7 @@ public class CountlyNative {
 
     public String init(JSONArray args){
         try {
+            this.log("init", args);
             String serverUrl = args.getString(0);
             String appKey = args.getString(1);
             this.config.setContext(context);
@@ -83,9 +84,16 @@ public class CountlyNative {
         }
     }
 
+    public void log(String method, JSONArray args){
+        if(isDebug){
+            Log.i("Countly Native", "Method: "+method);
+            Log.i("Countly Native", "Arguments: "+args.toString());
+        }
+    }
 
     public String changeDeviceId(JSONArray args){
         try {
+            this.log("changeDeviceId", args);
             String newDeviceID = args.getString(0);
             String onServerString = args.getString(1);
             if ("1".equals(onServerString)) {
@@ -101,6 +109,7 @@ public class CountlyNative {
 
     public String setHttpPostForced(JSONArray args){
         try {
+            this.log("setHttpPostForced", args);
             int isEnabled = Integer.parseInt(args.getString(0));
             if (isEnabled == 1) {
                 this.config.setHttpPostForced(true);
@@ -115,6 +124,7 @@ public class CountlyNative {
 
     public String enableParameterTamperingProtection(JSONArray args){
         try {
+            this.log("enableParameterTamperingProtection", args);
             String salt = args.getString(0);
             this.config.setParameterTamperingProtectionSalt(salt);
             return "setParameterTamperingProtectionSalt success!";
@@ -125,6 +135,7 @@ public class CountlyNative {
 
     public String setLocation(JSONArray args){
         try {
+            this.log("setLocation", args);
             String latitude = args.getString(0);
             String longitude = args.getString(1);
             String latlng = (latitude + "," + longitude);
@@ -136,12 +147,14 @@ public class CountlyNative {
     }
 
     public String enableCrashReporting(JSONArray args){
+        this.log("enableCrashReporting", args);
         this.config.enableCrashReporting();
         return "enableCrashReporting success!";
     }
 
     public String addCrashLog(JSONArray args){
         try {
+            this.log("addCrashLog", args);
             String record = args.getString(0);
             Countly.sharedInstance().crashes().addCrashBreadcrumb(record);
             return "addCrashLog success";
@@ -151,6 +164,7 @@ public class CountlyNative {
     }
     public String setCustomCrashSegments(JSONArray args){
         try {
+            this.log("setCustomCrashSegments", args);
             HashMap<String, Object> segments = new HashMap<String, Object>();
             for (int i = 0, il = args.length(); i < il; i += 2) {
                 segments.put(args.getString(i), args.getString(i + 1));
@@ -164,6 +178,7 @@ public class CountlyNative {
 
     public String logException(JSONArray args){
         try {
+            this.log("logException", args);
             String exceptionString = args.getString(0);
             Exception exception = new Exception(exceptionString);
             Countly.sharedInstance().crashes().recordHandledException(exception);
@@ -174,15 +189,16 @@ public class CountlyNative {
     }
 
    public String askForNotificationPermission(JSONArray args){
-       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-           String channelName = "Default Name";
-           String channelDescription = "Default Description";
-           NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-           if (notificationManager != null) {
-               NotificationChannel channel = new NotificationChannel(CountlyPush.CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-               channel.setDescription(channelDescription);
-               notificationManager.createNotificationChannel(channel);
-           }
+        this.log("askForNotificationPermission", args);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelName = "Default Name";
+            String channelDescription = "Default Description";
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                NotificationChannel channel = new NotificationChannel(CountlyPush.CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                channel.setDescription(channelDescription);
+                notificationManager.createNotificationChannel(channel);
+            }
        }
        CountlyPush.init(activity.getApplication(), pushTokenTypeVariable);
        FirebaseApp.initializeApp(context);
@@ -203,6 +219,7 @@ public class CountlyNative {
 
     public String pushTokenType(JSONArray args){
         try {
+            this.log("pushTokenType", args);
             String tokenType = args.getString(0);
             if("2".equals(tokenType)){
                 pushTokenTypeVariable = Countly.CountlyMessagingMode.TEST;
@@ -216,16 +233,19 @@ public class CountlyNative {
     }
 
     public String start(JSONArray args){
+        this.log("start", args);
         Countly.sharedInstance().onStart(activity);
         return "started: success";
     }
 
     public String stop(JSONArray args){
+        this.log("stop", args);
         Countly.sharedInstance().onStop();
         return "stoped: success";
     }
 
     public String halt(JSONArray args){
+        this.log("halt", args);
         Countly.sharedInstance().halt();
         return "halt: success";
     }
@@ -246,6 +266,7 @@ public class CountlyNative {
 
     public String startEvent(JSONArray args){
         try {
+            this.log("startEvent", args);
             String startEvent = args.getString(0);
             Countly.sharedInstance().events().startEvent(startEvent);
             return "startEvent";
@@ -255,6 +276,7 @@ public class CountlyNative {
     }
     public String cancelEvent(JSONArray args){
         try {
+            this.log("cancelEvent", args);
             String cancelEvent = args.getString(0);
             Countly.sharedInstance().events().cancelEvent(cancelEvent);
             return "cancelEvent";
@@ -265,6 +287,7 @@ public class CountlyNative {
 
     public String endEvent(JSONArray args){
         try {
+            this.log("endEvent", args);
             String key = args.getString(0);
             int count = Integer.parseInt(args.getString(1));
             float sum = Float.valueOf(args.getString(2)); // new Float(args.getString(2)).floatValue();
@@ -283,6 +306,7 @@ public class CountlyNative {
 
     public String recordEvent(JSONArray args){
         try {
+            this.log("recordEvent", args);
             String key = args.getString(0);
             int count = Integer.parseInt(args.getString(1));
             float sum = Float.valueOf(args.getString(2)); // new Float(args.getString(2)).floatValue();
@@ -302,6 +326,7 @@ public class CountlyNative {
 
     public String setLoggingEnabled(JSONArray args){
         try {
+            this.log("setLoggingEnabled", args);
             String loggingEnable = args.getString(0);
             if (loggingEnable.equals("true")) {
                 isDebug = true;
@@ -320,6 +345,7 @@ public class CountlyNative {
         try {
             // Bundle bundle = new Bundle();
 
+            this.log("setuserdata", args);
             Map<String, String> bundle = new HashMap<String, String>();
 
             bundle.put("name", args.getString(0));
@@ -342,6 +368,7 @@ public class CountlyNative {
 
     public String userData_setProperty(JSONArray args){
         try {
+            this.log("userData_setProperty", args);
             String keyName = args.getString(0);
             String keyValue = args.getString(1);
             Countly.userData.setProperty(keyName, keyValue);
@@ -354,6 +381,7 @@ public class CountlyNative {
 
     public String userData_increment(JSONArray args){
         try {
+            this.log("userData_increment", args);
             String keyName = args.getString(0);
             Countly.userData.increment(keyName);
             Countly.userData.save();
@@ -366,6 +394,7 @@ public class CountlyNative {
 
     public String userData_incrementBy(JSONArray args){
         try {
+            this.log("userData_incrementBy", args);
             String keyName = args.getString(0);
             int keyIncrement = Integer.parseInt(args.getString(1));
             Countly.userData.incrementBy(keyName, keyIncrement);
@@ -378,6 +407,7 @@ public class CountlyNative {
 
     public String userData_multiply(JSONArray args){
         try {
+            this.log("userData_multiply", args);
             String keyName = args.getString(0);
             int multiplyValue = Integer.parseInt(args.getString(1));
             Countly.userData.multiply(keyName, multiplyValue);
@@ -390,6 +420,7 @@ public class CountlyNative {
 
     public String userData_saveMax(JSONArray args){
         try {
+            this.log("userData_saveMax", args);
             String keyName = args.getString(0);
             int maxScore = Integer.parseInt(args.getString(1));
             Countly.userData.saveMax(keyName, maxScore);
@@ -402,6 +433,7 @@ public class CountlyNative {
 
     public String userData_saveMin(JSONArray args){
         try {
+            this.log("userData_saveMin", args);
             String keyName = args.getString(0);
             int minScore = Integer.parseInt(args.getString(1));
             Countly.userData.saveMin(keyName, minScore);
@@ -414,6 +446,7 @@ public class CountlyNative {
 
     public String userData_setOnce(JSONArray args){
         try {
+            this.log("userData_setOnce", args);
             String keyName = args.getString(0);
             String minScore = args.getString(1);
             Countly.userData.setOnce(keyName, minScore);
@@ -426,6 +459,7 @@ public class CountlyNative {
 
     public String userData_pushUniqueValue(JSONArray args){
         try {
+            this.log("userData_pushUniqueValue", args);
             String type = args.getString(0);
             String pushUniqueValue = args.getString(1);
             Countly.userData.pushUniqueValue(type, pushUniqueValue);
@@ -438,6 +472,7 @@ public class CountlyNative {
 
     public String userData_pushValue(JSONArray args){
         try {
+            this.log("userData_pushValue", args);
             String type = args.getString(0);
             String pushValue = args.getString(1);
             Countly.userData.pushValue(type, pushValue);
@@ -450,6 +485,7 @@ public class CountlyNative {
 
     public String userData_pullValue(JSONArray args){
         try {
+            this.log("userData_pullValue", args);
             String type = args.getString(0);
             String pullValue = args.getString(1);
             Countly.userData.pullValue(type, pullValue);
@@ -462,6 +498,7 @@ public class CountlyNative {
 
     public String setRequiresConsent(JSONArray args){
         try {
+            this.log("setRequiresConsent", args);
             String consentFlagString = args.getString(0);
             Boolean consentFlag = false;
             if (consentFlagString.equals("1")) {
@@ -476,6 +513,7 @@ public class CountlyNative {
 
     public String giveConsent(JSONArray args){
         try {
+            this.log("giveConsent", args);
             String consent = null;
             List<String> features = new ArrayList<>();
             for (int i = 0; i < args.length(); i++) {
@@ -516,6 +554,7 @@ public class CountlyNative {
 
     public String removeConsent(JSONArray args){
         try {
+            this.log("removeConsent", args);
             String consent = null;
             List<String> features = new ArrayList<>();
             for (int i = 0; i < args.length(); i++) {
@@ -555,6 +594,7 @@ public class CountlyNative {
     }
 
     public String giveAllConsent(JSONArray args){
+        this.log("giveAllConsent", args);
         Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
         Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
         Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
@@ -568,6 +608,7 @@ public class CountlyNative {
     }
 
     public String removeAllConsent(JSONArray args){
+        this.log("removeAllConsent", args);
         Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
         Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
         Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
@@ -599,6 +640,7 @@ public class CountlyNative {
 
     public String recordView(JSONArray args){
         try {
+            this.log("recordView", args);
             String viewName = args.getString(0);
             Countly.sharedInstance().views().recordView(viewName);
             return "View name sent: " + viewName;
@@ -609,6 +651,7 @@ public class CountlyNative {
 
     public String setOptionalParametersForInitialization(JSONArray args){
         try {
+            this.log("setOptionalParametersForInitialization", args);
             String city = args.getString(0);
             String country = args.getString(1);
             String latitude = args.getString(2);
@@ -641,6 +684,7 @@ public class CountlyNative {
     }
 
     public String setRemoteConfigAutomaticDownload(JSONArray args, final Callback theCallback){
+        this.log("setRemoteConfigAutomaticDownload", args);
         this.config.setRemoteConfigAutomaticDownload(true, new RemoteConfig.RemoteConfigCallback() {
             @Override
             public void callback(String error) {
@@ -655,6 +699,7 @@ public class CountlyNative {
     }
 
     public String remoteConfigUpdate(JSONArray args ,final Callback theCallback){
+        this.log("remoteConfigUpdate", args);
         Countly.sharedInstance().remoteConfig().update(new RemoteConfigCallback() {
             @Override
             public void callback(String error) {
@@ -670,6 +715,7 @@ public class CountlyNative {
 
     public String updateRemoteConfigForKeysOnly(JSONArray args, final Callback theCallback){
         try {
+            this.log("updateRemoteConfigForKeysOnly", args);
             String[] keysOnly = new String[args.length()];
             for (int i = 0, il = args.length(); i < il; i++) {
                 keysOnly[i] = args.getString(i);
@@ -693,6 +739,7 @@ public class CountlyNative {
 
     public String updateRemoteConfigExceptKeys(JSONArray args, final Callback theCallback){
         try {
+            this.log("updateRemoteConfigExceptKeys", args);
             String[] exceptKeys = new String[args.length()];
             for (int i = 0, il = args.length(); i < il; i++) {
                 exceptKeys[i] = args.getString(i);
@@ -714,12 +761,14 @@ public class CountlyNative {
     }
 
     public String remoteConfigClearValues(JSONArray args){
+        this.log("remoteConfigClearValues", args);
         Countly.sharedInstance().remoteConfig().clearStoredValues();
         return "remoteConfigClearValues: success";
     }
 
     public String getRemoteConfigValueForKey(JSONArray args){
         try {
+            this.log("getRemoteConfigValueForKey", args);
             String getRemoteConfigValueForKeyResult = Countly.sharedInstance().remoteConfig().getValueForKey(args.getString(0)).toString();
             return getRemoteConfigValueForKeyResult;
         }catch (JSONException jsonException){
@@ -729,6 +778,7 @@ public class CountlyNative {
 
     public String askForFeedback(JSONArray args, final Callback theCallback){
         try {
+            this.log("askForFeedback", args);
             String widgetId = args.getString(0);
             String closeButtonText = args.getString(1);
             Countly.sharedInstance().ratings().showFeedbackPopup(widgetId, closeButtonText, activity, new FeedbackRatingCallback(){
@@ -749,12 +799,14 @@ public class CountlyNative {
     }
 
     public String askForStarRating(JSONArray args){
+        this.log("askForStarRating", args);
         Countly.sharedInstance().ratings().showStarRating(activity, null);
         return "askForStarRating success.";
     }
 
     public String sendPushToken(JSONArray args){
         try {
+            this.log("sendPushToken", args);
             ConnectionQueue connectionQueue_ = Countly.sharedInstance().getConnectionQueue();
             String token = args.getString(0);
             int messagingMode = Integer.parseInt(args.getString(1));
