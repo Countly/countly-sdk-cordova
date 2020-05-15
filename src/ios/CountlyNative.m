@@ -19,7 +19,7 @@
 @implementation CountlyNative
 
     CountlyConfig* config = nil;
-
+    Boolean isDebug = false;
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
 
     if(config == nil){
@@ -71,10 +71,16 @@
         NSString* recordView = [command objectAtIndex:0];
         [Countly.sharedInstance recordView:recordView];
         result(@"recordView Sent!");
-    }else if ([@"setloggingenabled" isEqualToString:method]) {
-        config.enableDebug = YES;
-        result(@"setloggingenabled!");
-
+    }else if ([@"setLoggingEnabled" isEqualToString:method]) {
+        NSString* loggingEnable = [command objectAtIndex:0];
+        if([@"true" isEqualToString:loggingEnable]){
+            isDebug = true;
+            config.enableDebug = YES;
+        }else{
+            isDebug = false;
+            config.enableDebug = NO;
+        }
+        result(@"setLoggingEnabled!");
     }else if ([@"setuserdata" isEqualToString:method]) {
         NSString* name = [command objectAtIndex:0];
         NSString* username = [command objectAtIndex:1];
