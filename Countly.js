@@ -34,7 +34,8 @@ Countly.recordView = function(recordView){
 // countly enable logger
 Countly.setLoggingEnabled = function(isDebug){
     Countly.isDebug = isDebug;
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setloggingenabled",[]);
+    var args = [isDebug?"true": "false"];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLoggingEnabled",args);
 }
 
 // countly sending user data
