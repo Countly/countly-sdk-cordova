@@ -65,7 +65,7 @@
         <string>remote-notification</string>
       </array>
     </config-file>
-
+    <hook type="after_platform_add" src="hooks/createService.js"/>
   </platform>
 
   <!-- android -->
