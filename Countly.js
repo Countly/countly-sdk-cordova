@@ -93,6 +93,9 @@ Countly.halt = function(){
 Countly.askForNotificationPermission = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
 }
+Countly.onNotification = function(callback){
+    cordova.exec(callback,callback,"CountlyCordova","registerForNotification",[]);
+}
 Countly.pushTokenType = function(tokenType){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","pushTokenType",[tokenType]);
 }

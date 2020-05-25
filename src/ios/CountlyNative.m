@@ -1,6 +1,7 @@
 #import "CountlyNative.h"
 #import "Countly.h"
 #import "CountlyConfig.h"
+#import <objc/runtime.h>
 //#import "CountlyDeviceInfo.h"
 //#import "CountlyRemoteConfig.h"
 //
@@ -11,15 +12,141 @@
 //}
 //@end
 
+static char launchNotificationKey;
+static char coldstartKey;
+NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
+@implementation AppDelegate (notification)
+- (id) getCommandInstance:(NSString*)className
+{
+    return [self.viewController getCommandInstance:className];
+}
+
+// its dangerous to override a method from within a category.
+// Instead we will use method swizzling. we set this up in the load call.
++ (void)load
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Class class = [self class];
+
+        SEL originalSelector = @selector(init);
+        SEL swizzledSelector = @selector(pushPluginSwizzledInit);
+
+        Method original = class_getInstanceMethod(class, originalSelector);
+        Method swizzled = class_getInstanceMethod(class, swizzledSelector);
+
+        BOOL didAddMethod =
+        class_addMethod(class,
+                        originalSelector,
+                        method_getImplementation(swizzled),
+                        method_getTypeEncoding(swizzled));
+
+        if (didAddMethod) {
+            class_replaceMethod(class,
+                                swizzledSelector,
+                                method_getImplementation(original),
+                                method_getTypeEncoding(original));
+        } else {
+            method_exchangeImplementations(original, swizzled);
+        }
+    });
+}
+
+- (AppDelegate *)pushPluginSwizzledInit
+{
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    center.delegate = self;
+
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(pushPluginOnApplicationDidBecomeActive:)
+                                                name:UIApplicationDidBecomeActiveNotification
+                                              object:nil];
+
+    // This actually calls the original init method over in AppDelegate. Equivilent to calling super
+    // on an overrided method, this is not recursive, although it appears that way. neat huh?
+    return [self pushPluginSwizzledInit];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"didReceiveNotification with fetchCompletionHandler");
+
+    // app is in the background or inactive, so only call notification callback if this is a silent push
+    if (application.applicationState != UIApplicationStateActive) {
+
+        NSLog(@"app in-active");
+
+        // do some convoluted logic to find out if this should be a silent push.
+        long silent = 0;
+        id aps = [userInfo objectForKey:@"aps"];
+        id contentAvailable = [aps objectForKey:@"content-available"];
+        if ([contentAvailable isKindOfClass:[NSString class]] && [contentAvailable isEqualToString:@"1"]) {
+            silent = 1;
+        } else if ([contentAvailable isKindOfClass:[NSNumber class]]) {
+            silent = [contentAvailable integerValue];
+        }
+
+        if (silent == 1) {
+            NSLog(@"this should be a silent push");
+            void (^safeHandler)(UIBackgroundFetchResult) = ^(UIBackgroundFetchResult result){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completionHandler(result);
+                });
+            };
+            [CountlyNative onNotification:userInfo];
+        } else {
+            NSLog(@"just put it in the shade");
+            //save it for later
+            self.launchNotification = userInfo;
+            completionHandler(UIBackgroundFetchResultNewData);
+        }
+
+    } else {
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
+}
+
+- (void)pushPluginOnApplicationDidBecomeActive:(NSNotification *)notification {
+
+    NSLog(@"active");
+    
+    NSString *firstLaunchKey = @"firstLaunchKey";
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"phonegap-plugin-push"];
+    if (![defaults boolForKey:firstLaunchKey]) {
+        NSLog(@"application first launch: remove badge icon number");
+        [defaults setBool:YES forKey:firstLaunchKey];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    }
+    [CountlyNative onNotification: notification.userInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:pushPluginApplicationDidBecomeActiveNotification object:nil];
+}
+@end
+
+
+
 @interface CountlyNative ()
 {
 }
 @end
 
+NSDictionary *lastStoredNotification = nil;
 @implementation CountlyNative
 
     CountlyConfig* config = nil;
     Boolean isDebug = false;
+    Boolean isPushListenerEnabled = false;
+    Result notificationListener = nil;
+- (void)handleRemoteNotificationReceived:(NSNotification *)notification{
+    if(isPushListenerEnabled == true && notificationListener != nil){
+      notificationListener(notification.userInfo);
+      lastStoredNotification = nil;
+    }
+}
++ (void)onNotification:(NSDictionary *)notification
+{
+    lastStoredNotification = notification;
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"onCountlyPushNotification" object:self userInfo:notification];
+}
+
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
     if(isDebug == true){
         NSLog(@"Countly Native method : %@", method);
@@ -110,28 +237,7 @@
 
     }else if ([@"getDeviceID" isEqualToString:method]) {
         NSString* deviceID = Countly.sharedInstance.deviceID;
-        result(@"default!");
-
-    // }else if ([@"sendRating" isEqualToString:method]) {
-//        NSString* ratingString = [command objectAtIndex:0];
-//        int rating = [ratingString intValue];
-//        NSString* const kCountlySRKeyPlatform       = @"platform";
-//        NSString* const kCountlySRKeyAppVersion     = @"app_version";
-//        NSString* const kCountlySRKeyRating         = @"rating";
-//        NSString* const kCountlyReservedEventStarRating = @"[CLY]_star_rating";
-//
-//        if (rating != 0)
-//        {
-//            NSDictionary* segmentation =
-//            @{
-//              kCountlySRKeyPlatform: CountlyDeviceInfo.osName,
-//              kCountlySRKeyAppVersion: CountlyDeviceInfo.appVersion,
-//              kCountlySRKeyRating: @(rating)
-//              };
-//            //            [Countly.sharedInstance recordReservedEvent:kCountlyReservedEventStarRating segmentation:segmentation];
-//        }
-//        result(@"sendRating!");
-
+        result([NSString stringWithFormat:@"%@", deviceID]);
     }else if ([@"start" isEqualToString:method]) {
         [Countly.sharedInstance beginSession];
         result(@"start!");
@@ -145,25 +251,6 @@
     }else if ([@"update" isEqualToString:method]) {
         [Countly.sharedInstance updateSession];
         result(@"update!");
-
-    // }else if ([@"manualSessionHandling" isEqualToString:method]) {
-    //     // NSString* manualSessionHandling = [command objectAtIndex:0];
-    //     config.manualSessionHandling = YES;
-    //     result(@"manualSessionHandling!");
-
-    // }else if ([@"updateSessionPeriod" isEqualToString:method]) {
-    //     config.updateSessionPeriod = [[command objectAtIndex:0] intValue];
-    //     result(@"updateSessionPeriod!");
-
-    // }else if ([@"eventSendThreshold" isEqualToString:method]) {
-    //     config.eventSendThreshold = [[command objectAtIndex:0] intValue];
-    //     result(@"eventSendThreshold!");
-
-    // }else if ([@"storedRequestsLimit" isEqualToString:method]) {
-    //     // NSString* storedRequestsLimit = [command objectAtIndex:0];
-    //     config.storedRequestsLimit = 1;
-    //     result(@"storedRequestsLimit!");
-
     }else if ([@"changeDeviceId" isEqualToString:method]) {
         NSString* newDeviceID = [command objectAtIndex:0];
         NSString* onServerString = [command objectAtIndex:1];
@@ -273,6 +360,16 @@
             [Countly.sharedInstance askForNotificationPermission];
             result(@"askForNotificationPermission!");
         });
+    }else if ([@"registerForNotification" isEqualToString:method]) {
+        isPushListenerEnabled = true;
+        notificationListener = result;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationReceived:)
+          name:@"onCountlyPushNotification"
+        object:nil];
+        if(lastStoredNotification != nil){
+            result(lastStoredNotification);
+            lastStoredNotification = nil;
+        }
     }else if ([@"pushTokenType" isEqualToString:method]) {
         NSString* tokenType = [command objectAtIndex:0];
         if([tokenType isEqualToString: @"1"]){
