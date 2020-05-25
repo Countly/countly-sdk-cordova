@@ -135,6 +135,12 @@
         <div class="ui horizontal divider">Rating Methods End</div>
     </div>
     <script type="text/javascript">
+        document.addEventListener("deviceready", function(){
+            console.log("deviceready");
+            Countly.onNotification(function(theNotification){
+                alert(JSON.stringify(theNotification));
+            });
+        });
     app = {};
     function makeid() {
         var text = "";
