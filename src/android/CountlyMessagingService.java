@@ -43,6 +43,7 @@ public class CountlyMessagingService extends FirebaseMessagingService {
         } else {
             Log.i(TAG, "Message wasn't handled by Countly SDK because API level is too low for Notification support or because currentActivity is null (not enough lifecycle method calls)");
         }
+        CountlyNative.onNotification(remoteMessage.getData());
     }
 
     @Override

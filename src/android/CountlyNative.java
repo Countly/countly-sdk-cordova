@@ -12,6 +12,8 @@ import android.app.Activity;
 import android.content.Context;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import android.content.SharedPreferences;
 import android.util.Log;
 import java.util.List;
 import java.util.Set;
@@ -24,12 +26,13 @@ import android.os.Build;
 import android.app.NotificationManager;
 import android.app.NotificationChannel;
 import ly.count.android.sdk.messaging.CountlyPush;
-
+import org.json.JSONObject;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.FirebaseApp;
+
 
 public class CountlyNative {
 
@@ -38,6 +41,8 @@ public class CountlyNative {
     private Activity activity;
     private Boolean isDebug = false;
     private CountlyConfig config = new CountlyConfig();
+    private static Callback notificationListener = null;
+    private static String lastStoredNotification = null;
     private final Set<String> validConsentFeatureNames = new HashSet<String>(Arrays.asList(
             Countly.CountlyFeatureNames.sessions,
             Countly.CountlyFeatureNames.events,
@@ -53,7 +58,16 @@ public class CountlyNative {
         this.activity = _activity;
         this.context = _context;
     }
-
+    public static void onNotification(Map<String, String>  notification){
+        JSONObject json = new JSONObject(notification);
+        String notificationString = json.toString();
+        Log.i("Countly onNotification", notificationString);
+        if(notificationListener != null){
+            notificationListener.callback(notificationString);
+        }else{
+            lastStoredNotification = notificationString;
+        }
+    }
     public interface Callback {
         void callback(String result);
     }
@@ -216,6 +230,15 @@ public class CountlyNative {
                });
        return "askForNotificationPermission";
    }
+    public String registerForNotification(JSONArray args, final Callback theCallback){
+        notificationListener = theCallback;
+        Log.i("CountlyNative", "registerForNotification theCallback");
+        if(lastStoredNotification != null){
+            theCallback.callback(lastStoredNotification);
+            lastStoredNotification = null;
+        }
+        return "pushTokenType: success";
+    }
 
     public String pushTokenType(JSONArray args){
         try {

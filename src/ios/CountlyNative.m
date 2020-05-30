@@ -425,9 +425,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"registerForNotification" isEqualToString:method]) {
         NSLog(@"Countly Native: registerForNotification");
         notificationListener = result;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationReceived:)
-          name:@"onCountlyPushNotification"
-        object:nil];
         if(lastStoredNotification != nil){
             result([lastStoredNotification description]);
             lastStoredNotification = nil;

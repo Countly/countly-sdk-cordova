@@ -68,6 +68,18 @@ public class CountlyCordova extends CordovaPlugin {
         else if ("askForNotificationPermission".equals(action)) {
             callbackContext.success(countlyNative.askForNotificationPermission(args));
         }
+        else if ("registerForNotification".equals(action)) {
+            PluginResult pluginResult = new  PluginResult(PluginResult.Status.NO_RESULT);
+            pluginResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(pluginResult);
+            countlyNative.registerForNotification(args, new CountlyNative.Callback() {
+                @Override
+                public void callback(String result) {
+                    callbackContext.success(result);
+
+                }
+            });
+        }
         else if ("pushTokenType".equals(action)) {
             callbackContext.success(countlyNative.pushTokenType(args));
         }
