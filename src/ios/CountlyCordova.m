@@ -345,12 +345,12 @@ CountlyNative* countlyNative = nil;
     if(countlyNative == nil){
         countlyNative = CountlyNative.new;
     }
-    [countlyNative onCall: @"registerForNotification" commandString: command.arguments callback: ^(NSDictionary * theResult)
-     {
-         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary: theResult];
-         [pluginResult setKeepCallbackAsBool:YES];
-         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-     }];
+    [countlyNative onCall: @"registerForNotification" commandString: command.arguments callback: ^(NSString * theResult)
+    {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+        [pluginResult setKeepCallbackAsBool:YES];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
 }
 - (void)pushTokenType:(CDVInvokedUrlCommand*)command
 {
