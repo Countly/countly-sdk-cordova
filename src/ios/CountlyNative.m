@@ -2,20 +2,40 @@
 #import "Countly.h"
 #import "CountlyConfig.h"
 #import <objc/runtime.h>
-//#import "CountlyDeviceInfo.h"
-//#import "CountlyRemoteConfig.h"
-//
-//@interface CountlyNative ()
-//{
-//    NSTimer* timer;
-//    BOOL isSuspended;
-//}
-//@end
 
 static char launchNotificationKey;
 static char coldstartKey;
+Result notificationListener = nil;
+NSDictionary *lastStoredNotification = nil;
+
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 @implementation AppDelegate (notification)
+- (NSMutableArray *)launchNotification
+{
+    return objc_getAssociatedObject(self, &launchNotificationKey);
+}
+
+- (void)setLaunchNotification:(NSDictionary *)aDictionary
+{
+    objc_setAssociatedObject(self, &launchNotificationKey, aDictionary, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSNumber *)coldstart
+{
+    return objc_getAssociatedObject(self, &coldstartKey);
+}
+
+- (void)setColdstart:(NSNumber *)aNumber
+{
+    objc_setAssociatedObject(self, &coldstartKey, aNumber, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)dealloc
+{
+    self.launchNotification = nil; // clear the association and release the object
+    self.coldstart = nil;
+}
+
 - (id) getCommandInstance:(NSString*)className
 {
     return [self.viewController getCommandInstance:className];
@@ -87,12 +107,8 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
 
         if (silent == 1) {
             NSLog(@"this should be a silent push");
-            void (^safeHandler)(UIBackgroundFetchResult) = ^(UIBackgroundFetchResult result){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completionHandler(result);
-                });
-            };
             [CountlyNative onNotification:userInfo];
+            completionHandler(UIBackgroundFetchResultNewData);
         } else {
             NSLog(@"just put it in the shade");
             //save it for later
@@ -104,7 +120,57 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
         completionHandler(UIBackgroundFetchResultNoData);
     }
 }
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+{
+    NSLog( @"NotificationCenter Handle push from foreground" );
+    // custom code to handle push while app is in the foreground
+    [CountlyNative onNotification: notification.request.content.userInfo];
 
+    completionHandler(UNNotificationPresentationOptionNone);
+}
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void(^)(void))completionHandler
+{
+    NSLog(@"Push Plugin didReceiveNotificationResponse: actionIdentifier %@, notification: %@", response.actionIdentifier,
+          response.notification.request.content.userInfo);
+    NSMutableDictionary *userInfo = [response.notification.request.content.userInfo mutableCopy];
+    [userInfo setObject:response.actionIdentifier forKey:@"actionCallback"];
+    NSLog(@"Push Plugin userInfo %@", userInfo);
+    switch ([UIApplication sharedApplication].applicationState) {
+        case UIApplicationStateActive:
+        {
+            NSLog(@"UIApplicationStateActive");
+            [CountlyNative onNotification: response.notification.request.content.userInfo];
+            if(notificationListener != nil){
+                completionHandler();
+            }
+            break;
+        }
+        case UIApplicationStateInactive:
+        {
+            NSLog(@"UIApplicationStateInactive");
+            self.launchNotification = response.notification.request.content.userInfo;
+            self.coldstart = [NSNumber numberWithBool:YES];
+            break;
+        }
+        case UIApplicationStateBackground:
+        {
+            NSLog(@"UIApplicationStateBackground");
+            void (^safeHandler)(void) = ^(void){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completionHandler();
+                });
+            };
+            [CountlyNative onNotification: response.notification.request.content.userInfo];
+            if(notificationListener != nil){
+                completionHandler();
+            }
+        }
+    }
+}
 - (void)pushPluginOnApplicationDidBecomeActive:(NSNotification *)notification {
 
     NSLog(@"active");
@@ -116,7 +182,8 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
         [defaults setBool:YES forKey:firstLaunchKey];
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     }
-    [CountlyNative onNotification: notification.userInfo];
+    NSLog(@"pushPluginOnApplicationDidBecomeActive: %@", self.launchNotification);
+    [CountlyNative onNotification: self.launchNotification];
     [[NSNotificationCenter defaultCenter] postNotificationName:pushPluginApplicationDidBecomeActiveNotification object:nil];
 }
 @end
@@ -128,23 +195,18 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
 }
 @end
 
-NSDictionary *lastStoredNotification = nil;
 @implementation CountlyNative
 
     CountlyConfig* config = nil;
     Boolean isDebug = false;
-    Boolean isPushListenerEnabled = false;
-    Result notificationListener = nil;
-- (void)handleRemoteNotificationReceived:(NSNotification *)notification{
-    if(isPushListenerEnabled == true && notificationListener != nil){
-      notificationListener(notification.userInfo);
-      lastStoredNotification = nil;
+
++ (void)onNotification: (NSDictionary *) notificationMessage{
+    NSLog(@"Notification received");
+    if(lastStoredNotification != nil){
+        notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
+    }else{
+        lastStoredNotification = notificationMessage;
     }
-}
-+ (void)onNotification:(NSDictionary *)notification
-{
-    lastStoredNotification = notification;
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"onCountlyPushNotification" object:self userInfo:notification];
 }
 
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
@@ -361,13 +423,13 @@ NSDictionary *lastStoredNotification = nil;
             result(@"askForNotificationPermission!");
         });
     }else if ([@"registerForNotification" isEqualToString:method]) {
-        isPushListenerEnabled = true;
+        NSLog(@"Countly Native: registerForNotification");
         notificationListener = result;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationReceived:)
           name:@"onCountlyPushNotification"
         object:nil];
         if(lastStoredNotification != nil){
-            result(lastStoredNotification);
+            result([lastStoredNotification description]);
             lastStoredNotification = nil;
         }
     }else if ([@"pushTokenType" isEqualToString:method]) {
