@@ -3,11 +3,12 @@
 #import "CountlyConfig.h"
 #import <objc/runtime.h>
 
+
 static char launchNotificationKey;
 static char coldstartKey;
 Result notificationListener = nil;
 NSDictionary *lastStoredNotification = nil;
-
+NSString *notificationID = nil;
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 @implementation AppDelegate (notification)
 - (NSMutableArray *)launchNotification
@@ -202,10 +203,27 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 + (void)onNotification: (NSDictionary *) notificationMessage{
     NSLog(@"Notification received");
-    if(lastStoredNotification != nil){
+    NSLog(@"The notification %@", notificationMessage);
+    if(notificationMessage && notificationListener != nil){
         notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
     }else{
         lastStoredNotification = notificationMessage;
+    }
+    if(notificationMessage){
+        NSDictionary* countlyPayload = notificationMessage[@"c"];
+        notificationID = countlyPayload[@"i"];
+    }
+}
+- (void)recordPushAction
+{
+    if(notificationID != nil){
+        NSDictionary* segmentation =
+        @{
+            @"i": notificationID,
+            @"b": @(0)
+        };
+        [Countly.sharedInstance recordEvent:@"[CLY]_push_action" segmentation: segmentation];
+        notificationID = nil;
     }
 }
 
@@ -237,6 +255,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         if (serverurl != nil && [serverurl length] > 0) {
             [[Countly sharedInstance] startWithConfig:config];
+            [self recordPushAction];
             result(@"initialized.");
         } else {
             result(@"initialization failed!");

@@ -346,11 +346,12 @@ CountlyNative* countlyNative = nil;
         countlyNative = CountlyNative.new;
     }
     [countlyNative onCall: @"registerForNotification" commandString: command.arguments callback: ^(NSString * theResult)
-    {
+     {
+        
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
         [pluginResult setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    }];
+     }];
 }
 - (void)pushTokenType:(CDVInvokedUrlCommand*)command
 {
@@ -359,8 +360,8 @@ CountlyNative* countlyNative = nil;
     }
     [countlyNative onCall: @"pushTokenType" commandString: command.arguments callback: ^(NSString * theResult)
      {
-         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
-         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }];
 }
 
