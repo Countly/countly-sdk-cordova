@@ -8,7 +8,8 @@ static char launchNotificationKey;
 static char coldstartKey;
 Result notificationListener = nil;
 NSDictionary *lastStoredNotification = nil;
-NSString *notificationID = nil;
+NSMutableArray *notificationIDs = nil;        // alloc here
+
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 @implementation AppDelegate (notification)
 - (NSMutableArray *)launchNotification
@@ -210,21 +211,26 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         lastStoredNotification = notificationMessage;
     }
     if(notificationMessage){
+        if(notificationIDs == nil){
+            notificationIDs = [[NSMutableArray alloc] init];
+        }
         NSDictionary* countlyPayload = notificationMessage[@"c"];
-        notificationID = countlyPayload[@"i"];
+        NSString *notificationID = countlyPayload[@"i"];
+        [notificationIDs insertObject:notificationID atIndex:[notificationIDs count]];
     }
 }
 - (void)recordPushAction
 {
-    if(notificationID != nil){
+    for(int i=0,il = (int) notificationIDs.count;i<il;i++){
+        NSString *notificationID = notificationIDs[i];
         NSDictionary* segmentation =
         @{
             @"i": notificationID,
             @"b": @(0)
         };
         [Countly.sharedInstance recordEvent:@"[CLY]_push_action" segmentation: segmentation];
-        notificationID = nil;
     }
+    notificationIDs = nil;
 }
 
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
