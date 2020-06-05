@@ -22,6 +22,15 @@ public class CountlyMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        if(!Countly.sharedInstance().isInitialized()) {
+            int mode = CountlyPush.getLastMessagingMethod(this);
+            if(mode == 0) {
+                CountlyPush.init(getApplication(), Countly.CountlyMessagingMode.TEST);
+            } else if(mode == 1) {
+                CountlyPush.init(getApplication(), Countly.CountlyMessagingMode.PRODUCTION);
+            }
+        }
+        
         Log.d(TAG, "got new message: " + remoteMessage.getData());
 
         // decode message data and extract meaningful information from it: title, body, badge, etc.
