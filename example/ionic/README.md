@@ -16,7 +16,7 @@ ionic start myApp blank
 cd myApp
 ionic cordova platform add android
 ionic cordova platform add ios
-ionic cordova plugin add https://github.com/Countly/countly-sdk-js.git
+ionic cordova plugin add https://github.com/Countly/countly-sdk-cordova.git
 ionic cordova run android --device -l
 
 ```
