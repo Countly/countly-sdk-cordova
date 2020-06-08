@@ -529,12 +529,15 @@
         Countly.userData.setProperty("setProperty", "My Property");
     }
     app.userData.increment = function() {
+        Countly.userData.setProperty("increment", 4);
         Countly.userData.increment("increment");
     }
     app.userData.incrementBy = function() {
+        Countly.userData.setProperty("incrementBy", 5);
         Countly.userData.incrementBy("incrementBy", 10);
     }
     app.userData.multiply = function() {
+        Countly.userData.setProperty("multiply", 5);
         Countly.userData.multiply("multiply", 20);
     }
     app.userData.saveMax = function() {
