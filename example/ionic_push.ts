@@ -16,8 +16,9 @@ export class HomePage {
     });
   }
   ionViewDidEnter(){
+    const self = this;
     Countly.onNotification(function(notification: any){
-      this.events.publish('countly:notification', notification, Date.now());
+      self.events.publish('countly:notification', notification, Date.now());
     });
   }
 }
