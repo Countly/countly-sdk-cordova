@@ -680,21 +680,15 @@ public class CountlyNative {
             String latitude = args.getString(2);
             String longitude = args.getString(3);
             String ipAddress = args.getString(4);
-            String latlng = latitude + "," + longitude;
+            String latlng = null;
             if(city.length() == 0){
                 city = null;
             }
             if(country.length() == 0){
                 country = null;
             }
-            if(latitude.equals("0.00")){
-                latitude = null;
-            }
-            if(longitude.equals("0.00")){
-                longitude = null;
-            }
-            if(latitude == null && longitude == null){
-                latlng = null;
+            if(!latitude.equals("null") && !longitude.equals("null")) {
+                latlng = latitude + "," + longitude;
             }
             if(ipAddress.equals("0.0.0.0")){
                 ipAddress = null;
