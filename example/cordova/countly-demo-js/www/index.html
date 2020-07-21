@@ -133,6 +133,17 @@
         <button onclick="app.askForStarRating()" class="fluid ui button orange">Open rating modal</button>
         <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
         <div class="ui horizontal divider">Rating Methods End</div>
+
+        <button onclick="this.apm()" class="fluid ui button black">APM</button>
+        <button onclick="this.startTrace()" class="fluid ui button black">Start Trace</button>
+        <button onclick="this.endTrace()" class="fluid ui button black">End Trace</button>
+        <button onclick="this.startNetworkRequestSuccess()" class="fluid ui button black">Start Network Request Success</button>
+        <button onclick="this.endNetworkRequestSuccess()" class="fluid ui button black">End Network Request Success</button>
+        <button onclick="this.startNetworkRequestFailure()" class="fluid ui button black">Start Network Request Failure</button>
+        <button onclick="this.endNetworkRequestFailure()" class="fluid ui button black">End Network Request Failure</button>
+        <button onclick="this.setRecordAppStartTime()" class="fluid ui button black">Set Record App Start Time</button>
+        <button onclick="this.applicationOnCreate()" class="fluid ui button black">Application on create</button>
+
     </div>
     <script type="text/javascript">
     app = {};
@@ -724,6 +735,56 @@
         });
     }
 
+    // APM Examples
+    app.apm = function(){
+        Countly.apm();
+    }
+    app.startTrace = function(){
+        var traceKey = "Trace Key";
+        Countly.startTrace(traceKey);
+    }
+    app.endTrace = function(){
+        var traceKey = "Trace Key";
+        var customMetric = {
+        "ABC": 1233,
+        "C44C": 1337
+        };
+        Countly.endTrace(traceKey, customMetric);
+    }
+    app.startNetworkRequestSuccess = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var uniqueId = "1337";
+        Countly.startNetworkRequest(networkTraceKey, uniqueId);
+    }
+    app.endNetworkRequestSuccess = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var uniqueId = "1337";
+        var rnd = new Random();
+        var responseCode = successCodes[rnd.nextInt(successCodes.length)];
+        var requestPayloadSize = rnd.nextInt(700) + 200;
+        var responsePayloadSize = rnd.nextInt(700) + 200;
+        Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+    }
+    app.startNetworkRequestFailure = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var uniqueId = "7331";
+        Countly.startNetworkRequest(networkTraceKey, uniqueId);
+    }
+    app.endNetworkRequestFailure = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var uniqueId = "7331";
+        var rnd = new Random();
+        var responseCode = failureCodes[rnd.nextInt(failureCodes.length)];
+        var requestPayloadSize = rnd.nextInt(700) + 250;
+        var responsePayloadSize = rnd.nextInt(700) + 250;
+        Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+    }
+    app.setRecordAppStartTime = function(){
+        Countly.setRecordAppStartTime(true);
+    }
+    app.applicationOnCreate = function(){
+        Countly.applicationOnCreate();
+    }
     // Remote config usage
 
     // /** Use StackTrace to log all exceptions **/

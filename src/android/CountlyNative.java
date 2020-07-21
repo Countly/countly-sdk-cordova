@@ -838,5 +838,56 @@ public class CountlyNative {
         return "sendPushToken success.";
     }
 
+    public String apm(ReadableArray args){
+        Countly.sharedInstance().apm();
+        return "apm success.";
+    }
 
+    public String startTrace(ReadableArray args){
+        String traceKey = args.getString(0);
+        Countly.sharedInstance().apm().startTrace(traceKey);
+        return "startTrace success.";
+    }
+
+    public String endTrace(ReadableArray args){
+        String traceKey = args.getString(0);
+        HashMap<String, Integer> customMetric = new HashMap<String, Integer>();
+        for (int i = 1, il = args.length(); i < il; i += 2) {
+            customMetric.put(args.getString(i), Integer.parseInt(args.getString(i + 1)));
+        }
+        Countly.sharedInstance().apm().endTrace(traceKey, customMetric);
+        return "endTrace success.";
+    }
+
+    public String startNetworkRequest(ReadableArray args){
+        String networkTraceKey = args.getString(0);
+        String uniqueId = args.getString(1);
+        Countly.sharedInstance().apm().startNetworkRequest(networkTraceKey, uniqueId);
+        return "startNetworkRequest success.";
+    }
+
+    public String endNetworkRequest(ReadableArray args){
+        String networkTraceKey = args.getString(0);
+        String uniqueId = args.getString(1);
+        int responseCode = Integer.parseInt(args.getString(1));
+        int requestPayloadSize = Integer.parseInt(args.getString(1));
+        int responsePayloadSize = Integer.parseInt(args.getString(1));
+        Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+        return "endNetworkRequest success.";
+    }
+
+    public String setRecordAppStartTime(ReadableArray args){
+        String isStart = args.getString(0);
+        if(isStart.equals("true")){
+            this.config.setRecordAppStartTime(true);
+        }else{
+            this.config.setRecordAppStartTime(false);
+        }
+        return "setRecordAppStartTime success.";
+    }
+
+    public String applicationOnCreate(ReadableArray args){
+        Countly.applicationOnCreate();
+        return "applicationOnCreate success.";
+    }
 }
