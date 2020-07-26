@@ -85,7 +85,7 @@
         <button onclick="app.giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
         <button onclick="app.giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
         <button onclick="app.giveConsentAppleWatch()" class="fluid ui button blue">Give Consent AppleWatch</button>
-        <button onclick="app.giveConsentPerformance()" class="fluid ui button blue">Performance</button>
+        <button onclick="app.giveConsentPerformance()" class="fluid ui button blue">Give Consent Performance</button>
 
         </br>
         <button onclick="app.removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
@@ -757,6 +757,9 @@
         });
     }
 
+    var successCodes = [100, 101, 200, 201, 202, 205, 300, 301, 303, 305];
+    var failureCodes = [400, 402, 405, 408, 500, 501, 502, 505];
+
     app.apm = function(){
         Countly.apm();
     }
@@ -796,9 +799,9 @@
     app.endNetworkRequestFailure = function(){
         var networkTraceKey = "api/endpoint.1";
         var uniqueId = "7331";
-        var responseCode = failureCodes[this.random(failureCodes.length)];
-        var requestPayloadSize = this.random(700) + 250;
-        var responsePayloadSize = this.random(700) + 250;
+        var responseCode = failureCodes[random(failureCodes.length)];
+        var requestPayloadSize = random(700) + 250;
+        var responsePayloadSize = random(700) + 250;
         Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
     }
     app.setRecordAppStartTime = function(){

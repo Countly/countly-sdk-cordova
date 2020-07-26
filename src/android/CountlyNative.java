@@ -568,6 +568,9 @@ public class CountlyNative {
                 if (consent.equals("starRating")) {
                     Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
                 }
+                if (consent.equals("performance")) {
+                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.apm});
+                }
             }
             return "giveConsent: Success";
         }catch (JSONException jsonException){
@@ -608,6 +611,9 @@ public class CountlyNative {
                 }
                 if (consent.equals("starRating")) {
                     Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+                }
+                if (consent.equals("performance")) {
+                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.apm});
                 }
             }
             return "removeConsent: Success";
@@ -838,67 +844,92 @@ public class CountlyNative {
         return "sendPushToken success.";
     }
 
-    public String apm(ReadableArray args){
+    public String apm(JSONArray args){
         Countly.sharedInstance().apm();
         return "apm success.";
     }
 
-    public String startTrace(ReadableArray args){
-        String traceKey = args.getString(0);
-        Countly.sharedInstance().apm().startTrace(traceKey);
-        return "startTrace success.";
+    public String startTrace(JSONArray args){
+        try {
+            String traceKey = args.getString(0);
+            Countly.sharedInstance().apm().startTrace(traceKey);
+            return "startTrace success.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
     }
 
-    public String cancelTrace(ReadableArray args){
-        String traceKey = args.getString(0);
-        // Countly.sharedInstance().apm().cancelTrace(traceKey);
-        return "cancelTrace not implemented.";
+    public String cancelTrace(JSONArray args){
+        try {
+            String traceKey = args.getString(0);
+            // Countly.sharedInstance().apm().cancelTrace(traceKey);
+            return "cancelTrace not implemented.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
     }
 
 
-    public String clearAllTrace(ReadableArray args){
+    public String clearAllTrace(JSONArray args){
         // Countly.sharedInstance().apm().clearAllTrace(traceKey);
         return "clearAllTrace not implemented.";
+
     }
 
-    public String endTrace(ReadableArray args){
-        String traceKey = args.getString(0);
-        HashMap<String, Integer> customMetric = new HashMap<String, Integer>();
-        for (int i = 1, il = args.length(); i < il; i += 2) {
-            customMetric.put(args.getString(i), Integer.parseInt(args.getString(i + 1)));
+    public String endTrace(JSONArray args){
+        try {
+            String traceKey = args.getString(0);
+            HashMap<String, Integer> customMetric = new HashMap<String, Integer>();
+            for (int i = 1, il = args.length(); i < il; i += 2) {
+                customMetric.put(args.getString(i), Integer.parseInt(args.getString(i + 1)));
+            }
+            Countly.sharedInstance().apm().endTrace(traceKey, customMetric);
+            return "endTrace success.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
         }
-        Countly.sharedInstance().apm().endTrace(traceKey, customMetric);
-        return "endTrace success.";
     }
 
-    public String startNetworkRequest(ReadableArray args){
-        String networkTraceKey = args.getString(0);
-        String uniqueId = args.getString(1);
-        Countly.sharedInstance().apm().startNetworkRequest(networkTraceKey, uniqueId);
-        return "startNetworkRequest success.";
-    }
-
-    public String endNetworkRequest(ReadableArray args){
-        String networkTraceKey = args.getString(0);
-        String uniqueId = args.getString(1);
-        int responseCode = Integer.parseInt(args.getString(1));
-        int requestPayloadSize = Integer.parseInt(args.getString(1));
-        int responsePayloadSize = Integer.parseInt(args.getString(1));
-        Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
-        return "endNetworkRequest success.";
-    }
-
-    public String setRecordAppStartTime(ReadableArray args){
-        String isStart = args.getString(0);
-        if(isStart.equals("true")){
-            this.config.setRecordAppStartTime(true);
-        }else{
-            this.config.setRecordAppStartTime(false);
+    public String startNetworkRequest(JSONArray args){
+        try {
+            String networkTraceKey = args.getString(0);
+            String uniqueId = args.getString(1);
+            Countly.sharedInstance().apm().startNetworkRequest(networkTraceKey, uniqueId);
+            return "startNetworkRequest success.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
         }
-        return "setRecordAppStartTime success.";
     }
 
-    public String applicationOnCreate(ReadableArray args){
+    public String endNetworkRequest(JSONArray args){
+        try {
+            String networkTraceKey = args.getString(0);
+            String uniqueId = args.getString(1);
+            int responseCode = Integer.parseInt(args.getString(1));
+            int requestPayloadSize = Integer.parseInt(args.getString(1));
+            int responsePayloadSize = Integer.parseInt(args.getString(1));
+            Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+            return "endNetworkRequest success.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
+    public String setRecordAppStartTime(JSONArray args){
+        try {
+            String isStart = args.getString(0);
+            if(isStart.equals("true")){
+                this.config.setRecordAppStartTime(true);
+            }else{
+                this.config.setRecordAppStartTime(false);
+            }
+            return "setRecordAppStartTime success.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
+    public String applicationOnCreate(JSONArray args){
         Countly.applicationOnCreate();
         return "applicationOnCreate success.";
     }
