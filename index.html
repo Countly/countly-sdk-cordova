@@ -74,6 +74,7 @@
         <button onclick="app.giveAllConsent()" class="fluid ui button blue">Give all Consent</button>
         <button onclick="app.removeAllConsent()" class="fluid ui button blue">Remove all Consent</button>
 
+        </br>
         <button onclick="app.giveConsentSessions()" class="fluid ui button blue">Give Consent Sessions</button>
         <button onclick="app.giveConsentEvents()" class="fluid ui button blue">Give Consent Events</button>
         <button onclick="app.giveConsentViews()" class="fluid ui button blue">Give Consent Views</button>
@@ -84,7 +85,9 @@
         <button onclick="app.giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
         <button onclick="app.giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
         <button onclick="app.giveConsentAppleWatch()" class="fluid ui button blue">Give Consent AppleWatch</button>
+        <button onclick="app.giveConsentPerformance()" class="fluid ui button blue">Performance</button>
 
+        </br>
         <button onclick="app.removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
         <button onclick="app.removeConsentEvents()" class="fluid ui button blue">Remove Consent Events</button>
         <button onclick="app.removeConsentViews()" class="fluid ui button blue">Remove Consent Views</button>
@@ -95,6 +98,7 @@
         <button onclick="app.removeConsentPush()" class="fluid ui button blue">Remove Consent Push</button>
         <button onclick="app.removeConsentStarRating()" class="fluid ui button blue">Remove Consent starRating</button>
         <button onclick="app.removeConsentAppleWatch()" class="fluid ui button blue">Remove Consent AppleWatch</button>
+        <button onclick="app.removeConsentPerformance()" class="fluid ui button blue">Remove Consent Performance</button>
 
         <!-- Consent Button -->
         <div class="ui horizontal divider">User Methods End</div>
@@ -133,6 +137,19 @@
         <button onclick="app.askForStarRating()" class="fluid ui button orange">Open rating modal</button>
         <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
         <div class="ui horizontal divider">Rating Methods End</div>
+
+        <div class="ui horizontal divider">Performance Methods Start</div>
+        <button onclick="app.apm()" class="fluid ui black button">APM</button>
+        <button onclick="app.startTrace()" class="fluid ui black button">Start Trace</button>
+        <button onclick="app.endTrace()" class="fluid ui black button">End Trace</button>
+        <button onclick="app.startNetworkRequestSuccess()" class="fluid ui black button">Start Network Request Success</button>
+        <button onclick="app.endNetworkRequestSuccess()" class="fluid ui black button">End Network Request Success</button>
+        <button onclick="app.startNetworkRequestFailure()" class="fluid ui black button">Start Network Request Failure</button>
+        <button onclick="app.endNetworkRequestFailure()" class="fluid ui black button">End Network Request Failure</button>
+        <button onclick="app.setRecordAppStartTime()" class="fluid ui black button">Set Record App Start Time</button>
+        <button onclick="app.applicationOnCreate()" class="fluid ui black button">Application on create</button>
+        <div class="ui horizontal divider">Performance Methods End</div>
+
     </div>
     <script type="text/javascript">
         document.addEventListener("deviceready", function(){
@@ -608,6 +625,9 @@
     app.giveConsentAppleWatch = function() {
         Countly.giveConsent(["AppleWatch"]);
     }
+    app.giveConsentPerformance = function(){
+        Countly.giveConsent(["performance"]);
+    }
 
     app.removeConsentSessions = function() {
         Countly.removeConsent(["sessions"]);
@@ -638,6 +658,9 @@
     }
     app.removeConsentAppleWatch = function() {
         Countly.giveConsent(["AppleWatch"]);
+    }
+    app.removeConsentPerformance = function(){
+        Countly.removeConsent(["performance"]);
     }
 
     // Remote config usage
@@ -734,6 +757,56 @@
         });
     }
 
+    app.apm = function(){
+        Countly.apm();
+    }
+    app.startTrace = function(){
+        var traceKey = "Trace Key";
+        Countly.startTrace(traceKey);
+    }
+    app.endTrace = function(){
+        var traceKey = "Trace Key";
+        var customMetric = {
+        "ABC": 1233,
+        "C44C": 1337
+        };
+        Countly.endTrace(traceKey, customMetric);
+    }
+    app.startNetworkRequestSuccess = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var uniqueId = "1337";
+        Countly.startNetworkRequest(networkTraceKey, uniqueId);
+    }
+    function random(number){
+        return Math.floor(Math.random() * number);
+    }
+    app.endNetworkRequestSuccess = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var uniqueId = "1337";
+        var responseCode = successCodes[random(successCodes.length)];
+        var requestPayloadSize = random(700) + 200;
+        var responsePayloadSize = random(700) + 200;
+        Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+    }
+    app.startNetworkRequestFailure = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var uniqueId = "7331";
+        Countly.startNetworkRequest(networkTraceKey, uniqueId);
+    }
+    app.endNetworkRequestFailure = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var uniqueId = "7331";
+        var responseCode = failureCodes[this.random(failureCodes.length)];
+        var requestPayloadSize = this.random(700) + 250;
+        var responsePayloadSize = this.random(700) + 250;
+        Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+    }
+    app.setRecordAppStartTime = function(){
+        Countly.setRecordAppStartTime(true);
+    }
+    app.applicationOnCreate = function(){
+        Countly.applicationOnCreate();
+    }
     // Remote config usage
 
     // /** Use StackTrace to log all exceptions **/

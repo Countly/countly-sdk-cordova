@@ -19,4 +19,5 @@ typedef void (^Result)(id _Nullable result);
 - (void) onCall:(NSString *  _Nullable)method commandString:(NSArray *  _Nullable)commandString callback:(Result _Nullable ) result;
 + (void)onNotification: (NSDictionary *) notificationMessage; // :(Boolean *)isInline :(Boolean *)coldstart
 - (void)recordPushAction;
+- (int)getTime;
 @end

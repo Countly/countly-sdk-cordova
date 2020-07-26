@@ -65,4 +65,14 @@
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command;
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command;
 
+- (void)apm:(CDVInvokedUrlCommand*)command;
+- (void)startTrace:(CDVInvokedUrlCommand*)command;
+- (void)cancelTrace:(CDVInvokedUrlCommand*)command;
+- (void)clearAllTrace:(CDVInvokedUrlCommand*)command;
+- (void)endTrace:(CDVInvokedUrlCommand*)command;
+- (void)startNetworkRequest:(CDVInvokedUrlCommand*)command;
+- (void)endNetworkRequest:(CDVInvokedUrlCommand*)command;
+- (void)setRecordAppStartTime:(CDVInvokedUrlCommand*)command;
+- (void)applicationOnCreate:(CDVInvokedUrlCommand*)command;
+
 @end

@@ -849,6 +849,18 @@ public class CountlyNative {
         return "startTrace success.";
     }
 
+    public String cancelTrace(ReadableArray args){
+        String traceKey = args.getString(0);
+        // Countly.sharedInstance().apm().cancelTrace(traceKey);
+        return "cancelTrace not implemented.";
+    }
+
+
+    public String clearAllTrace(ReadableArray args){
+        // Countly.sharedInstance().apm().clearAllTrace(traceKey);
+        return "clearAllTrace not implemented.";
+    }
+
     public String endTrace(ReadableArray args){
         String traceKey = args.getString(0);
         HashMap<String, Integer> customMetric = new HashMap<String, Integer>();

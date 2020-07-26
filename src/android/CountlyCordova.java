@@ -217,6 +217,12 @@ public class CountlyCordova extends CordovaPlugin {
         else if("startTrace".equals(action)){
             callbackContext.success(countlyNative.startTrace(args));
         }
+        else if("cancelTrace".equals(action)){
+            callbackContext.success(countlyNative.cancelTrace(args));
+        }
+        else if("clearAllTrace".equals(action)){
+            callbackContext.success(countlyNative.clearAllTrace(args));
+        }
         else if("endTrace".equals(action)){
             callbackContext.success(countlyNative.endTrace(args));
         }
@@ -228,9 +234,6 @@ public class CountlyCordova extends CordovaPlugin {
         }
         else if("setRecordAppStartTime".equals(action)){
             callbackContext.success(countlyNative.setRecordAppStartTime(args));
-        }
-        else if("applicationOnCreate".equals(action)){
-            callbackContext.success(countlyNative.applicationOnCreate(args));
         }
         else if("applicationOnCreate".equals(action)){
             callbackContext.success(countlyNative.applicationOnCreate(args));
