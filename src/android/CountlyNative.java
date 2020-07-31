@@ -582,7 +582,7 @@ public class CountlyNative {
                 if (consent.equals("starRating")) {
                     Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
                 }
-                if (consent.equals("performance")) {
+                if (consent.equals("apm")) {
                     Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.apm});
                 }
             }
@@ -626,7 +626,7 @@ public class CountlyNative {
                 if (consent.equals("starRating")) {
                     Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
                 }
-                if (consent.equals("performance")) {
+                if (consent.equals("apm")) {
                     Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.apm});
                 }
             }
@@ -858,11 +858,6 @@ public class CountlyNative {
         return "sendPushToken success.";
     }
 
-    public String apm(JSONArray args){
-        Countly.sharedInstance().apm();
-        return "apm success.";
-    }
-
     public String startTrace(JSONArray args){
         try {
             String traceKey = args.getString(0);
@@ -884,7 +879,7 @@ public class CountlyNative {
     }
 
 
-    public String clearAllTrace(JSONArray args){
+    public String clearAllTraces(JSONArray args){
         // Countly.sharedInstance().apm().clearAllTrace(traceKey);
         return "clearAllTrace not implemented.";
 
@@ -904,47 +899,29 @@ public class CountlyNative {
         }
     }
 
-    public String startNetworkRequest(JSONArray args){
-        try {
-            String networkTraceKey = args.getString(0);
-            String uniqueId = args.getString(1);
-            Countly.sharedInstance().apm().startNetworkRequest(networkTraceKey, uniqueId);
-            return "startNetworkRequest success.";
-        }catch (JSONException jsonException){
-            return jsonException.toString();
-        }
-    }
 
-    public String endNetworkRequest(JSONArray args){
+    public String recordNetworkTrace(JSONArray args){
         try {
             String networkTraceKey = args.getString(0);
-            String uniqueId = args.getString(1);
             int responseCode = Integer.parseInt(args.getString(1));
-            int requestPayloadSize = Integer.parseInt(args.getString(1));
-            int responsePayloadSize = Integer.parseInt(args.getString(1));
-            Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+            int requestPayloadSize = Integer.parseInt(args.getString(2));
+            int responsePayloadSize = Integer.parseInt(args.getString(3));
+            int startTime = Integer.parseInt(args.getString(4));
+            int endTime = Integer.parseInt(args.getString(5));
+            // Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, null, responseCode, requestPayloadSize, responsePayloadSize);
             return "endNetworkRequest success.";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
     }
 
-    public String setRecordAppStartTime(JSONArray args){
+    public String enableApm(JSONArray args){
         try {
-            String isStart = args.getString(0);
-            if(isStart.equals("true")){
-                this.config.setRecordAppStartTime(true);
-            }else{
-                this.config.setRecordAppStartTime(false);
-            }
-            return "setRecordAppStartTime success.";
+            this.config.setRecordAppStartTime(true);
+            return "enableApm success.";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
     }
 
-    public String applicationOnCreate(JSONArray args){
-        Countly.applicationOnCreate();
-        return "applicationOnCreate success.";
-    }
 }

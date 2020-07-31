@@ -214,32 +214,23 @@ public class CountlyCordova extends CordovaPlugin {
                 }
             });
         }
-        else if("apm".equals(action)){
-            callbackContext.success(countlyNative.apm(args));
-        }
         else if("startTrace".equals(action)){
             callbackContext.success(countlyNative.startTrace(args));
         }
         else if("cancelTrace".equals(action)){
             callbackContext.success(countlyNative.cancelTrace(args));
         }
-        else if("clearAllTrace".equals(action)){
-            callbackContext.success(countlyNative.clearAllTrace(args));
+        else if("clearAllTraces".equals(action)){
+            callbackContext.success(countlyNative.clearAllTraces(args));
         }
         else if("endTrace".equals(action)){
             callbackContext.success(countlyNative.endTrace(args));
         }
-        else if("startNetworkRequest".equals(action)){
-            callbackContext.success(countlyNative.startNetworkRequest(args));
+        else if("recordNetworkTrace".equals(action)){
+            callbackContext.success(countlyNative.recordNetworkTrace(args));
         }
-        else if("endNetworkRequest".equals(action)){
-            callbackContext.success(countlyNative.endNetworkRequest(args));
-        }
-        else if("setRecordAppStartTime".equals(action)){
-            callbackContext.success(countlyNative.setRecordAppStartTime(args));
-        }
-        else if("applicationOnCreate".equals(action)){
-            callbackContext.success(countlyNative.applicationOnCreate(args));
+        else if("enableApm".equals(action)){
+            callbackContext.success(countlyNative.enableApm(args));
         }
         else{
             return false;

@@ -85,7 +85,7 @@
         <button onclick="app.giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
         <button onclick="app.giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
         <button onclick="app.giveConsentAppleWatch()" class="fluid ui button blue">Give Consent AppleWatch</button>
-        <button onclick="app.giveConsentPerformance()" class="fluid ui button blue">Give Consent Performance</button>
+        <button onclick="app.giveConsentAPM()" class="fluid ui button blue">Give Consent Performance</button>
 
         </br>
         <button onclick="app.removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
@@ -98,7 +98,7 @@
         <button onclick="app.removeConsentPush()" class="fluid ui button blue">Remove Consent Push</button>
         <button onclick="app.removeConsentStarRating()" class="fluid ui button blue">Remove Consent starRating</button>
         <button onclick="app.removeConsentAppleWatch()" class="fluid ui button blue">Remove Consent AppleWatch</button>
-        <button onclick="app.removeConsentPerformance()" class="fluid ui button blue">Remove Consent Performance</button>
+        <button onclick="app.removeConsentAPM()" class="fluid ui button blue">Remove Consent Performance</button>
 
         <!-- Consent Button -->
         <div class="ui horizontal divider">User Methods End</div>
@@ -622,8 +622,8 @@
     app.giveConsentAppleWatch = function() {
         Countly.giveConsent(["AppleWatch"]);
     }
-    app.giveConsentPerformance = function(){
-        Countly.giveConsent(["performance"]);
+    app.giveConsentAPM = function(){
+        Countly.giveConsent(["apm"]);
     }
 
     app.removeConsentSessions = function() {
@@ -656,8 +656,8 @@
     app.removeConsentAppleWatch = function() {
         Countly.giveConsent(["AppleWatch"]);
     }
-    app.removeConsentPerformance = function(){
-        Countly.removeConsent(["performance"]);
+    app.removeConsentAPM = function(){
+        Countly.removeConsent(["apm"]);
     }
 
     // Remote config usage
@@ -774,23 +774,21 @@
     }
     app.recordNetworkTraceSuccess = function(){
         var networkTraceKey = "api/endpoint.1";
-        var uniqueId = "1337";
         var responseCode = successCodes[random(successCodes.length)];
         var requestPayloadSize = random(700) + 200;
         var responsePayloadSize = random(700) + 200;
         var startTime = new Date().getTime();
         var endTime = startTime + 500;
-        Countly.recordNetworkTrace(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
+        Countly.recordNetworkTrace(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
     }
     app.recordNetworkTraceFailure = function(){
         var networkTraceKey = "api/endpoint.1";
-        var uniqueId = "7331";
         var responseCode = failureCodes[random(failureCodes.length)];
         var requestPayloadSize = random(700) + 250;
         var responsePayloadSize = random(700) + 250;
         var startTime = new Date().getTime();
         var endTime = startTime + 500;
-        Countly.recordNetworkTrace(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
+        Countly.recordNetworkTrace(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
     }
     app.enableApm = function(){
         Countly.enableApm();
