@@ -54,6 +54,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if("logException".equals(action)){
             callbackContext.success(countlyNative.logException(args));
         }
+        else if("setCustomCrashSegments".equals(action)){
+            callbackContext.success(countlyNative.setCustomCrashSegments(args));
+        }
 
         else if ("start".equals(action)) {
             callbackContext.success(countlyNative.start(args));

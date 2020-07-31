@@ -202,6 +202,20 @@ public class CountlyNative {
         }
     }
 
+    public String setCustomCrashSegments(JSONArray args){
+        try {
+            this.log("setCustomCrashSegments", args);
+            Map<String, Object> segments = new HashMap<String, Object>();
+            for(int i=0,il=args.size();i<il;i+=2){
+                segments.put(args.getString(i), args.getString(i+1));
+            }
+            this.config.setCustomCrashSegments(segments);
+        return "setCustomCrashSegments success!";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
    public String askForNotificationPermission(JSONArray args){
         this.log("askForNotificationPermission", args);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

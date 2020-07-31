@@ -191,7 +191,14 @@ Countly.logException = function(exception, nonfatal, segments){
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
-
+Countly.setCustomCrashSegments = function(segments){
+    var args = [];
+    for(var key in segments){
+        args.push(key.toString());
+        args.push(segments[key].toString());
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setCustomCrashSegments",args);
+}
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
 }
@@ -381,11 +388,6 @@ Countly.setHttpPostForced = function(boolean){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setHttpPostForced",[boolean == true?"1": "0"]);
 }
 
-Countly.apm = function(){
-    var args = [];
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","apm",args);
-}
-
 Countly.startTrace = function(traceKey){
     var args = [];
     args.push(traceKey);
@@ -398,9 +400,9 @@ Countly.cancelTrace = function(traceKey){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","cancelTrace",args);
 }
 
-Countly.clearAllTrace = function(traceKey){
+Countly.clearAllTraces = function(traceKey){
     var args = [];
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","clearAllTrace",args);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","clearAllTraces",args);
 }
 
 Countly.endTrace = function(traceKey, customMetric){
@@ -414,37 +416,22 @@ Countly.endTrace = function(traceKey, customMetric){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endTrace",args);
 }
 
-Countly.startNetworkRequest = function(networkTraceKey, uniqueId){
-    var args = [];
-    args.push(networkTraceKey);
-    args.push(uniqueId);
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startNetworkRequest",args);
-}
-
-Countly.endNetworkRequest = function(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize){
+Countly.recordNetworkTrace = function(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime){
     var args = [];
     args.push(networkTraceKey);
     args.push(uniqueId);
     args.push(responseCode.toString());
     args.push(requestPayloadSize.toString());
     args.push(responsePayloadSize.toString());
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endNetworkRequest",args);
+    args.push(startTime.toString());
+    args.push(endTime.toString());
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordNetworkTrace",args);
 }
 
-
-Countly.setRecordAppStartTime = function(isRecordAppStartTime){
+Countly.enableApm = function(){
     var args = [];
-    if(isRecordAppStartTime){
-        args.push("true");
-    }else{
-        args.push("false");
-    }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setRecordAppStartTime",args);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableApm",args);
 }
 
-Countly.applicationOnCreate = function(){
-    var args = [];
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","applicationOnCreate",args);
-}
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);

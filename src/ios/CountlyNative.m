@@ -468,6 +468,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         result(@"logException!");
         });
 
+    }else if ([@"setCustomCrashSegments" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        for(int i=0,il=(int)command.count;i<il;i+=2){
+            dict[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
+        }
+        config.crashSegmentation = dict;
+        });
+        result(@"setCustomCrashSegments!");
+
     }else if ([@"sendPushToken" isEqualToString:method]) {
         if(config != nil){
             NSString* token = [command objectAtIndex:0];
@@ -869,12 +879,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 result([NSString stringWithFormat: @"Rating:%d", (int)rating]);
             }];
         });
-    }else if ([@"apm" isEqualToString:method]) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-        config.enablePerformanceMonitoring = YES;
-        });
-        result(@"apm!");
-
     }else if ([@"startTrace" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* traceKey = [command objectAtIndex:0];
@@ -889,11 +893,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
         result(@"cancelTrace!");
 
-    }else if ([@"clearAllTrace" isEqualToString:method]) {
+    }else if ([@"clearAllTraces" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance clearAllCustomTraces];
         });
-        result(@"clearAllTrace!");
+        result(@"clearAllTraces!");
 
     }else if ([@"endTrace" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
@@ -906,44 +910,21 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
         result(@"endTrace!");
 
-    }else if ([@"startNetworkRequest" isEqualToString:method]) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-        NSString* uniqueId = [command objectAtIndex:1];
-        int startTime = [self getTime];
-        if(networkRequest == nil){
-            networkRequest = [[NSMutableDictionary alloc] init];
-        }
-        [networkRequest setValue: [NSNumber numberWithInt: startTime] forKey:uniqueId];
-        });
-        result(@"startNetworkRequest!");
-
-    }else if ([@"endNetworkRequest" isEqualToString:method]) {
+    }else if ([@"recordNetworkTrace" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* networkTraceKey = [command objectAtIndex:0];
-        NSString* uniqueId = [command objectAtIndex:1];
-        if(networkRequest == nil){
-            networkRequest = [[NSMutableDictionary alloc] init];
-        }
-        if(networkRequest[uniqueId]){
-            int responseCode = [[command objectAtIndex:2] intValue];
-            int requestPayloadSize = [[command objectAtIndex:3] intValue];
-            int responsePayloadSize = [[command objectAtIndex:4] intValue];
-            int startTime = [networkRequest[uniqueId] intValue];
-            int endTime = [self getTime];
-            [Countly.sharedInstance recordNetworkTrace: networkTraceKey requestPayloadSize: requestPayloadSize responsePayloadSize: responsePayloadSize responseStatusCode: responseCode startTime: startTime endTime: endTime];
-        }
+        int responseCode = [[command objectAtIndex:1] intValue];
+        int requestPayloadSize = [[command objectAtIndex:2] intValue];
+        int responsePayloadSize = [[command objectAtIndex:3] intValue];
+        int startTime = [[command objectAtIndex:4] intValue];
+        int endTime = [[command objectAtIndex:5] intValue];
+        [Countly.sharedInstance recordNetworkTrace: networkTraceKey requestPayloadSize: requestPayloadSize responsePayloadSize: responsePayloadSize responseStatusCode: responseCode startTime: startTime endTime: endTime];
         });
-        result(@"endNetworkRequest!");
+        result(@"recordNetworkTrace!");
 
-    }else if ([@"setRecordAppStartTime" isEqualToString:method]) {
-        NSLog(@"No implementation for iOS for setRecordAppStartTime.");
-        result(@"No implementation for iOS for setRecordAppStartTime!");
-
-    }else if ([@"applicationOnCreate" isEqualToString:method]) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-        [Countly.sharedInstance appLoadingFinished];
-        });
-        result(@"applicationOnCreate!");
+    }else if ([@"enableApm" isEqualToString:method]) {
+        config.enablePerformanceMonitoring = YES;
+        result(@"enableApm!");
 
     }else if ([@"getPlatformVersion" isEqualToString:method]) {
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
@@ -952,13 +933,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         NSLog(@"Countly Bridge Method Not Implemented %@", method);
         result(@"Countly Bridge Method Not Implemented");
     }
-}
-
-- (int)getTime
-{
-    NSTimeInterval time = ([[NSDate date] timeIntervalSince1970]); // returned as a double
-    int decimalDigits = (int)(fmod(time, 1) * 1000); // this will get the 3 missing digits
-    return decimalDigits;
 }
 
 @end

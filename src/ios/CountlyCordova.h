@@ -27,6 +27,7 @@
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command;
 - (void)addCrashLog:(CDVInvokedUrlCommand*)command;
 - (void)logException:(CDVInvokedUrlCommand*)command;
+- (void)setCustomCrashSegments:(CDVInvokedUrlCommand*)command;
 - (void)sendPushToken:(CDVInvokedUrlCommand*)command;
 - (void)askForNotificationPermission:(CDVInvokedUrlCommand*)command;
 - (void)registerForNotification:(CDVInvokedUrlCommand*)command;
@@ -65,14 +66,11 @@
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command;
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command;
 
-- (void)apm:(CDVInvokedUrlCommand*)command;
 - (void)startTrace:(CDVInvokedUrlCommand*)command;
 - (void)cancelTrace:(CDVInvokedUrlCommand*)command;
-- (void)clearAllTrace:(CDVInvokedUrlCommand*)command;
+- (void)clearAllTraces:(CDVInvokedUrlCommand*)command;
 - (void)endTrace:(CDVInvokedUrlCommand*)command;
-- (void)startNetworkRequest:(CDVInvokedUrlCommand*)command;
-- (void)endNetworkRequest:(CDVInvokedUrlCommand*)command;
-- (void)setRecordAppStartTime:(CDVInvokedUrlCommand*)command;
-- (void)applicationOnCreate:(CDVInvokedUrlCommand*)command;
+- (void)recordNetworkTrace:(CDVInvokedUrlCommand*)command;
+- (void)enableApm:(CDVInvokedUrlCommand*)command;
 
 @end

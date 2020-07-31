@@ -119,6 +119,7 @@
 
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
+        <button onclick="app.setCustomCrashSegments()" class="fluid ui button teal">Set Custom Crash Segment</button>
         <button onclick="app.setloggingenabled()" class="fluid ui button teal">Enable Debug Mode</button>
         <button onclick="app.setloggingdisabled()" class="fluid ui button teal">Disable Debug Mode</button>
         <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
@@ -139,15 +140,11 @@
         <div class="ui horizontal divider">Rating Methods End</div>
 
         <div class="ui horizontal divider">Performance Methods Start</div>
-        <button onclick="app.apm()" class="fluid ui black button">APM</button>
         <button onclick="app.startTrace()" class="fluid ui black button">Start Trace</button>
         <button onclick="app.endTrace()" class="fluid ui black button">End Trace</button>
-        <button onclick="app.startNetworkRequestSuccess()" class="fluid ui black button">Start Network Request Success</button>
-        <button onclick="app.endNetworkRequestSuccess()" class="fluid ui black button">End Network Request Success</button>
-        <button onclick="app.startNetworkRequestFailure()" class="fluid ui black button">Start Network Request Failure</button>
-        <button onclick="app.endNetworkRequestFailure()" class="fluid ui black button">End Network Request Failure</button>
-        <button onclick="app.setRecordAppStartTime()" class="fluid ui black button">Set Record App Start Time</button>
-        <button onclick="app.applicationOnCreate()" class="fluid ui black button">Application on create</button>
+        <button onclick="app.recordNetworkTraceSuccess()" class="fluid ui black button">Record Network Trace Success</button>
+        <button onclick="app.recordNetworkTraceFailure()" class="fluid ui black button">Record Network Trace Failure</button>
+        <button onclick="app.enableApm()" class="fluid ui black button">Enable APM</button>
         <div class="ui horizontal divider">Performance Methods End</div>
 
     </div>
@@ -760,9 +757,6 @@
     var successCodes = [100, 101, 200, 201, 202, 205, 300, 301, 303, 305];
     var failureCodes = [400, 402, 405, 408, 500, 501, 502, 505];
 
-    app.apm = function(){
-        Countly.apm();
-    }
     app.startTrace = function(){
         var traceKey = "Trace Key";
         Countly.startTrace(traceKey);
@@ -775,40 +769,35 @@
         };
         Countly.endTrace(traceKey, customMetric);
     }
-    app.startNetworkRequestSuccess = function(){
-        var networkTraceKey = "api/endpoint.1";
-        var uniqueId = "1337";
-        Countly.startNetworkRequest(networkTraceKey, uniqueId);
-    }
     function random(number){
         return Math.floor(Math.random() * number);
     }
-    app.endNetworkRequestSuccess = function(){
+    app.recordNetworkTraceSuccess = function(){
         var networkTraceKey = "api/endpoint.1";
         var uniqueId = "1337";
         var responseCode = successCodes[random(successCodes.length)];
         var requestPayloadSize = random(700) + 200;
         var responsePayloadSize = random(700) + 200;
-        Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+        var startTime = new Date().getTime();
+        var endTime = startTime + 500;
+        Countly.recordNetworkTrace(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
     }
-    app.startNetworkRequestFailure = function(){
-        var networkTraceKey = "api/endpoint.1";
-        var uniqueId = "7331";
-        Countly.startNetworkRequest(networkTraceKey, uniqueId);
-    }
-    app.endNetworkRequestFailure = function(){
+    app.recordNetworkTraceFailure = function(){
         var networkTraceKey = "api/endpoint.1";
         var uniqueId = "7331";
         var responseCode = failureCodes[random(failureCodes.length)];
         var requestPayloadSize = random(700) + 250;
         var responsePayloadSize = random(700) + 250;
-        Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+        var startTime = new Date().getTime();
+        var endTime = startTime + 500;
+        Countly.recordNetworkTrace(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
     }
-    app.setRecordAppStartTime = function(){
-        Countly.setRecordAppStartTime(true);
+    app.enableApm = function(){
+        Countly.enableApm();
     }
-    app.applicationOnCreate = function(){
-        Countly.applicationOnCreate();
+    app.setCustomCrashSegments = function(){
+        var segment = {"Key": "Value"};
+        Countly.setCustomCrashSegments(segment);
     }
     // Remote config usage
 
