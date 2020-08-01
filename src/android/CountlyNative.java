@@ -551,41 +551,7 @@ public class CountlyNative {
     public String giveConsent(JSONArray args){
         try {
             this.log("giveConsent", args);
-            String consent = null;
-            List<String> features = new ArrayList<>();
-            for (int i = 0; i < args.length(); i++) {
-                consent = args.getString(i);
-                if (consent.equals("sessions")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
-                }
-                if (consent.equals("events")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
-                }
-                if (consent.equals("views")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
-                }
-                if (consent.equals("location")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
-                }
-                if (consent.equals("crashes")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-                }
-                if (consent.equals("attribution")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-                }
-                if (consent.equals("users")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
-                }
-                if (consent.equals("push")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
-                }
-                if (consent.equals("starRating")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
-                }
-                if (consent.equals("apm")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.apm});
-                }
-            }
+            Countly.sharedInstance().consent().giveConsent(getStringArray(args));
             return "giveConsent: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -595,41 +561,7 @@ public class CountlyNative {
     public String removeConsent(JSONArray args){
         try {
             this.log("removeConsent", args);
-            String consent = null;
-            List<String> features = new ArrayList<>();
-            for (int i = 0; i < args.length(); i++) {
-                consent = args.getString(i);
-                if (consent.equals("sessions")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
-                }
-                if (consent.equals("events")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
-                }
-                if (consent.equals("views")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
-                }
-                if (consent.equals("location")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
-                }
-                if (consent.equals("crashes")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-                }
-                if (consent.equals("attribution")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-                }
-                if (consent.equals("users")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
-                }
-                if (consent.equals("push")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
-                }
-                if (consent.equals("starRating")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
-                }
-                if (consent.equals("apm")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.apm});
-                }
-            }
+            Countly.sharedInstance().consent().removeConsent(getStringArray(args));
             return "removeConsent: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -889,8 +821,12 @@ public class CountlyNative {
         try {
             String traceKey = args.getString(0);
             HashMap<String, Integer> customMetric = new HashMap<String, Integer>();
-            for (int i = 1, il = args.length(); i < il; i += 2) {
+            try{
                 customMetric.put(args.getString(i), Integer.parseInt(args.getString(i + 1)));
+            }catch(Exception exception){
+                if(Countly.sharedInstance().isLoggingEnabled()){
+                    Log.e(Countly.TAG, "[CountlyCordova] endTrace, could not parse metrics, skipping it. ");
+                }
             }
             Countly.sharedInstance().apm().endTrace(traceKey, customMetric);
             return "endTrace success.";
@@ -923,5 +859,15 @@ public class CountlyNative {
             return jsonException.toString();
         }
     }
-
+    public static String[] getStringArray(JSONArray jsonArray) {
+        String[] stringArray = null;
+        if (jsonArray != null) {
+            int length = jsonArray.length();
+            stringArray = new String[length];
+            for (int i = 0; i < length; i++) {
+                stringArray[i] = jsonArray.optString(i);
+            }
+        }
+        return stringArray;
+    }
 }
