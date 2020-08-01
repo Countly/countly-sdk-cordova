@@ -707,10 +707,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
         NSArray *keysOnly = [randomSelection copy];
 
-        // NSArray * keysOnly[] = {};
-        // for(int i=0,il=(int)command.count;i<il;i++){
-        //     keysOnly[i] = [command objectAtIndex:i];
-        // }
         [Countly.sharedInstance updateRemoteConfigOnlyForKeys: keysOnly completionHandler:^(NSError * error)
          {
              if (!error){
@@ -829,7 +825,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 metrics[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
             }
             @catch(NSException *exception){
-                NSLog(@"[CountlyCordova] Exception occured while parsing metrics: %@", locationString);
+                NSLog(@"[CountlyCordova] Exception occured while parsing metrics: %@", exception);
             }
         }
         [Countly.sharedInstance endCustomTrace: traceKey metrics: metrics];
