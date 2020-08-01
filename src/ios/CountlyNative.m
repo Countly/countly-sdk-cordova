@@ -468,7 +468,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         result(@"logException!");
         });
 
-    }else if ([@"setCustomCrashSegments" isEqualToString:method]) {
+    }else if ([@"setCustomCrashSegment" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         for(int i=0,il=(int)command.count;i<il;i+=2){
@@ -476,7 +476,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
         config.crashSegmentation = dict;
         });
-        result(@"setCustomCrashSegments!");
+        result(@"setCustomCrashSegment!");
 
     }else if ([@"sendPushToken" isEqualToString:method]) {
         if(config != nil){

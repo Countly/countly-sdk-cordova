@@ -162,15 +162,15 @@ public class CountlyNative {
             return jsonException.toString();
         }
     }
-    public String setCustomCrashSegments(JSONArray args){
+    public String setCustomCrashSegment(JSONArray args){
         try {
-            this.log("setCustomCrashSegments", args);
+            this.log("setCustomCrashSegment", args);
             HashMap<String, Object> segments = new HashMap<String, Object>();
             for (int i = 0, il = args.length(); i < il; i += 2) {
                 segments.put(args.getString(i), args.getString(i + 1));
             }
             this.config.setCustomCrashSegment(segments);
-            return "setCustomCrashSegments";
+            return "setCustomCrashSegment";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }

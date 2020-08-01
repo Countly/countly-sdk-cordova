@@ -27,7 +27,7 @@
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command;
 - (void)addCrashLog:(CDVInvokedUrlCommand*)command;
 - (void)logException:(CDVInvokedUrlCommand*)command;
-- (void)setCustomCrashSegments:(CDVInvokedUrlCommand*)command;
+- (void)setCustomCrashSegment:(CDVInvokedUrlCommand*)command;
 - (void)sendPushToken:(CDVInvokedUrlCommand*)command;
 - (void)askForNotificationPermission:(CDVInvokedUrlCommand*)command;
 - (void)registerForNotification:(CDVInvokedUrlCommand*)command;

@@ -191,13 +191,13 @@ Countly.logException = function(exception, nonfatal, segments){
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
-Countly.setCustomCrashSegments = function(segments){
+Countly.setCustomCrashSegment = function(segments){
     var args = [];
     for(var key in segments){
         args.push(key.toString());
         args.push(segments[key].toString());
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setCustomCrashSegments",args);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setCustomCrashSegment",args);
 }
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);

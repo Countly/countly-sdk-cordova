@@ -119,7 +119,7 @@
 
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
-        <button onclick="app.setCustomCrashSegments()" class="fluid ui button teal">Set Custom Crash Segment</button>
+        <button onclick="app.setCustomCrashSegment()" class="fluid ui button teal">Set Custom Crash Segment</button>
         <button onclick="app.setloggingenabled()" class="fluid ui button teal">Enable Debug Mode</button>
         <button onclick="app.setloggingdisabled()" class="fluid ui button teal">Disable Debug Mode</button>
         <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
@@ -793,9 +793,9 @@
     app.enableApm = function(){
         Countly.enableApm();
     }
-    app.setCustomCrashSegments = function(){
+    app.setCustomCrashSegment = function(){
         var segment = {"Key": "Value"};
-        Countly.setCustomCrashSegments(segment);
+        Countly.setCustomCrashSegment(segment);
     }
     // Remote config usage
 

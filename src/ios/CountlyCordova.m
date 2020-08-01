@@ -317,12 +317,12 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
-- (void)setCustomCrashSegments:(CDVInvokedUrlCommand*)command
+- (void)setCustomCrashSegment:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
         countlyNative = CountlyNative.new;
     }
-    [countlyNative onCall: @"setCustomCrashSegments" commandString: command.arguments callback: ^(NSString * theResult)
+    [countlyNative onCall: @"setCustomCrashSegment" commandString: command.arguments callback: ^(NSString * theResult)
      {
          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

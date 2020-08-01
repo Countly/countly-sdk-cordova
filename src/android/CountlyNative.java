@@ -43,17 +43,6 @@ public class CountlyNative {
     private CountlyConfig config = new CountlyConfig();
     private static Callback notificationListener = null;
     private static String lastStoredNotification = null;
-    private final Set<String> validConsentFeatureNames = new HashSet<String>(Arrays.asList(
-            Countly.CountlyFeatureNames.sessions,
-            Countly.CountlyFeatureNames.events,
-            Countly.CountlyFeatureNames.views,
-            Countly.CountlyFeatureNames.location,
-            Countly.CountlyFeatureNames.crashes,
-            Countly.CountlyFeatureNames.attribution,
-            Countly.CountlyFeatureNames.users,
-            Countly.CountlyFeatureNames.push,
-            Countly.CountlyFeatureNames.starRating
-    ));
     public CountlyNative(Activity _activity, Context _context){
         this.activity = _activity;
         this.context = _context;
@@ -202,15 +191,15 @@ public class CountlyNative {
         }
     }
 
-    public String setCustomCrashSegments(JSONArray args){
+    public String setCustomCrashSegment(JSONArray args){
         try {
             this.log("setCustomCrashSegments", args);
             Map<String, Object> segments = new HashMap<String, Object>();
-            for(int i=0,il=args.size();i<il;i+=2){
+            for(int i=0,il=args.length();i<il;i+=2){
                 segments.put(args.getString(i), args.getString(i+1));
             }
-            this.config.setCustomCrashSegments(segments);
-        return "setCustomCrashSegments success!";
+            this.config.setCustomCrashSegment(segments);
+            return "setCustomCrashSegments success!";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -549,23 +538,15 @@ public class CountlyNative {
     }
 
     public String giveConsent(JSONArray args){
-        try {
-            this.log("giveConsent", args);
-            Countly.sharedInstance().consent().giveConsent(getStringArray(args));
-            return "giveConsent: Success";
-        }catch (JSONException jsonException){
-            return jsonException.toString();
-        }
+        this.log("giveConsent", args);
+        Countly.sharedInstance().consent().giveConsent(getStringArray(args));
+        return "giveConsent: Success";
     }
 
     public String removeConsent(JSONArray args){
-        try {
-            this.log("removeConsent", args);
-            Countly.sharedInstance().consent().removeConsent(getStringArray(args));
-            return "removeConsent: Success";
-        }catch (JSONException jsonException){
-            return jsonException.toString();
-        }
+        this.log("removeConsent", args);
+        Countly.sharedInstance().consent().removeConsent(getStringArray(args));
+        return "removeConsent: Success";
     }
 
     public String giveAllConsent(JSONArray args){
@@ -821,11 +802,13 @@ public class CountlyNative {
         try {
             String traceKey = args.getString(0);
             HashMap<String, Integer> customMetric = new HashMap<String, Integer>();
-            try{
-                customMetric.put(args.getString(i), Integer.parseInt(args.getString(i + 1)));
-            }catch(Exception exception){
-                if(Countly.sharedInstance().isLoggingEnabled()){
-                    Log.e(Countly.TAG, "[CountlyCordova] endTrace, could not parse metrics, skipping it. ");
+            for (int i = 1, il = args.length(); i < il; i += 2) {
+                try{
+                    customMetric.put(args.getString(i), Integer.parseInt(args.getString(i + 1)));
+                }catch(Exception exception){
+                    if(Countly.sharedInstance().isLoggingEnabled()){
+                        Log.e(Countly.TAG, "[CountlyCordova] endTrace, could not parse metrics, skipping it. ");
+                    }
                 }
             }
             Countly.sharedInstance().apm().endTrace(traceKey, customMetric);
@@ -852,12 +835,8 @@ public class CountlyNative {
     }
 
     public String enableApm(JSONArray args){
-        try {
-            this.config.setRecordAppStartTime(true);
-            return "enableApm success.";
-        }catch (JSONException jsonException){
-            return jsonException.toString();
-        }
+        this.config.setRecordAppStartTime(true);
+        return "enableApm success.";
     }
     public static String[] getStringArray(JSONArray jsonArray) {
         String[] stringArray = null;
