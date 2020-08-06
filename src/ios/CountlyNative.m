@@ -292,7 +292,19 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"recordView" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* recordView = [command objectAtIndex:0];
-        [Countly.sharedInstance recordView:recordView];
+        NSMutableDictionary *segments = [[NSMutableDictionary alloc] init];
+        int il=(int)command.count;
+        if(il > 2) {
+            for(int i=1;i<il;i+=2){
+                @try{
+                    segments[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
+                }
+                @catch(NSException *exception){
+                    NSLog(@"[CountlyFlutter] recordView: Exception occured while parsing segments: %@", exception);
+                }
+            }
+        }
+        [Countly.sharedInstance recordView:recordView segmentation:segments];
         result(@"recordView Sent!");
         });
     }else if ([@"setLoggingEnabled" isEqualToString:method]) {
@@ -884,8 +896,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
     }else if ([@"getPlatformVersion" isEqualToString:method]) {
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-    }
-    else {
+    }else if ([@"enableAttribution" isEqualToString:method]) {
+        config.enableAttribution = YES;
+        result(@"enableAttribution");
+    }else {
         NSLog(@"Countly Bridge Method Not Implemented %@", method);
         result(@"Countly Bridge Method Not Implemented");
     }

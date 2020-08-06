@@ -665,7 +665,17 @@ public class CountlyNative {
         try {
             this.log("recordView", args);
             String viewName = args.getString(0);
-            Countly.sharedInstance().views().recordView(viewName);
+            HashMap<String, Object> segmentation = new HashMap<String, Object>();
+            for(int i=1,il=args.length();i<il;i+=2){
+                try{
+                    segmentation.put(args.getString(i), args.getString(i+1));
+                }catch(Exception exception){
+                    if(isDebug){
+                        Log.e(Countly.TAG, "[CountlyCordova] recordView, could not parse segments, skipping it. ");
+                    }
+                }
+            }
+            Countly.sharedInstance().views().recordView(viewName, segmentation);
             return "View name sent: " + viewName;
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -836,6 +846,12 @@ public class CountlyNative {
             return jsonException.toString();
         }
         return "sendPushToken success.";
+    }
+
+    public String enableAttribution(JSONArray args){
+        this.log("enableAttribution", args);
+        this.config.setEnableAttribution(true);
+        return "enableAttribution success!";
     }
 
 

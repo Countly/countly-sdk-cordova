@@ -64,5 +64,6 @@
 - (void)getRemoteConfigValueForKey:(CDVInvokedUrlCommand*)command;
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command;
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command;
+- (void)enableAttribution:(CDVInvokedUrlCommand*)command;
 
 @end
