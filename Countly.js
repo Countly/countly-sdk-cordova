@@ -26,11 +26,14 @@ Countly.init = function(serverUrl,appKey, deviceId){
     };
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
 }
-/// Record custom view to Countly.
-///
-/// [recordView] - name of the view
-/// [segments] - allows to add optional segmentation,
-/// Supported data type for segments values are String, int, double and bool
+
+/**
+ * Record custom view to Countly.
+ * 
+ * @param {string} recordView - name of the view
+ * @param {Map} segments - allows to add optional segmentation,
+ * Supported data type for segments values are String, int, double and bool
+ */
 Countly.recordView = function(recordView, segments){
     var args = [];
     args.push(String(recordView) || "");
@@ -395,7 +398,7 @@ Countly.setHttpPostForced = function(boolean){
 }
 
 
-/// Enable campaign attribution reporting to Countly.
+/** Enable campaign attribution reporting to Countly. */
 Countly.enableAttribution = function() {
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableAttribution",[]);
 }
