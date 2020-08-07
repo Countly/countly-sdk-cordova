@@ -83,6 +83,7 @@ public class CountlyNative {
             Countly.sharedInstance().onStart(activity);
             return "initialized: success";
         }catch (JSONException jsonException){
+            logError("init", jsonException);
             return jsonException.toString();
         }
     }
@@ -91,6 +92,13 @@ public class CountlyNative {
         if(isDebug){
             Log.i("Countly Native", "Method: "+method);
             Log.i("Countly Native", "Arguments: "+args.toString());
+        }
+    }
+
+    public void logError(String method, JSONException exception){
+        if(isDebug){
+            Log.i("Countly Native", "Method: "+method);
+            Log.i("Countly Native", "Exception: "+exception.toString());
         }
     }
 
@@ -106,6 +114,7 @@ public class CountlyNative {
             }
             return "changeDeviceId success!";
         }catch (JSONException jsonException){
+            logError("changeDeviceId", jsonException);
             return jsonException.toString();
         }
     }
@@ -121,6 +130,7 @@ public class CountlyNative {
             }
             return "setHttpPostForced";
         }catch (JSONException jsonException){
+            logError("setHttpPostForced", jsonException);
             return jsonException.toString();
         }
     }
@@ -132,6 +142,7 @@ public class CountlyNative {
             this.config.setParameterTamperingProtectionSalt(salt);
             return "setParameterTamperingProtectionSalt success!";
         }catch (JSONException jsonException){
+            logError("enableParameterTamperingProtection", jsonException);
             return jsonException.toString();
         }
     }
@@ -145,6 +156,7 @@ public class CountlyNative {
             Countly.sharedInstance().setLocation(null, null, latlng, null);
             return "setLocation success!";
         }catch (JSONException jsonException){
+            logError("setLocation", jsonException);
             return jsonException.toString();
         }
     }
@@ -162,6 +174,7 @@ public class CountlyNative {
             Countly.sharedInstance().crashes().addCrashBreadcrumb(record);
             return "addCrashLog success";
         }catch (JSONException jsonException){
+            logError("addCrashLog", jsonException);
             return jsonException.toString();
         }
     }
@@ -175,6 +188,7 @@ public class CountlyNative {
             this.config.setCustomCrashSegment(segments);
             return "setCustomCrashSegments";
         }catch (JSONException jsonException){
+            logError("setCustomCrashSegments", jsonException);
             return jsonException.toString();
         }
     }
@@ -187,6 +201,7 @@ public class CountlyNative {
             Countly.sharedInstance().crashes().recordHandledException(exception);
             return "logException success!";
         }catch (JSONException jsonException){
+            logError("logException", jsonException);
             return jsonException.toString();
         }
     }
@@ -201,6 +216,7 @@ public class CountlyNative {
             this.config.setCustomCrashSegment(segments);
             return "setCustomCrashSegments success!";
         }catch (JSONException jsonException){
+            logError("setCustomCrashSegment", jsonException);
             return jsonException.toString();
         }
     }
@@ -235,7 +251,7 @@ public class CountlyNative {
    }
     public String registerForNotification(JSONArray args, final Callback theCallback){
         notificationListener = theCallback;
-        Log.i("CountlyNative", "registerForNotification theCallback");
+        this.log("registerForNotification", args);
         if(lastStoredNotification != null){
             theCallback.callback(lastStoredNotification);
             lastStoredNotification = null;
@@ -254,6 +270,7 @@ public class CountlyNative {
             }
             return "pushTokenType: success";
         }catch (JSONException jsonException){
+            logError("pushTokenType", jsonException);
             return jsonException.toString();
         }
     }
@@ -297,6 +314,7 @@ public class CountlyNative {
             Countly.sharedInstance().events().startEvent(startEvent);
             return "startEvent";
         }catch (JSONException jsonException){
+            logError("startEvent", jsonException);
             return jsonException.toString();
         }
     }
@@ -307,6 +325,7 @@ public class CountlyNative {
             Countly.sharedInstance().events().cancelEvent(cancelEvent);
             return "cancelEvent";
         }catch (JSONException jsonException){
+            logError("cancelEvent", jsonException);
             return jsonException.toString();
         }
     }
@@ -326,6 +345,7 @@ public class CountlyNative {
             Countly.sharedInstance().events().endEvent(key, segmentation, count, sum);
             return "endEvent for:" + key;
         }catch (JSONException jsonException){
+            logError("endEvent", jsonException);
             return jsonException.toString();
         }
     }
@@ -346,6 +366,7 @@ public class CountlyNative {
             Countly.sharedInstance().events().recordEvent(key, segmentation, count, sum, duration);
             return "recordEvent for: " + key;
         }catch (JSONException jsonException){
+            logError("recordEvent", jsonException);
             return jsonException.toString();
         }
     }
@@ -363,6 +384,7 @@ public class CountlyNative {
             }
             return "setLoggingEnabled success!";
         }catch (JSONException jsonException){
+            logError("setLoggingEnabled", jsonException);
             return jsonException.toString();
         }
     }
@@ -388,6 +410,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "setuserdata success";
         }catch (JSONException jsonException){
+            logError("setuserdata", jsonException);
             return jsonException.toString();
         }
     }
@@ -401,6 +424,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_setProperty success!";
         }catch (JSONException jsonException){
+            logError("userData_setProperty", jsonException);
             return jsonException.toString();
         }
     }
@@ -413,6 +437,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_increment: success";
         }catch (JSONException jsonException){
+            logError("userData_increment", jsonException);
             return jsonException.toString();
         }
     }
@@ -427,6 +452,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_incrementBy success!";
         }catch (JSONException jsonException){
+            logError("userData_incrementBy", jsonException);
             return jsonException.toString();
         }
     }
@@ -440,6 +466,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_multiply success!";
         }catch (JSONException jsonException){
+            logError("userData_multiply", jsonException);
             return jsonException.toString();
         }
     }
@@ -453,6 +480,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_saveMax success!";
         }catch (JSONException jsonException){
+            logError("userData_saveMax", jsonException);
             return jsonException.toString();
         }
     }
@@ -466,6 +494,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_saveMin success!";
         }catch (JSONException jsonException){
+            logError("userData_saveMin", jsonException);
             return jsonException.toString();
         }
     }
@@ -479,6 +508,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_setOnce success!";
         }catch (JSONException jsonException){
+            logError("userData_setOnce", jsonException);
             return jsonException.toString();
         }
     }
@@ -493,6 +523,7 @@ public class CountlyNative {
             return "userData_pushUniqueValue success!";
         }catch (JSONException jsonException){
             return jsonException.toString();
+            logError("userData_pushUniqueValue", jsonException);
         }
     }
 
@@ -505,6 +536,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_pushValue success!";
         }catch (JSONException jsonException){
+            logError("userData_pushValue", jsonException);
             return jsonException.toString();
         }
     }
@@ -518,6 +550,7 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_pullValue success!";
         }catch (JSONException jsonException){
+            logError("userData_pullValue", jsonException);
             return jsonException.toString();
         }
     }
@@ -533,6 +566,7 @@ public class CountlyNative {
             this.config.setRequiresConsent(consentFlag);
             return "setRequiresConsent: Success";
         }catch (JSONException jsonException){
+            logError("setRequiresConsent", jsonException);
             return jsonException.toString();
         }
     }
@@ -551,48 +585,15 @@ public class CountlyNative {
 
     public String giveAllConsent(JSONArray args){
         this.log("giveAllConsent", args);
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+        Countly.sharedInstance().consent().giveConsentAll();
         return "giveAllConsent: Success";
     }
 
     public String removeAllConsent(JSONArray args){
         this.log("removeAllConsent", args);
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+        Countly.sharedInstance().consent().removeConsentAll();
         return "removeAllConsent: Success";
     }
-
-    // public String sendRating(JSONArray args){
-    //     try {
-    //         String ratingString = args.getString(0);
-    //         int rating = Integer.parseInt(ratingString);
-
-    //         Map<String, String> segm = new HashMap<>();
-    //         segm.put("platform", "android");
-    //         // segm.put("app_version", DeviceInfo.getAppVersion(context));
-    //         segm.put("rating", "" + rating);
-
-    //         Countly.sharedInstance().recordEvent("[CLY]_star_rating", segm, 1);
-    //         return "sendRating: " + ratingString;
-    //     }catch (JSONException jsonException){
-    //         return jsonException.toString();
-    //     }
-    // }
 
     public String recordView(JSONArray args){
         try {
@@ -601,6 +602,7 @@ public class CountlyNative {
             Countly.sharedInstance().views().recordView(viewName);
             return "View name sent: " + viewName;
         }catch (JSONException jsonException){
+            logError("recordView", jsonException);
             return jsonException.toString();
         }
     }
@@ -629,6 +631,7 @@ public class CountlyNative {
             Countly.sharedInstance().setLocation(country, city, latlng, ipAddress);
             return "setOptionalParametersForInitialization sent.";
         }catch (JSONException jsonException){
+            logError("setOptionalParametersForInitialization", jsonException);
             return jsonException.toString();
         }
     }
@@ -683,6 +686,7 @@ public class CountlyNative {
             });
             return "updateRemoteConfigForKeysOnly: success";
         }catch (JSONException jsonException){
+            logError("updateRemoteConfigForKeysOnly", jsonException);final Callback theCallback){
             return jsonException.toString();
         }
     }
@@ -706,6 +710,7 @@ public class CountlyNative {
             });
             return "updateRemoteConfigExceptKeys: Success";
         }catch (JSONException jsonException){
+            logError("updateRemoteConfigExceptKeys", jsonException);final Callback theCallback){
             return jsonException.toString();
         }
     }
@@ -722,6 +727,7 @@ public class CountlyNative {
             String getRemoteConfigValueForKeyResult = Countly.sharedInstance().remoteConfig().getValueForKey(args.getString(0)).toString();
             return getRemoteConfigValueForKeyResult;
         }catch (JSONException jsonException){
+            logError("getRemoteConfigValueForKey", jsonException);
             return jsonException.toString();
         }
     }
@@ -743,6 +749,7 @@ public class CountlyNative {
             });
             return "askForFeedback: success";
         }catch (JSONException jsonException){
+            logError("askForFeedback", jsonException);final Callback theCallback){
             theCallback.callback(jsonException.toString());
             return jsonException.toString();
         }
@@ -766,6 +773,7 @@ public class CountlyNative {
                 connectionQueue_.tokenSession(token, Countly.CountlyMessagingMode.TEST);
             }
         }catch (JSONException jsonException){
+            logError("sendPushToken", jsonException);
             return jsonException.toString();
         }
         return "sendPushToken success.";
@@ -777,6 +785,7 @@ public class CountlyNative {
             Countly.sharedInstance().apm().startTrace(traceKey);
             return "startTrace success.";
         }catch (JSONException jsonException){
+            logError("startTrace", jsonException);
             return jsonException.toString();
         }
     }
@@ -787,6 +796,7 @@ public class CountlyNative {
             // Countly.sharedInstance().apm().cancelTrace(traceKey);
             return "cancelTrace not implemented.";
         }catch (JSONException jsonException){
+            logError("cancelTrace", jsonException);
             return jsonException.toString();
         }
     }
@@ -814,6 +824,7 @@ public class CountlyNative {
             Countly.sharedInstance().apm().endTrace(traceKey, customMetric);
             return "endTrace success.";
         }catch (JSONException jsonException){
+            logError("endTrace", jsonException);
             return jsonException.toString();
         }
     }
@@ -830,6 +841,7 @@ public class CountlyNative {
             // Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, null, responseCode, requestPayloadSize, responsePayloadSize);
             return "endNetworkRequest success.";
         }catch (JSONException jsonException){
+            logError("recordNetworkTrace", jsonException);
             return jsonException.toString();
         }
     }
