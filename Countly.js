@@ -27,8 +27,24 @@ Countly.init = function(serverUrl,appKey, deviceId){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","init",args);
 }
 
-Countly.recordView = function(recordView){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",[recordView || ""]);
+/**
+ * Record custom view to Countly.
+ * 
+ * @param {string} recordView - name of the view
+ * @param {Map} segments - allows to add optional segmentation,
+ * Supported data type for segments values are String, int, double and bool
+ */
+Countly.recordView = function(recordView, segments){
+    var args = [];
+    args.push(String(recordView) || "");
+    if(!segments){
+        segments = {};
+    }
+    for(var key in segments){
+        args.push(key);
+        args.push(segments[key]);
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",args);
 };
 
 // countly enable logger
@@ -379,6 +395,12 @@ Countly.sendPushToken = function(options){
 //setHttpPostForced
 Countly.setHttpPostForced = function(boolean){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setHttpPostForced",[boolean == true?"1": "0"]);
+}
+
+
+/** Enable campaign attribution reporting to Countly. */
+Countly.enableAttribution = function() {
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableAttribution",[]);
 }
 
 window.Countly = Countly;
