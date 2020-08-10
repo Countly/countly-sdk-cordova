@@ -87,7 +87,7 @@ public class CountlyNative {
         }
     }
 
-    public void log(String method, JSONArray args){
+    public static void log(String method, JSONArray args){
         if(Countly.sharedInstance().isLoggingEnabled()){
             Log.i("Countly Native", "Method: "+method);
             Log.i("Countly Native", "Arguments: "+args.toString());
@@ -856,8 +856,8 @@ public class CountlyNative {
             int responseCode = Integer.parseInt(args.getString(1));
             int requestPayloadSize = Integer.parseInt(args.getString(2));
             int responsePayloadSize = Integer.parseInt(args.getString(3));
-            int startTime = Integer.parseInt(args.getString(4));
-            int endTime = Integer.parseInt(args.getString(5));
+            long startTime = Long.parseLong(args.getString(4));
+            long endTime = Long.parseLong(args.getString(5));
             // Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, null, responseCode, requestPayloadSize, responsePayloadSize);
             return "endNetworkRequest success.";
         }catch (JSONException jsonException){
