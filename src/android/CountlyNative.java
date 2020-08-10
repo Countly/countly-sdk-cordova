@@ -573,21 +573,21 @@ public class CountlyNative {
 
     public String giveConsent(JSONArray args){
         this.log("giveConsent", args);
-        String stringArray = new String[args.length()];
+        String[] features = new String[args.length()];
         for (int i = 0; i < length; i++) {
-            stringArray[i] = jsonArray.optString(i);
+            features[i] = jsonArray.getString(i);
         }
-        Countly.sharedInstance().consent().giveConsent(stringArray);
+        Countly.sharedInstance().consent().giveConsent(features);
         return "giveConsent: Success";
     }
 
     public String removeConsent(JSONArray args){
         this.log("removeConsent", args);
-        String stringArray = new String[args.length()];
+        String[] features = new String[args.length()];
         for (int i = 0; i < length; i++) {
-            stringArray[i] = jsonArray.optString(i);
+            features[i] = jsonArray.getString(i);
         }
-        Countly.sharedInstance().consent().removeConsent(stringArray);
+        Countly.sharedInstance().consent().removeConsent(features);
         return "removeConsent: Success";
     }
 
