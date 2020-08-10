@@ -221,7 +221,7 @@ public class CountlyNative {
         }
     }
 
-   public String askForNotificationPermission(JSONArray args){
+    public String askForNotificationPermission(JSONArray args){
         this.log("askForNotificationPermission", args);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelName = "Default Name";
@@ -232,23 +232,23 @@ public class CountlyNative {
                 channel.setDescription(channelDescription);
                 notificationManager.createNotificationChannel(channel);
             }
-       }
-       CountlyPush.init(activity.getApplication(), pushTokenTypeVariable);
-       FirebaseApp.initializeApp(context);
-       FirebaseInstanceId.getInstance().getInstanceId()
-               .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                   @Override
-                   public void onComplete(Task<InstanceIdResult> task) {
-                       if (!task.isSuccessful()) {
-                           Log.w("Tag", "getInstanceId failed", task.getException());
-                           return;
-                       }
-                       String token = task.getResult().getToken();
-                       CountlyPush.onTokenRefresh(token);
-                   }
-               });
-       return "askForNotificationPermission";
-   }
+        }
+        CountlyPush.init(activity.getApplication(), pushTokenTypeVariable);
+        FirebaseApp.initializeApp(context);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("Tag", "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        String token = task.getResult().getToken();
+                        CountlyPush.onTokenRefresh(token);
+                    }
+                });
+        return "askForNotificationPermission";
+    }
     public String registerForNotification(JSONArray args, final Callback theCallback){
         notificationListener = theCallback;
         this.log("registerForNotification", args);
@@ -522,8 +522,8 @@ public class CountlyNative {
             Countly.userData.save();
             return "userData_pushUniqueValue success!";
         }catch (JSONException jsonException){
-            return jsonException.toString();
             logError("userData_pushUniqueValue", jsonException);
+            return jsonException.toString();
         }
     }
 
@@ -572,23 +572,33 @@ public class CountlyNative {
     }
 
     public String giveConsent(JSONArray args){
-        this.log("giveConsent", args);
-        String[] features = new String[args.length()];
-        for (int i = 0; i < length; i++) {
-            features[i] = jsonArray.getString(i);
+        try {
+            this.log("giveConsent", args);
+            String[] features = new String[args.length()];
+            for (int i = 0; i < args.length(); i++) {
+                features[i] = args.getString(i);
+            }
+            Countly.sharedInstance().consent().giveConsent(features);
+            return "giveConsent: Success";
+        }catch (JSONException jsonException){
+            logError("giveConsent", jsonException);
+            return jsonException.toString();
         }
-        Countly.sharedInstance().consent().giveConsent(features);
-        return "giveConsent: Success";
     }
 
     public String removeConsent(JSONArray args){
-        this.log("removeConsent", args);
-        String[] features = new String[args.length()];
-        for (int i = 0; i < length; i++) {
-            features[i] = jsonArray.getString(i);
+        try {
+            this.log("removeConsent", args);
+            String[] features = new String[args.length()];
+            for (int i = 0; i < args.length(); i++) {
+                features[i] = args.getString(i);
+            }
+            Countly.sharedInstance().consent().removeConsent(features);
+            return "removeConsent: Success";
+        }catch (JSONException jsonException){
+            logError("giveConsent", jsonException);
+            return jsonException.toString();
         }
-        Countly.sharedInstance().consent().removeConsent(features);
-        return "removeConsent: Success";
     }
 
     public String giveAllConsent(JSONArray args){
@@ -694,7 +704,7 @@ public class CountlyNative {
             });
             return "updateRemoteConfigForKeysOnly: success";
         }catch (JSONException jsonException){
-            logError("updateRemoteConfigForKeysOnly", jsonException);final Callback theCallback){
+            logError("updateRemoteConfigForKeysOnly", jsonException);
             return jsonException.toString();
         }
     }
@@ -718,7 +728,7 @@ public class CountlyNative {
             });
             return "updateRemoteConfigExceptKeys: Success";
         }catch (JSONException jsonException){
-            logError("updateRemoteConfigExceptKeys", jsonException);final Callback theCallback){
+            logError("updateRemoteConfigExceptKeys", jsonException);
             return jsonException.toString();
         }
     }
@@ -757,7 +767,7 @@ public class CountlyNative {
             });
             return "askForFeedback: success";
         }catch (JSONException jsonException){
-            logError("askForFeedback", jsonException);final Callback theCallback){
+            logError("askForFeedback", jsonException);
             theCallback.callback(jsonException.toString());
             return jsonException.toString();
         }
