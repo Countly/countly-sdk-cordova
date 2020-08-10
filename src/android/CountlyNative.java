@@ -858,15 +858,4 @@ public class CountlyNative {
         this.config.setRecordAppStartTime(true);
         return "enableApm success.";
     }
-    public static String[] getStringArray(JSONArray jsonArray) {
-        String[] stringArray = null;
-        if (jsonArray != null) {
-            int length = jsonArray.length();
-            stringArray = new String[length];
-            for (int i = 0; i < length; i++) {
-                stringArray[i] = jsonArray.optString(i);
-            }
-        }
-        return stringArray;
-    }
 }
