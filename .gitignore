@@ -2,3 +2,5 @@
 node_modules/
 *.orig
 .idea
+example/cordova/countly-demo-js/platforms/android
+example/cordova/countly-demo-js/platforms/ios

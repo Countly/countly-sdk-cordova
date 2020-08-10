@@ -39,7 +39,6 @@ public class CountlyNative {
     private Countly.CountlyMessagingMode pushTokenTypeVariable = Countly.CountlyMessagingMode.PRODUCTION;
     private Context context;
     private Activity activity;
-    private Boolean isDebug = false;
     private CountlyConfig config = new CountlyConfig();
     private static Callback notificationListener = null;
     private static String lastStoredNotification = null;
@@ -89,14 +88,14 @@ public class CountlyNative {
     }
 
     public void log(String method, JSONArray args){
-        if(isDebug){
+        if(Countly.sharedInstance().isLoggingEnabled()){
             Log.i("Countly Native", "Method: "+method);
             Log.i("Countly Native", "Arguments: "+args.toString());
         }
     }
 
     public void logError(String method, JSONException exception){
-        if(isDebug){
+        if(Countly.sharedInstance().isLoggingEnabled()){
             Log.i("Countly Native", "Method: "+method);
             Log.i("Countly Native", "Exception: "+exception.toString());
         }
@@ -376,10 +375,8 @@ public class CountlyNative {
             this.log("setLoggingEnabled", args);
             String loggingEnable = args.getString(0);
             if (loggingEnable.equals("true")) {
-                isDebug = true;
                 this.config.setLoggingEnabled(true);
             } else {
-                isDebug = false;
                 this.config.setLoggingEnabled(false);
             }
             return "setLoggingEnabled success!";
@@ -799,6 +796,7 @@ public class CountlyNative {
 
     public String startTrace(JSONArray args){
         try {
+            this.log("startTrace", args);
             String traceKey = args.getString(0);
             Countly.sharedInstance().apm().startTrace(traceKey);
             return "startTrace success.";
@@ -810,6 +808,7 @@ public class CountlyNative {
 
     public String cancelTrace(JSONArray args){
         try {
+            this.log("cancelTrace", args);
             String traceKey = args.getString(0);
             // Countly.sharedInstance().apm().cancelTrace(traceKey);
             return "cancelTrace not implemented.";
@@ -821,6 +820,7 @@ public class CountlyNative {
 
 
     public String clearAllTraces(JSONArray args){
+        this.log("clearAllTraces", args);
         // Countly.sharedInstance().apm().clearAllTrace(traceKey);
         return "clearAllTrace not implemented.";
 
@@ -828,6 +828,7 @@ public class CountlyNative {
 
     public String endTrace(JSONArray args){
         try {
+            this.log("endTrace", args);
             String traceKey = args.getString(0);
             HashMap<String, Integer> customMetric = new HashMap<String, Integer>();
             for (int i = 1, il = args.length(); i < il; i += 2) {
@@ -850,6 +851,7 @@ public class CountlyNative {
 
     public String recordNetworkTrace(JSONArray args){
         try {
+            this.log("recordNetworkTrace", args);
             String networkTraceKey = args.getString(0);
             int responseCode = Integer.parseInt(args.getString(1));
             int requestPayloadSize = Integer.parseInt(args.getString(2));
@@ -865,6 +867,7 @@ public class CountlyNative {
     }
 
     public String enableApm(JSONArray args){
+        this.log("enableApm", args);
         this.config.setRecordAppStartTime(true);
         return "enableApm success.";
     }
