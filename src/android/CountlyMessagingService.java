@@ -6,6 +6,8 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONArray;
+
 import ly.count.android.sdk.messaging.CountlyPush;
 
 public class CountlyMessagingService extends FirebaseMessagingService {
@@ -14,8 +16,10 @@ public class CountlyMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
         super.onNewToken(token);
-        Log.d(TAG, "got new token: " + token);
-        CountlyPush.onTokenRefresh(token);
+        if(Countly.sharedInstance().isInitialized()) {
+            CountlyNative.log("onNewToken", new JSONArray().put(token));
+            CountlyPush.onTokenRefresh(token);
+        }
     }
 
     @Override
@@ -30,8 +34,8 @@ public class CountlyMessagingService extends FirebaseMessagingService {
                 CountlyPush.init(getApplication(), Countly.CountlyMessagingMode.PRODUCTION);
             }
         }
-        
-        Log.d(TAG, "got new message: " + remoteMessage.getData());
+
+        CountlyNative.log("onMessageReceived", new JSONArray().put(remoteMessage.getData()));
 
         // decode message data and extract meaningful information from it: title, body, badge, etc.
         CountlyPush.Message message = CountlyPush.decodeMessage(remoteMessage.getData());
@@ -42,7 +46,7 @@ public class CountlyMessagingService extends FirebaseMessagingService {
             return;
         }
 
-        Intent notificationIntent = null;//new Intent(getApplicationContext(), MainActivity.class);
+        Intent notificationIntent = null;
 
         Boolean result = CountlyPush.displayMessage(getApplicationContext(), message, getApplicationContext().getApplicationInfo().icon, notificationIntent);
         if (result == null) {
