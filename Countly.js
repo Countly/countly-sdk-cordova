@@ -96,8 +96,12 @@ Countly.askForNotificationPermission = function(){
 Countly.onNotification = function(callback){
     cordova.exec(callback,callback,"CountlyCordova","registerForNotification",[]);
 }
-Countly.pushTokenType = function(tokenType){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","pushTokenType",[tokenType]);
+Countly.pushTokenType = function(tokenType, channelName, channelDescription){
+    var args = [];
+    args.push(tokenType);
+    args.push(channelName);
+    args.push(channelDescription);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","pushTokenType",args);
 }
 
 // countly deviceready for testing purpose
@@ -184,11 +188,7 @@ Countly.logException = function(exception, nonfatal, segments){
 
     var args = [];
     args.push(exceptionString || "");
-    args.push(nonfatal || false);
-    for(var key in segments){
-        args.push(key);
-        args.push(segments[key].toString());
-    }
+    args.push(nonfatal ? "true": "false");
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
 };
 Countly.setCustomCrashSegment = function(segments){
@@ -351,28 +351,14 @@ Countly.getRemoteConfigValueForKey = function(key, onSuccess, onError){
 }
 // Remote config
 
-// Rating
-// config
-Countly.rating = {
-    starRatingMessage: "How would you rate the app?",
-    starRatingDismissButtonTitle: "Dismiss",
-    starRatingSubmitButtonTitle: "Submit",
-}
-// orginal method
-// Countly.sendRating = function(rating){
-//     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendRating",[rating.toString()]);
-// }
-
-// ui related methods
-// opens the modal
+// Rating & Feedback
 Countly.askForStarRating = function(callback){
     cordova.exec(callback, callback,"CountlyCordova","askForStarRating",[]);
 }
-
 Countly.askForFeedback = function(widgetId, buttonText){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForFeedback",[widgetId, buttonText || ""]);
 }
-// FEEDBACK-WORK
+// Rating & Feedback
 
 // Push Notification
 Countly.sendPushToken = function(options){

@@ -42,6 +42,9 @@ public class CountlyNative {
     private CountlyConfig config = new CountlyConfig();
     private static Callback notificationListener = null;
     private static String lastStoredNotification = null;
+    private String channelName = "Default Name";
+    private String channelDescription = "Default Description";
+
     public CountlyNative(Activity _activity, Context _context){
         this.activity = _activity;
         this.context = _context;
@@ -196,8 +199,13 @@ public class CountlyNative {
         try {
             this.log("logException", args);
             String exceptionString = args.getString(0);
+            String isFatal = args.getString(1);
             Exception exception = new Exception(exceptionString);
-            Countly.sharedInstance().crashes().recordHandledException(exception);
+            if(isFatal.equals("true")){
+                Countly.sharedInstance().crashes().recordUnhandledException(exception);
+            }else{
+                Countly.sharedInstance().crashes().recordHandledException(exception);
+            }
             return "logException success!";
         }catch (JSONException jsonException){
             logError("logException", jsonException);
@@ -223,8 +231,6 @@ public class CountlyNative {
     public String askForNotificationPermission(JSONArray args){
         this.log("askForNotificationPermission", args);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelName = "Default Name";
-            String channelDescription = "Default Description";
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
             if (notificationManager != null) {
                 NotificationChannel channel = new NotificationChannel(CountlyPush.CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
@@ -262,6 +268,8 @@ public class CountlyNative {
         try {
             this.log("pushTokenType", args);
             String tokenType = args.getString(0);
+            channelName = args.getString(1);
+            channelDescription = args.getString(2);
             if("2".equals(tokenType)){
                 pushTokenTypeVariable = Countly.CountlyMessagingMode.TEST;
             }else{

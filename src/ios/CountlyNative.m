@@ -253,7 +253,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         config.appKey = appkey;
         config.host = serverurl;
         Countly.sharedInstance.isAutoViewTrackingActive = NO;
-        config.features = @[CLYCrashReporting, CLYPushNotifications];
+        config.features = @[CLYPushNotifications];
 
         if(command.count == 3){
             deviceID = [command objectAtIndex:2];
@@ -316,7 +316,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         NSString* organization = [command objectAtIndex:3];
         NSString* phone = [command objectAtIndex:4];
         NSString* picture = [command objectAtIndex:5];
-        //NSString* picturePath = [command objectAtIndex:6];
+        NSString* picturePath = [command objectAtIndex:6];
         NSString* gender = [command objectAtIndex:7];
         NSString* byear = [command objectAtIndex:8];
 
@@ -333,11 +333,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         result(@"setuserdata!");
         });
 
-    }else if ([@"getDeviceID" isEqualToString:method]) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-        NSString* deviceID = Countly.sharedInstance.deviceID;
-        result([NSString stringWithFormat:@"%@", deviceID]);
-        });
     }else if ([@"start" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance beginSession];
@@ -352,11 +347,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"halt" isEqualToString:method]) { // This method is not implemented in iOS SDK
         // [Countly.sharedInstance endSession];
         result(@"No implemntation for halt!");
-    }else if ([@"update" isEqualToString:method]) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-        [Countly.sharedInstance updateSession];
-        result(@"update!");
-        });
     }else if ([@"changeDeviceId" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* newDeviceID = [command objectAtIndex:0];
@@ -439,7 +429,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
 
     }else if ([@"enableCrashReporting" isEqualToString:method]) {
-        // config.features = @[CLYCrashReporting];
+        [config.features addObject:CLYCrashReporting];
         result(@"enableCrashReporting!");
 
     }else if ([@"addCrashLog" isEqualToString:method]) {
@@ -452,18 +442,17 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"logException" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* execption = [command objectAtIndex:0];
-        NSString* nonfatal = [command objectAtIndex:1];
+        NSString* isFatal = [command objectAtIndex:1];
         NSArray *nsException = [execption componentsSeparatedByString:@"\n"];
 
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-
-        for(int i=2,il=(int)command.count;i<il;i+=2){
-            dict[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
+        if([@"true" isEqualToString: isFatal]){
+            [dict setObject:true forKey:@"fatal"];
+        }else{
+            [dict setObject:true forKey:@"nonfatal"];
         }
-        [dict setObject:nonfatal forKey:@"nonfatal"];
 
         NSException* myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:dict];
-
         [Countly.sharedInstance recordHandledException:myException withStackTrace: nsException];
         result(@"logException!");
         });

@@ -120,8 +120,8 @@
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
         <button onclick="app.setCustomCrashSegment()" class="fluid ui button teal">Set Custom Crash Segment</button>
-        <button onclick="app.setloggingenabled()" class="fluid ui button teal">Enable Debug Mode</button>
-        <button onclick="app.setloggingdisabled()" class="fluid ui button teal">Disable Debug Mode</button>
+        <button onclick="app.setLoggingEnabled()" class="fluid ui button teal">Enable Debug Mode</button>
+        <button onclick="app.setLoggingDisabled()" class="fluid ui button teal">Disable Debug Mode</button>
         <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
         <button onclick="app.sendPushToken()" class="fluid ui button teal">Send Push Token</button>
         <button onclick="app.setHttpPostForced()" class="fluid ui button teal">SetHttpPostForced</button>
@@ -166,13 +166,13 @@
         return text;
     }
     app.init = function() {
-        Countly.pushTokenType(Countly.messagingMode.TEST);
+        Countly.pushTokenType(Countly.messagingMode.TEST, "Default Name", "Default Description");
         Countly.setLoggingEnabled(true);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
         // Countly.eventSendThreshold(1);
     };
     app.initWithID = function(){
-        Countly.pushTokenType(Countly.messagingMode.TEST);
+        Countly.pushTokenType(Countly.messagingMode.TEST, "Default Name", "Default Description");
         Countly.setLoggingEnabled(true);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
         // Countly.eventSendThreshold(1);
@@ -366,11 +366,11 @@
 
 
 
-    app.setloggingenabled = function() {
+    app.setLoggingEnabled = function() {
         // example for setLoggingEnabled
         Countly.setLoggingEnabled(true);
     }
-    app.setloggingdisabled = function() {
+    app.setLoggingDisabled = function() {
         // example for setLoggingEnabled
         Countly.setLoggingEnabled(false);
     }
@@ -532,7 +532,7 @@
             throw new Error("My Second Error");
         } catch (err) {
             StackTrace.fromError(err).then(function(stackframes) {
-                Countly.logException(stackframes, true, {"_facebook_version": "0.0.1"});
+                Countly.logException(stackframes, true);
             });
         }
     }

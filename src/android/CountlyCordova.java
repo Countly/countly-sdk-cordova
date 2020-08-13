@@ -156,9 +156,6 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success(countlyNative.removeConsent(args));
         }
 
-        // else if("sendRating".equals(action)){
-        //     callbackContext.success(countlyNative.sendRating(args));
-        // }
         else if("recordView".equals(action)){
             callbackContext.success(countlyNative.recordView(args));
         }
