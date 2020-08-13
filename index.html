@@ -134,7 +134,6 @@
         <button onclick="app.addCrashLog()" class="fluid ui button yellow">Send Crash Report</button>
         <div class="ui horizontal divider">Other Methods End</div>
         <div class="ui horizontal divider">Rating Methods Start</div>
-        <!-- <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button> -->
         <button onclick="app.askForStarRating()" class="fluid ui button orange">Open rating modal</button>
         <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
         <div class="ui horizontal divider">Rating Methods End</div>
@@ -488,10 +487,6 @@
     app.cancelEventX = function(){
         Countly.cancelEvent("Event X");
     }
-    // app.sendRating = function(){
-    //     // Ratings can be from 1 - 5;
-    //     Countly.sendRating(5);
-    // }
     app.askForFeedback = function(){
         Countly.askForFeedback("5e4254507975d006a22535fc", "Close");
     }

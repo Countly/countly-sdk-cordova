@@ -48,11 +48,11 @@
 - (void)userData_pullValue:(CDVInvokedUrlCommand*)command;
 - (void)setOptionalParametersForInitialization:(CDVInvokedUrlCommand*)command;
 
-// - (void)setRequiresConsent:(CDVInvokedUrlCommand*)command;
-// - (void)giveConsent:(CDVInvokedUrlCommand*)command;
-// - (void)removeConsent:(CDVInvokedUrlCommand*)command;
-// - (void)giveAllConsent:(CDVInvokedUrlCommand*)command;
-// - (void)removeAllConsent:(CDVInvokedUrlCommand*)command;
+- (void)setRequiresConsent:(CDVInvokedUrlCommand*)command;
+- (void)giveConsent:(CDVInvokedUrlCommand*)command;
+- (void)removeConsent:(CDVInvokedUrlCommand*)command;
+- (void)giveAllConsent:(CDVInvokedUrlCommand*)command;
+- (void)removeAllConsent:(CDVInvokedUrlCommand*)command;
 
 - (void)setRemoteConfigAutomaticDownload:(CDVInvokedUrlCommand*)command;
 - (void)remoteConfigUpdate:(CDVInvokedUrlCommand*)command;

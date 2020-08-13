@@ -652,7 +652,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         NSString* latitudeString = [command objectAtIndex:2];
         NSString* longitudeString = [command objectAtIndex:3];
-        NSString* ipAddress = [command objectAtIndex:3];
+        NSString* ipAddress = [command objectAtIndex:4];
 
         double latitudeDouble = [latitudeString doubleValue];
         double longitudeDouble = [longitudeString doubleValue];
@@ -842,10 +842,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         config.enablePerformanceMonitoring = YES;
         result(@"enableApm!");
 
-    }else if ([@"getPlatformVersion" isEqualToString:method]) {
-        result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-    }
-    else {
+    } else {
         NSLog(@"Countly Bridge Method Not Implemented %@", method);
         result(@"Countly Bridge Method Not Implemented");
     }
