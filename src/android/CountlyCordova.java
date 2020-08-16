@@ -106,8 +106,8 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success(countlyNative.setLoggingEnabled(args));
         }
 
-        else if ("setuserdata".equals(action)) {
-            callbackContext.success(countlyNative.setuserdata(args));
+        else if ("setUserData".equals(action)) {
+            callbackContext.success(countlyNative.setUserData(args));
         }
         else if ("userData_setProperty".equals(action)) {
             callbackContext.success(countlyNative.userData_setProperty(args));

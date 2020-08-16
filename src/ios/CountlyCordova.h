@@ -6,7 +6,7 @@
 - (void)event:(CDVInvokedUrlCommand*)command;
 - (void)recordEvent:(CDVInvokedUrlCommand*)command;
 - (void)setLoggingEnabled:(CDVInvokedUrlCommand*)command;
-- (void)setuserdata:(CDVInvokedUrlCommand*)command;
+- (void)setUserData:(CDVInvokedUrlCommand*)command;
 - (void)start:(CDVInvokedUrlCommand*)command;
 - (void)halt:(CDVInvokedUrlCommand*)command;
 - (void)manualSessionHandling:(CDVInvokedUrlCommand*)command;

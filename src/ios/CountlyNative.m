@@ -308,7 +308,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
         result(@"setLoggingEnabled!");
         });
-    }else if ([@"setuserdata" isEqualToString:method]) {
+    }else if ([@"setUserData" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* name = [command objectAtIndex:0];
         NSString* username = [command objectAtIndex:1];
@@ -330,7 +330,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         Countly.user.birthYear = @([byear integerValue]);
 
         [Countly.user save];
-        result(@"setuserdata!");
+        result(@"setUserData!");
         });
 
     }else if ([@"start" isEqualToString:method]) {

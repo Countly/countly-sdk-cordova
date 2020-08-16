@@ -51,7 +51,7 @@ Countly.setUserData = function(options){
     args.push(options.gender || "");
     args.push(options.byear || 0);
 
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setuserdata",args);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setUserData",args);
 }
 
 // countly start for android

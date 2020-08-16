@@ -394,11 +394,11 @@ public class CountlyNative {
         }
     }
 
-    public String setuserdata(JSONArray args){
+    public String setUserData(JSONArray args){
         try {
             // Bundle bundle = new Bundle();
 
-            this.log("setuserdata", args);
+            this.log("setUserData", args);
             Map<String, String> bundle = new HashMap<String, String>();
 
             bundle.put("name", args.getString(0));
@@ -413,9 +413,9 @@ public class CountlyNative {
 
             Countly.userData.setUserData(bundle);
             Countly.userData.save();
-            return "setuserdata success";
+            return "setUserData success";
         }catch (JSONException jsonException){
-            logError("setuserdata", jsonException);
+            logError("setUserData", jsonException);
             return jsonException.toString();
         }
     }
