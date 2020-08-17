@@ -71,7 +71,7 @@ Countly.setAutomaticViewTracking = function(enabled = true){
     if(typeof enabled === 'string') {
         enabled = (enabled === "true"); // Typecast from string to boolean
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutomaticViewTracking",args);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutomaticViewTracking",[enabled]]);
 }
 
 /**
