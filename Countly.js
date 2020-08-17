@@ -32,7 +32,7 @@ Countly.init = function(serverUrl,appKey, deviceId){
 
 Countly.isInitialized = function(){
     return new Promise((resolve,reject) => {
-        cordova.exec(resolve,reject,"CountlyCordova","isInitialized",[]]);
+        cordova.exec(resolve,reject,"CountlyCordova","isInitialized",[]);
     });
 }
 
