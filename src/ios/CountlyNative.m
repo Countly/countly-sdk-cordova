@@ -9,6 +9,8 @@ static char coldstartKey;
 Result notificationListener = nil;
 NSDictionary *lastStoredNotification = nil;
 NSMutableArray *notificationIDs = nil;        // alloc here
+NSMutableArray<CLYFeature>* countlyFeatures = nil;
+Boolean isInitialized = false;
 
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 @implementation AppDelegate (notification)
@@ -252,7 +254,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         config.appKey = appkey;
         config.host = serverurl;
         Countly.sharedInstance.isAutoViewTrackingActive = NO;
-        config.features = @[CLYCrashReporting, CLYPushNotifications];
+        [self addCountlyFeature:CLYPushNotifications];
 
         if(command.count == 3){
             deviceID = [command objectAtIndex:2];
@@ -261,6 +263,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         if (serverurl != nil && [serverurl length] > 0) {
             dispatch_async(dispatch_get_main_queue(), ^ {
+            isInitialized = true;
             [[Countly sharedInstance] startWithConfig:config];
             [self recordPushAction];
             });
@@ -268,6 +271,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         } else {
             result(@"initialization failed!");
         }
+    }else if ([@"isInitialized" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        if(isInitialized){
+            result(@"true");
+        }else{
+            result(@"false");
+        }
+        });
     }else if ([@"recordEvent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* key = [command objectAtIndex:0];
@@ -306,6 +317,18 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
         [Countly.sharedInstance recordView:recordView segmentation:segments];
         result(@"recordView Sent!");
+        });
+    }else if ([@"setAutomaticViewTracking" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        BOOL boolean = [[command objectAtIndex:0] boolValue];
+        if(boolean) {
+            [self addCountlyFeature:CLYAutoViewTracking];
+        }
+        else {
+            [self removeCountlyFeature:CLYAutoViewTracking];
+        }
+        [Countly.sharedInstance setIsAutoViewTrackingActive:boolean];
+        result(@"setAutomaticViewTracking!");
         });
     }else if ([@"setLoggingEnabled" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
@@ -450,7 +473,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
 
     }else if ([@"enableCrashReporting" isEqualToString:method]) {
-        // config.features = @[CLYCrashReporting];
+        [self addCountlyFeature:CLYCrashReporting];
         result(@"enableCrashReporting!");
 
     }else if ([@"addCrashLog" isEqualToString:method]) {
@@ -902,6 +925,28 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else {
         NSLog(@"Countly Bridge Method Not Implemented %@", method);
         result(@"Countly Bridge Method Not Implemented");
+    }
+}
+
+- (void)addCountlyFeature:(CLYFeature)feature
+{
+    if(countlyFeatures == nil) {
+        countlyFeatures = [[NSMutableArray alloc] init];
+    }
+    if(![countlyFeatures containsObject:feature]) {
+        [countlyFeatures addObject:feature];
+        config.features = countlyFeatures;
+    }
+}
+
+- (void)removeCountlyFeature:(CLYFeature)feature
+{
+    if(countlyFeatures == nil) {
+        return;
+    }
+    if(![countlyFeatures containsObject:feature]) {
+        [countlyFeatures removeObject:feature];
+        config.features = countlyFeatures;
     }
 }
 

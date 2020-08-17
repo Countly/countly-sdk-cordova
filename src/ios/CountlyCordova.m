@@ -28,6 +28,18 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
+- (void)isInitialized:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"isInitialized" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
 - (void)recordEvent:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
@@ -45,6 +57,17 @@ CountlyNative* countlyNative = nil;
         countlyNative = CountlyNative.new;
     }
     [countlyNative onCall: @"recordView" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+- (void)setAutomaticViewTracking:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"setAutomaticViewTracking" commandString: command.arguments callback: ^(NSString * theResult)
      {
          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
