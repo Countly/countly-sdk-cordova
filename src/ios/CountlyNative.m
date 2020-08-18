@@ -825,7 +825,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 metrics[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
             }
             @catch(NSException *exception){
-                NSLog(@"[CountlyCordova] Exception occured while parsing metrics: %@", exception);
+                if(isDebug){
+                    NSLog(@"[CountlyCordova] Exception occured while parsing metrics: %@", exception);
+                }
             }
         }
         [Countly.sharedInstance endCustomTrace: traceKey metrics: metrics];
@@ -844,7 +846,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 [Countly.sharedInstance recordNetworkTrace: networkTraceKey requestPayloadSize: requestPayloadSize responsePayloadSize: responsePayloadSize responseStatusCode: responseCode startTime: startTime endTime: endTime];
             }
             @catch(NSException *exception){
-                NSLog(@"[CountlyCordova] Exception occured at recordNetworkTrace method: %@", exception);
+                if(isDebug){
+                    NSLog(@"[CountlyCordova] Exception occured at recordNetworkTrace method: %@", exception);
+                }
             }
         });
         result(@"recordNetworkTrace!");
