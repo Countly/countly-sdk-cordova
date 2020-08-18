@@ -34,6 +34,8 @@
 - (void)registerForNotification:(CDVInvokedUrlCommand*)command;
 - (void)pushTokenType:(CDVInvokedUrlCommand*)command;
 
+- (void)getCurrentDeviceId:(CDVInvokedUrlCommand*)command;
+- (void)getDeviceIdAuthor:(CDVInvokedUrlCommand*)command;
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command;
 - (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command;
 - (void)startEvent:(CDVInvokedUrlCommand*)command;

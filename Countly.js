@@ -204,6 +204,22 @@ Countly.setOptionalParametersForInitialization = function(options){
 Countly.setLocation = function(latitude, longitude){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[latitude, longitude]);
 }
+
+/** 
+ * 
+ * Get currently used device Id.
+ * Should be call after Countly init
+ * */
+Countly.getCurrentDeviceId = function(onSuccess, onError){
+    if(!await Countly.isInitialized()) {
+        if(Countly.isDebug){
+            console.warn("'getCurrentDeviceId, init must be called before getCurrentDeviceId'");
+        }
+        return;
+    }
+    cordova.exec(onSuccess, onError,"CountlyCordova","getCurrentDeviceId",[]);
+}
+
 Countly.changeDeviceId = function(newDeviceID, onServer){
     if(onServer === false){
         onServer = "0";

@@ -116,6 +116,34 @@ public class CountlyNative {
         }
     }
 
+    public String getCurrentDeviceId(JSONArray args){
+        String deviceID = Countly.sharedInstance().getDeviceID();
+        if (deviceID == null) {
+            Log.d(Countly.TAG, "[CountlyReactNative] getCurrentDeviceId, deviceIdNotFound");
+            return "deviceIdNotFound";
+        }
+        else {
+            Log.d(Countly.TAG, "[CountlyReactNative] getCurrentDeviceId: " + deviceID);
+            return deviceID;
+        }
+    }
+
+    public String getDeviceIdAuthor(JSONArray args){
+        DeviceId.Type deviceIDType = Countly.sharedInstance().getDeviceIDType();
+        if (deviceIDType == null) {
+            Log.d(Countly.TAG, "[CountlyReactNative] getDeviceIdAuthor, deviceIdAuthorNotFound");
+            return "deviceIdAuthorNotFound";
+        }
+        else {
+            Log.d(Countly.TAG, "[CountlyReactNative] getDeviceIdAuthor: " + deviceIDType);
+            if(deviceIDType == DeviceId.Type.DEVELOPER_SUPPLIED){
+                return "developerProvided";
+            }else{
+                return "sdkGenerated";
+            }
+        }
+    }
+
     public String changeDeviceId(JSONArray args){
         try {
             this.log("changeDeviceId", args);

@@ -23,7 +23,6 @@
         <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
         <img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
         <button onclick="app.init()" class="fluid ui green button">Init</button>
-        <button onclick="app.initWithID()" class="fluid ui green button">Init with ID </button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
         <button onclick="app.halt()" class="fluid ui red button">Halt</button>
@@ -189,12 +188,6 @@
         
         // Countly.eventSendThreshold(1);
     };
-    app.initWithID = function(){
-        Countly.pushTokenType(Countly.messagingMode.TEST);
-        Countly.setLoggingEnabled(true);
-        Countly.init("https://try.count.ly", "YOUR_API_KEY", makeid());
-        // Countly.eventSendThreshold(1);
-    }
     // app.test = function() {
     //     app.sendPushToken();
     //     app.sendSampleEvent();

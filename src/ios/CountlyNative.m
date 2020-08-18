@@ -391,6 +391,23 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.sharedInstance updateSession];
         result(@"update!");
         });
+    }else if ([@"getCurrentDeviceId" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* value = [Countly.sharedInstance deviceID];
+        if(value){
+            result(value);
+        }
+        else{
+            NSString *value = @"deviceIdNotFound";
+            result(value);
+        }
+        });
+    }
+    else if ([@"getDeviceIdAuthor" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            NSString *value = @"Not implemented for iOS";
+            result(value);
+        });
     }else if ([@"changeDeviceId" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* newDeviceID = [command objectAtIndex:0];

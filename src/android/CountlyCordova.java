@@ -36,6 +36,12 @@ public class CountlyCordova extends CordovaPlugin {
         if ("isInitialized".equals(action)) {
             callbackContext.success(countlyNative.isInitialized(args));
         }
+        else if("getCurrentDeviceId".equals(action)){
+            callbackContext.success(countlyNative.getCurrentDeviceId(args));
+        }
+        else if("getDeviceIdAuthor".equals(action)){
+            callbackContext.success(countlyNative.getDeviceIdAuthor(args));
+        }
         else if ("changeDeviceId".equals(action)){
             callbackContext.success(countlyNative.changeDeviceId(args));
         }
