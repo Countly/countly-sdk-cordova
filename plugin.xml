@@ -49,7 +49,7 @@
         <source url="https://github.com/CocoaPods/Specs.git"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="Countly"/>
+        <pod name="Countly" version="20.04.2"/>
       </pods>
     </podspec>
     <!-- Push notification -->

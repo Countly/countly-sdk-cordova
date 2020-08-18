@@ -43,17 +43,6 @@ public class CountlyNative {
     private CountlyConfig config = new CountlyConfig();
     private static Callback notificationListener = null;
     private static String lastStoredNotification = null;
-    private final Set<String> validConsentFeatureNames = new HashSet<String>(Arrays.asList(
-            Countly.CountlyFeatureNames.sessions,
-            Countly.CountlyFeatureNames.events,
-            Countly.CountlyFeatureNames.views,
-            Countly.CountlyFeatureNames.location,
-            Countly.CountlyFeatureNames.crashes,
-            Countly.CountlyFeatureNames.attribution,
-            Countly.CountlyFeatureNames.users,
-            Countly.CountlyFeatureNames.push,
-            Countly.CountlyFeatureNames.starRating
-    ));
     public CountlyNative(Activity _activity, Context _context){
         this.activity = _activity;
         this.context = _context;
@@ -844,5 +833,77 @@ public class CountlyNative {
         return "sendPushToken success.";
     }
 
+    public String startTrace(JSONArray args){
+        try {
+            this.log("startTrace", args);
+            String traceKey = args.getString(0);
+            Countly.sharedInstance().apm().startTrace(traceKey);
+            return "startTrace success.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
 
+    public String cancelTrace(JSONArray args){
+        try {
+            this.log("cancelTrace", args);
+            String traceKey = args.getString(0);
+            // Countly.sharedInstance().apm().cancelTrace(traceKey);
+            return "cancelTrace not implemented.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
+
+    public String clearAllTraces(JSONArray args){
+        this.log("clearAllTraces", args);
+        // Countly.sharedInstance().apm().clearAllTrace(traceKey);
+        return "clearAllTrace not implemented.";
+
+    }
+
+    public String endTrace(JSONArray args){
+        try {
+            this.log("endTrace", args);
+            String traceKey = args.getString(0);
+            HashMap<String, Integer> customMetric = new HashMap<String, Integer>();
+            for (int i = 1, il = args.length(); i < il; i += 2) {
+                try{
+                    customMetric.put(args.getString(i), Integer.parseInt(args.getString(i + 1)));
+                }catch(Exception exception){
+                    if(Countly.sharedInstance().isLoggingEnabled()){
+                        Log.e(Countly.TAG, "[CountlyCordova] endTrace, could not parse metrics, skipping it. ");
+                    }
+                }
+            }
+            Countly.sharedInstance().apm().endTrace(traceKey, customMetric);
+            return "endTrace success.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
+
+    public String recordNetworkTrace(JSONArray args){
+        try {
+            this.log("recordNetworkTrace", args);
+            String networkTraceKey = args.getString(0);
+            int responseCode = Integer.parseInt(args.getString(1));
+            int requestPayloadSize = Integer.parseInt(args.getString(2));
+            int responsePayloadSize = Integer.parseInt(args.getString(3));
+            long startTime = Long.parseLong(args.getString(4));
+            long endTime = Long.parseLong(args.getString(5));
+            // Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, null, responseCode, requestPayloadSize, responsePayloadSize);
+            return "endNetworkRequest success.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
+    public String enableApm(JSONArray args){
+        this.log("enableApm", args);
+        this.config.setRecordAppStartTime(true);
+        return "enableApm success.";
+    }
 }

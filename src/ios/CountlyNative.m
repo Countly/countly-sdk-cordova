@@ -800,10 +800,68 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 result([NSString stringWithFormat: @"Rating:%d", (int)rating]);
             }];
         });
-    }else if ([@"getPlatformVersion" isEqualToString:method]) {
-        result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-    }
-    else {
+    }else if ([@"startTrace" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* traceKey = [command objectAtIndex:0];
+        [Countly.sharedInstance startCustomTrace: traceKey];
+        });
+        result(@"startTrace!");
+
+    }else if ([@"cancelTrace" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* traceKey = [command objectAtIndex:0];
+        [Countly.sharedInstance cancelCustomTrace: traceKey];
+        });
+        result(@"cancelTrace!");
+
+    }else if ([@"clearAllTraces" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        [Countly.sharedInstance clearAllCustomTraces];
+        });
+        result(@"clearAllTraces!");
+
+    }else if ([@"endTrace" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* traceKey = [command objectAtIndex:0];
+        NSMutableDictionary *metrics = [[NSMutableDictionary alloc] init];
+        for(int i=1,il=(int)command.count;i<il;i+=2){
+            @try{
+                metrics[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
+            }
+            @catch(NSException *exception){
+                if(isDebug){
+                    NSLog(@"[CountlyCordova] Exception occured while parsing metrics: %@", exception);
+                }
+            }
+        }
+        [Countly.sharedInstance endCustomTrace: traceKey metrics: metrics];
+        });
+        result(@"endTrace!");
+
+    }else if ([@"recordNetworkTrace" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            @try{
+                NSString* networkTraceKey = [command objectAtIndex:0];
+                int responseCode = [[command objectAtIndex:1] intValue];
+                int requestPayloadSize = [[command objectAtIndex:2] intValue];
+                int responsePayloadSize = [[command objectAtIndex:3] intValue];
+                int startTime = [[command objectAtIndex:4] intValue];
+                int endTime = [[command objectAtIndex:5] intValue];
+                [Countly.sharedInstance recordNetworkTrace: networkTraceKey requestPayloadSize: requestPayloadSize responsePayloadSize: responsePayloadSize responseStatusCode: responseCode startTime: startTime endTime: endTime];
+            }
+            @catch(NSException *exception){
+                if(isDebug){
+                    NSLog(@"[CountlyCordova] Exception occured at recordNetworkTrace method: %@", exception);
+                }
+            }
+        });
+        result(@"recordNetworkTrace!");
+
+    }else if ([@"enableApm" isEqualToString:method]) {
+        config.enablePerformanceMonitoring = YES;
+        result(@"enableApm!");
+
+    } else {
         NSLog(@"Countly Bridge Method Not Implemented %@", method);
         result(@"Countly Bridge Method Not Implemented");
     }

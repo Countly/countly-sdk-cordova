@@ -211,8 +211,23 @@ public class CountlyCordova extends CordovaPlugin {
                 }
             });
         }
-        else if("sendPushToken".equals(action)){
-            callbackContext.success(countlyNative.sendPushToken(args));
+        else if("startTrace".equals(action)){
+            callbackContext.success(countlyNative.startTrace(args));
+        }
+        else if("cancelTrace".equals(action)){
+            callbackContext.success(countlyNative.cancelTrace(args));
+        }
+        else if("clearAllTraces".equals(action)){
+            callbackContext.success(countlyNative.clearAllTraces(args));
+        }
+        else if("endTrace".equals(action)){
+            callbackContext.success(countlyNative.endTrace(args));
+        }
+        else if("recordNetworkTrace".equals(action)){
+            callbackContext.success(countlyNative.recordNetworkTrace(args));
+        }
+        else if("enableApm".equals(action)){
+            callbackContext.success(countlyNative.enableApm(args));
         }
         else{
             return false;

@@ -65,4 +65,11 @@
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command;
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command;
 
+- (void)startTrace:(CDVInvokedUrlCommand*)command;
+- (void)cancelTrace:(CDVInvokedUrlCommand*)command;
+- (void)clearAllTraces:(CDVInvokedUrlCommand*)command;
+- (void)endTrace:(CDVInvokedUrlCommand*)command;
+- (void)recordNetworkTrace:(CDVInvokedUrlCommand*)command;
+- (void)enableApm:(CDVInvokedUrlCommand*)command;
+
 @end
