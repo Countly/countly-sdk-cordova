@@ -144,7 +144,6 @@
         <button onclick="app.endTrace()" class="fluid ui black button">End Trace</button>
         <button onclick="app.recordNetworkTraceSuccess()" class="fluid ui black button">Record Network Trace Success</button>
         <button onclick="app.recordNetworkTraceFailure()" class="fluid ui black button">Record Network Trace Failure</button>
-        <button onclick="app.enableApm()" class="fluid ui black button">Enable APM</button>
         <div class="ui horizontal divider">Performance Methods End</div>
 
     </div>
@@ -168,12 +167,14 @@
     app.init = function() {
         Countly.pushTokenType(Countly.messagingMode.TEST);
         Countly.setLoggingEnabled(true);
+        Countly.enableApm();
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
         // Countly.eventSendThreshold(1);
     };
     app.initWithID = function(){
         Countly.pushTokenType(Countly.messagingMode.TEST);
         Countly.setLoggingEnabled(true);
+        Countly.enableApm();
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
         // Countly.eventSendThreshold(1);
     }
@@ -789,9 +790,6 @@
         var startTime = new Date().getTime();
         var endTime = startTime + 500;
         Countly.recordNetworkTrace(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
-    }
-    app.enableApm = function(){
-        Countly.enableApm();
     }
     app.setCustomCrashSegment = function(){
         var segment = {"Key": "Value"};

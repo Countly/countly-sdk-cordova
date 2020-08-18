@@ -96,8 +96,7 @@ public class CountlyNative {
 
     public void logError(String method, JSONException exception){
         if(Countly.sharedInstance().isLoggingEnabled()){
-            Log.i("Countly Native", "Method: "+method);
-            Log.i("Countly Native", "Exception: "+exception.toString());
+            Log.e("Countly Native", "Method: "+method +"\nException: "+exception.toString());
         }
     }
 
