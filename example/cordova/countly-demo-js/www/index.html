@@ -74,6 +74,7 @@
         <button onclick="app.giveAllConsent()" class="fluid ui button blue">Give all Consent</button>
         <button onclick="app.removeAllConsent()" class="fluid ui button blue">Remove all Consent</button>
 
+        </br>
         <button onclick="app.giveConsentSessions()" class="fluid ui button blue">Give Consent Sessions</button>
         <button onclick="app.giveConsentEvents()" class="fluid ui button blue">Give Consent Events</button>
         <button onclick="app.giveConsentViews()" class="fluid ui button blue">Give Consent Views</button>
@@ -84,7 +85,9 @@
         <button onclick="app.giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
         <button onclick="app.giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
         <button onclick="app.giveConsentAppleWatch()" class="fluid ui button blue">Give Consent AppleWatch</button>
+        <button onclick="app.giveConsentAPM()" class="fluid ui button blue">Give Consent Performance</button>
 
+        </br>
         <button onclick="app.removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
         <button onclick="app.removeConsentEvents()" class="fluid ui button blue">Remove Consent Events</button>
         <button onclick="app.removeConsentViews()" class="fluid ui button blue">Remove Consent Views</button>
@@ -95,6 +98,7 @@
         <button onclick="app.removeConsentPush()" class="fluid ui button blue">Remove Consent Push</button>
         <button onclick="app.removeConsentStarRating()" class="fluid ui button blue">Remove Consent starRating</button>
         <button onclick="app.removeConsentAppleWatch()" class="fluid ui button blue">Remove Consent AppleWatch</button>
+        <button onclick="app.removeConsentAPM()" class="fluid ui button blue">Remove Consent Performance</button>
 
         <!-- Consent Button -->
         <div class="ui horizontal divider">User Methods End</div>
@@ -115,8 +119,9 @@
 
         <div class="ui horizontal divider">Remote Config Methods End</div>
         <div class="ui horizontal divider">Other Methods Start</div>
-        <button onclick="app.setloggingenabled()" class="fluid ui button teal">Enable Debug Mode</button>
-        <button onclick="app.setloggingdisabled()" class="fluid ui button teal">Disable Debug Mode</button>
+        <button onclick="app.setCustomCrashSegment()" class="fluid ui button teal">Set Custom Crash Segment</button>
+        <button onclick="app.setLoggingEnabled()" class="fluid ui button teal">Enable Debug Mode</button>
+        <button onclick="app.setLoggingDisabled()" class="fluid ui button teal">Disable Debug Mode</button>
         <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
         <button onclick="app.sendPushToken()" class="fluid ui button teal">Send Push Token</button>
         <button onclick="app.setHttpPostForced()" class="fluid ui button teal">SetHttpPostForced</button>
@@ -129,23 +134,26 @@
         <button onclick="app.addCrashLog()" class="fluid ui button yellow">Send Crash Report</button>
         <div class="ui horizontal divider">Other Methods End</div>
         <div class="ui horizontal divider">Rating Methods Start</div>
-        <!-- <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button> -->
         <button onclick="app.askForStarRating()" class="fluid ui button orange">Open rating modal</button>
         <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
         <div class="ui horizontal divider">Rating Methods End</div>
 
-        <button onclick="this.apm()" class="fluid ui button black">APM</button>
-        <button onclick="this.startTrace()" class="fluid ui button black">Start Trace</button>
-        <button onclick="this.endTrace()" class="fluid ui button black">End Trace</button>
-        <button onclick="this.startNetworkRequestSuccess()" class="fluid ui button black">Start Network Request Success</button>
-        <button onclick="this.endNetworkRequestSuccess()" class="fluid ui button black">End Network Request Success</button>
-        <button onclick="this.startNetworkRequestFailure()" class="fluid ui button black">Start Network Request Failure</button>
-        <button onclick="this.endNetworkRequestFailure()" class="fluid ui button black">End Network Request Failure</button>
-        <button onclick="this.setRecordAppStartTime()" class="fluid ui button black">Set Record App Start Time</button>
-        <button onclick="this.applicationOnCreate()" class="fluid ui button black">Application on create</button>
+        <div class="ui horizontal divider">Performance Methods Start</div>
+        <button onclick="app.startTrace()" class="fluid ui black button">Start Trace</button>
+        <button onclick="app.endTrace()" class="fluid ui black button">End Trace</button>
+        <button onclick="app.recordNetworkTraceSuccess()" class="fluid ui black button">Record Network Trace Success</button>
+        <button onclick="app.recordNetworkTraceFailure()" class="fluid ui black button">Record Network Trace Failure</button>
+        <button onclick="app.enableApm()" class="fluid ui black button">Enable APM</button>
+        <div class="ui horizontal divider">Performance Methods End</div>
 
     </div>
     <script type="text/javascript">
+        document.addEventListener("deviceready", function(){
+            console.log("deviceready");
+            Countly.onNotification(function(theNotification){
+                alert(JSON.stringify(theNotification));
+            });
+        });
     app = {};
     function makeid() {
         var text = "";
@@ -157,13 +165,13 @@
         return text;
     }
     app.init = function() {
-        Countly.pushTokenType(Countly.messagingMode.TEST);
+        Countly.pushTokenType(Countly.messagingMode.TEST, "Default Name", "Default Description");
         Countly.setLoggingEnabled(true);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
         // Countly.eventSendThreshold(1);
     };
     app.initWithID = function(){
-        Countly.pushTokenType(Countly.messagingMode.TEST);
+        Countly.pushTokenType(Countly.messagingMode.TEST, "Default Name", "Default Description");
         Countly.setLoggingEnabled(true);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
         // Countly.eventSendThreshold(1);
@@ -175,10 +183,11 @@
 
     app.setOptionalParametersForInitialization = function() {
         Countly.setOptionalParametersForInitialization({
-            city: "Tampa",
-            country: "US",
-            latitude: "28.006324",
-            longitude: "-82.7166183"
+            "city": "Tampa",
+            "country": "US",
+            "latitude": "28.006324",
+            "longitude": "-82.7166183",
+            "ipAddress": "255.255.255.255"
         });
     };
 
@@ -356,11 +365,11 @@
 
 
 
-    app.setloggingenabled = function() {
+    app.setLoggingEnabled = function() {
         // example for setLoggingEnabled
         Countly.setLoggingEnabled(true);
     }
-    app.setloggingdisabled = function() {
+    app.setLoggingDisabled = function() {
         // example for setLoggingEnabled
         Countly.setLoggingEnabled(false);
     }
@@ -478,10 +487,6 @@
     app.cancelEventX = function(){
         Countly.cancelEvent("Event X");
     }
-    // app.sendRating = function(){
-    //     // Ratings can be from 1 - 5;
-    //     Countly.sendRating(5);
-    // }
     app.askForFeedback = function(){
         Countly.askForFeedback("5e4254507975d006a22535fc", "Close");
     }
@@ -522,7 +527,7 @@
             throw new Error("My Second Error");
         } catch (err) {
             StackTrace.fromError(err).then(function(stackframes) {
-                Countly.logException(stackframes, true, {"_facebook_version": "0.0.1"});
+                Countly.logException(stackframes, true);
             });
         }
     }
@@ -534,12 +539,15 @@
         Countly.userData.setProperty("setProperty", "My Property");
     }
     app.userData.increment = function() {
+        Countly.userData.setProperty("increment", 4);
         Countly.userData.increment("increment");
     }
     app.userData.incrementBy = function() {
+        Countly.userData.setProperty("incrementBy", 5);
         Countly.userData.incrementBy("incrementBy", 10);
     }
     app.userData.multiply = function() {
+        Countly.userData.setProperty("multiply", 5);
         Countly.userData.multiply("multiply", 20);
     }
     app.userData.saveMax = function() {
@@ -609,6 +617,9 @@
     app.giveConsentAppleWatch = function() {
         Countly.giveConsent(["AppleWatch"]);
     }
+    app.giveConsentAPM = function(){
+        Countly.giveConsent(["apm"]);
+    }
 
     app.removeConsentSessions = function() {
         Countly.removeConsent(["sessions"]);
@@ -639,6 +650,9 @@
     }
     app.removeConsentAppleWatch = function() {
         Countly.giveConsent(["AppleWatch"]);
+    }
+    app.removeConsentAPM = function(){
+        Countly.removeConsent(["apm"]);
     }
 
     // Remote config usage
@@ -735,10 +749,9 @@
         });
     }
 
-    // APM Examples
-    app.apm = function(){
-        Countly.apm();
-    }
+    var successCodes = [100, 101, 200, 201, 202, 205, 300, 301, 303, 305];
+    var failureCodes = [400, 402, 405, 408, 500, 501, 502, 505];
+
     app.startTrace = function(){
         var traceKey = "Trace Key";
         Countly.startTrace(traceKey);
@@ -751,39 +764,33 @@
         };
         Countly.endTrace(traceKey, customMetric);
     }
-    app.startNetworkRequestSuccess = function(){
+    function random(number){
+        return Math.floor(Math.random() * number);
+    }
+    app.recordNetworkTraceSuccess = function(){
         var networkTraceKey = "api/endpoint.1";
-        var uniqueId = "1337";
-        Countly.startNetworkRequest(networkTraceKey, uniqueId);
+        var responseCode = successCodes[random(successCodes.length)];
+        var requestPayloadSize = random(700) + 200;
+        var responsePayloadSize = random(700) + 200;
+        var startTime = new Date().getTime();
+        var endTime = startTime + 500;
+        Countly.recordNetworkTrace(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
     }
-    app.endNetworkRequestSuccess = function(){
+    app.recordNetworkTraceFailure = function(){
         var networkTraceKey = "api/endpoint.1";
-        var uniqueId = "1337";
-        var rnd = new Random();
-        var responseCode = successCodes[rnd.nextInt(successCodes.length)];
-        var requestPayloadSize = rnd.nextInt(700) + 200;
-        var responsePayloadSize = rnd.nextInt(700) + 200;
-        Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
+        var responseCode = failureCodes[random(failureCodes.length)];
+        var requestPayloadSize = random(700) + 250;
+        var responsePayloadSize = random(700) + 250;
+        var startTime = new Date().getTime();
+        var endTime = startTime + 500;
+        Countly.recordNetworkTrace(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
     }
-    app.startNetworkRequestFailure = function(){
-        var networkTraceKey = "api/endpoint.1";
-        var uniqueId = "7331";
-        Countly.startNetworkRequest(networkTraceKey, uniqueId);
+    app.enableApm = function(){
+        Countly.enableApm();
     }
-    app.endNetworkRequestFailure = function(){
-        var networkTraceKey = "api/endpoint.1";
-        var uniqueId = "7331";
-        var rnd = new Random();
-        var responseCode = failureCodes[rnd.nextInt(failureCodes.length)];
-        var requestPayloadSize = rnd.nextInt(700) + 250;
-        var responsePayloadSize = rnd.nextInt(700) + 250;
-        Countly.endNetworkRequest(networkTraceKey, uniqueId, responseCode, requestPayloadSize, responsePayloadSize);
-    }
-    app.setRecordAppStartTime = function(){
-        Countly.setRecordAppStartTime(true);
-    }
-    app.applicationOnCreate = function(){
-        Countly.applicationOnCreate();
+    app.setCustomCrashSegment = function(){
+        var segment = {"Key": "Value"};
+        Countly.setCustomCrashSegment(segment);
     }
     // Remote config usage
 
