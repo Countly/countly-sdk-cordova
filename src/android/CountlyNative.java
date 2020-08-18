@@ -98,6 +98,17 @@ public class CountlyNative {
         }
     }
 
+    public String isInitialized(JSONArray args){
+        this.log("isInitialized", args);
+        Boolean isInitialized = Countly.sharedInstance().isInitialized();
+            if(isInitialized){
+                return "true";
+
+            }else{
+                return "false";
+            }
+    }
+
     public void log(String method, JSONArray args){
         if(isDebug){
             Log.i("Countly Native", "Method: "+method);
@@ -677,6 +688,16 @@ public class CountlyNative {
             }
             Countly.sharedInstance().views().recordView(viewName, segmentation);
             return "View name sent: " + viewName;
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
+    public String setAutomaticViewTracking(JSONArray args){
+        try {
+            Boolean flag = args.getBoolean(0);
+            this.config.setViewTracking(flag);
+            return "Set automatic view tracking: " + flag;
         }catch (JSONException jsonException){
             return jsonException.toString();
         }

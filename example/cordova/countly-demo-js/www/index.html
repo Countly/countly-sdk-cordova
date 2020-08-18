@@ -135,6 +135,12 @@
         <div class="ui horizontal divider">Rating Methods End</div>
     </div>
     <script type="text/javascript">
+        document.addEventListener("deviceready", function(){
+            console.log("deviceready");
+            Countly.onNotification(function(theNotification){
+                alert(JSON.stringify(theNotification));
+            });
+        });
     app = {};
     function makeid() {
         var text = "";
@@ -146,15 +152,47 @@
         return text;
     }
     app.init = function() {
-        Countly.pushTokenType(Countly.messagingMode.TEST);
-        Countly.setLoggingEnabled(true);
-        Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
+        Countly.isInitialized().then((result) => {
+            if(result  != "true") {
+                /** Recommended settings for Countly initialisation */
+                Countly.setLoggingEnabled(true); // Enable countly internal debugging logs
+                Countly.enableCrashReporting(); // Enable crash reporting to report unhandled crashes to Countly
+                Countly.setRequiresConsent(true); // Set that consent should be required for features to work.
+                Countly.setAutomaticViewTracking(true); // Enable automatic view tracking
+
+                /** Optional settings for Countly initialisation */
+                Countly.enableParameterTamperingProtection("salt"); // Set the optional salt to be used for calculating the checksum of requested data which will be sent with each request
+                // Countly.pinnedCertificates("count.ly.cer"); // It will ensure that connection is made with one of the public keys specified
+                // Countly.setHttpPostForced(false); // Set to "true" if you want HTTP POST to be used for all requests
+                Countly.enableAttribution(); // Enable to measure your marketing campaign performance by attributing installs from specific campaigns.
+
+                Countly.init("https://try.count.ly", "YOUR_API_KEY").then((result) => {
+                    /** 
+                     * Push notifications settings 
+                     * Should be call after init
+                    */
+                    Countly.pushTokenType(Countly.messagingMode.TEST); // Set messaging mode for push notifications
+                    Countly.onNotification(function(theNotification){
+                        alert(JSON.stringify(theNotification));
+                    }); // Set callback to receive push notifications
+                    Countly.askForNotificationPermission(); // This method will ask for permission, enables push notification and send push token to countly server.
+
+                    Countly.giveAllConsent(); // give consent for all features, should be call after init
+                    // Countly.giveConsent(["events", "views"]); // give conset for some specific features, should be call after init.
+                },(err) => {
+                    console.error(err);
+                });
+            }
+        },(err) => {
+            console.error(err);
+        });
+        
         // Countly.eventSendThreshold(1);
     };
     app.initWithID = function(){
         Countly.pushTokenType(Countly.messagingMode.TEST);
         Countly.setLoggingEnabled(true);
-        Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
+        Countly.init("https://try.count.ly", "YOUR_API_KEY", makeid());
         // Countly.eventSendThreshold(1);
     }
     // app.test = function() {
@@ -164,10 +202,11 @@
 
     app.setOptionalParametersForInitialization = function() {
         Countly.setOptionalParametersForInitialization({
-            city: "Tampa",
-            country: "US",
-            latitude: "28.006324",
-            longitude: "-82.7166183"
+            "city": "Tampa",
+            "country": "US",
+            "latitude": "28.006324",
+            "longitude": "-82.7166183",
+            "ipAddress": "255.255.255.255"
         });
     };
 
@@ -523,12 +562,15 @@
         Countly.userData.setProperty("setProperty", "My Property");
     }
     app.userData.increment = function() {
+        Countly.userData.setProperty("increment", 4);
         Countly.userData.increment("increment");
     }
     app.userData.incrementBy = function() {
+        Countly.userData.setProperty("incrementBy", 5);
         Countly.userData.incrementBy("incrementBy", 10);
     }
     app.userData.multiply = function() {
+        Countly.userData.setProperty("multiply", 5);
         Countly.userData.multiply("multiply", 20);
     }
     app.userData.saveMax = function() {
