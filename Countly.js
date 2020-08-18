@@ -4,6 +4,9 @@ Countly.appKey = "";
 Countly.ready = false;
 Countly.version = "20.04";
 Countly.isDebug = false;
+Countly.deviceIDType = {
+    "TemporaryDeviceID": "TemporaryDeviceID"
+}
 var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 if (/android/i.test(userAgent)) {
     Countly.isAndroid = true;

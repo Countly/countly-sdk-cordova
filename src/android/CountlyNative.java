@@ -72,14 +72,16 @@ public class CountlyNative {
             this.config.setServerURL((serverUrl));
             this.config.setAppKey(appKey);
             if (args.length() == 2) {
+                this.config.setIdMode(DeviceId.Type.OPEN_UDID);
             } else if (args.length() == 3) {
                 String yourDeviceID = args.getString(2);
-                if(yourDeviceID.equals("TemporaryDeviceID")){
+                if (yourDeviceID.equals("TemporaryDeviceID")) {
                     this.config.enableTemporaryDeviceIdMode();
-                }else{
+                } else {
                     this.config.setDeviceId(yourDeviceID);
                 }
             } else {
+                this.config.setIdMode(DeviceId.Type.ADVERTISING_ID);
             }
             Countly.sharedInstance().init(this.config);
             Countly.sharedInstance().onStart(activity);
@@ -109,10 +111,14 @@ public class CountlyNative {
             this.log("changeDeviceId", args);
             String newDeviceID = args.getString(0);
             String onServerString = args.getString(1);
-            if ("1".equals(onServerString)) {
-                Countly.sharedInstance().changeDeviceId(newDeviceID);
-            } else {
-                Countly.sharedInstance().changeDeviceId(DeviceId.Type.DEVELOPER_SUPPLIED, newDeviceID);
+            if(newDeviceID.equals("TemporaryDeviceID")){
+                Countly.sharedInstance().enableTemporaryIdMode();
+            }else{
+                if ("1".equals(onServerString)) {
+                    Countly.sharedInstance().changeDeviceIdWithMerge(newDeviceID);
+                } else {
+                    Countly.sharedInstance().changeDeviceIdWithoutMerge(DeviceId.Type.DEVELOPER_SUPPLIED, newDeviceID);
+                }
             }
             return "changeDeviceId success!";
         }catch (JSONException jsonException){

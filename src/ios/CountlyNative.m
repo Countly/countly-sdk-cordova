@@ -257,7 +257,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         if(command.count == 3){
             deviceID = [command objectAtIndex:2];
-            config.deviceID = deviceID;
+            if ([@"TemporaryDeviceID" isEqualToString:deviceID]) {
+                config.deviceID = CLYTemporaryDeviceID;
+            } else {
+                config.deviceID = deviceID;
+            }
         }
 
         if (serverurl != nil && [serverurl length] > 0) {
@@ -352,10 +356,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         NSString* newDeviceID = [command objectAtIndex:0];
         NSString* onServerString = [command objectAtIndex:1];
 
-        if ([onServerString  isEqual: @"1"]) {
-            [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: YES];
+        if ([newDeviceID  isEqual: @"TemporaryDeviceID"]) {
+            [Countly.sharedInstance setNewDeviceID:CLYTemporaryDeviceID onServer:NO];
         }else{
-            [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: NO];
+            if ([onServerString  isEqual: @"1"]) {
+                [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: YES];
+            }else{
+                [Countly.sharedInstance setNewDeviceID:newDeviceID onServer: NO];
+            }
         }
 
         result(@"changeDeviceId!");
