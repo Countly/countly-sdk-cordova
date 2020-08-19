@@ -33,6 +33,9 @@ public class CountlyCordova extends CordovaPlugin {
         if ("init".equals(action)) {
             callbackContext.success(countlyNative.init(args));
         }
+        if ("isInitialized".equals(action)) {
+            callbackContext.success(countlyNative.isInitialized(args));
+        }
         else if ("changeDeviceId".equals(action)){
             callbackContext.success(countlyNative.changeDeviceId(args));
         }
@@ -159,6 +162,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if("recordView".equals(action)){
             callbackContext.success(countlyNative.recordView(args));
         }
+        else if("setAutomaticViewTracking".equals(action)){
+            callbackContext.success(countlyNative.setAutomaticViewTracking(args));
+        }
         else if("setOptionalParametersForInitialization".equals(action)){
             callbackContext.success(countlyNative.setOptionalParametersForInitialization(args));
         }
@@ -228,6 +234,9 @@ public class CountlyCordova extends CordovaPlugin {
         }
         else if("enableApm".equals(action)){
             callbackContext.success(countlyNative.enableApm(args));
+        }
+        else if("enableAttribution".equals(action)){
+            callbackContext.success(countlyNative.enableAttribution(args));
         }
         else{
             return false;

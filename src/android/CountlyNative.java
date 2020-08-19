@@ -43,6 +43,17 @@ public class CountlyNative {
     private CountlyConfig config = new CountlyConfig();
     private static Callback notificationListener = null;
     private static String lastStoredNotification = null;
+    private final Set<String> validConsentFeatureNames = new HashSet<String>(Arrays.asList(
+            Countly.CountlyFeatureNames.sessions,
+            Countly.CountlyFeatureNames.events,
+            Countly.CountlyFeatureNames.views,
+            Countly.CountlyFeatureNames.location,
+            Countly.CountlyFeatureNames.crashes,
+            Countly.CountlyFeatureNames.attribution,
+            Countly.CountlyFeatureNames.users,
+            Countly.CountlyFeatureNames.push,
+            Countly.CountlyFeatureNames.starRating
+    ));
     public CountlyNative(Activity _activity, Context _context){
         this.activity = _activity;
         this.context = _context;
@@ -85,6 +96,17 @@ public class CountlyNative {
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
+    }
+
+    public String isInitialized(JSONArray args){
+        this.log("isInitialized", args);
+        Boolean isInitialized = Countly.sharedInstance().isInitialized();
+            if(isInitialized){
+                return "true";
+
+            }else{
+                return "false";
+            }
     }
 
     public void log(String method, JSONArray args){
@@ -654,8 +676,28 @@ public class CountlyNative {
         try {
             this.log("recordView", args);
             String viewName = args.getString(0);
-            Countly.sharedInstance().views().recordView(viewName);
+            HashMap<String, Object> segmentation = new HashMap<String, Object>();
+            for(int i=1,il=args.length();i<il;i+=2){
+                try{
+                    segmentation.put(args.getString(i), args.getString(i+1));
+                }catch(Exception exception){
+                    if(isDebug){
+                        Log.e(Countly.TAG, "[CountlyCordova] recordView, could not parse segments, skipping it. ");
+                    }
+                }
+            }
+            Countly.sharedInstance().views().recordView(viewName, segmentation);
             return "View name sent: " + viewName;
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
+    public String setAutomaticViewTracking(JSONArray args){
+        try {
+            Boolean flag = args.getBoolean(0);
+            this.config.setViewTracking(flag);
+            return "Set automatic view tracking: " + flag;
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -669,21 +711,15 @@ public class CountlyNative {
             String latitude = args.getString(2);
             String longitude = args.getString(3);
             String ipAddress = args.getString(4);
-            String latlng = latitude + "," + longitude;
+            String latlng = null;
             if(city.length() == 0){
                 city = null;
             }
             if(country.length() == 0){
                 country = null;
             }
-            if(latitude.equals("0.00")){
-                latitude = null;
-            }
-            if(longitude.equals("0.00")){
-                longitude = null;
-            }
-            if(latitude == null && longitude == null){
-                latlng = null;
+            if(!latitude.equals("null") && !longitude.equals("null")) {
+                latlng = latitude + "," + longitude;
             }
             if(ipAddress.equals("0.0.0.0")){
                 ipAddress = null;
@@ -831,6 +867,12 @@ public class CountlyNative {
             return jsonException.toString();
         }
         return "sendPushToken success.";
+    }
+
+    public String enableAttribution(JSONArray args){
+        this.log("enableAttribution", args);
+        this.config.setEnableAttribution(true);
+        return "enableAttribution success!";
     }
 
     public String startTrace(JSONArray args){

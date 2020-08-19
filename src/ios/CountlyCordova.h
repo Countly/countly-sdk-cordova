@@ -3,6 +3,7 @@
 @interface CountlyCordova : CDVPlugin
 
 - (void)init:(CDVInvokedUrlCommand*)command;
+- (void)isInitialized:(CDVInvokedUrlCommand*)command;
 - (void)event:(CDVInvokedUrlCommand*)command;
 - (void)recordEvent:(CDVInvokedUrlCommand*)command;
 - (void)setLoggingEnabled:(CDVInvokedUrlCommand*)command;
@@ -18,6 +19,7 @@
 - (void)eventSendThreshold:(CDVInvokedUrlCommand*)command;
 - (void)storedRequestsLimit:(CDVInvokedUrlCommand*)command;
 - (void)recordView:(CDVInvokedUrlCommand*)command;
+- (void)setAutomaticViewTracking:(CDVInvokedUrlCommand*)command;
 - (void)resume:(CDVInvokedUrlCommand*)command;
 - (void)suspend:(CDVInvokedUrlCommand*)command;
 
@@ -64,6 +66,7 @@
 - (void)getRemoteConfigValueForKey:(CDVInvokedUrlCommand*)command;
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command;
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command;
+- (void)enableAttribution:(CDVInvokedUrlCommand*)command;
 
 - (void)startTrace:(CDVInvokedUrlCommand*)command;
 - (void)cancelTrace:(CDVInvokedUrlCommand*)command;

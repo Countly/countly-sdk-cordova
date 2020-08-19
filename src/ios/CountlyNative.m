@@ -9,6 +9,8 @@ static char coldstartKey;
 Result notificationListener = nil;
 NSDictionary *lastStoredNotification = nil;
 NSMutableArray *notificationIDs = nil;        // alloc here
+NSMutableArray<CLYFeature>* countlyFeatures = nil;
+Boolean isInitialized = false;
 
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 @implementation AppDelegate (notification)
@@ -176,7 +178,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (void)pushPluginOnApplicationDidBecomeActive:(NSNotification *)notification {
 
     NSLog(@"active");
-    
+
     NSString *firstLaunchKey = @"firstLaunchKey";
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"phonegap-plugin-push"];
     if (![defaults boolForKey:firstLaunchKey]) {
@@ -252,7 +254,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         config.appKey = appkey;
         config.host = serverurl;
         Countly.sharedInstance.isAutoViewTrackingActive = NO;
-        config.features = @[CLYCrashReporting, CLYPushNotifications];
+        [self addCountlyFeature:CLYPushNotifications];
 
         if(command.count == 3){
             deviceID = [command objectAtIndex:2];
@@ -260,13 +262,25 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
 
         if (serverurl != nil && [serverurl length] > 0) {
+            dispatch_async(dispatch_get_main_queue(), ^ {
+            isInitialized = true;
             [[Countly sharedInstance] startWithConfig:config];
             [self recordPushAction];
+            });
             result(@"initialized.");
         } else {
             result(@"initialization failed!");
         }
+    }else if ([@"isInitialized" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        if(isInitialized){
+            result(@"true");
+        }else{
+            result(@"false");
+        }
+        });
     }else if ([@"recordEvent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* key = [command objectAtIndex:0];
         NSString* countString = [command objectAtIndex:1];
         int count = [countString intValue];
@@ -285,11 +299,39 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         NSString *resultString = @"recordEvent for: ";
         resultString = [resultString stringByAppendingString: key];
         result(resultString);
+        });
     }else if ([@"recordView" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* recordView = [command objectAtIndex:0];
-        [Countly.sharedInstance recordView:recordView];
+        NSMutableDictionary *segments = [[NSMutableDictionary alloc] init];
+        int il=(int)command.count;
+        if(il > 2) {
+            for(int i=1;i<il;i+=2){
+                @try{
+                    segments[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
+                }
+                @catch(NSException *exception){
+                    NSLog(@"[CountlyFlutter] recordView: Exception occured while parsing segments: %@", exception);
+                }
+            }
+        }
+        [Countly.sharedInstance recordView:recordView segmentation:segments];
         result(@"recordView Sent!");
+        });
+    }else if ([@"setAutomaticViewTracking" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        BOOL boolean = [[command objectAtIndex:0] boolValue];
+        if(boolean) {
+            [self addCountlyFeature:CLYAutoViewTracking];
+        }
+        else {
+            [self removeCountlyFeature:CLYAutoViewTracking];
+        }
+        [Countly.sharedInstance setIsAutoViewTrackingActive:boolean];
+        result(@"setAutomaticViewTracking!");
+        });
     }else if ([@"setLoggingEnabled" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* loggingEnable = [command objectAtIndex:0];
         if([@"true" isEqualToString:loggingEnable]){
             isDebug = true;
@@ -299,7 +341,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             config.enableDebug = NO;
         }
         result(@"setLoggingEnabled!");
+        });
     }else if ([@"setuserdata" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* name = [command objectAtIndex:0];
         NSString* username = [command objectAtIndex:1];
         NSString* email = [command objectAtIndex:2];
@@ -321,24 +365,34 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         [Countly.user save];
         result(@"setuserdata!");
+        });
 
     }else if ([@"getDeviceID" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* deviceID = Countly.sharedInstance.deviceID;
         result([NSString stringWithFormat:@"%@", deviceID]);
+        });
     }else if ([@"start" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance beginSession];
         result(@"start!");
+        });
 
     }else if ([@"stop" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance endSession];
         result(@"stop!");
+        });
     }else if ([@"halt" isEqualToString:method]) { // This method is not implemented in iOS SDK
         // [Countly.sharedInstance endSession];
         result(@"No implemntation for halt!");
     }else if ([@"update" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance updateSession];
         result(@"update!");
+        });
     }else if ([@"changeDeviceId" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* newDeviceID = [command objectAtIndex:0];
         NSString* onServerString = [command objectAtIndex:1];
 
@@ -349,8 +403,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
 
         result(@"changeDeviceId!");
+        });
 
     }else if ([@"setHttpPostForced" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* isEnabled = [command objectAtIndex:0];
         if ([isEnabled  isEqual: @"1"]) {
             config.alwaysUsePOST = YES;
@@ -360,24 +416,32 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         // config.alwaysUsePOST = YES;
         result(@"setHttpPostForced!");
+        });
 
     }else if ([@"enableParameterTamperingProtection" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* salt = [command objectAtIndex:0];
         config.secretSalt = salt;
         result(@"enableParameterTamperingProtection!");
+        });
 
     }else if ([@"startEvent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* eventName = [command objectAtIndex:0];
         [Countly.sharedInstance startEvent:eventName];
         result(@"startEvent!");
+        });
 
     }else if ([@"cancelEvent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* eventName = [command objectAtIndex:0];
         [Countly.sharedInstance cancelEvent:eventName];
         result(@"cancelEvent!");
+        });
 
     }else if ([@"endEvent" isEqualToString:method]) {
 
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* key = [command objectAtIndex:0];
         NSString* countString = [command objectAtIndex:1];
         int count = [countString intValue];
@@ -394,7 +458,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         NSString *resultString = @"endEvent for: ";
         resultString = [resultString stringByAppendingString: key];
         result(resultString);
+        });
     }else if ([@"setLocation" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* latitudeString = [command objectAtIndex:0];
         NSString* longitudeString = [command objectAtIndex:1];
 
@@ -404,17 +470,21 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
 
         result(@"setLocation!");
+        });
 
     }else if ([@"enableCrashReporting" isEqualToString:method]) {
-        // config.features = @[CLYCrashReporting];
+        [self addCountlyFeature:CLYCrashReporting];
         result(@"enableCrashReporting!");
 
     }else if ([@"addCrashLog" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* record = [command objectAtIndex:0];
         [Countly.sharedInstance recordCrashLog: record];
         result(@"addCrashLog!");
+        });
 
     }else if ([@"logException" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* execption = [command objectAtIndex:0];
         NSString* nonfatal = [command objectAtIndex:1];
         NSArray *nsException = [execption componentsSeparatedByString:@"\n"];
@@ -430,6 +500,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         [Countly.sharedInstance recordHandledException:myException withStackTrace: nsException];
         result(@"logException!");
+        });
 
     }else if ([@"sendPushToken" isEqualToString:method]) {
         if(config != nil){
@@ -455,6 +526,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             lastStoredNotification = nil;
         }
     }else if ([@"pushTokenType" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* tokenType = [command objectAtIndex:0];
         if([tokenType isEqualToString: @"1"]){
             config.pushTestMode = @"CLYPushTestModeDevelopment";
@@ -464,7 +536,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }else{
         }
         result(@"pushTokenType!");
+        });
     }else if ([@"userData_setProperty" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
 
@@ -472,16 +546,20 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user save];
 
         result(@"userData_setProperty!");
+        });
 
     }else if ([@"userData_increment" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* keyName = [command objectAtIndex:0];
 
         [Countly.user increment:keyName];
         [Countly.user save];
 
         result(@"userData_increment!");
+        });
 
     }else if ([@"userData_incrementBy" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
         int keyValueInteger = [keyValue intValue];
@@ -490,8 +568,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user save];
 
         result(@"userData_incrementBy!");
+        });
 
     }else if ([@"userData_multiply" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
         int keyValueInteger = [keyValue intValue];
@@ -500,8 +580,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user save];
 
         result(@"userData_multiply!");
+        });
 
     }else if ([@"userData_saveMax" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
         int  keyValueInteger = [keyValue intValue];
@@ -509,8 +591,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user max:keyName value:[NSNumber numberWithInt:keyValueInteger]];
         [Countly.user save];
         result(@"userData_saveMax!");
+        });
 
     }else if ([@"userData_saveMin" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
         int keyValueInteger = [keyValue intValue];
@@ -519,8 +603,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user save];
 
         result(@"userData_saveMin!");
+        });
 
     }else if ([@"userData_setOnce" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* keyName = [command objectAtIndex:0];
         NSString* keyValue = [command objectAtIndex:1];
 
@@ -528,8 +614,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user save];
 
         result(@"userData_setOnce!");
+        });
 
     }else if ([@"userData_pushUniqueValue" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* type = [command objectAtIndex:0];
         NSString* pushUniqueValueString = [command objectAtIndex:1];
 
@@ -537,8 +625,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user save];
 
         result(@"userData_pushUniqueValue!");
+        });
 
     }else if ([@"userData_pushValue" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* type = [command objectAtIndex:0];
         NSString* pushValue = [command objectAtIndex:1];
 
@@ -546,8 +636,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user save];
 
         result(@"userData_pushValue!");
+        });
 
     }else if ([@"userData_pullValue" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* type = [command objectAtIndex:0];
         NSString* pullValue = [command objectAtIndex:1];
 
@@ -555,14 +647,18 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.user save];
 
         result(@"userData_pullValue!");
+        });
 
         //setRequiresConsent
     }else if ([@"setRequiresConsent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         BOOL consentFlag = [[command objectAtIndex:0] boolValue];
         config.requiresConsent = consentFlag;
         result(@"setRequiresConsent!");
+        });
 
     }else if ([@"giveConsent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* consent = @"";
         // NSMutableDictionary *giveConsentAll = [[NSMutableDictionary alloc] init];
         for(int i=0,il=(int)command.count; i<il;i++){
@@ -602,8 +698,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         NSString *resultString = @"giveConsent for: ";
         result(@"giveConsent!");
+        });
 
     }else if ([@"removeConsent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* consent = @"";
         //        NSMutableDictionary *removeConsent = [[NSMutableDictionary alloc] init];
         for(int i=0,il=(int)command.count; i<il;i++){
@@ -642,8 +740,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         NSString *resultString = @"removeConsent for: ";
         result(@"removeConsent!");
+        });
 
     }else if ([@"giveAllConsent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentEvents];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentUserDetails];
@@ -656,8 +756,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.sharedInstance giveConsentForFeature:CLYConsentAppleWatch];
 
         result(@"giveAllConsent!");
+        });
 
     }else if ([@"removeAllConsent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentEvents];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentUserDetails];
@@ -669,8 +771,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentStarRating];
         [Countly.sharedInstance cancelConsentForFeature:CLYConsentAppleWatch];
         result(@"removeAllConsent!");
+        });
 
     }else if ([@"setOptionalParametersForInitialization" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* city = [command objectAtIndex:0];
         NSString* country = [command objectAtIndex:1];
 
@@ -685,8 +789,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.sharedInstance recordCity:city andISOCountryCode:country];
         [Countly.sharedInstance recordIP:ipAddress];
         result(@"setOptionalParametersForInitialization!");
+        });
 
     }else if ([@"setRemoteConfigAutomaticDownload" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         config.enableRemoteConfig = YES;
         config.remoteConfigCompletionHandler = ^(NSError * error)
         {
@@ -696,8 +802,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 result([@"Error :" stringByAppendingString: error.localizedDescription]);
             }
         };
+        });
 
     }else if ([@"remoteConfigUpdate" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance updateRemoteConfigWithCompletionHandler:^(NSError * error)
          {
              if (!error){
@@ -706,8 +814,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                  result([@"Error :" stringByAppendingString: error.localizedDescription]);
              }
          }];
+        });
 
     }else if ([@"updateRemoteConfigForKeysOnly" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSMutableArray *randomSelection = [[NSMutableArray alloc] init];
         for (int i = 0; i < (int)command.count; i++){
             [randomSelection addObject:[command objectAtIndex:i]];
@@ -726,8 +836,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                  result([@"Error :" stringByAppendingString: error.localizedDescription]);
              }
          }];
+        });
 
     }else if ([@"updateRemoteConfigExceptKeys" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSMutableArray *randomSelection = [[NSMutableArray alloc] init];
         for (int i = 0; i < (int)command.count; i++){
             [randomSelection addObject:[command objectAtIndex:i]];
@@ -746,12 +858,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                  result([@"Error :" stringByAppendingString: error.localizedDescription]);
              }
          }];
+        });
 
     }else if ([@"remoteConfigClearValues" isEqualToString:method]) {
 //        [CountlyRemoteConfig.sharedInstance clearCachedRemoteConfig];
         result(@"Success!");
 
     }else if ([@"getRemoteConfigValueForKey" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         id value = [Countly.sharedInstance remoteConfigValueForKey:[command objectAtIndex:0]];
         if(!value){
             value = @"Default Value";
@@ -782,7 +896,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }else{
             result([value stringValue]);
         }
+        });
     }else if ([@"askForFeedback" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* widgetId = [command objectAtIndex:0];
         [Countly.sharedInstance presentFeedbackWidgetWithID:widgetId completionHandler:^(NSError* error){
             if (error){
@@ -793,6 +909,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 result(@"Feedback widget presented successfully");
             }
         }];
+        });
 
     }else if ([@"askForStarRating" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
@@ -800,6 +917,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 result([NSString stringWithFormat: @"Rating:%d", (int)rating]);
             }];
         });
+    }else if ([@"getPlatformVersion" isEqualToString:method]) {
+        result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+    }else if ([@"enableAttribution" isEqualToString:method]) {
+        config.enableAttribution = YES;
+        result(@"enableAttribution");
     }else if ([@"startTrace" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* traceKey = [command objectAtIndex:0];
@@ -864,6 +986,28 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     } else {
         NSLog(@"Countly Bridge Method Not Implemented %@", method);
         result(@"Countly Bridge Method Not Implemented");
+    }
+}
+
+- (void)addCountlyFeature:(CLYFeature)feature
+{
+    if(countlyFeatures == nil) {
+        countlyFeatures = [[NSMutableArray alloc] init];
+    }
+    if(![countlyFeatures containsObject:feature]) {
+        [countlyFeatures addObject:feature];
+        config.features = countlyFeatures;
+    }
+}
+
+- (void)removeCountlyFeature:(CLYFeature)feature
+{
+    if(countlyFeatures == nil) {
+        return;
+    }
+    if(![countlyFeatures containsObject:feature]) {
+        [countlyFeatures removeObject:feature];
+        config.features = countlyFeatures;
     }
 }
 
