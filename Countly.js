@@ -24,7 +24,7 @@ Countly.init = function(serverUrl,appKey, deviceId){
     if(deviceId){
         args.push(deviceId || "");
     };
-    
+
     return new Promise((resolve,reject) => {
         cordova.exec(resolve,reject,"CountlyCordova","init",args);
     });
@@ -38,7 +38,7 @@ Countly.isInitialized = function(){
 
 /**
  * Record custom view to Countly.
- * 
+ *
  * @param {string} recordView - name of the view
  * @param {Map} segments - allows to add optional segmentation,
  * Supported data type for segments values are String, int, double and bool
@@ -71,7 +71,7 @@ Countly.setAutomaticViewTracking = function(enabled = true){
     if(typeof enabled === 'string') {
         enabled = (enabled === "true"); // Typecast from string to boolean
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutomaticViewTracking",[enabled]]);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutomaticViewTracking",[enabled]);
 }
 
 /**
@@ -126,7 +126,7 @@ Countly.halt = function(){
 // }
 
 /**
- * 
+ *
  * Events get grouped together and are sent either every minute or after the unsent event count reaches a threshold. By default it is 10
  * Should be call before Countly init
  */
@@ -149,7 +149,7 @@ Countly.onNotification = function(callback){
 }
 
 /**
- * 
+ *
  * Set Push notification messaging mode and callbacks for push notifications
  * Should be call after Countly init
  */
@@ -255,7 +255,7 @@ Countly.logException = function(exception, nonfatal, segments){
 };
 
 /**
- * 
+ *
  * Set the optional salt to be used for calculating the checksum of requested data which will be sent with each request, using the &checksum field
  * Should be call before Countly init
  */
@@ -375,7 +375,7 @@ Countly.userData.pullValue = function(type, pullValue){
 Countly.consents = ["sessions", "events", "views", "location", "crashes", "attribution", "users", "push", "star-rating","AppleWatch"];
 
 /**
- * 
+ *
  * Set that consent should be required for features to work.
  * Should be call before Countly init
  */
@@ -449,7 +449,7 @@ Countly.sendPushToken = function(options){
 // Push Notification
 
 /**
- * 
+ *
  * Set to "true" if you want HTTP POST to be used for all requests
  * Should be call before Countly init
  */
@@ -458,7 +458,7 @@ Countly.setHttpPostForced = function(boolean){
 }
 
 /**
- * 
+ *
  * Enable campaign attribution reporting to Countly.
  * Should be call before Countly init
  */

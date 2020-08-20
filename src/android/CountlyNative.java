@@ -882,7 +882,6 @@ public class CountlyNative {
             Countly.sharedInstance().apm().startTrace(traceKey);
             return "startTrace success.";
         }catch (JSONException jsonException){
-            logError("startTrace", jsonException);
             return jsonException.toString();
         }
     }
@@ -894,7 +893,6 @@ public class CountlyNative {
             // Countly.sharedInstance().apm().cancelTrace(traceKey);
             return "cancelTrace not implemented.";
         }catch (JSONException jsonException){
-            logError("cancelTrace", jsonException);
             return jsonException.toString();
         }
     }
@@ -924,7 +922,6 @@ public class CountlyNative {
             Countly.sharedInstance().apm().endTrace(traceKey, customMetric);
             return "endTrace success.";
         }catch (JSONException jsonException){
-            logError("endTrace", jsonException);
             return jsonException.toString();
         }
     }
@@ -942,7 +939,6 @@ public class CountlyNative {
             // Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, null, responseCode, requestPayloadSize, responsePayloadSize);
             return "endNetworkRequest success.";
         }catch (JSONException jsonException){
-            logError("recordNetworkTrace", jsonException);
             return jsonException.toString();
         }
     }
