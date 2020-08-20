@@ -211,12 +211,16 @@ Countly.setLocation = function(latitude, longitude){
  * Should be call after Countly init
  * */
 Countly.getCurrentDeviceId = function(onSuccess, onError){
-    if(!await Countly.isInitialized()) {
-        if(Countly.isDebug){
-            console.warn("'getCurrentDeviceId, init must be called before getCurrentDeviceId'");
+    Countly.isInitialized().then((result) => {
+        if(result  != "true") {
+            if(Countly.isDebug){
+                console.warn("'getCurrentDeviceId, init must be called before getCurrentDeviceId'");
+            }
+            return;
         }
-        return;
-    }
+    },(err) => {
+        console.error(err);
+    });
     cordova.exec(onSuccess, onError,"CountlyCordova","getCurrentDeviceId",[]);
 }
 
