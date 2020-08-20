@@ -938,8 +938,11 @@ public class CountlyNative {
             long endTime = Long.parseLong(args.getString(5));
             // Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, null, responseCode, requestPayloadSize, responsePayloadSize);
             return "endNetworkRequest success.";
-        }catch (JSONException jsonException){
-            return jsonException.toString();
+        }catch (Exception exception){
+            if(Countly.sharedInstance().isLoggingEnabled()){
+                Log.e(Countly.TAG, "Exception occured at recordNetworkTrace method: " +exception.toString());
+            }
+            return exception.toString();
         }
     }
 
