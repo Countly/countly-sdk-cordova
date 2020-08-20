@@ -24,7 +24,7 @@ Countly.init = function(serverUrl,appKey, deviceId){
     if(deviceId){
         args.push(deviceId || "");
     };
-    
+
     return new Promise((resolve,reject) => {
         cordova.exec(resolve,reject,"CountlyCordova","init",args);
     });
@@ -38,7 +38,7 @@ Countly.isInitialized = function(){
 
 /**
  * Record custom view to Countly.
- * 
+ *
  * @param {string} recordView - name of the view
  * @param {Map} segments - allows to add optional segmentation,
  * Supported data type for segments values are String, int, double and bool
@@ -71,7 +71,7 @@ Countly.setAutomaticViewTracking = function(enabled = true){
     if(typeof enabled === 'string') {
         enabled = (enabled === "true"); // Typecast from string to boolean
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutomaticViewTracking",[enabled]]);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutomaticViewTracking",[enabled]);
 }
 
 /**
@@ -126,7 +126,7 @@ Countly.halt = function(){
 // }
 
 /**
- * 
+ *
  * Events get grouped together and are sent either every minute or after the unsent event count reaches a threshold. By default it is 10
  * Should be call before Countly init
  */
@@ -149,7 +149,7 @@ Countly.onNotification = function(callback){
 }
 
 /**
- * 
+ *
  * Set Push notification messaging mode and callbacks for push notifications
  * Should be call after Countly init
  */
@@ -271,7 +271,7 @@ Countly.logException = function(exception, nonfatal, segments){
 };
 
 /**
- * 
+ *
  * Set the optional salt to be used for calculating the checksum of requested data which will be sent with each request, using the &checksum field
  * Should be call before Countly init
  */
@@ -391,7 +391,7 @@ Countly.userData.pullValue = function(type, pullValue){
 Countly.consents = ["sessions", "events", "views", "location", "crashes", "attribution", "users", "push", "star-rating","AppleWatch"];
 
 /**
- * 
+ *
  * Set that consent should be required for features to work.
  * Should be call before Countly init
  */
@@ -465,7 +465,7 @@ Countly.sendPushToken = function(options){
 // Push Notification
 
 /**
- * 
+ *
  * Set to "true" if you want HTTP POST to be used for all requests
  * Should be call before Countly init
  */
@@ -474,12 +474,56 @@ Countly.setHttpPostForced = function(boolean){
 }
 
 /**
- * 
+ *
  * Enable campaign attribution reporting to Countly.
  * Should be call before Countly init
  */
 Countly.enableAttribution = function() {
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableAttribution",[]);
+}
+
+Countly.startTrace = function(traceKey){
+    var args = [];
+    args.push(traceKey);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startTrace",args);
+}
+
+Countly.cancelTrace = function(traceKey){
+    var args = [];
+    args.push(traceKey);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","cancelTrace",args);
+}
+
+Countly.clearAllTraces = function(traceKey){
+    var args = [];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","clearAllTraces",args);
+}
+
+Countly.endTrace = function(traceKey, customMetric){
+    var args = [];
+    args.push(traceKey);
+    customMetric = customMetric || {};
+    for(var key in customMetric){
+        args.push(key.toString());
+        args.push(customMetric[key].toString());
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endTrace",args);
+}
+
+Countly.recordNetworkTrace = function(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime){
+    var args = [];
+    args.push(networkTraceKey);
+    args.push(responseCode.toString());
+    args.push(requestPayloadSize.toString());
+    args.push(responsePayloadSize.toString());
+    args.push(startTime.toString());
+    args.push(endTime.toString());
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordNetworkTrace",args);
+}
+
+Countly.enableApm = function(){
+    var args = [];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableApm",args);
 }
 
 window.Countly = Countly;
