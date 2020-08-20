@@ -466,5 +466,49 @@ Countly.enableAttribution = function() {
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableAttribution",[]);
 }
 
+Countly.startTrace = function(traceKey){
+    var args = [];
+    args.push(traceKey);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startTrace",args);
+}
+
+Countly.cancelTrace = function(traceKey){
+    var args = [];
+    args.push(traceKey);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","cancelTrace",args);
+}
+
+Countly.clearAllTraces = function(traceKey){
+    var args = [];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","clearAllTraces",args);
+}
+
+Countly.endTrace = function(traceKey, customMetric){
+    var args = [];
+    args.push(traceKey);
+    customMetric = customMetric || {};
+    for(var key in customMetric){
+        args.push(key.toString());
+        args.push(customMetric[key].toString());
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endTrace",args);
+}
+
+Countly.recordNetworkTrace = function(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime){
+    var args = [];
+    args.push(networkTraceKey);
+    args.push(responseCode.toString());
+    args.push(requestPayloadSize.toString());
+    args.push(responsePayloadSize.toString());
+    args.push(startTime.toString());
+    args.push(endTime.toString());
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordNetworkTrace",args);
+}
+
+Countly.enableApm = function(){
+    var args = [];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableApm",args);
+}
+
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
