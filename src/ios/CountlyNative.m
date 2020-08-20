@@ -967,8 +967,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 int responseCode = [[command objectAtIndex:1] intValue];
                 int requestPayloadSize = [[command objectAtIndex:2] intValue];
                 int responsePayloadSize = [[command objectAtIndex:3] intValue];
-                long startTime = [[command objectAtIndex:4] longValue];
-                long endTime = [[command objectAtIndex:5] longValue];
+                long long startTime = [[command objectAtIndex:4] longValue];
+                long long endTime = [[command objectAtIndex:5] longValue];
                 [Countly.sharedInstance recordNetworkTrace: networkTraceKey requestPayloadSize: requestPayloadSize responsePayloadSize: responsePayloadSize responseStatusCode: responseCode startTime: startTime endTime: endTime];
             }
             @catch(NSException *exception){
