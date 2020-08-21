@@ -50,6 +50,39 @@ CountlyNative* countlyNative = nil;
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }];
 }
+- (void)setViewTracking:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"setViewTracking" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+- (void)setAutoTrackingUseShortName:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"setAutoTrackingUseShortName" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+- (void)setTrackOrientationChanges:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"setTrackOrientationChanges" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
 - (void)setLoggingEnabled:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
@@ -100,6 +133,17 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
+- (void)onConfigurationChanged:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"onConfigurationChanged" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
 
 - (void)halt:(CDVInvokedUrlCommand*)command
 {
@@ -209,6 +253,17 @@ CountlyNative* countlyNative = nil;
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }];
 }
+- (void)recordPastEvent:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"recordPastEvent" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
 
 - (void)cancelEvent:(CDVInvokedUrlCommand*)command
 {
@@ -240,6 +295,17 @@ CountlyNative* countlyNative = nil;
         countlyNative = CountlyNative.new;
     }
     [countlyNative onCall: @"setLocation" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+- (void)disableLocation:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"disableLocation" commandString: command.arguments callback: ^(NSString * theResult)
      {
          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

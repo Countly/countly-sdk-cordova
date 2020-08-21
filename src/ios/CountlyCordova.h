@@ -11,16 +11,24 @@
 - (void)halt:(CDVInvokedUrlCommand*)command;
 - (void)manualSessionHandling:(CDVInvokedUrlCommand*)command;
 - (void)stop:(CDVInvokedUrlCommand*)command;
+- (void)onConfigurationChanged:(CDVInvokedUrlCommand*)command;
+
 - (void)updateSessionPeriod:(CDVInvokedUrlCommand*)command;
 - (void)eventSendThreshold:(CDVInvokedUrlCommand*)command;
 - (void)storedRequestsLimit:(CDVInvokedUrlCommand*)command;
 - (void)recordView:(CDVInvokedUrlCommand*)command;
+- (void)setViewTracking:(CDVInvokedUrlCommand*)command;
+- (void)setTrackOrientationChanges:(CDVInvokedUrlCommand*)command;
+
+- (void)setAutoTrackingUseShortName:(CDVInvokedUrlCommand*)command;
 - (void)resume:(CDVInvokedUrlCommand*)command;
 - (void)suspend:(CDVInvokedUrlCommand*)command;
 
 
 - (void)setHttpPostForced:(CDVInvokedUrlCommand*)command;
 - (void)setLocation:(CDVInvokedUrlCommand*)command;
+- (void)disableLocation:(CDVInvokedUrlCommand*)command;
+
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command;
 - (void)addCrashLog:(CDVInvokedUrlCommand*)command;
 - (void)logException:(CDVInvokedUrlCommand*)command;
@@ -33,6 +41,8 @@
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command;
 - (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command;
 - (void)startEvent:(CDVInvokedUrlCommand*)command;
+- (void)recordPastEvent:(CDVInvokedUrlCommand*)command;
+
 - (void)cancelEvent:(CDVInvokedUrlCommand*)command;
 - (void)endEvent:(CDVInvokedUrlCommand*)command;
 

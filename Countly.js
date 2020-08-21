@@ -34,6 +34,21 @@ Countly.recordView = function(recordView){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",[recordView || ""]);
 };
 
+Countly.setViewTracking = function(isView){
+    Countly.isView = isView;
+    var args = [isView ?"true": "false"];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setViewTracking",args);
+}
+Countly.setAutoTrackingUseShortName = function(isView){
+    Countly.isView = isView;
+    var args = [isView?"true": "false"];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutoTrackingUseShortName",args);
+}
+Countly.setTrackOrientationChanges = function(isView){
+    Countly.isView = isView;
+    var args = [isView?"true": "false"];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setTrackOrientationChanges",args);
+}
 // countly enable logger
 Countly.setLoggingEnabled = function(isDebug){
     Countly.isDebug = isDebug;
@@ -65,6 +80,9 @@ Countly.start = function(){
 // countly stop for android
 Countly.stop = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","stop",[]);
+}
+Countly.onConfigurationChanged =function(callback) {
+    cordova.exec(callback,callback,"CountlyCordova","onConfigurationChanged",[]);
 }
 // countly halt for android
 Countly.halt = function(){
@@ -154,6 +172,10 @@ Countly.setOptionalParametersForInitialization = function(options){
 Countly.setLocation = function(latitude, longitude){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[latitude, longitude]);
 }
+Countly.disableLocation = function(){
+    var args = [];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","disableLocation",args);
+}
 Countly.changeDeviceId = function(newDeviceID, onServer){
     if(onServer === false){
         onServer = "0";
@@ -172,7 +194,7 @@ Countly.enableCrashReporting = function(){
 Countly.addCrashLog = function(crashLog){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","addCrashLog",[crashLog || ""]);
 };
-Countly.logException = function(exception, nonfatal, segments){
+Countly.logException = function(exception, nonfatal){
     var exceptionString = "";
     if (Array.isArray(exception)) {
         for(var i=0, il=exception.length; i<il; i++){
@@ -205,9 +227,44 @@ Countly.setCustomCrashSegment = function(segments){
 Countly.enableParameterTamperingProtection = function(salt){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
 }
-
 Countly.startEvent = function(key){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startEvent",[key.toString() || ""]);
+}
+Countly.recordPastEvent = function(options){
+    var args = [];
+    if(!options.key){
+        options.key = "default";
+    }
+    args.push(options.key.toString());
+
+    if(!options.count){
+        options.count = 1;
+    }
+    args.push(options.count.toString());
+
+    if(!options.sum){
+        options.sum = "0";
+    }
+    args.push(options.sum.toString());
+
+    if(!options.duration){
+        options.duration = "0";
+    }
+    args.push(options.duration.toString());
+
+
+    if(!options.timestamp){
+        options.timestamp = new Date().getTime();
+    }
+    args.push(options.timestamp.toString());
+
+    if(options.segments){
+        for(var key in options.segments){
+            args.push(key);
+            args.push(options.segments[key]);
+        }
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordPastEvent",[key.toString() || ""]);
 }
 Countly.cancelEvent = function(key){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","cancelEvent",[key.toString() || ""]);
@@ -327,10 +384,10 @@ Countly.removeConsent = function(consent){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",consent);
 }
 Countly.giveAllConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",Countly.consents);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveAllConsent",Countly.consents);
 }
 Countly.removeAllConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",Countly.consents);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeAllConsent",Countly.consents);
 }
 
 // Remote config

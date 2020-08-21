@@ -300,7 +300,23 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.sharedInstance recordView:recordView];
         result(@"recordView Sent!");
         });
-    }else if ([@"setLoggingEnabled" isEqualToString:method]) {
+    }else if ([@"setViewTracking" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        config.features = @[CLYAutoViewTracking];
+        result(@"setViewTracking!");
+        });
+    }
+    else if ([@"setAutoTrackingUseShortName" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        result(@"setAutoTrackingUseShortName!");
+        });
+    }
+    else if ([@"setTrackOrientationChanges" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        result(@"setTrackOrientationChanges!");
+        });
+    }
+    else if ([@"setLoggingEnabled" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* loggingEnable = [command objectAtIndex:0];
         if([@"true" isEqualToString:loggingEnable]){
@@ -348,7 +364,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.sharedInstance endSession];
         result(@"stop!");
         });
-    }else if ([@"halt" isEqualToString:method]) { // This method is not implemented in iOS SDK
+    }else if ([@"onConfigurationChanged" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        result(@"onConfigurationChanged!");
+        });
+    }
+    else if ([@"halt" isEqualToString:method]) { // This method is not implemented in iOS SDK
         // [Countly.sharedInstance endSession];
         result(@"No implemntation for halt!");
     }else if ([@"changeDeviceId" isEqualToString:method]) {
@@ -396,7 +417,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         result(@"startEvent!");
         });
 
-    }else if ([@"cancelEvent" isEqualToString:method]) {
+    }else if ([@"recordPastEvent" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        
+        result(@"recordPastEvent!");
+        });
+    }
+    else if ([@"cancelEvent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* eventName = [command objectAtIndex:0];
         [Countly.sharedInstance cancelEvent:eventName];
@@ -435,6 +462,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         result(@"setLocation!");
         });
+
+    }else if ([@"disableLocation" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        [Countly.sharedInstance disableLocationInfo];
+        });
+        result(@"disableLocation!");
 
     }else if ([@"enableCrashReporting" isEqualToString:method]) {
         [config.features addObject:CLYCrashReporting];

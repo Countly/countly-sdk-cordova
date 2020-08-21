@@ -45,6 +45,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if("setLocation".equals(action)){
             callbackContext.success(countlyNative.setLocation(args));
         }
+        else if("disableLocation".equals(action)){
+            callbackContext.success(countlyNative.disableLocation(args));
+        }
         else if("enableCrashReporting".equals(action)){
             callbackContext.success(countlyNative.enableCrashReporting(args));
         }
@@ -63,6 +66,9 @@ public class CountlyCordova extends CordovaPlugin {
         }
         else if ("stop".equals(action)) {
             callbackContext.success(countlyNative.stop(args));
+        }
+        else if  ("onConfigurationChanged".equals(action)){
+            callbackContext.success(countlyNative.onConfigurationChanged(args));
         }
         else if ("halt".equals(action)) {
             callbackContext.success(countlyNative.halt(args));
@@ -89,6 +95,9 @@ public class CountlyCordova extends CordovaPlugin {
 
         else if("startEvent".equals(action)){
             callbackContext.success(countlyNative.startEvent(args));
+        }
+        else if("recordPastEvent".equals(action)){
+            callbackContext.success(countlyNative.recordPastEvent(args));
         }
         else if("cancelEvent".equals(action)){
             callbackContext.success(countlyNative.cancelEvent(args));
@@ -150,14 +159,23 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success(countlyNative.removeConsent(args));
         }
         else if ("giveAllConsent".equals(action)) {
-            callbackContext.success(countlyNative.giveConsent(args));
+            callbackContext.success(countlyNative.giveAllConsent(args));
         }
         else if ("removeAllConsent".equals(action)) {
-            callbackContext.success(countlyNative.removeConsent(args));
+            callbackContext.success(countlyNative.removeAllConsent(args));
         }
 
         else if("recordView".equals(action)){
             callbackContext.success(countlyNative.recordView(args));
+        }
+        else if ("setViewTracking".equals(action)) {
+            callbackContext.success(countlyNative.setViewTracking(args));
+        }
+        else if ("setAutoTrackingUseShortName".equals(action)) {
+            callbackContext.success(countlyNative.setAutoTrackingUseShortName(args));
+        }
+        else if ("setTrackOrientationChanges".equals(action)) {
+            callbackContext.success(countlyNative.setTrackOrientationChanges(args));
         }
         else if("setOptionalParametersForInitialization".equals(action)){
             callbackContext.success(countlyNative.setOptionalParametersForInitialization(args));

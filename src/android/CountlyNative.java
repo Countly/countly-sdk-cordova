@@ -168,6 +168,10 @@ public class CountlyNative {
             return jsonException.toString();
         }
     }
+    public String disableLocation(JSONArray args){
+        Countly.sharedInstance().disableLocation();
+        return "disableLocation: Success";
+    }
 
     public String enableCrashReporting(JSONArray args){
         this.log("enableCrashReporting", args);
@@ -299,7 +303,11 @@ public class CountlyNative {
         Countly.sharedInstance().onStop();
         return "stoped: success";
     }
-
+     public String onConfigurationChanged(JSONArray args){
+        this.log("onConfigurationChanged", args);
+        Countly.sharedInstance().onConfigurationChanged();
+        return "onConfigurationChanged: success";
+    }
     public String halt(JSONArray args){
         this.log("halt", args);
         Countly.sharedInstance().halt();
@@ -318,8 +326,6 @@ public class CountlyNative {
     //     }
     // }
 
-
-
     public String startEvent(JSONArray args){
         try {
             this.log("startEvent", args);
@@ -328,6 +334,16 @@ public class CountlyNative {
             return "startEvent";
         }catch (JSONException jsonException){
             logError("startEvent", jsonException);
+            return jsonException.toString();
+        }
+    }
+     public String recordPastEvent(JSONArray args){
+        try {
+            this.log("recordPastEvent", args);
+            Countly.sharedInstance().events().recordPastEvent(key, segmentation, count, sum, dur, timestamp)
+            return "recordPastEvent";
+        }catch (JSONException jsonException){
+            logError("recordPastEvent", jsonException);
             return jsonException.toString();
         }
     }
@@ -632,6 +648,52 @@ public class CountlyNative {
             return "View name sent: " + viewName;
         }catch (JSONException jsonException){
             logError("recordView", jsonException);
+            return jsonException.toString();
+        }
+    }
+
+     public String setViewTracking(JSONArray args){
+        try {
+            this.log("setViewTracking", args);
+            String flag = args.getString(0);
+            if (flag.equals("true")) {
+                this.config.setViewTracking(true);
+            } else {
+                this.config.setViewTracking(false);
+            }
+            return "setViewTracking success!";
+        }catch (JSONException jsonException){
+            logError("setViewTracking", jsonException);
+            return jsonException.toString();
+        }
+    }
+     public String setAutoTrackingUseShortName(JSONArray args){
+        try {
+            this.log("setAutoTrackingUseShortName", args);
+            String flag = args.getString(0);
+            if (flag.equals("true")) {
+                this.config.setAutoTrackingUseShortName(true);
+            } else {
+                this.config.setAutoTrackingUseShortName(false);
+            }
+            return "setAutoTrackingUseShortName success!";
+        }catch (JSONException jsonException){
+            logError("setAutoTrackingUseShortName", jsonException);
+            return jsonException.toString();
+        }
+    }
+     public String setTrackOrientationChanges(JSONArray args){
+        try {
+            this.log("setTrackOrientationChanges", args);
+            String flag = args.getString(0);
+            if (flag.equals("true")) {
+                this.config.setTrackOrientationChanges(true);
+            } else {
+                this.config.setTrackOrientationChanges(false);
+            }
+            return "setTrackOrientationChanges success!";
+        }catch (JSONException jsonException){
+            logError("setTrackOrientationChanges", jsonException);
             return jsonException.toString();
         }
     }

@@ -26,6 +26,8 @@
         <button onclick="app.initWithID()" class="fluid ui green button">Init with ID </button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
+        <button onclick="app.onConfigurationChanged()" class="fluid ui red button">On Configuration Changed</button>
+
         <button onclick="app.halt()" class="fluid ui red button">Halt</button>
 
         <!-- <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button>
@@ -43,11 +45,17 @@
         <button onclick="app.endEventWithSum()" class="fluid ui button">Timed event Sum: Start / Stop</button>
         <button onclick="app.endEventWithSegment()" class="fluid ui button">Timed event Segment: Start / Stop</button>
         <button onclick="app.endEventWithSumSegment()" class="fluid ui button">Timed event Sum Segment: Start / Stop</button>
+        <button onclick="app.recordPastEvent()" class="fluid ui button">Record Past Event</button>
+
         <button onclick="app.startEventX()" class="fluid ui button">Start Event X</button>
         <button onclick="app.cancelEventX()" class="fluid ui button">Cancel Event X</button>
         <div class="ui horizontal divider">Events End</div>
         <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
         <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
+        <button onclick="app.setViewTracking()" class="fluid ui button">Set View Tracking</button>
+        <button onclick="app.setAutoTrackingUseShortName()" class="fluid ui button">Set AutoTracking Use ShortName</button>
+        <button onclick="app.setTrackOrientationChanges()" class="fluid ui button">Set Track Orientation Changes</button>
+
         <div class="ui horizontal divider">2017</div>
         <div class="ui horizontal divider">User Methods Start</div>
 
@@ -131,6 +139,8 @@
         <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button yellow">Enable Parameter Tapmering Protection</button>
         <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button yellow">City, State, and Location</button>
         <button onclick="app.setLocation()" class="fluid ui button yellow">SetLocation</button>
+        <button onclick="app.disableLocation()" class="fluid ui button yellow">Disable Location</button>
+
         <button onclick="app.addCrashLog()" class="fluid ui button yellow">Send Crash Report</button>
         <div class="ui horizontal divider">Other Methods End</div>
         <div class="ui horizontal divider">Rating Methods Start</div>
@@ -167,6 +177,7 @@
     app.init = function() {
         Countly.pushTokenType(Countly.messagingMode.TEST, "Default Name", "Default Description");
         Countly.setLoggingEnabled(true);
+        Countly.setAutoTrackingUseShortName(true);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
         // Countly.eventSendThreshold(1);
         // Countly.deviceIDType["TemporaryDeviceID"];
@@ -174,6 +185,7 @@
     app.initWithID = function(){
         Countly.pushTokenType(Countly.messagingMode.TEST, "Default Name", "Default Description");
         Countly.setLoggingEnabled(true);
+        Countly.setAutoTrackingUseShortName(true);
         Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
         // Countly.eventSendThreshold(1);
     }
@@ -195,7 +207,9 @@
     app.setLocation = function() {
         Countly.setLocation("28.006324","-82.7166183");
     };
-
+    app.disableLocation = function() {
+       Countly.disableLocation();
+    }
     app.event = function() {
         setInterval(function() {
             app.sendSampleEvent();
@@ -223,6 +237,9 @@
 
     app.stop = function() {
         Countly.stop();
+    }
+    app.onConfigurationChanged =function() {
+        Countly.onConfigurationChanged();
     }
 
     app.halt = function() {
@@ -432,6 +449,15 @@
     app.recordView = function(viewName) {
         Countly.recordView(viewName);
     }
+    app.setViewTracking = function(){
+        Countly.setViewTracking(true);
+    }
+    app.setAutoTrackingUseShortName = function(){
+        Countly.setAutoTrackingUseShortName(true);
+    }
+    app.setTrackOrientationChanges = function() {
+        Countly.setTrackOrientationChanges(true);
+    }
 
     /** 2017 **/
     app.changeDeviceId = function() {
@@ -481,6 +507,20 @@
             };
             Countly.endEvent(events);
         }, 1000);
+    }
+    app.recordPastEvent =function() {
+	    var event = {
+                "key": "Timed Event With Segment",
+		"count": 1,
+		"sum": 0.99,
+		"duration": 2000,
+		"timestamp": new Date().getTime()
+            };
+            event.segments = {
+                "Country": "Turkey",
+                "Age": "28"
+            };
+        Countly.recordPastEvent(event);
     }
     app.startEventX = function(){
         Countly.startEvent("Event X");
