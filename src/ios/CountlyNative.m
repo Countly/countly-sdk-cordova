@@ -1,8 +1,11 @@
 #import "CountlyNative.h"
 #import "Countly.h"
 #import "CountlyConfig.h"
+#import "CountlyCommon.h"
 #import <objc/runtime.h>
 
+NSString* const kCountlyCordovaSDKVersion = @"20.4.0";
+NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
 
 static char launchNotificationKey;
 static char coldstartKey;
@@ -253,6 +256,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         config.appKey = appkey;
         config.host = serverurl;
+
+        CountlyCommon.sharedInstance.SDKName = kCountlyCordovaSDKName;
+        CountlyCommon.sharedInstance.SDKVersion = kCountlyCordovaSDKVersion;
+
         Countly.sharedInstance.isAutoViewTrackingActive = NO;
         [self addCountlyFeature:CLYPushNotifications];
 
@@ -771,7 +778,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
     }else if ([@"giveAllConsent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentLocation];
         [Countly.sharedInstance giveConsentForAllFeatures];
         result(@"giveAllConsent!");
         });
@@ -789,7 +795,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         NSString* latitudeString = [command objectAtIndex:2];
         NSString* longitudeString = [command objectAtIndex:3];
-        NSString* ipAddress = [command objectAtIndex:3];
+        NSString* ipAddress = [command objectAtIndex:4];
 
         double latitudeDouble = [latitudeString doubleValue];
         double longitudeDouble = [longitudeString doubleValue];

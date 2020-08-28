@@ -35,6 +35,8 @@ import com.google.firebase.FirebaseApp;
 
 
 public class CountlyNative {
+    private String COUNTLY_CORDOVA_SDK_VERSION_STRING = "20.4.0";
+    private String COUNTLY_CORDOVA_SDK_NAME = "js-cordovab-android";
 
     private Countly.CountlyMessagingMode pushTokenTypeVariable = Countly.CountlyMessagingMode.PRODUCTION;
     private Context context;
@@ -80,6 +82,9 @@ public class CountlyNative {
             this.config.setContext(context);
             this.config.setServerURL((serverUrl));
             this.config.setAppKey(appKey);
+            Countly.sharedInstance().COUNTLY_SDK_NAME = COUNTLY_CORDOVA_SDK_NAME;
+            Countly.sharedInstance().COUNTLY_SDK_VERSION_STRING = COUNTLY_CORDOVA_SDK_VERSION_STRING;
+
             if (args.length() == 2) {
             } else if (args.length() == 3) {
                 String yourDeviceID = args.getString(2);
