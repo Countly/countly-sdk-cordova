@@ -62,17 +62,6 @@ CountlyNative* countlyNative = nil;
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }];
 }
-- (void)setAutomaticViewTracking:(CDVInvokedUrlCommand*)command
-{
-    if(countlyNative == nil){
-        countlyNative = CountlyNative.new;
-    }
-    [countlyNative onCall: @"setAutomaticViewTracking" commandString: command.arguments callback: ^(NSString * theResult)
-     {
-         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
-         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-     }];
-}
 - (void)setLoggingEnabled:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
@@ -310,6 +299,18 @@ CountlyNative* countlyNative = nil;
         countlyNative = CountlyNative.new;
     }
     [countlyNative onCall: @"endEvent" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
+- (void)setLocationInit:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"setLocationInit" commandString: command.arguments callback: ^(NSString * theResult)
      {
          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

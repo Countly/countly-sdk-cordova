@@ -19,12 +19,12 @@
 - (void)eventSendThreshold:(CDVInvokedUrlCommand*)command;
 - (void)storedRequestsLimit:(CDVInvokedUrlCommand*)command;
 - (void)recordView:(CDVInvokedUrlCommand*)command;
-- (void)setAutomaticViewTracking:(CDVInvokedUrlCommand*)command;
 - (void)resume:(CDVInvokedUrlCommand*)command;
 - (void)suspend:(CDVInvokedUrlCommand*)command;
 
 
 - (void)setHttpPostForced:(CDVInvokedUrlCommand*)command;
+- (void)setLocationInit:(CDVInvokedUrlCommand*)command;
 - (void)setLocation:(CDVInvokedUrlCommand*)command;
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command;
 - (void)addCrashLog:(CDVInvokedUrlCommand*)command;

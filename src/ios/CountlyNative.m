@@ -318,18 +318,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [Countly.sharedInstance recordView:recordView segmentation:segments];
         result(@"recordView Sent!");
         });
-    }else if ([@"setAutomaticViewTracking" isEqualToString:method]) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-        BOOL boolean = [[command objectAtIndex:0] boolValue];
-        if(boolean) {
-            [self addCountlyFeature:CLYAutoViewTracking];
-        }
-        else {
-            [self removeCountlyFeature:CLYAutoViewTracking];
-        }
-        [Countly.sharedInstance setIsAutoViewTrackingActive:boolean];
-        result(@"setAutomaticViewTracking!");
-        });
     }else if ([@"setLoggingEnabled" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* loggingEnable = [command objectAtIndex:0];
@@ -476,6 +464,25 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         resultString = [resultString stringByAppendingString: key];
         result(resultString);
         });
+    }else if ([@"setLocationInit" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* city = [command objectAtIndex:0];
+        NSString* country = [command objectAtIndex:1];
+
+        NSString* latitudeString = [command objectAtIndex:2];
+        NSString* longitudeString = [command objectAtIndex:3];
+        NSString* ipAddress = [command objectAtIndex:3];
+
+        double latitudeDouble = [latitudeString doubleValue];
+        double longitudeDouble = [longitudeString doubleValue];
+
+        config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
+        config.city = city;
+        config.ISOCountryCode = country;
+        config.IP = ipAddress;
+        result(@"setLocationInit!");
+        });
+
     }else if ([@"setLocation" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* latitudeString = [command objectAtIndex:0];
@@ -761,32 +768,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
     }else if ([@"giveAllConsent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentEvents];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentUserDetails];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentCrashReporting];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentLocation];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentViewTracking];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentAttribution];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentStarRating];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentAppleWatch];
-
+        [Countly.sharedInstance giveConsentForAllFeatures];
         result(@"giveAllConsent!");
         });
 
     }else if ([@"removeAllConsent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentEvents];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentUserDetails];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentCrashReporting];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentPushNotifications];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentLocation];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentViewTracking];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentAttribution];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentStarRating];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentAppleWatch];
+        [Countly.sharedInstance cancelConsentForAllFeatures];
         result(@"removeAllConsent!");
         });
 

@@ -57,24 +57,6 @@ Countly.recordView = function(recordView, segments){
 };
 
 /**
- * Enable automatic view tracking
- * Should be call before Countly init
- * @param enabled Expected value is boolean
- */
-Countly.setAutomaticViewTracking = function(enabled = true){
-    if(typeof enabled !== 'boolean' && typeof enabled !== 'string') {
-        if(Countly.isDebug){
-            console.warn("setAutomaticViewTracking, unsupported data type [" + typeof enabled+ "]");
-        }
-        return;
-    }
-    if(typeof enabled === 'string') {
-        enabled = (enabled === "true"); // Typecast from string to boolean
-    }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutomaticViewTracking",[enabled]);
-}
-
-/**
  * Set to true if you want to enable countly internal debugging logs
  * Should be call before Countly init
  */
@@ -409,7 +391,7 @@ Countly.removeConsent = function(consent){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",consent);
 }
 Countly.giveAllConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",Countly.consents);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveAllConsent",[]);
 }
 Countly.removeAllConsent = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",Countly.consents);

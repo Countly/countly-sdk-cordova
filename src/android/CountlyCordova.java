@@ -51,6 +51,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if("enableParameterTamperingProtection".equals(action)){
             callbackContext.success(countlyNative.enableParameterTamperingProtection(args));
         }
+        else if("setLocationInit".equals(action)){
+            callbackContext.success(countlyNative.setLocationInit(args));
+        }
         else if("setLocation".equals(action)){
             callbackContext.success(countlyNative.setLocation(args));
         }
@@ -167,9 +170,6 @@ public class CountlyCordova extends CordovaPlugin {
         // }
         else if("recordView".equals(action)){
             callbackContext.success(countlyNative.recordView(args));
-        }
-        else if("setAutomaticViewTracking".equals(action)){
-            callbackContext.success(countlyNative.setAutomaticViewTracking(args));
         }
         else if("setOptionalParametersForInitialization".equals(action)){
             callbackContext.success(countlyNative.setOptionalParametersForInitialization(args));

@@ -186,6 +186,34 @@ public class CountlyNative {
         }
     }
 
+    public String setLocationInit(JSONArray args){
+        try {
+            this.log("setOptionalParametersForInitialization", args);
+            String city = args.getString(0);
+            String country = args.getString(1);
+            String latitude = args.getString(2);
+            String longitude = args.getString(3);
+            String ipAddress = args.getString(4);
+            String latlng = null;
+            if(city.length() == 0){
+                city = null;
+            }
+            if(country.length() == 0){
+                country = null;
+            }
+            if(!latitude.equals("null") && !longitude.equals("null")) {
+                latlng = latitude + "," + longitude;
+            }
+            if(ipAddress.equals("0.0.0.0")){
+                ipAddress = null;
+            }
+            this.config.setLocation(country, city, latlng, ipAddress);
+            return "setLocationInit sent.";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
     public String setLocation(JSONArray args){
         try {
             this.log("setLocation", args);
@@ -657,29 +685,13 @@ public class CountlyNative {
 
     public String giveAllConsent(JSONArray args){
         this.log("giveAllConsent", args);
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
-        Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+        Countly.sharedInstance().consent().giveConsentAll();
         return "giveAllConsent: Success";
     }
 
     public String removeAllConsent(JSONArray args){
         this.log("removeAllConsent", args);
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
-        Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+        Countly.sharedInstance().consent().removeConsentAll();
         return "removeAllConsent: Success";
     }
 
@@ -716,16 +728,6 @@ public class CountlyNative {
             }
             Countly.sharedInstance().views().recordView(viewName, segmentation);
             return "View name sent: " + viewName;
-        }catch (JSONException jsonException){
-            return jsonException.toString();
-        }
-    }
-
-    public String setAutomaticViewTracking(JSONArray args){
-        try {
-            Boolean flag = args.getBoolean(0);
-            this.config.setViewTracking(flag);
-            return "Set automatic view tracking: " + flag;
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -918,8 +920,8 @@ public class CountlyNative {
         try {
             this.log("cancelTrace", args);
             String traceKey = args.getString(0);
-            // Countly.sharedInstance().apm().cancelTrace(traceKey);
-            return "cancelTrace not implemented.";
+            Countly.sharedInstance().apm().cancelTrace(traceKey);
+            return "cancelTrace success.";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
@@ -928,8 +930,8 @@ public class CountlyNative {
 
     public String clearAllTraces(JSONArray args){
         this.log("clearAllTraces", args);
-        // Countly.sharedInstance().apm().clearAllTrace(traceKey);
-        return "clearAllTrace not implemented.";
+        Countly.sharedInstance().apm().cancelAllTraces();
+        return "clearAllTrace success.";
 
     }
 
@@ -964,8 +966,8 @@ public class CountlyNative {
             int responsePayloadSize = Integer.parseInt(args.getString(3));
             long startTime = Long.parseLong(args.getString(4));
             long endTime = Long.parseLong(args.getString(5));
-            // Countly.sharedInstance().apm().endNetworkRequest(networkTraceKey, null, responseCode, requestPayloadSize, responsePayloadSize);
-            return "endNetworkRequest success.";
+            Countly.sharedInstance().apm().recordNetworkTrace(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
+            return "recordNetworkTrace success.";
         }catch (Exception exception){
             if(Countly.sharedInstance().isLoggingEnabled()){
                 Log.e(Countly.TAG, "Exception occured at recordNetworkTrace method: " +exception.toString());
@@ -976,7 +978,7 @@ public class CountlyNative {
 
     public String enableApm(JSONArray args){
         this.log("enableApm", args);
-        this.config.setRecordAppStartTime(true);
+        this.config.setRecordAppStartTime(false);
         return "enableApm success.";
     }
 
