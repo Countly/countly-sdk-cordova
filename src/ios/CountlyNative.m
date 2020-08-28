@@ -529,7 +529,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"sendPushToken" isEqualToString:method]) {
         if(config != nil){
             NSString* token = [command objectAtIndex:0];
-            int messagingMode = [[command objectAtIndex:1] intValue];
+            int messagingMode = 1;
+            if(config.pushTestMode == nil || [config.pushTestMode  isEqual: @""] || [config.pushTestMode isEqualToString:@"CLYPushTestModeTestFlightOrAdHoc"]) {
+                messagingMode = 0;
+            }
             NSString *urlString = [ @"" stringByAppendingFormat:@"%@?device_id=%@&app_key=%@&token_session=1&test_mode=%d&ios_token=%@", config.host, [Countly.sharedInstance deviceID], config.appKey, messagingMode, token];
             NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
             [request setHTTPMethod:@"GET"];

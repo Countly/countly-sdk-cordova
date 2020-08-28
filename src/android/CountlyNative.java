@@ -885,14 +885,8 @@ public class CountlyNative {
     public String sendPushToken(JSONArray args){
         try {
             this.log("sendPushToken", args);
-            ConnectionQueue connectionQueue_ = Countly.sharedInstance().getConnectionQueue();
             String token = args.getString(0);
-            int messagingMode = Integer.parseInt(args.getString(1));
-            if(messagingMode == 0){
-                connectionQueue_.tokenSession(token, Countly.CountlyMessagingMode.PRODUCTION);
-            }else{
-                connectionQueue_.tokenSession(token, Countly.CountlyMessagingMode.TEST);
-            }
+            CountlyPush.onTokenRefresh(token);
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
