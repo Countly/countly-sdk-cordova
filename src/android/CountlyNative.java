@@ -41,7 +41,7 @@ public class CountlyNative {
     private Countly.CountlyMessagingMode pushTokenTypeVariable = Countly.CountlyMessagingMode.PRODUCTION;
     private Context context;
     private Activity activity;
-    private Boolean isDebug = false;
+    private static Boolean isDebug = false;
     private CountlyConfig config = new CountlyConfig();
     private static Callback notificationListener = null;
     private static String lastStoredNotification = null;
@@ -63,7 +63,7 @@ public class CountlyNative {
     public static void onNotification(Map<String, String>  notification){
         JSONObject json = new JSONObject(notification);
         String notificationString = json.toString();
-        log(notificationString);
+        log(notificationString, LogLevel.INFO);
         if(notificationListener != null){
             notificationListener.callback(notificationString);
         }else{
@@ -123,8 +123,8 @@ public class CountlyNative {
 
     public void log(String method, JSONArray args){
         if(isDebug){
-            log("Method: "+method);
-            log("Arguments: "+args.toString());
+            log("Method: "+method, LogLevel.INFO);
+            log("Arguments: "+args.toString(), LogLevel.INFO);
         }
     }
 
@@ -309,7 +309,7 @@ public class CountlyNative {
    }
     public String registerForNotification(JSONArray args, final Callback theCallback){
         notificationListener = theCallback;
-        log("registerForNotification theCallback");
+        log("registerForNotification theCallback", LogLevel.INFO);
         if(lastStoredNotification != null){
             theCallback.callback(lastStoredNotification);
             lastStoredNotification = null;
@@ -965,15 +965,13 @@ public class CountlyNative {
     }
 
     enum LogLevel {INFO, DEBUG, VERBOSE, WARNING, ERROR}
-    static void log(String message)  {
-        log(message, LogLevel.INFO);
-    }
     static void log(String message, LogLevel logLevel)  {
         log(message, null, logLevel);
     }
 
     static void log(String message, Throwable tr, LogLevel logLevel)  {
         if(!isDebug) {
+            return;
         }
         switch (logLevel) {
             case INFO:
