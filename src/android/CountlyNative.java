@@ -1,6 +1,4 @@
 package ly.count.android.sdk;
-
-//import io.flutter.plugin.common.MethodChannel;
 import ly.count.android.sdk.Countly;
 import ly.count.android.sdk.DeviceId;
 import ly.count.android.sdk.RemoteConfig;
@@ -35,6 +33,8 @@ import com.google.firebase.FirebaseApp;
 
 
 public class CountlyNative {
+
+    public static final String TAG = "CountlyCordova";
     private String COUNTLY_CORDOVA_SDK_VERSION_STRING = "20.4.0";
     private String COUNTLY_CORDOVA_SDK_NAME = "js-cordovab-android";
 
@@ -63,7 +63,7 @@ public class CountlyNative {
     public static void onNotification(Map<String, String>  notification){
         JSONObject json = new JSONObject(notification);
         String notificationString = json.toString();
-        Log.i("Countly onNotification", notificationString);
+        log(notificationString);
         if(notificationListener != null){
             notificationListener.callback(notificationString);
         }else{
@@ -93,10 +93,17 @@ public class CountlyNative {
                 }else{
                     this.config.setDeviceId(yourDeviceID);
                 }
-            } else {
+            } 
+
+            if (activity == null) {
+                if(Countly.sharedInstance().isLoggingEnabled()) {
+                    log("Activity is 'null' during init, cannot set Application", LogLevel.WARNING);
+                }
+            }
+            else {
+                this.config.setApplication(activity.getApplication());
             }
             Countly.sharedInstance().init(this.config);
-            Countly.sharedInstance().onStart(activity);
             return "initialized: success";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -116,19 +123,19 @@ public class CountlyNative {
 
     public void log(String method, JSONArray args){
         if(isDebug){
-            Log.i("Countly Native", "Method: "+method);
-            Log.i("Countly Native", "Arguments: "+args.toString());
+            log("Method: "+method);
+            log("Arguments: "+args.toString());
         }
     }
 
     public String getCurrentDeviceId(JSONArray args){
         String deviceID = Countly.sharedInstance().getDeviceID();
         if (deviceID == null) {
-            Log.d(Countly.TAG, "[CountlyReactNative] getCurrentDeviceId, deviceIdNotFound");
+            log("getCurrentDeviceId, deviceIdNotFound", LogLevel.DEBUG);
             return "deviceIdNotFound";
         }
         else {
-            Log.d(Countly.TAG, "[CountlyReactNative] getCurrentDeviceId: " + deviceID);
+            log("getCurrentDeviceId: " + deviceID, LogLevel.DEBUG);
             return deviceID;
         }
     }
@@ -136,11 +143,11 @@ public class CountlyNative {
     public String getDeviceIdAuthor(JSONArray args){
         DeviceId.Type deviceIDType = Countly.sharedInstance().getDeviceIDType();
         if (deviceIDType == null) {
-            Log.d(Countly.TAG, "[CountlyReactNative] getDeviceIdAuthor, deviceIdAuthorNotFound");
+            log("getDeviceIdAuthor, deviceIdAuthorNotFound", LogLevel.DEBUG);
             return "deviceIdAuthorNotFound";
         }
         else {
-            Log.d(Countly.TAG, "[CountlyReactNative] getDeviceIdAuthor: " + deviceIDType);
+            log("getDeviceIdAuthor: " + deviceIDType, LogLevel.DEBUG);
             if(deviceIDType == DeviceId.Type.DEVELOPER_SUPPLIED){
                 return "developerProvided";
             }else{
@@ -193,26 +200,24 @@ public class CountlyNative {
 
     public String setLocationInit(JSONArray args){
         try {
-            this.log("setOptionalParametersForInitialization", args);
-            String city = args.getString(0);
-            String country = args.getString(1);
-            String latitude = args.getString(2);
-            String longitude = args.getString(3);
-            String ipAddress = args.getString(4);
-            String latlng = null;
-            if(city.length() == 0){
+            this.log("setLocationInit", args);
+            String countryCode = args.getString(0);
+            String city = args.getString(1);
+            String location = args.getString(2);
+            String ipAddress = args.getString(3);
+            if("null".equals(countryCode)){
+                countryCode = null;
+            }
+            if("null".equals(city)){
                 city = null;
             }
-            if(country.length() == 0){
-                country = null;
+            if("null".equals(location)){
+                location = null;
             }
-            if(!latitude.equals("null") && !longitude.equals("null")) {
-                latlng = latitude + "," + longitude;
-            }
-            if(ipAddress.equals("0.0.0.0")){
+            if("null".equals(ipAddress)){
                 ipAddress = null;
             }
-            this.config.setLocation(country, city, latlng, ipAddress);
+            this.config.setLocation(countryCode, city, location, ipAddress);
             return "setLocationInit sent.";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -293,7 +298,7 @@ public class CountlyNative {
                    @Override
                    public void onComplete(Task<InstanceIdResult> task) {
                        if (!task.isSuccessful()) {
-                           Log.w("Tag", "getInstanceId failed", task.getException());
+                           log("getInstanceId failed", task.getException(), LogLevel.WARNING);
                            return;
                        }
                        String token = task.getResult().getToken();
@@ -304,7 +309,7 @@ public class CountlyNative {
    }
     public String registerForNotification(JSONArray args, final Callback theCallback){
         notificationListener = theCallback;
-        Log.i("CountlyNative", "registerForNotification theCallback");
+        log("registerForNotification theCallback");
         if(lastStoredNotification != null){
             theCallback.callback(lastStoredNotification);
             lastStoredNotification = null;
@@ -606,82 +611,60 @@ public class CountlyNative {
         }
     }
 
-    public String giveConsent(JSONArray args){
+    public String giveConsentInit(JSONArray featureNames){
         try {
-            this.log("giveConsent", args);
-            String consent = null;
+            this.log("giveConsentInit", featureNames);
             List<String> features = new ArrayList<>();
-            for (int i = 0; i < args.length(); i++) {
-                consent = args.getString(i);
-                if (consent.equals("sessions")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.sessions});
+            for (int i = 0; i < featureNames.length(); i++) {
+                String featureName = featureNames.getString(i);
+                if (validConsentFeatureNames.contains(featureName)) {
+                    features.add(featureName);
                 }
-                if (consent.equals("events")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.events});
-                }
-                if (consent.equals("views")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.views});
-                }
-                if (consent.equals("location")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.location});
-                }
-                if (consent.equals("crashes")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-                }
-                if (consent.equals("attribution")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-                }
-                if (consent.equals("users")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.users});
-                }
-                if (consent.equals("push")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.push});
-                }
-                if (consent.equals("starRating")) {
-                    Countly.sharedInstance().consent().giveConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+                else {
+                    log("Not a valid consent feature to add: " + featureName, LogLevel.DEBUG);
                 }
             }
+            this.config.setConsentEnabled(features.toArray(new String[features.size()]));
+            return "giveConsentInit: Success";
+        }catch (JSONException jsonException){
+            return jsonException.toString();
+        }
+    }
+
+    public String giveConsent(JSONArray featureNames){
+        try {
+            this.log("giveConsent", featureNames);
+            List<String> features = new ArrayList<>();
+            for (int i = 0; i < featureNames.length(); i++) {
+                String featureName = featureNames.getString(i);
+                if (validConsentFeatureNames.contains(featureName)) {
+                    features.add(featureName);
+                }
+                else {
+                    log("Not a valid consent feature to add: " + featureName, LogLevel.DEBUG);
+                }
+            }
+            Countly.sharedInstance().consent().giveConsent(features.toArray(new String[features.size()]));
             return "giveConsent: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
         }
     }
 
-    public String removeConsent(JSONArray args){
+    public String removeConsent(JSONArray featureNames){
         try {
-            this.log("removeConsent", args);
-            String consent = null;
+            this.log("removeConsent", featureNames);
             List<String> features = new ArrayList<>();
-            for (int i = 0; i < args.length(); i++) {
-                consent = args.getString(i);
-                if (consent.equals("sessions")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.sessions});
+            for (int i = 0; i < featureNames.length(); i++) {
+                String featureName = featureNames.getString(i);
+                if (validConsentFeatureNames.contains(featureName)) {
+                    features.add(featureName);
                 }
-                if (consent.equals("events")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.events});
-                }
-                if (consent.equals("views")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.views});
-                }
-                if (consent.equals("location")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.location});
-                }
-                if (consent.equals("crashes")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.crashes});
-                }
-                if (consent.equals("attribution")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.attribution});
-                }
-                if (consent.equals("users")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.users});
-                }
-                if (consent.equals("push")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.push});
-                }
-                if (consent.equals("starRating")) {
-                    Countly.sharedInstance().consent().removeConsent(new String[]{Countly.CountlyFeatureNames.starRating});
+                else {
+                    log("Not a valid consent feature to remove: " + featureName, LogLevel.DEBUG);
                 }
             }
+            Countly.sharedInstance().consent().removeConsent(features.toArray(new String[features.size()]));
             return "removeConsent: Success";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -727,7 +710,7 @@ public class CountlyNative {
                     segmentation.put(args.getString(i), args.getString(i+1));
                 }catch(Exception exception){
                     if(isDebug){
-                        Log.e(Countly.TAG, "[CountlyCordova] recordView, could not parse segments, skipping it. ");
+                        log("recordView, could not parse segments, skipping it. ", LogLevel.ERROR);
                     }
                 }
             }
@@ -944,7 +927,7 @@ public class CountlyNative {
                     customMetric.put(args.getString(i), Integer.parseInt(args.getString(i + 1)));
                 }catch(Exception exception){
                     if(Countly.sharedInstance().isLoggingEnabled()){
-                        Log.e(Countly.TAG, "[CountlyCordova] endTrace, could not parse metrics, skipping it. ");
+                        log("endTrace, could not parse metrics, skipping it. ", LogLevel.ERROR);
                     }
                 }
             }
@@ -969,7 +952,7 @@ public class CountlyNative {
             return "recordNetworkTrace success.";
         }catch (Exception exception){
             if(Countly.sharedInstance().isLoggingEnabled()){
-                Log.e(Countly.TAG, "Exception occured at recordNetworkTrace method: " +exception.toString());
+                log("Exception occured at recordNetworkTrace method: ", exception, LogLevel.ERROR);
             }
             return exception.toString();
         }
@@ -979,6 +962,36 @@ public class CountlyNative {
         this.log("enableApm", args);
         this.config.setRecordAppStartTime(false);
         return "enableApm success.";
+    }
+
+    enum LogLevel {INFO, DEBUG, VERBOSE, WARNING, ERROR}
+    static void log(String message)  {
+        log(message, LogLevel.INFO);
+    }
+    static void log(String message, LogLevel logLevel)  {
+        log(message, null, logLevel);
+    }
+
+    static void log(String message, Throwable tr, LogLevel logLevel)  {
+        if(isDebug) {
+            switch (logLevel) {
+                case INFO:
+                    Log.i(TAG, message, tr);
+                    break;
+                case DEBUG:
+                    Log.d(TAG, message, tr);
+                    break;
+                case WARNING:
+                    Log.w(TAG, message, tr);
+                    break;
+                case ERROR:
+                    Log.e(TAG, message, tr);
+                    break;
+                case VERBOSE:
+                    Log.v(TAG, message, tr);
+                    break;
+            }
+        }
     }
 
 

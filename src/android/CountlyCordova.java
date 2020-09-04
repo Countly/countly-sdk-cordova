@@ -152,6 +152,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if ("setRequiresConsent".equals(action)) {
             callbackContext.success(countlyNative.setRequiresConsent(args));
         }
+        else if ("giveConsentInit".equals(action)) {
+            callbackContext.success(countlyNative.giveConsentInit(args));
+        }
         else if ("giveConsent".equals(action)) {
             callbackContext.success(countlyNative.giveConsent(args));
         }
