@@ -36,6 +36,12 @@ public class CountlyCordova extends CordovaPlugin {
         if ("isInitialized".equals(action)) {
             callbackContext.success(countlyNative.isInitialized(args));
         }
+        else if("getCurrentDeviceId".equals(action)){
+            callbackContext.success(countlyNative.getCurrentDeviceId(args));
+        }
+        else if("getDeviceIdAuthor".equals(action)){
+            callbackContext.success(countlyNative.getDeviceIdAuthor(args));
+        }
         else if ("changeDeviceId".equals(action)){
             callbackContext.success(countlyNative.changeDeviceId(args));
         }
@@ -44,6 +50,9 @@ public class CountlyCordova extends CordovaPlugin {
         }
         else if("enableParameterTamperingProtection".equals(action)){
             callbackContext.success(countlyNative.enableParameterTamperingProtection(args));
+        }
+        else if("setLocationInit".equals(action)){
+            callbackContext.success(countlyNative.setLocationInit(args));
         }
         else if("setLocation".equals(action)){
             callbackContext.success(countlyNative.setLocation(args));
@@ -143,6 +152,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if ("setRequiresConsent".equals(action)) {
             callbackContext.success(countlyNative.setRequiresConsent(args));
         }
+        else if ("giveConsentInit".equals(action)) {
+            callbackContext.success(countlyNative.giveConsentInit(args));
+        }
         else if ("giveConsent".equals(action)) {
             callbackContext.success(countlyNative.giveConsent(args));
         }
@@ -150,7 +162,7 @@ public class CountlyCordova extends CordovaPlugin {
             callbackContext.success(countlyNative.removeConsent(args));
         }
         else if ("giveAllConsent".equals(action)) {
-            callbackContext.success(countlyNative.giveConsent(args));
+            callbackContext.success(countlyNative.giveAllConsent(args));
         }
         else if ("removeAllConsent".equals(action)) {
             callbackContext.success(countlyNative.removeConsent(args));
@@ -161,9 +173,6 @@ public class CountlyCordova extends CordovaPlugin {
         // }
         else if("recordView".equals(action)){
             callbackContext.success(countlyNative.recordView(args));
-        }
-        else if("setAutomaticViewTracking".equals(action)){
-            callbackContext.success(countlyNative.setAutomaticViewTracking(args));
         }
         else if("setOptionalParametersForInitialization".equals(action)){
             callbackContext.success(countlyNative.setOptionalParametersForInitialization(args));
@@ -222,6 +231,24 @@ public class CountlyCordova extends CordovaPlugin {
         }
         else if("enableAttribution".equals(action)){
             callbackContext.success(countlyNative.enableAttribution(args));
+        }
+        else if("startTrace".equals(action)){
+            callbackContext.success(countlyNative.startTrace(args));
+        }
+        else if("cancelTrace".equals(action)){
+            callbackContext.success(countlyNative.cancelTrace(args));
+        }
+        else if("clearAllTraces".equals(action)){
+            callbackContext.success(countlyNative.clearAllTraces(args));
+        }
+        else if("endTrace".equals(action)){
+            callbackContext.success(countlyNative.endTrace(args));
+        }
+        else if("recordNetworkTrace".equals(action)){
+            callbackContext.success(countlyNative.recordNetworkTrace(args));
+        }
+        else if("enableApm".equals(action)){
+            callbackContext.success(countlyNative.enableApm(args));
         }
         else{
             return false;

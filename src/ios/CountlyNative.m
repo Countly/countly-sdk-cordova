@@ -3,6 +3,12 @@
 #import "CountlyConfig.h"
 #import <objc/runtime.h>
 
+#if DEBUG
+#define COUNTLY_CORDOVA_LOG(fmt, ...) CountlyCordovaInternalLog(fmt, ##__VA_ARGS__)
+#else
+#define COUNTLY_CORDOVA_LOG(...)
+#endif
+void CountlyCordovaInternalLog(NSString *format, ...);
 
 static char launchNotificationKey;
 static char coldstartKey;
@@ -11,8 +17,17 @@ NSDictionary *lastStoredNotification = nil;
 NSMutableArray *notificationIDs = nil;        // alloc here
 NSMutableArray<CLYFeature>* countlyFeatures = nil;
 Boolean isInitialized = false;
-
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
+NSArray *consents = nil;
+
+NSString* const kCountlyCordovaSDKVersion = @"20.4.0";
+NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
+@interface CountlyCommon
+- (CountlyCommon *)sharedInstance;
+- (void)setSDKName:(NSString *)SDKName;
+- (void)setSDKVersion:(NSString *)SDKVersion;
+@end
+
 @implementation AppDelegate (notification)
 - (NSMutableArray *)launchNotification
 {
@@ -92,12 +107,12 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    NSLog(@"didReceiveNotification with fetchCompletionHandler");
+    COUNTLY_CORDOVA_LOG(@"didReceiveNotification with fetchCompletionHandler");
 
     // app is in the background or inactive, so only call notification callback if this is a silent push
     if (application.applicationState != UIApplicationStateActive) {
 
-        NSLog(@"app in-active");
+        COUNTLY_CORDOVA_LOG(@"app in-active");
 
         // do some convoluted logic to find out if this should be a silent push.
         long silent = 0;
@@ -110,11 +125,11 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
         }
 
         if (silent == 1) {
-            NSLog(@"this should be a silent push");
+            COUNTLY_CORDOVA_LOG(@"this should be a silent push");
             [CountlyNative onNotification:userInfo];
             completionHandler(UIBackgroundFetchResultNewData);
         } else {
-            NSLog(@"just put it in the shade");
+            COUNTLY_CORDOVA_LOG(@"just put it in the shade");
             //save it for later
             self.launchNotification = userInfo;
             completionHandler(UIBackgroundFetchResultNewData);
@@ -128,7 +143,7 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
-    NSLog( @"NotificationCenter Handle push from foreground" );
+    COUNTLY_CORDOVA_LOG( @"NotificationCenter Handle push from foreground" );
     // custom code to handle push while app is in the foreground
     [CountlyNative onNotification: notification.request.content.userInfo];
 
@@ -138,15 +153,15 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void(^)(void))completionHandler
 {
-    NSLog(@"Push Plugin didReceiveNotificationResponse: actionIdentifier %@, notification: %@", response.actionIdentifier,
+    COUNTLY_CORDOVA_LOG(@"Push Plugin didReceiveNotificationResponse: actionIdentifier %@, notification: %@", response.actionIdentifier,
           response.notification.request.content.userInfo);
     NSMutableDictionary *userInfo = [response.notification.request.content.userInfo mutableCopy];
     [userInfo setObject:response.actionIdentifier forKey:@"actionCallback"];
-    NSLog(@"Push Plugin userInfo %@", userInfo);
+    COUNTLY_CORDOVA_LOG(@"Push Plugin userInfo %@", userInfo);
     switch ([UIApplication sharedApplication].applicationState) {
         case UIApplicationStateActive:
         {
-            NSLog(@"UIApplicationStateActive");
+            COUNTLY_CORDOVA_LOG(@"UIApplicationStateActive");
             [CountlyNative onNotification: response.notification.request.content.userInfo];
             if(notificationListener != nil){
                 completionHandler();
@@ -155,14 +170,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
         case UIApplicationStateInactive:
         {
-            NSLog(@"UIApplicationStateInactive");
+            COUNTLY_CORDOVA_LOG(@"UIApplicationStateInactive");
             self.launchNotification = response.notification.request.content.userInfo;
             self.coldstart = [NSNumber numberWithBool:YES];
             break;
         }
         case UIApplicationStateBackground:
         {
-            NSLog(@"UIApplicationStateBackground");
+            COUNTLY_CORDOVA_LOG(@"UIApplicationStateBackground");
             void (^safeHandler)(void) = ^(void){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     completionHandler();
@@ -177,16 +192,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 - (void)pushPluginOnApplicationDidBecomeActive:(NSNotification *)notification {
 
-    NSLog(@"active");
+    COUNTLY_CORDOVA_LOG(@"active");
 
     NSString *firstLaunchKey = @"firstLaunchKey";
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"phonegap-plugin-push"];
     if (![defaults boolForKey:firstLaunchKey]) {
-        NSLog(@"application first launch: remove badge icon number");
+        COUNTLY_CORDOVA_LOG(@"application first launch: remove badge icon number");
         [defaults setBool:YES forKey:firstLaunchKey];
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     }
-    NSLog(@"pushPluginOnApplicationDidBecomeActive: %@", self.launchNotification);
+    COUNTLY_CORDOVA_LOG(@"pushPluginOnApplicationDidBecomeActive: %@", self.launchNotification);
     [CountlyNative onNotification: self.launchNotification];
     [[NSNotificationCenter defaultCenter] postNotificationName:pushPluginApplicationDidBecomeActiveNotification object:nil];
 }
@@ -205,8 +220,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     Boolean isDebug = false;
 
 + (void)onNotification: (NSDictionary *) notificationMessage{
-    NSLog(@"Notification received");
-    NSLog(@"The notification %@", notificationMessage);
+    COUNTLY_CORDOVA_LOG(@"Notification received");
+    COUNTLY_CORDOVA_LOG(@"The notification %@", notificationMessage);
     if(notificationMessage && notificationListener != nil){
         notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
     }else{
@@ -237,8 +252,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
     if(isDebug == true){
-        NSLog(@"Countly Native method : %@", method);
-        NSLog(@"Countly Native arguments : %@", command);
+        COUNTLY_CORDOVA_LOG(@"Countly Native method : %@", method);
+        COUNTLY_CORDOVA_LOG(@"Countly Native arguments : %@", command);
     }
 
     if(config == nil){
@@ -253,6 +268,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         config.appKey = appkey;
         config.host = serverurl;
+
+        CountlyCommon.sharedInstance.SDKName = kCountlyCordovaSDKName;
+        CountlyCommon.sharedInstance.SDKVersion = kCountlyCordovaSDKVersion;
+
         Countly.sharedInstance.isAutoViewTrackingActive = NO;
         [self addCountlyFeature:CLYPushNotifications];
 
@@ -265,6 +284,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             dispatch_async(dispatch_get_main_queue(), ^ {
             isInitialized = true;
             [[Countly sharedInstance] startWithConfig:config];
+            if(consents != nil) {
+                [Countly.sharedInstance giveConsentForFeatures:consents];
+            }
             [self recordPushAction];
             });
             result(@"initialized.");
@@ -311,24 +333,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     segments[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
                 }
                 @catch(NSException *exception){
-                    NSLog(@"[CountlyFlutter] recordView: Exception occured while parsing segments: %@", exception);
+                    COUNTLY_CORDOVA_LOG(@"recordView: Exception occured while parsing segments: %@", exception);
                 }
             }
         }
         [Countly.sharedInstance recordView:recordView segmentation:segments];
         result(@"recordView Sent!");
-        });
-    }else if ([@"setAutomaticViewTracking" isEqualToString:method]) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-        BOOL boolean = [[command objectAtIndex:0] boolValue];
-        if(boolean) {
-            [self addCountlyFeature:CLYAutoViewTracking];
-        }
-        else {
-            [self removeCountlyFeature:CLYAutoViewTracking];
-        }
-        [Countly.sharedInstance setIsAutoViewTrackingActive:boolean];
-        result(@"setAutomaticViewTracking!");
         });
     }else if ([@"setLoggingEnabled" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
@@ -390,6 +400,23 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         dispatch_async(dispatch_get_main_queue(), ^ {
         [Countly.sharedInstance updateSession];
         result(@"update!");
+        });
+    }else if ([@"getCurrentDeviceId" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* value = [Countly.sharedInstance deviceID];
+        if(value){
+            result(value);
+        }
+        else{
+            NSString *value = @"deviceIdNotFound";
+            result(value);
+        }
+        });
+    }
+    else if ([@"getDeviceIdAuthor" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            NSString *value = @"Not implemented for iOS";
+            result(value);
         });
     }else if ([@"changeDeviceId" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
@@ -459,6 +486,39 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         resultString = [resultString stringByAppendingString: key];
         result(resultString);
         });
+    }else if ([@"setLocationInit" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* countryCode = [command objectAtIndex:0];
+        NSString* city = [command objectAtIndex:1];
+        NSString* locationString = [command objectAtIndex:2];
+        NSString* ipAddress = [command objectAtIndex:3];
+
+      if(locationString != nil && ![locationString isEqualToString:@"null"] && [locationString containsString:@","]){
+          @try{
+              NSArray *locationArray = [locationString componentsSeparatedByString:@","];
+              NSString* latitudeString = [locationArray objectAtIndex:0];
+              NSString* longitudeString = [locationArray objectAtIndex:1];
+
+              double latitudeDouble = [latitudeString doubleValue];
+              double longitudeDouble = [longitudeString doubleValue];
+              config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
+          }
+          @catch(NSException *exception){
+              COUNTLY_CORDOVA_LOG(@"Invalid location: %@", locationString);
+          }
+      }
+      if(city != nil && ![city isEqualToString:@"null"]) {
+          config.city = city;
+      }
+      if(countryCode != nil && ![countryCode isEqualToString:@"null"]) {
+          config.ISOCountryCode = countryCode;
+      }
+      if(ipAddress != nil && ![ipAddress isEqualToString:@"null"]) {
+          config.IP = ipAddress;
+      }
+        result(@"setLocationInit!");
+        });
+
     }else if ([@"setLocation" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* latitudeString = [command objectAtIndex:0];
@@ -505,7 +565,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"sendPushToken" isEqualToString:method]) {
         if(config != nil){
             NSString* token = [command objectAtIndex:0];
-            int messagingMode = [[command objectAtIndex:1] intValue];
+            int messagingMode = 1;
+            if(config.pushTestMode == nil || [config.pushTestMode  isEqual: @""] || [config.pushTestMode isEqualToString:@"CLYPushTestModeTestFlightOrAdHoc"]) {
+                messagingMode = 0;
+            }
             NSString *urlString = [ @"" stringByAppendingFormat:@"%@?device_id=%@&app_key=%@&token_session=1&test_mode=%d&ios_token=%@", config.host, [Countly.sharedInstance deviceID], config.appKey, messagingMode, token];
             NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
             [request setHTTPMethod:@"GET"];
@@ -519,7 +582,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             result(@"askForNotificationPermission!");
         });
     }else if ([@"registerForNotification" isEqualToString:method]) {
-        NSLog(@"Countly Native: registerForNotification");
+        COUNTLY_CORDOVA_LOG(@"registerForNotification");
         notificationListener = result;
         if(lastStoredNotification != nil){
             result([lastStoredNotification description]);
@@ -657,119 +720,34 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         result(@"setRequiresConsent!");
         });
 
+    }else if ([@"giveConsentInit" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        consents = command;
+        result(@"giveConsentInit!");
+        });
+
     }else if ([@"giveConsent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        NSString* consent = @"";
-        // NSMutableDictionary *giveConsentAll = [[NSMutableDictionary alloc] init];
-        for(int i=0,il=(int)command.count; i<il;i++){
-            consent = [command objectAtIndex:i];
-            if([@"sessions" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
-            }
-            if([@"events" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentEvents];
-            }
-            if([@"views" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentViewTracking];
-            }
-            if([@"location" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentLocation];
-            }
-            if([@"crashes" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentCrashReporting];
-            }
-            if([@"attribution" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentAttribution];
-            }
-            if([@"users" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentUserDetails];
-            }
-            if([@"push" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
-            }
-            if([@"star-rating" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentStarRating];
-            }
-            if([@"accessory-devices" isEqualToString:consent]){
-                [Countly.sharedInstance giveConsentForFeature:CLYConsentAppleWatch];
-            }
-        }
-
-
-        NSString *resultString = @"giveConsent for: ";
-        result(@"giveConsent!");
+            [Countly.sharedInstance giveConsentForFeatures:command];
+            result(@"giveConsent!");
         });
 
     }else if ([@"removeConsent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        NSString* consent = @"";
-        //        NSMutableDictionary *removeConsent = [[NSMutableDictionary alloc] init];
-        for(int i=0,il=(int)command.count; i<il;i++){
-            consent = [command objectAtIndex:i];
-            if([@"sessions" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
-            }
-            if([@"events" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentEvents];
-            }
-            if([@"views" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentViewTracking];
-            }
-            if([@"location" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentLocation];
-            }
-            if([@"crashes" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentCrashReporting];
-            }
-            if([@"attribution" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentAttribution];
-            }
-            if([@"users" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentUserDetails];
-            }
-            if([@"push" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentPushNotifications];
-            }
-            if([@"star-rating" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentStarRating];
-            }
-            if([@"accessory-devices" isEqualToString:consent]){
-                [Countly.sharedInstance cancelConsentForFeature:CLYConsentAppleWatch];
-            }
-        }
-
-        NSString *resultString = @"removeConsent for: ";
-        result(@"removeConsent!");
+            [Countly.sharedInstance cancelConsentForFeatures:command];
+            result(@"removeConsent!");
         });
 
     }else if ([@"giveAllConsent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentSessions];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentEvents];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentUserDetails];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentCrashReporting];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentPushNotifications];
         [Countly.sharedInstance giveConsentForFeature:CLYConsentLocation];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentViewTracking];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentAttribution];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentStarRating];
-        [Countly.sharedInstance giveConsentForFeature:CLYConsentAppleWatch];
-
+        [Countly.sharedInstance giveConsentForAllFeatures];
         result(@"giveAllConsent!");
         });
 
     }else if ([@"removeAllConsent" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentSessions];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentEvents];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentUserDetails];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentCrashReporting];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentPushNotifications];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentLocation];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentViewTracking];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentAttribution];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentStarRating];
-        [Countly.sharedInstance cancelConsentForFeature:CLYConsentAppleWatch];
+        [Countly.sharedInstance cancelConsentForAllFeatures];
         result(@"removeAllConsent!");
         });
 
@@ -780,7 +758,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
         NSString* latitudeString = [command objectAtIndex:2];
         NSString* longitudeString = [command objectAtIndex:3];
-        NSString* ipAddress = [command objectAtIndex:3];
+        NSString* ipAddress = [command objectAtIndex:4];
 
         double latitudeDouble = [latitudeString doubleValue];
         double longitudeDouble = [longitudeString doubleValue];
@@ -880,7 +858,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                                                                  error:&error];
 
             if (!jsonData) {
-                NSLog(@"Got an error: %@", error);
+                COUNTLY_CORDOVA_LOG(@"Got an error: %@", error);
                 result(error);
             } else {
                 NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
@@ -922,8 +900,69 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"enableAttribution" isEqualToString:method]) {
         config.enableAttribution = YES;
         result(@"enableAttribution");
-    }else {
-        NSLog(@"Countly Bridge Method Not Implemented %@", method);
+    }else if ([@"startTrace" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* traceKey = [command objectAtIndex:0];
+        [Countly.sharedInstance startCustomTrace: traceKey];
+        });
+        result(@"startTrace!");
+
+    }else if ([@"cancelTrace" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* traceKey = [command objectAtIndex:0];
+        [Countly.sharedInstance cancelCustomTrace: traceKey];
+        });
+        result(@"cancelTrace!");
+
+    }else if ([@"clearAllTraces" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        [Countly.sharedInstance clearAllCustomTraces];
+        });
+        result(@"clearAllTraces!");
+
+    }else if ([@"endTrace" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* traceKey = [command objectAtIndex:0];
+        NSMutableDictionary *metrics = [[NSMutableDictionary alloc] init];
+        for(int i=1,il=(int)command.count;i<il;i+=2){
+            @try{
+                metrics[[command objectAtIndex:i]] = [command objectAtIndex:i+1];
+            }
+            @catch(NSException *exception){
+                if(isDebug){
+                    COUNTLY_CORDOVA_LOG(@"Exception occured while parsing metrics: %@", exception);
+                }
+            }
+        }
+        [Countly.sharedInstance endCustomTrace: traceKey metrics: metrics];
+        });
+        result(@"endTrace!");
+
+    }else if ([@"recordNetworkTrace" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            @try{
+                NSString* networkTraceKey = [command objectAtIndex:0];
+                int responseCode = [[command objectAtIndex:1] intValue];
+                int requestPayloadSize = [[command objectAtIndex:2] intValue];
+                int responsePayloadSize = [[command objectAtIndex:3] intValue];
+                long long startTime = [[command objectAtIndex:4] longLongValue];
+                long long endTime = [[command objectAtIndex:5] longLongValue];
+                [Countly.sharedInstance recordNetworkTrace: networkTraceKey requestPayloadSize: requestPayloadSize responsePayloadSize: responsePayloadSize responseStatusCode: responseCode startTime: startTime endTime: endTime];
+            }
+            @catch(NSException *exception){
+                if(isDebug){
+                    COUNTLY_CORDOVA_LOG(@"Exception occured at recordNetworkTrace method: %@", exception);
+                }
+            }
+        });
+        result(@"recordNetworkTrace!");
+
+    }else if ([@"enableApm" isEqualToString:method]) {
+        config.enablePerformanceMonitoring = YES;
+        result(@"enableApm!");
+
+    } else {
+        COUNTLY_CORDOVA_LOG(@"Countly Bridge Method Not Implemented %@", method);
         result(@"Countly Bridge Method Not Implemented");
     }
 }
@@ -948,6 +987,20 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [countlyFeatures removeObject:feature];
         config.features = countlyFeatures;
     }
+}
+
+void CountlyCordovaInternalLog(NSString *format, ...)
+{
+    if (!config.enableDebug)
+        return;
+
+    va_list args;
+    va_start(args, format);
+
+    NSString* logString = [NSString.alloc initWithFormat:format arguments:args];
+    NSLog(@"[CountlyCordova] %@", logString);
+
+    va_end(args);
 }
 
 @end

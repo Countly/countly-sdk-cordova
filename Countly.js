@@ -24,7 +24,7 @@ Countly.init = function(serverUrl,appKey, deviceId){
     if(deviceId){
         args.push(deviceId || "");
     };
-    
+
     return new Promise((resolve,reject) => {
         cordova.exec(resolve,reject,"CountlyCordova","init",args);
     });
@@ -38,7 +38,7 @@ Countly.isInitialized = function(){
 
 /**
  * Record custom view to Countly.
- * 
+ *
  * @param {string} recordView - name of the view
  * @param {Map} segments - allows to add optional segmentation,
  * Supported data type for segments values are String, int, double and bool
@@ -55,24 +55,6 @@ Countly.recordView = function(recordView, segments){
     }
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",args);
 };
-
-/**
- * Enable automatic view tracking
- * Should be call before Countly init
- * @param enabled Expected value is boolean
- */
-Countly.setAutomaticViewTracking = function(enabled = true){
-    if(typeof enabled !== 'boolean' && typeof enabled !== 'string') {
-        if(Countly.isDebug){
-            console.warn("setAutomaticViewTracking, unsupported data type [" + typeof enabled+ "]");
-        }
-        return;
-    }
-    if(typeof enabled === 'string') {
-        enabled = (enabled === "true"); // Typecast from string to boolean
-    }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setAutomaticViewTracking",[enabled]]);
-}
 
 /**
  * Set to true if you want to enable countly internal debugging logs
@@ -126,7 +108,7 @@ Countly.halt = function(){
 // }
 
 /**
- * 
+ *
  * Events get grouped together and are sent either every minute or after the unsent event count reaches a threshold. By default it is 10
  * Should be call before Countly init
  */
@@ -140,17 +122,27 @@ Countly.halt = function(){
 //     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","storedRequestsLimit",[storedRequestsLimit]);
 // }
 
-// countly askForNotificationPermission for android
+/**
+ * 
+ * This method will ask for permission, enables push notification and send push token to countly server.
+ * Should be call after Countly init
+ */
 Countly.askForNotificationPermission = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
 }
+
+/**
+ * 
+ * Set callback to receive push notifications
+ * @param {callback listner } callback 
+ */
 Countly.onNotification = function(callback){
     cordova.exec(callback,callback,"CountlyCordova","registerForNotification",[]);
 }
 
 /**
- * 
- * Set Push notification messaging mode and callbacks for push notifications
+ *
+ * Set Push notification messaging mode
  * Should be call after Countly init
  */
 Countly.pushTokenType = function(tokenType){
@@ -201,9 +193,48 @@ Countly.setOptionalParametersForInitialization = function(options){
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setOptionalParametersForInitialization",args);
 }
+
+/**
+ * Set user initial location
+ * Should be call before init
+ * @param {ISO Country code for the user's country} countryCode 
+ * @param {Name of the user's city} city 
+ * @param {comma separate lat and lng values. For example, "56.42345,123.45325"} location 
+ * @param {IP address of user's} ipAddress 
+ * */
+
+Countly.setLocationInit = function(countryCode, city, location, ipAddress){
+    var args = [];
+    args.push(countryCode || "null");
+    args.push(city || "null");
+    args.push(location || "null");
+    args.push(ipAddress || "null");
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocationInit",args);
+}
+
 Countly.setLocation = function(latitude, longitude){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[latitude, longitude]);
 }
+
+/** 
+ * 
+ * Get currently used device Id.
+ * Should be call after Countly init
+ * */
+Countly.getCurrentDeviceId = function(onSuccess, onError){
+    Countly.isInitialized().then((result) => {
+        if(result  != "true") {
+            if(Countly.isDebug){
+                console.warn("'getCurrentDeviceId, init must be called before getCurrentDeviceId'");
+            }
+            return;
+        }
+    },(err) => {
+        console.error(err);
+    });
+    cordova.exec(onSuccess, onError,"CountlyCordova","getCurrentDeviceId",[]);
+}
+
 Countly.changeDeviceId = function(newDeviceID, onServer){
     if(onServer === false){
         onServer = "0";
@@ -255,7 +286,7 @@ Countly.logException = function(exception, nonfatal, segments){
 };
 
 /**
- * 
+ *
  * Set the optional salt to be used for calculating the checksum of requested data which will be sent with each request, using the &checksum field
  * Should be call before Countly init
  */
@@ -375,27 +406,58 @@ Countly.userData.pullValue = function(type, pullValue){
 Countly.consents = ["sessions", "events", "views", "location", "crashes", "attribution", "users", "push", "star-rating","AppleWatch"];
 
 /**
- * 
+ *
  * Set that consent should be required for features to work.
  * Should be call before Countly init
  */
 Countly.setRequiresConsent = function(boolean){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setRequiresConsent",[boolean == true?"1": "0"]);
 }
+
+/**
+ * 
+ * Give consent for specific features before init.
+ * Should be call after Countly init
+ */
+Countly.giveConsentInit = async function(consent){
+    var features = [];
+    if (typeof consent == "string") {
+        features.push(consent);
+    }
+    else if(Array.isArray(consent)) {
+        features = consent;
+    }
+    else {
+        if(Countly.isDebug) {
+            console.warn("[CountlyCordova] giveConsentInit, unsupported data type '" + (typeof consent) + "'");
+        }
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsentInit",features);
+}
+
 Countly.giveConsent = function(consent){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",consent);
 }
 Countly.removeConsent = function(consent){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",consent);
 }
+/**
+ * 
+ * Give consent for all features
+ * Should be call after Countly init
+ */
 Countly.giveAllConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",Countly.consents);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveAllConsent",[]);
 }
 Countly.removeAllConsent = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",Countly.consents);
 }
 
-// Remote config
+/** 
+ * 
+ * Set Automatic value download happens when the SDK is initiated or when the device ID is changed.
+ * Should be call before Countly init
+ */
 Countly.setRemoteConfigAutomaticDownload = function(onSuccess, onError){
     cordova.exec(onSuccess, onError,"CountlyCordova","setRemoteConfigAutomaticDownload",[]);
 }
@@ -443,13 +505,12 @@ Countly.askForFeedback = function(widgetId, buttonText){
 Countly.sendPushToken = function(options){
     var args = [];
     args.push(options.token || "");
-    args.push(options.messagingMode.toString() || Countly.messagingMode.PRODUCTION.toString());
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendPushToken",args);
 }
 // Push Notification
 
 /**
- * 
+ *
  * Set to "true" if you want HTTP POST to be used for all requests
  * Should be call before Countly init
  */
@@ -458,12 +519,61 @@ Countly.setHttpPostForced = function(boolean){
 }
 
 /**
- * 
+ *
  * Enable campaign attribution reporting to Countly.
  * Should be call before Countly init
  */
 Countly.enableAttribution = function() {
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableAttribution",[]);
+}
+
+Countly.startTrace = function(traceKey){
+    var args = [];
+    args.push(traceKey);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startTrace",args);
+}
+
+Countly.cancelTrace = function(traceKey){
+    var args = [];
+    args.push(traceKey);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","cancelTrace",args);
+}
+
+Countly.clearAllTraces = function(traceKey){
+    var args = [];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","clearAllTraces",args);
+}
+
+Countly.endTrace = function(traceKey, customMetric){
+    var args = [];
+    args.push(traceKey);
+    customMetric = customMetric || {};
+    for(var key in customMetric){
+        args.push(key.toString());
+        args.push(customMetric[key].toString());
+    }
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endTrace",args);
+}
+
+Countly.recordNetworkTrace = function(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime){
+    var args = [];
+    args.push(networkTraceKey);
+    args.push(responseCode.toString());
+    args.push(requestPayloadSize.toString());
+    args.push(responsePayloadSize.toString());
+    args.push(startTime.toString());
+    args.push(endTime.toString());
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordNetworkTrace",args);
+}
+
+/**
+ *
+ * Enable APM features, which includes the recording of app start time.
+ * Should be call before Countly init
+ */
+Countly.enableApm = function(){
+    var args = [];
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableApm",args);
 }
 
 window.Countly = Countly;

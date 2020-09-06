@@ -23,7 +23,6 @@
         <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
         <img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
         <button onclick="app.init()" class="fluid ui green button">Init</button>
-        <button onclick="app.initWithID()" class="fluid ui green button">Init with ID </button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
         <button onclick="app.halt()" class="fluid ui red button">Halt</button>
@@ -84,6 +83,7 @@
         <button onclick="app.giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
         <button onclick="app.giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
         <button onclick="app.giveConsentAppleWatch()" class="fluid ui button blue">Give Consent AppleWatch</button>
+        <button onclick="app.giveConsentAPM()" class="fluid ui button blue">Give Consent Performance</button>
 
         <button onclick="app.removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
         <button onclick="app.removeConsentEvents()" class="fluid ui button blue">Remove Consent Events</button>
@@ -95,6 +95,7 @@
         <button onclick="app.removeConsentPush()" class="fluid ui button blue">Remove Consent Push</button>
         <button onclick="app.removeConsentStarRating()" class="fluid ui button blue">Remove Consent starRating</button>
         <button onclick="app.removeConsentAppleWatch()" class="fluid ui button blue">Remove Consent AppleWatch</button>
+        <button onclick="app.removeConsentAPM()" class="fluid ui button blue">Remove Consent Performance</button>
 
         <!-- Consent Button -->
         <div class="ui horizontal divider">User Methods End</div>
@@ -133,6 +134,15 @@
         <button onclick="app.askForStarRating()" class="fluid ui button orange">Open rating modal</button>
         <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
         <div class="ui horizontal divider">Rating Methods End</div>
+
+        <div class="ui horizontal divider">Performance Methods Start</div>
+        <button onclick="app.startTrace()" class="fluid ui black button">Start Trace</button>
+        <button onclick="app.endTrace()" class="fluid ui black button">End Trace</button>
+        <button onclick="app.recordNetworkTraceSuccess()" class="fluid ui black button">Record Network Trace Success</button>
+        <button onclick="app.recordNetworkTraceFailure()" class="fluid ui black button">Record Network Trace Failure</button>
+        <button onclick="app.enableApm()" class="fluid ui black button">Enable APM</button>
+        <div class="ui horizontal divider">Performance Methods End</div>
+
     </div>
     <script type="text/javascript">
         document.addEventListener("deviceready", function(){
@@ -158,14 +168,22 @@
                 Countly.setLoggingEnabled(true); // Enable countly internal debugging logs
                 Countly.enableCrashReporting(); // Enable crash reporting to report unhandled crashes to Countly
                 Countly.setRequiresConsent(true); // Set that consent should be required for features to work.
-                Countly.setAutomaticViewTracking(true); // Enable automatic view tracking
+                Countly.giveConsentInit(["location", "sessions", "attribution", "push", "events", "views", "crashes", "users", "push", "star-rating", "apm"]); // give conset for specific features before init.
+                Countly.setLocationInit("TR", "Istanbul", "41.0082,28.9784", "10.2.33.12"); // Set user initial location.
+
 
                 /** Optional settings for Countly initialisation */
                 Countly.enableParameterTamperingProtection("salt"); // Set the optional salt to be used for calculating the checksum of requested data which will be sent with each request
                 // Countly.pinnedCertificates("count.ly.cer"); // It will ensure that connection is made with one of the public keys specified
-                // Countly.setHttpPostForced(false); // Set to "true" if you want HTTP POST to be used for all requests
+                Countly.setHttpPostForced(false); // Set to "true" if you want HTTP POST to be used for all requests
+                Countly.enableApm(); // Enable APM features, which includes the recording of app start time.
                 Countly.enableAttribution(); // Enable to measure your marketing campaign performance by attributing installs from specific campaigns.
-
+                Countly.setRemoteConfigAutomaticDownload(function(r){
+                    alert("onSuccess : " + r)
+                }, function(r){
+                    alert("onError : " + r);
+                }); // Set Automatic value download happens when the SDK is initiated or when the device ID is changed.
+                
                 Countly.init("https://try.count.ly", "YOUR_API_KEY").then((result) => {
                     /** 
                      * Push notifications settings 
@@ -189,12 +207,6 @@
         
         // Countly.eventSendThreshold(1);
     };
-    app.initWithID = function(){
-        Countly.pushTokenType(Countly.messagingMode.TEST);
-        Countly.setLoggingEnabled(true);
-        Countly.init("https://try.count.ly", "YOUR_API_KEY", makeid());
-        // Countly.eventSendThreshold(1);
-    }
     // app.test = function() {
     //     app.sendPushToken();
     //     app.sendSampleEvent();
@@ -313,14 +325,14 @@
     app.setUserData = function() {
         // example for setUserData
         var options = {};
-        options.name = "Trinisoft Technologies";
-        options.username = "trinisofttechnologies";
-        options.email = "trinisofttechnologies@gmail.com";
-        options.organization = "Trinisoft Technologies Pvt. Ltd.";
-        options.phone = "+91 812 840 2946";
-        options.picture = "https://avatars0.githubusercontent.com/u/10754117?s=400&u=fe019f92d573ac76cbfe7969dde5e20d7206975a&v=4";
+        options.name = "Name of User";
+        options.username = "Username";
+        options.email = "User Email";
+        options.org = "User Organization";
+        options.phone = "User Contact number";
+        options.picture = "https://count.ly/images/logos/countly-logo.png";
         options.picturePath = "";
-        options.gender = "M"; // "F"
+        options.gender = "User Gender";
         options.byear = 1989;
         Countly.setUserData(options);
     };
@@ -640,6 +652,9 @@
     app.giveConsentAppleWatch = function() {
         Countly.giveConsent(["AppleWatch"]);
     }
+    app.giveConsentAPM = function(){
+        Countly.giveConsent(["apm"]);
+    }
 
     app.removeConsentSessions = function() {
         Countly.removeConsent(["sessions"]);
@@ -670,6 +685,9 @@
     }
     app.removeConsentAppleWatch = function() {
         Countly.giveConsent(["AppleWatch"]);
+    }
+    app.removeConsentAPM = function(){
+        Countly.removeConsent(["apm"]);
     }
 
     // Remote config usage
@@ -766,6 +784,49 @@
         });
     }
 
+    var successCodes = [100, 101, 200, 201, 202, 205, 300, 301, 303, 305];
+    var failureCodes = [400, 402, 405, 408, 500, 501, 502, 505];
+
+    app.startTrace = function(){
+        var traceKey = "Trace Key";
+        Countly.startTrace(traceKey);
+    }
+    app.endTrace = function(){
+        var traceKey = "Trace Key";
+        var customMetric = {
+        "ABC": 1233,
+        "C44C": 1337
+        };
+        Countly.endTrace(traceKey, customMetric);
+    }
+    function random(number){
+        return Math.floor(Math.random() * number);
+    }
+    app.recordNetworkTraceSuccess = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var responseCode = successCodes[random(successCodes.length)];
+        var requestPayloadSize = random(700) + 200;
+        var responsePayloadSize = random(700) + 200;
+        var startTime = new Date().getTime();
+        var endTime = startTime + 500;
+        Countly.recordNetworkTrace(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
+    }
+    app.recordNetworkTraceFailure = function(){
+        var networkTraceKey = "api/endpoint.1";
+        var responseCode = failureCodes[random(failureCodes.length)];
+        var requestPayloadSize = random(700) + 250;
+        var responsePayloadSize = random(700) + 250;
+        var startTime = new Date().getTime();
+        var endTime = startTime + 500;
+        Countly.recordNetworkTrace(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime);
+    }
+    app.enableApm = function(){
+        Countly.enableApm();
+    }
+    app.setCustomCrashSegment = function(){
+        var segment = {"Key": "Value"};
+        Countly.setCustomCrashSegment(segment);
+    }
     // Remote config usage
 
     // /** Use StackTrace to log all exceptions **/

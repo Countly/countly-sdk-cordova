@@ -19,12 +19,12 @@
 - (void)eventSendThreshold:(CDVInvokedUrlCommand*)command;
 - (void)storedRequestsLimit:(CDVInvokedUrlCommand*)command;
 - (void)recordView:(CDVInvokedUrlCommand*)command;
-- (void)setAutomaticViewTracking:(CDVInvokedUrlCommand*)command;
 - (void)resume:(CDVInvokedUrlCommand*)command;
 - (void)suspend:(CDVInvokedUrlCommand*)command;
 
 
 - (void)setHttpPostForced:(CDVInvokedUrlCommand*)command;
+- (void)setLocationInit:(CDVInvokedUrlCommand*)command;
 - (void)setLocation:(CDVInvokedUrlCommand*)command;
 - (void)enableCrashReporting:(CDVInvokedUrlCommand*)command;
 - (void)addCrashLog:(CDVInvokedUrlCommand*)command;
@@ -34,6 +34,8 @@
 - (void)registerForNotification:(CDVInvokedUrlCommand*)command;
 - (void)pushTokenType:(CDVInvokedUrlCommand*)command;
 
+- (void)getCurrentDeviceId:(CDVInvokedUrlCommand*)command;
+- (void)getDeviceIdAuthor:(CDVInvokedUrlCommand*)command;
 - (void)changeDeviceId:(CDVInvokedUrlCommand*)command;
 - (void)enableParameterTamperingProtection:(CDVInvokedUrlCommand*)command;
 - (void)startEvent:(CDVInvokedUrlCommand*)command;
@@ -67,5 +69,12 @@
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command;
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command;
 - (void)enableAttribution:(CDVInvokedUrlCommand*)command;
+
+- (void)startTrace:(CDVInvokedUrlCommand*)command;
+- (void)cancelTrace:(CDVInvokedUrlCommand*)command;
+- (void)clearAllTraces:(CDVInvokedUrlCommand*)command;
+- (void)endTrace:(CDVInvokedUrlCommand*)command;
+- (void)recordNetworkTrace:(CDVInvokedUrlCommand*)command;
+- (void)enableApm:(CDVInvokedUrlCommand*)command;
 
 @end
