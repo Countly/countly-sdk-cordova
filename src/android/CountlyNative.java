@@ -34,7 +34,7 @@ import com.google.firebase.FirebaseApp;
 
 public class CountlyNative {
 
-    public static final String TAG = "CountlyCordova";
+    public static final String TAG = "CountlyCordovaPlugin";
     private String COUNTLY_CORDOVA_SDK_VERSION_STRING = "20.4.0";
     private String COUNTLY_CORDOVA_SDK_NAME = "js-cordovab-android";
 

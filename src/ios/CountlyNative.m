@@ -998,7 +998,7 @@ void CountlyCordovaInternalLog(NSString *format, ...)
     va_start(args, format);
 
     NSString* logString = [NSString.alloc initWithFormat:format arguments:args];
-    NSLog(@"[CountlyCordova] %@", logString);
+    NSLog(@"[CountlyCordovaPlugin] %@", logString);
 
     va_end(args);
 }
