@@ -14,7 +14,48 @@ export class HomePage {
   }
 
   init() {
-    Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", "");
+    Countly.isInitialized().then((result) => {
+      if(result  != "true") {
+          /** Recommended settings for Countly initialisation */
+          Countly.setLoggingEnabled(true); // Enable countly internal debugging logs
+          Countly.enableCrashReporting(); // Enable crash reporting to report unhandled crashes to Countly
+          Countly.setRequiresConsent(true); // Set that consent should be required for features to work.
+          Countly.giveConsentInit(["location", "sessions", "attribution", "push", "events", "views", "crashes", "users", "push", "star-rating", "apm"]); // give conset for specific features before init.
+          Countly.setLocationInit("TR", "Istanbul", "41.0082,28.9784", "10.2.33.12"); // Set user initial location.
+
+
+          /** Optional settings for Countly initialisation */
+          Countly.enableParameterTamperingProtection("salt"); // Set the optional salt to be used for calculating the checksum of requested data which will be sent with each request
+          // Countly.pinnedCertificates("count.ly.cer"); // It will ensure that connection is made with one of the public keys specified
+          Countly.setHttpPostForced(false); // Set to "true" if you want HTTP POST to be used for all requests
+          Countly.enableApm(); // Enable APM features, which includes the recording of app start time.
+          Countly.enableAttribution(); // Enable to measure your marketing campaign performance by attributing installs from specific campaigns.
+          Countly.setRemoteConfigAutomaticDownload(function(r){
+              alert("onSuccess : " + r)
+          }, function(r){
+              alert("onError : " + r);
+          }); // Set Automatic value download happens when the SDK is initiated or when the device ID is changed.
+          
+          Countly.init("https://master.count.ly", "a646f1e4325e4e979ad5aa8dc01a334f12a6f4fe").then((result) => {
+              /** 
+               * Push notifications settings 
+               * Should be call after init
+              */
+              Countly.pushTokenType(Countly.messagingMode.TEST); // Set messaging mode for push notifications
+              Countly.onNotification(function(theNotification){
+                  alert(JSON.stringify(theNotification));
+              }); // Set callback to receive push notifications
+              Countly.askForNotificationPermission(); // This method will ask for permission, enables push notification and send push token to countly server.
+
+              // Countly.giveAllConsent(); // give consent for all features, should be call after init
+              // Countly.giveConsent(["events", "views"]); // give conset for some specific features, should be call after init.
+          },(err) => {
+              console.error(err);
+          });
+      }
+  },(err) => {
+      console.error(err);
+  });
   };
 
   test() {
@@ -107,14 +148,14 @@ export class HomePage {
       "gender": "",
       "byear": 0
     };
-    options.name = "Trinisoft Technologies";
-    options.username = "trinisofttechnologies";
-    options.email = "trinisofttechnologies@gmail.com";
-    options.org = "Trinisoft Technologies Pvt. Ltd.";
-    options.phone = "+91 812 840 2946";
-    options.picture = "http://www.trinisofttechnologies.com/images/logo.png";
+    options.name = "Name of User";
+    options.username = "Username";
+    options.email = "User Email";
+    options.org = "User Organization";
+    options.phone = "User Contact number";
+    options.picture = "https://count.ly/images/logos/countly-logo.png";
     options.picturePath = "";
-    options.gender = "M"; // "F"
+    options.gender = "User Gender";
     options.byear = 1989;
     Countly.setUserData(options);
   }
