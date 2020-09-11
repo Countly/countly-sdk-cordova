@@ -521,10 +521,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
     }else if ([@"setLocation" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        NSString* countryCode = [arguments objectAtIndex:0];
-        NSString* city = [arguments objectAtIndex:1];
-        NSString* locationString = [arguments objectAtIndex:2];
-        NSString* ipAddress = [arguments objectAtIndex:3];
+        NSString* countryCode = [command objectAtIndex:0];
+        NSString* city = [command objectAtIndex:1];
+        NSString* locationString = [command objectAtIndex:2];
+        NSString* ipAddress = [command objectAtIndex:3];
 
         if([@"null" isEqualToString:city]){
             city = nil;
@@ -550,7 +550,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 [Countly.sharedInstance recordLocation:(CLLocationCoordinate2D){latitudeDouble,longitudeDouble}];
             }
             @catch(NSException *exception){
-                COUNTLY_RN_LOG(@"Invalid location: %@", locationString);
+                COUNTLY_CORDOVA_LOG(@"Invalid location: %@", locationString);
             }
         }
 
