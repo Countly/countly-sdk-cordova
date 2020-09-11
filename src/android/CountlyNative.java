@@ -227,10 +227,23 @@ public class CountlyNative {
     public String setLocation(JSONArray args){
         try {
             this.log("setLocation", args);
-            String latitude = args.getString(0);
-            String longitude = args.getString(1);
-            String latlng = (latitude + "," + longitude);
-            Countly.sharedInstance().setLocation(null, null, latlng, null);
+            String countryCode = args.getString(0);
+            String city = args.getString(1);
+            String location = args.getString(2);
+            String ipAddress = args.getString(3);
+            if("null".equals(countryCode)){
+                countryCode = null;
+            }
+            if("null".equals(city)){
+                city = null;
+            }
+            if("null".equals(location)){
+                location = null;
+            }
+            if("null".equals(ipAddress)){
+                ipAddress = null;
+            }
+            Countly.sharedInstance().setLocation(countryCode, city, location, ipAddress);
             return "setLocation success!";
         }catch (JSONException jsonException){
             return jsonException.toString();

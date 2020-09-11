@@ -521,13 +521,41 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
     }else if ([@"setLocation" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        NSString* latitudeString = [command objectAtIndex:0];
-        NSString* longitudeString = [command objectAtIndex:1];
+        NSString* countryCode = [arguments objectAtIndex:0];
+        NSString* city = [arguments objectAtIndex:1];
+        NSString* locationString = [arguments objectAtIndex:2];
+        NSString* ipAddress = [arguments objectAtIndex:3];
 
-        double latitudeDouble = [latitudeString doubleValue];
-        double longitudeDouble = [longitudeString doubleValue];
+        if([@"null" isEqualToString:city]){
+            city = nil;
+        }
+        if([@"null" isEqualToString:countryCode]){
+            countryCode = nil;
+        }
+        if([@"null" isEqualToString:locationString]){
+            locationString = nil;
+        }
+        if([@"null" isEqualToString:ipAddress]){
+            ipAddress = nil;
+        }
 
-        config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
+        if(locationString != nil && [locationString containsString:@","]){
+            @try{
+                NSArray *locationArray = [locationString componentsSeparatedByString:@","];
+                NSString* latitudeString = [locationArray objectAtIndex:0];
+                NSString* longitudeString = [locationArray objectAtIndex:1];
+
+                double latitudeDouble = [latitudeString doubleValue];
+                double longitudeDouble = [longitudeString doubleValue];
+                [Countly.sharedInstance recordLocation:(CLLocationCoordinate2D){latitudeDouble,longitudeDouble}];
+            }
+            @catch(NSException *exception){
+                COUNTLY_RN_LOG(@"Invalid location: %@", locationString);
+            }
+        }
+
+        [Countly.sharedInstance recordCity:city andISOCountryCode:countryCode];
+        [Countly.sharedInstance recordIP:ipAddress];
 
         result(@"setLocation!");
         });
