@@ -15,10 +15,10 @@
     "is_top_level": false,
     "variables": {}
   },
-  "countly-sdk-js": {
+  "countly-sdk-cordova": {
     "source": {
-      "type": "local",
-      "path": "/Users/trinisoft/office/countly/app/c3/countly-demo-js/node_modules/countly-sdk-js"
+      "type": "registry",
+      "id": "https://github.com/Countly/countly-sdk-cordova.git#dev-junaid"
     },
     "is_top_level": true,
     "variables": {}

@@ -5,9 +5,6 @@
 // Please visit www.count.ly for more information.
 
 #import <Foundation/Foundation.h>
-#if TARGET_OS_IOS
-#import <UIKit/UIKit.h>
-#endif
 
 extern NSString* const kCountlyQSKeyDeviceID;
 
@@ -23,6 +20,8 @@ extern NSString* const kCountlyQSKeyDeviceID;
 @property (nonatomic) BOOL alwaysUsePOST;
 @property (nonatomic) NSURLSessionConfiguration* URLSessionConfiguration;
 
+@property (nonatomic) BOOL isTerminating;
+
 + (instancetype)sharedInstance;
 
 - (void)beginSession;
@@ -36,8 +35,9 @@ extern NSString* const kCountlyQSKeyDeviceID;
 - (void)sendCrashReport:(NSString *)report immediately:(BOOL)immediately;
 - (void)sendOldDeviceID:(NSString *)oldDeviceID;
 - (void)sendParentDeviceID:(NSString *)parentDeviceID;
-- (void)sendAttribution:(NSString *)attribution;
+- (void)sendAttribution;
 - (void)sendConsentChanges:(NSString *)consentChanges;
+- (void)sendPerformanceMonitoringTrace:(NSString *)trace;
 
 - (void)proceedOnQueue;
 

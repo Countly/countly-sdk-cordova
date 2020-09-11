@@ -6,16 +6,17 @@
 
 #import "CountlyCommon.h"
 
-NSString* const CLYConsentSessions             = @"sessions";
-NSString* const CLYConsentEvents               = @"events";
-NSString* const CLYConsentUserDetails          = @"users";
-NSString* const CLYConsentCrashReporting       = @"crashes";
-NSString* const CLYConsentPushNotifications    = @"push";
-NSString* const CLYConsentLocation             = @"location";
-NSString* const CLYConsentViewTracking         = @"views";
-NSString* const CLYConsentAttribution          = @"attribution";
-NSString* const CLYConsentStarRating           = @"star-rating";
-NSString* const CLYConsentAppleWatch           = @"accessory-devices";
+CLYConsent const CLYConsentSessions             = @"sessions";
+CLYConsent const CLYConsentEvents               = @"events";
+CLYConsent const CLYConsentUserDetails          = @"users";
+CLYConsent const CLYConsentCrashReporting       = @"crashes";
+CLYConsent const CLYConsentPushNotifications    = @"push";
+CLYConsent const CLYConsentLocation             = @"location";
+CLYConsent const CLYConsentViewTracking         = @"views";
+CLYConsent const CLYConsentAttribution          = @"attribution";
+CLYConsent const CLYConsentStarRating           = @"star-rating";
+CLYConsent const CLYConsentAppleWatch           = @"accessory-devices";
+CLYConsent const CLYConsentPerformanceMonitoring = @"apm";
 
 
 @interface CountlyConsentManager ()
@@ -34,6 +35,7 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
 @synthesize consentForAttribution = _consentForAttribution;
 @synthesize consentForStarRating = _consentForStarRating;
 @synthesize consentForAppleWatch = _consentForAppleWatch;
+@synthesize consentForPerformanceMonitoring = _consentForPerformanceMonitoring;
 
 #pragma mark -
 
@@ -77,6 +79,11 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
     if (!features.count)
         return;
 
+    //NOTE: Due to some legacy Countly Server location info problems, giving consent for location should be the first.
+    //NOTE: Otherwise, if location consent is given after sessions consent, begin_session request will be sent with an empty string as location.
+    if ([features containsObject:CLYConsentLocation] && !self.consentForLocation)
+        self.consentForLocation = YES;
+
     if ([features containsObject:CLYConsentSessions] && !self.consentForSessions)
         self.consentForSessions = YES;
 
@@ -92,9 +99,6 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
     if ([features containsObject:CLYConsentPushNotifications] && !self.consentForPushNotifications)
         self.consentForPushNotifications = YES;
 
-    if ([features containsObject:CLYConsentLocation] && !self.consentForLocation)
-        self.consentForLocation = YES;
-
     if ([features containsObject:CLYConsentViewTracking] && !self.consentForViewTracking)
         self.consentForViewTracking = YES;
 
@@ -106,6 +110,9 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
 
     if ([features containsObject:CLYConsentAppleWatch] && !self.consentForAppleWatch)
         self.consentForAppleWatch = YES;
+
+    if ([features containsObject:CLYConsentPerformanceMonitoring] && !self.consentForPerformanceMonitoring)
+        self.consentForPerformanceMonitoring = YES;
 
     [self sendConsentChanges];
 }
@@ -152,6 +159,9 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
     if ([features containsObject:CLYConsentAppleWatch] && self.consentForAppleWatch)
         self.consentForAppleWatch = NO;
 
+    if ([features containsObject:CLYConsentPerformanceMonitoring] && self.consentForPerformanceMonitoring)
+        self.consentForPerformanceMonitoring = NO;
+
     [self sendConsentChanges];
 }
 
@@ -180,6 +190,7 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
         CLYConsentAttribution,
         CLYConsentStarRating,
         CLYConsentAppleWatch,
+        CLYConsentPerformanceMonitoring,
     ];
 }
 
@@ -196,7 +207,8 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
     self.consentForViewTracking ||
     self.consentForAttribution ||
     self.consentForStarRating ||
-    self.consentForAppleWatch;
+    self.consentForAppleWatch ||
+    self.consentForPerformanceMonitoring;
 }
 
 
@@ -266,7 +278,6 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
 {
     _consentForCrashReporting = consentForCrashReporting;
 
-#if TARGET_OS_IOS
     if (consentForCrashReporting)
     {
         COUNTLY_LOG(@"Consent for CrashReporting is given.");
@@ -279,7 +290,6 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
 
         [CountlyCrashReporter.sharedInstance stopCrashReporting];
     }
-#endif
 
     self.consentChanges[CLYConsentCrashReporting] = @(consentForCrashReporting);
 }
@@ -289,18 +299,21 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
 {
     _consentForPushNotifications = consentForPushNotifications;
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS || TARGET_OS_OSX)
     if (consentForPushNotifications)
     {
         COUNTLY_LOG(@"Consent for PushNotifications is given.");
 
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         [CountlyPushNotifications.sharedInstance startPushNotifications];
+#endif
     }
     else
     {
         COUNTLY_LOG(@"Consent for PushNotifications is cancelled.");
-
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         [CountlyPushNotifications.sharedInstance stopPushNotifications];
+#endif
     }
 #endif
 
@@ -358,7 +371,7 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
     {
         COUNTLY_LOG(@"Consent for Attribution is given.");
 
-        [CountlyCommon.sharedInstance startAttribution];
+        [CountlyConnectionManager.sharedInstance sendAttribution];
     }
     else
     {
@@ -373,7 +386,7 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
 {
     _consentForStarRating = consentForStarRating;
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
     if (consentForStarRating)
     {
         COUNTLY_LOG(@"Consent for StarRating is given.");
@@ -408,6 +421,29 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
 #endif
 
     self.consentChanges[CLYConsentAppleWatch] = @(consentForAppleWatch);
+}
+
+
+- (void)setConsentForPerformanceMonitoring:(BOOL)consentForPerformanceMonitoring
+{
+    _consentForPerformanceMonitoring = consentForPerformanceMonitoring;
+
+#if (TARGET_OS_IOS)
+    if (consentForPerformanceMonitoring)
+    {
+        COUNTLY_LOG(@"Consent for PerformanceMonitoring is given.");
+        
+        [CountlyPerformanceMonitoring.sharedInstance startPerformanceMonitoring];
+    }
+    else
+    {
+        COUNTLY_LOG(@"Consent for PerformanceMonitoring is cancelled.");
+
+        [CountlyPerformanceMonitoring.sharedInstance stopPerformanceMonitoring];
+    }
+#endif
+
+    self.consentChanges[CLYConsentPerformanceMonitoring] = @(consentForPerformanceMonitoring);
 }
 
 #pragma mark -
@@ -499,6 +535,15 @@ NSString* const CLYConsentAppleWatch           = @"accessory-devices";
       return YES;
 
     return _consentForAppleWatch;
+}
+
+
+- (BOOL)consentForPerformanceMonitoring
+{
+    if (!self.requiresConsent)
+        return YES;
+
+    return _consentForPerformanceMonitoring;
 }
 
 @end

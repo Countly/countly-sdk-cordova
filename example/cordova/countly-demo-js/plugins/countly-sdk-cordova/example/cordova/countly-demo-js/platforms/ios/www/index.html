@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stacktrace.js/2.0.0/stacktrace.min.js"></script>
+    <style type="text/css">
+    button {
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+    }
+    </style>
+    <title>Countly Cordova Demo App</title>
+</head>
+
+<body>
+    <div class="app">
+        <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
+        <img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
+        <button onclick="app.init()" class="fluid ui green button">Init</button>
+        <button onclick="app.initWithID()" class="fluid ui green button">Init with ID </button>
+        <button onclick="app.start()" class="fluid ui green button">Start</button>
+        <button onclick="app.stop()" class="fluid ui red button">Stop</button>
+        <button onclick="app.halt()" class="fluid ui red button">Halt</button>
+
+        <!-- <button onclick="app.manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button>
+        <button onclick="app.updateSessionPeriod()" class="fluid ui CornflowerBlue button">Update Session Period</button>
+        <button onclick="app.eventSendThreshold()" class="fluid ui CornflowerBlue button">Event Send Threshold</button>
+        <button onclick="app.storedRequestsLimit()" class="fluid ui CornflowerBlue button">Stored Requests Limit</button> -->
+
+        <div class="ui horizontal divider">Events Start</div>
+        <button onclick="app.basicEvent()" class="fluid ui button">Basic Events</button>
+        <button onclick="app.eventWithSum()" class="fluid ui button">Event with Sum</button>
+        <button onclick="app.eventWithSegment()" class="fluid ui button">Event with Segment</button>
+        <button onclick="app.eventWithSumSegment()" class="fluid ui button">Even with Sum and Segment</button>
+        <button onclick="app.event()" class="fluid ui black button">All Events</button>
+        <button onclick="app.endEventBasic()" class="fluid ui button">Timed event: Start / Stop</button>
+        <button onclick="app.endEventWithSum()" class="fluid ui button">Timed event Sum: Start / Stop</button>
+        <button onclick="app.endEventWithSegment()" class="fluid ui button">Timed event Segment: Start / Stop</button>
+        <button onclick="app.endEventWithSumSegment()" class="fluid ui button">Timed event Sum Segment: Start / Stop</button>
+        <button onclick="app.startEventX()" class="fluid ui button">Start Event X</button>
+        <button onclick="app.cancelEventX()" class="fluid ui button">Cancel Event X</button>
+        <div class="ui horizontal divider">Events End</div>
+        <button onclick="app.recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
+        <button onclick="app.recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
+        <div class="ui horizontal divider">2017</div>
+        <div class="ui horizontal divider">User Methods Start</div>
+
+        <button onclick="app.setCaptianAmericaData()" class="fluid ui button teal">Send Captian America Data</button>
+        <button onclick="app.setIronManData()" class="fluid ui button teal">Send Iron Man Data</button>
+        <button onclick="app.setSpiderManData()" class="fluid ui button teal">Send Spider-Man Data</button>
+
+        <button onclick="app.setUserData()" class="fluid ui button teal">Send Users Data</button>
+        <button onclick="app.userData.setProperty()" class="fluid ui button teal">UserData.setProperty</button>
+        <button onclick="app.userData.increment()" class="fluid ui button teal">UserData.increment</button>
+        <button onclick="app.userData.incrementBy()" class="fluid ui button teal">UserData.incrementBy</button>
+        <button onclick="app.userData.multiply()" class="fluid ui button teal">UserData.multiply</button>
+        <button onclick="app.userData.saveMax()" class="fluid ui button teal">UserData.saveMax</button>
+        <button onclick="app.userData.saveMin()" class="fluid ui button teal">UserData.saveMin</button>
+        <button onclick="app.userData.setOnce()" class="fluid ui button teal">UserData.setOnce</button>
+        <button onclick="app.userData.pushUniqueValue()" class="fluid ui button teal">UserData.pushUniqueValue</button>
+        <button onclick="app.userData.pushValue()" class="fluid ui button teal">UserData.pushValue</button>
+        <button onclick="app.userData.pullValue()" class="fluid ui button teal">UserData.pullValue</button>
+        <!-- Consent Button -->
+
+        <button onclick="app.setRequiresConsent()" class="fluid ui button blue">Init Consent</button>
+        <button onclick="app.giveMultipleConsent()" class="fluid ui button blue">Give multiple consent</button>
+        <button onclick="app.removeMultipleConsent()" class="fluid ui button blue">Remove multiple consent</button>
+        <button onclick="app.giveAllConsent()" class="fluid ui button blue">Give all Consent</button>
+        <button onclick="app.removeAllConsent()" class="fluid ui button blue">Remove all Consent</button>
+
+        <button onclick="app.giveConsentSessions()" class="fluid ui button blue">Give Consent Sessions</button>
+        <button onclick="app.giveConsentEvents()" class="fluid ui button blue">Give Consent Events</button>
+        <button onclick="app.giveConsentViews()" class="fluid ui button blue">Give Consent Views</button>
+        <button onclick="app.giveConsentLocation()" class="fluid ui button blue">Give Consent Location</button>
+        <button onclick="app.giveConsentCrashes()" class="fluid ui button blue">Give Consent Crashes</button>
+        <button onclick="app.giveConsentAttribution()" class="fluid ui button blue">Give Consent Attribution</button>
+        <button onclick="app.giveConsentUsers()" class="fluid ui button blue">Give Consent Users</button>
+        <button onclick="app.giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
+        <button onclick="app.giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
+        <button onclick="app.giveConsentAppleWatch()" class="fluid ui button blue">Give Consent AppleWatch</button>
+
+        <button onclick="app.removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
+        <button onclick="app.removeConsentEvents()" class="fluid ui button blue">Remove Consent Events</button>
+        <button onclick="app.removeConsentViews()" class="fluid ui button blue">Remove Consent Views</button>
+        <button onclick="app.removeConsentLocation()" class="fluid ui button blue">Remove Consent Location</button>
+        <button onclick="app.removeConsentCrashes()" class="fluid ui button blue">Remove Consent Crashes</button>
+        <button onclick="app.removeConsentAttribution()" class="fluid ui button blue">Remove Consent Attribution</button>
+        <button onclick="app.removeConsentUsers()" class="fluid ui button blue">Remove Consent Users</button>
+        <button onclick="app.removeConsentPush()" class="fluid ui button blue">Remove Consent Push</button>
+        <button onclick="app.removeConsentStarRating()" class="fluid ui button blue">Remove Consent starRating</button>
+        <button onclick="app.removeConsentAppleWatch()" class="fluid ui button blue">Remove Consent AppleWatch</button>
+
+        <!-- Consent Button -->
+        <div class="ui horizontal divider">User Methods End</div>
+        <div class="ui horizontal divider">Remote Config Methods Start</div>
+        <button onclick="app.setRemoteConfigAutomaticDownload()" class="fluid ui button blue">Countly.setRemoteConfigAutomaticDownload</button>
+        <button onclick="app.remoteConfigUpdate()" class="fluid ui button blue">Countly.remoteConfigUpdate</button>
+        <button onclick="app.updateRemoteConfigForKeysOnly()" class="fluid ui button blue">Countly.updateRemoteConfigForKeysOnly</button>
+        <button onclick="app.updateRemoteConfigExceptKeys()" class="fluid ui button blue">Countly.updateRemoteConfigExceptKeys</button>
+        <button onclick="app.remoteConfigClearValues()" class="fluid ui button blue">Countly.remoteConfigClearValues</button>
+
+        <button onclick="app.updateRemoteConfigForbooleanValueOnly()" class="fluid ui button blue">Boolean Test</button>
+        <button onclick="app.updateRemoteConfigForfloatValueOnly()" class="fluid ui button blue">Float Test</button>
+        <button onclick="app.updateRemoteConfigForintegerValueOnly()" class="fluid ui button blue">Integer Test</button>
+        <button onclick="app.updateRemoteConfigForstringValueOnly()" class="fluid ui button blue">String Test</button>
+        <button onclick="app.updateRemoteConfigForjsonValueOnly()" class="fluid ui button blue">JSON Test</button>
+        <button onclick="app.updateRemoteConfigForjsonStringValueOnly()" class="fluid ui button blue">Array String Test</button>
+        <button onclick="app.updateRemoteConfigForjsonNumberValueOnly()" class="fluid ui button blue">Array Number Test</button>
+
+        <div class="ui horizontal divider">Remote Config Methods End</div>
+        <div class="ui horizontal divider">Other Methods Start</div>
+        <button onclick="app.askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
+        <button onclick="app.sendPushToken()" class="fluid ui button teal">Send Push Token</button>
+        <button onclick="app.setHttpPostForced()" class="fluid ui button teal">SetHttpPostForced</button>
+        <!-- <button onclick="app.testAndroidPush()" class="fluid ui button teal">Push Test Android</button> -->
+        <!-- <button onclick="app.testiOSPush()" class="fluid ui button teal">Push Test iOS</button> -->
+        <button onclick="app.changeDeviceId()" class="fluid ui button yellow">Change Device ID</button>
+        <button onclick="app.enableParameterTamperingProtection('123456')" class="fluid ui button yellow">Enable Parameter Tapmering Protection</button>
+        <button onclick="app.setOptionalParametersForInitialization()" class="fluid ui button yellow">City, State, and Location</button>
+        <button onclick="app.setLocation()" class="fluid ui button yellow">SetLocation</button>
+        <button onclick="app.addCrashLog()" class="fluid ui button yellow">Send Crash Report</button>
+        <div class="ui horizontal divider">Other Methods End</div>
+        <div class="ui horizontal divider">Rating Methods Start</div>
+        <!-- <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button> -->
+        <button onclick="app.askForStarRating()" class="fluid ui button orange">Open rating modal</button>
+        <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
+        <div class="ui horizontal divider">Rating Methods End</div>
+    </div>
+    <script type="text/javascript">
+    app = {};
+    function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < 5; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+    app.init = function() {
+        Countly.pushTokenType(Countly.messagingMode.TEST);
+        Countly.setLoggingEnabled();
+        Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5");
+        // Countly.eventSendThreshold(1);
+    };
+    app.initWithID = function(){
+        Countly.pushTokenType(Countly.messagingMode.TEST);
+        Countly.setLoggingEnabled();
+        Countly.init("https://trinisoft.count.ly", "f0b2ac6919f718a13821575db28c0e2971e05ec5", makeid());
+        // Countly.eventSendThreshold(1);
+    }
+    // app.test = function() {
+    //     app.sendPushToken();
+    //     app.sendSampleEvent();
+    // }
+
+    app.setOptionalParametersForInitialization = function() {
+        Countly.setOptionalParametersForInitialization({
+            city: "Tampa",
+            country: "US",
+            latitude: "28.006324",
+            longitude: "-82.7166183"
+        });
+    };
+
+    app.setLocation = function() {
+        Countly.setLocation("28.006324","-82.7166183");
+    };
+
+    app.event = function() {
+        setInterval(function() {
+            app.sendSampleEvent();
+        }, 1000);
+    }
+    app.start = function() {
+        Countly.start();
+    }
+
+    // app.manualSessionHandling = function() {
+    //     Countly.manualSessionHandling();
+    // }
+
+    // app.updateSessionPeriod = function() {
+    //     Countly.updateSessionPeriod(15);
+    // }
+
+    // app.eventSendThreshold = function() {
+    //     Countly.eventSendThreshold(1);
+    // }
+
+    // app.storedRequestsLimit = function() {
+    //     Countly.storedRequestsLimit(1);
+    // }
+
+    app.stop = function() {
+        Countly.stop();
+    }
+
+    app.halt = function() {
+        Countly.halt();
+    }
+
+    app.sendSampleEvent = function() {
+        app.basicEvent();
+        app.eventWithSum();
+        app.eventWithSegment();
+        app.eventWithSumSegment();
+    }
+
+    app.basicEvent = function() {
+        // example for basic event
+        var event = {
+            "key": "Basic Event",
+            "count": 1
+        };
+        Countly.recordEvent(event);
+    }
+    app.eventWithSum = function() {
+        // example for event with sum
+        var event = {
+            "key": "Event With Sum",
+            "count": 1,
+            "sum": "0.99",
+        };
+        Countly.recordEvent(event);
+    }
+    app.eventWithSegment = function() {
+        // example for event with segment
+        var event = {
+            "key": "Event With Segment",
+            "count": 1
+        };
+        event.segments = {
+            "Country": "Turkey",
+            "Age": "28"
+        };
+        Countly.recordEvent(event);
+    }
+    app.eventWithSumSegment = function() {
+        // example for event with segment and sum
+        var event = {
+            "key": "Event With Sum And Segment",
+            "count": 1,
+            "sum": "0.99"
+        };
+        event.segments = {
+            "Country": "Turkey",
+            "Age": "28"
+        };
+        Countly.recordEvent(event);
+    }
+    app.eventWithSumSegment_duration = function() {
+        // example for event with segment and sum
+        var event = {
+            "key": "Event With Sum And Segment duration",
+            "count": 1,
+            "sum": "0.99",
+            "duration":"1000"
+        };
+        event.segments = {
+            "Country": "Turkey",
+            "Age": "28"
+        };
+        Countly.recordEvent(event);
+    }
+    app.setUserData = function() {
+        // example for setUserData
+        var options = {};
+        options.name = "Trinisoft Technologies";
+        options.username = "trinisofttechnologies";
+        options.email = "trinisofttechnologies@gmail.com";
+        options.organization = "Trinisoft Technologies Pvt. Ltd.";
+        options.phone = "+91 812 840 2946";
+        options.picture = "https://avatars0.githubusercontent.com/u/10754117?s=400&u=fe019f92d573ac76cbfe7969dde5e20d7206975a&v=4";
+        options.picturePath = "";
+        options.gender = "M"; // "F"
+        options.byear = 1989;
+        Countly.setUserData(options);
+    };
+
+    app.setCaptianAmericaData = function() {
+        // example for setCaptianAmericaData
+        var deviceId = makeid();
+        Countly.changeDeviceId(deviceId, false);
+
+        var options = {};
+        options.name = "Captian America";
+        options.username = "captianamerica";
+        options.email = "captianamerica@avengers.com";
+        options.organization = "Avengers";
+        options.phone = "+91 555 555 5555";
+        options.picture = "http://icons.iconarchive.com/icons/hopstarter/superhero-avatar/256/Avengers-Captain-America-icon.png";
+        options.picturePath = "";
+        options.gender = "M"; // "F"
+        options.byear = 1989;
+        Countly.setUserData(options);
+
+    };
+
+    app.setIronManData = function() {
+        // example for setIronManData
+        var deviceId = makeid();
+        Countly.changeDeviceId(deviceId, false);
+
+        var options = {};
+        options.name = "Iron Man";
+        options.username = "ironman";
+        options.email = "ironman@avengers.com";
+        options.organization = "Avengers";
+        options.phone = "+91 555 555 5555";
+        options.picture = "http://icons.iconarchive.com/icons/hopstarter/superhero-avatar/256/Avengers-Iron-Man-icon.png";
+        options.picturePath = "";
+        options.gender = "M"; // "F"
+        options.byear = 1989;
+        Countly.setUserData(options);
+        Countly.start();
+    };
+
+    app.setSpiderManData = function() {
+        var deviceId = makeid();
+        Countly.changeDeviceId(deviceId, false);
+
+        var options = {};
+        options.name = "Spider-Man";
+        options.username = "spiderman";
+        options.email = "spiderman@avengers.com";
+        options.organization = "Avengers";
+        options.phone = "+91 555 555 5555";
+        options.picture = "http://icons.iconarchive.com/icons/mattahan/ultrabuuf/512/Comics-Spiderman-Morales-icon.png";
+        options.picturePath = "";
+        options.gender = "M"; // "F"
+        options.byear = 1989;
+        Countly.setUserData(options);
+        Countly.start();
+    };
+
+
+
+
+    app.setloggingenabled = function() {
+        // example for setLoggingEnabled
+        Countly.setLoggingEnabled();
+    }
+
+    // app.testAndroidPush = function() {
+    //     Countly.sendPushToken({
+    //         "token": "1234567890",
+    //         "messagingMode": Countly.messagingMode.DEVELOPMENT
+    //     });
+    // };
+
+    // app.testiOSPush = function() {
+    //     Countly.sendPushToken({
+    //         "token": "1234567890",
+    //         "messagingMode": Countly.messagingMode.DEVELOPMENT
+    //     });
+    // };
+
+
+    app.sendPushToken = function() {
+
+        var push = PushNotification.init({
+            android: {sound: true},
+            ios: {
+                alert: "true",
+                badge: "true",
+                sound: "true"
+            },
+            windows: {}
+        });
+
+        push.on('registration', function(data) {
+            alert('Token received: '+data.registrationId);
+            Countly.sendPushToken({
+                "token": data.registrationId,
+                "messagingMode": Countly.messagingMode.DEVELOPMENT
+            });
+        });
+
+        push.on('notification', function(data) {
+            alert(JSON.stringify(data));
+        });
+
+        push.on('error', function(e) {
+            // e.message
+        });
+        // Countly.messagingMode.DEVELOPMENT
+        // Countly.messagingMode.PRODUCTION
+        // Countly.messagingMode.ADHOC
+    }
+
+    app.setHttpPostForced = function() {
+        Countly.setHttpPostForced(true);
+    }
+
+    app.askForNotificationPermission = function() {
+        Countly.askForNotificationPermission();
+    }
+
+    app.recordView = function(viewName) {
+        Countly.recordView(viewName);
+    }
+
+    /** 2017 **/
+    app.changeDeviceId = function() {
+        Countly.changeDeviceId("123456", true);
+    }
+    app.enableParameterTamperingProtection = function() {
+        Countly.enableParameterTamperingProtection("salt");
+    }
+
+    app.endEventBasic = function() {
+        Countly.startEvent("Timed Event");
+        setTimeout(function() {
+            Countly.endEvent({ "key": "Timed Event" });
+        }, 1000);
+    }
+    app.endEventWithSum = function() {
+        Countly.startEvent("Timed Event With Sum");
+        setTimeout(function() {
+            Countly.endEvent({ "key": "Timed Event With Sum", "sum": "0.99" });
+        }, 1000);
+    }
+    app.endEventWithSegment = function() {
+        Countly.startEvent("Timed Event With Segment");
+        setTimeout(function() {
+
+            var events = {
+                "key": "Timed Event With Segment"
+            };
+            events.segments = {
+                "Country": "Turkey",
+                "Age": "28"
+            };
+            Countly.endEvent(events);
+        }, 1000);
+    }
+    app.endEventWithSumSegment = function() {
+        Countly.startEvent("Timed Event With Segment, Sum and Count");
+        setTimeout(function() {
+            var events = {
+                "key": "Timed Event With Segment, Sum and Count",
+                "count": 1,
+                "sum": "0.99"
+            };
+            events.segments = {
+                "Country": "Turkey",
+                "Age": "28"
+            };
+            Countly.endEvent(events);
+        }, 1000);
+    }
+    app.startEventX = function(){
+        Countly.startEvent("Event X");
+    }
+    app.cancelEventX = function(){
+        Countly.cancelEvent("Event X");
+    }
+    // app.sendRating = function(){
+    //     // Ratings can be from 1 - 5;
+    //     Countly.sendRating(5);
+    // }
+    app.askForFeedback = function(){
+        Countly.askForFeedback("5e4254507975d006a22535fc", "Close");
+    }
+    app.askForStarRating = function(){
+        Countly.askForStarRating(function(ratingResult){
+            console.log(ratingResult);
+        });
+    }
+
+    app.addCrashLog = function() {
+        Countly.enableCrashReporting();
+        Countly.addCrashLog("User Performed Step A");
+        setTimeout(function() {
+            Countly.addCrashLog("User Performed Step B");
+        }, 1000);
+        setTimeout(function() {
+            Countly.addCrashLog("User Performed Step C");
+            // console.log("Opps found and error");
+            a();
+        }, 1000);
+    }
+
+    function a() {
+        b();
+    }
+
+    function b() {
+        c();
+    }
+
+    function c() {
+        d();
+        throw new Error("My Custom Error");
+    }
+
+    function d() {
+        try {
+            throw new Error("My Second Error");
+        } catch (err) {
+            StackTrace.fromError(err).then(function(stackframes) {
+                Countly.logException(stackframes, true, {"_facebook_version": "0.0.1"});
+            });
+        }
+    }
+
+    /** user details **/
+
+    app.userData = {};
+    app.userData.setProperty = function() {
+        Countly.userData.setProperty("setProperty", "My Property");
+    }
+    app.userData.increment = function() {
+        Countly.userData.increment("increment");
+    }
+    app.userData.incrementBy = function() {
+        Countly.userData.incrementBy("incrementBy", 10);
+    }
+    app.userData.multiply = function() {
+        Countly.userData.multiply("multiply", 20);
+    }
+    app.userData.saveMax = function() {
+        Countly.userData.saveMax("saveMax", 100);
+    }
+    app.userData.saveMin = function() {
+        Countly.userData.saveMin("saveMin", 50);
+    }
+    app.userData.setOnce = function() {
+        Countly.userData.setOnce("setOnce", 200);
+    }
+    app.userData.pushUniqueValue = function() {
+        Countly.userData.pushUniqueValue("pushUniqueValue", "morning");
+    }
+    app.userData.pushValue = function() {
+        Countly.userData.pushValue("pushValue", "morning");
+    }
+    app.userData.pullValue = function() {
+        Countly.userData.pullValue("pullValue", "morning");
+    }
+
+//setRequiresConsent
+    app.setRequiresConsent = function() {
+        Countly.setRequiresConsent(true);
+    }
+
+    app.giveMultipleConsent = function() {
+        Countly.giveConsent(["events", "views", "star-rating", "crashes"]);
+    }
+    app.removeMultipleConsent = function() {
+        Countly.removeConsent(["events", "views", "star-rating", "crashes"]);
+    }
+    app.giveAllConsent = function() {
+        Countly.giveAllConsent();
+    }
+    app.removeAllConsent = function() {
+        Countly.removeAllConsent();
+    }
+
+    app.giveConsentSessions = function() {
+        Countly.giveConsent(["sessions"]);
+    }
+    app.giveConsentEvents = function() {
+        Countly.giveConsent(["events"]);
+    }
+    app.giveConsentViews = function() {
+        Countly.giveConsent(["views"]);
+    }
+    app.giveConsentLocation = function() {
+        Countly.giveConsent(["location"]);
+    }
+    app.giveConsentCrashes = function() {
+        Countly.giveConsent(["crashes"]);
+    }
+    app.giveConsentAttribution = function() {
+        Countly.giveConsent(["attribution"]);
+    }
+    app.giveConsentUsers = function() {
+        Countly.giveConsent(["users"]);
+    }
+    app.giveConsentPush = function() {
+        Countly.giveConsent(["push"]);
+    }
+    app.giveConsentStarRating = function() {
+        Countly.giveConsent(["star-rating"]);
+    }
+    app.giveConsentAppleWatch = function() {
+        Countly.giveConsent(["AppleWatch"]);
+    }
+
+    app.removeConsentSessions = function() {
+        Countly.removeConsent(["sessions"]);
+    }
+    app.removeConsentEvents = function() {
+        Countly.removeConsent(["events"]);
+    }
+    app.removeConsentViews = function() {
+        Countly.removeConsent(["views"]);
+    }
+    app.removeConsentLocation = function() {
+        Countly.removeConsent(["location"]);
+    }
+    app.removeConsentCrashes = function() {
+        Countly.removeConsent(["crashes"]);
+    }
+    app.removeConsentAttribution = function() {
+        Countly.removeConsent(["attribution"]);
+    }
+    app.removeConsentUsers = function() {
+        Countly.removeConsent(["users"]);
+    }
+    app.removeConsentPush = function() {
+        Countly.removeConsent(["push"]);
+    }
+    app.removeConsentStarRating = function() {
+        Countly.removeConsent(["star-rating"]);
+    }
+    app.removeConsentAppleWatch = function() {
+        Countly.giveConsent(["AppleWatch"]);
+    }
+
+    // Remote config usage
+    app.setRemoteConfigAutomaticDownload = function(){
+        Countly.setRemoteConfigAutomaticDownload(function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.remoteConfigUpdate = function(){
+        Countly.remoteConfigUpdate(function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForKeysOnly = function(){
+        Countly.updateRemoteConfigForKeysOnly(["name"], function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigExceptKeys = function(){
+        Countly.updateRemoteConfigExceptKeys(["url"], function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.remoteConfigClearValues = function(){
+        Countly.remoteConfigClearValues(function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.getRemoteConfigValueForKey = function(){
+        Countly.getRemoteConfigValueForKey("name", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+
+    app.updateRemoteConfigForbooleanValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("booleanValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForfloatValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("floatValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForintegerValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("integerValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForstringValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("stringValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForjsonValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("jsonValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForjsonStringValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("arrayStringValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+    app.updateRemoteConfigForjsonNumberValueOnly = function(){
+        Countly.getRemoteConfigValueForKey("arrayNumberValue", function(r){
+            alert(r)
+        }, function(r){
+            alert(r);
+        });
+    }
+
+    // Remote config usage
+
+    // /** Use StackTrace to log all exceptions **/
+    // (function(){
+    //     if (window.StackTrace) {
+    //         StackTrace.get().then(function(stackframes) {
+    //             if (Countly.isCrashReportingEnabled) {
+    //                 Countly.logException(stackframes, true, {"_facebook_version": "0.0.1"});
+    //             }
+    //         }).catch(function(err) {});
+    //     }
+    // })();
+    </script>
+</body>
+
+</html>

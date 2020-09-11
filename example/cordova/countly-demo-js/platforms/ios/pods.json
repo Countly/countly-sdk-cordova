@@ -14,7 +14,7 @@
     "libraries": {
         "Countly": {
             "name": "Countly",
-            "spec": "~> 19.08",
+            "version": "20.04.3",
             "count": 1
         }
     }

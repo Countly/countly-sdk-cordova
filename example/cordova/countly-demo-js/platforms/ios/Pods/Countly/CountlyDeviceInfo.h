@@ -9,6 +9,7 @@
 @interface CountlyDeviceInfo : NSObject
 
 @property (nonatomic) NSString *deviceID;
+@property (nonatomic) NSDictionary<NSString *, NSString *>* customMetrics;
 
 + (instancetype)sharedInstance;
 - (void)initializeDeviceID:(NSString *)deviceID;
@@ -25,7 +26,7 @@
 + (NSString *)locale;
 + (NSString *)appVersion;
 + (NSString *)appBuild;
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 + (NSInteger)hasWatch;
 + (NSInteger)installedWatchApp;
 #endif
@@ -39,7 +40,6 @@
 + (unsigned long long)totalDisk;
 + (NSInteger)batteryLevel;
 + (NSString *)orientation;
-+ (NSString *)OpenGLESversion;
 + (BOOL)isJailbroken;
 + (BOOL)isInBackground;
 @end

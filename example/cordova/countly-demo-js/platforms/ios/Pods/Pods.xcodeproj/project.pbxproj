@@ -3,52 +3,54 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		014B55947B7F3D2209FB3AC0D4E63438 /* CountlyConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 456E92CB4A452671E164AE69D7830C63 /* CountlyConfig.m */; };
-		174DE2CA25CC322E500EA10392E5E1F6 /* Countly.h in Headers */ = {isa = PBXBuildFile; fileRef = A06E0B4DC22936F514C888210DD490A5 /* Countly.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1E1004ED40C2A9FF3E7219A2474AA656 /* CountlyNotificationService.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C0544B82D23E181FC222BA4A76A016E /* CountlyNotificationService.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2308C608D0A116ABD3C6134320B5837E /* Countly.m in Sources */ = {isa = PBXBuildFile; fileRef = C013DF237713CC7703B3EB80C350B634 /* Countly.m */; };
-		2A38E4723924C342C399FC1025D9F1FB /* CountlyConnectionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 17414E3B58164D3E622A8CEEE35CE4B5 /* CountlyConnectionManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		2E23DCD50B6179D3DCD54C1E1697CCFC /* CountlyCrashReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6F9F5212A9186BD708AED987782710 /* CountlyCrashReporter.m */; };
-		36B3A206A7D7ADC068E26DE91FC653F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		37EB401BA62014588B73A9D5CD40A25A /* CountlyStarRating.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D9BBAB5467539E28840DEAE997B65F /* CountlyStarRating.m */; };
-		3CCE3A088D611C7B50CAE5CB9E5FB2D3 /* CountlyUserDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 202C83BA01ED3FD2BF7D554A4C6AFFCE /* CountlyUserDetails.m */; };
-		4B6CF1F8531D0985BF1C043B7F1DB7A8 /* CountlyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 701815583C206ABE3DAFD07DDCF77C53 /* CountlyEvent.m */; };
-		5511FF03661E176D5B7B195246D07A94 /* CountlyConsentManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B1EC058FC1B5668EA03023863FC83A32 /* CountlyConsentManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		69EA3B03D40C6B0D3EC80331A6491FD1 /* CountlyRemoteConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = E8FEF0F60D8E032B42427CCEDB9E3DA3 /* CountlyRemoteConfig.m */; };
-		6BAADDCDAB15008D2C295F621182823F /* CountlyDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FFFE5776D3BB92EE63B39396F94D0027 /* CountlyDeviceInfo.m */; };
-		7A9C5AAE9EFE35E178F40FA4545B383B /* CountlyNotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = A05799AB037C5D588ADB78FF9C3720EA /* CountlyNotificationService.m */; };
-		7DCEB2DC17F7DD186CBE06E2A02763A0 /* Countly-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 789CC94609E09BD35DDEE847F5E00938 /* Countly-dummy.m */; };
-		804B4F71EFA5009EC9D491FEDC0BDC62 /* CountlyCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = EDC67219F77A5FDE21C24CFA225F86A0 /* CountlyCommon.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		860715FE0E785A3D940BCC1B02F3D5ED /* CountlyEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 0EFC2FB1FB6446EF40EF90076FCA1A25 /* CountlyEvent.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		97365AF47F882674DF72182C92414C15 /* CountlyCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = C8BC546C0B3E2DF3361B5DBF7B32A429 /* CountlyCommon.m */; };
-		A083DC465281B3F450CEF448526ACFFD /* CountlyDeviceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 99B5539D8F607F9EDE8521871514A70F /* CountlyDeviceInfo.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		A72EFE9FED886275EBF1D61ADB388DEA /* CountlyConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = CC7BE623CF1B273DF08A15FBDE5F1A89 /* CountlyConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A8003EBB14088B221111BFEFA7C19FF1 /* CountlyPushNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A7DD83C76223CEE44A137B2722CC839E /* CountlyPushNotifications.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		ABA15C417D0084409E1A64688E466F8A /* CountlyCrashReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E00CAC368D8368CED1AF65F800B234E /* CountlyCrashReporter.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		AD7BE639EBEC062E7E6AF1C77C3AD909 /* CountlyLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ABD0A1FEFBD5CB2DE822975298C9D23 /* CountlyLocationManager.m */; };
-		B1AC3BB0E7D634BAED6E64F3E7DECB79 /* Pods-countly-demo-js-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D2ED767EAAA239548C928E52B28897F7 /* Pods-countly-demo-js-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B1BFAEB8A7252FD4BA241C05B7FB3083 /* CountlyConsentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D55670A0F27D5DA9FE75D84D0659F3 /* CountlyConsentManager.m */; };
-		B327F439587E1EBEA6F92FAA1197B861 /* CountlyPushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 174DC516C567F24C82EFAE1FDD09678D /* CountlyPushNotifications.m */; };
-		B906AC4B0F1443647FDEAB2AD8B39EFF /* CountlyUserDetails.h in Headers */ = {isa = PBXBuildFile; fileRef = 15B56B96530035022BA1BF828341F146 /* CountlyUserDetails.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C6592C6A7E7D7FA9309AE982C911DD1C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		C77A3D32333EEA7E518D06E907E443D6 /* CountlyLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5216653C3288927D159B3A4D75D72B /* CountlyLocationManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		CA1671F7A2EBB273728DC4088D29AEC3 /* Pods-countly-demo-js-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FE66E02A0DC039B26637EEF33959FACF /* Pods-countly-demo-js-dummy.m */; };
-		E1BECB3BBBB6E2F9F3A39414F15EFA02 /* CountlyConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 748D6DE8B9188A95C86995DF80240B5A /* CountlyConnectionManager.m */; };
-		E2FC73267474DA77B1248AEBB3E277C4 /* CountlyRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A733E62D7F988D9EAB017FE48E4CC0 /* CountlyRemoteConfig.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E767978F2E71DD9A3CB0DC8F3A2EB098 /* CountlyPersistency.h in Headers */ = {isa = PBXBuildFile; fileRef = B1661935E5C89ACCC42A6EE5A31F8E7A /* CountlyPersistency.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E7CDDBE789FFA97B923DA12FD9110C48 /* CountlyStarRating.h in Headers */ = {isa = PBXBuildFile; fileRef = 633E5D9405910D8A5EE2F6E425A4B521 /* CountlyStarRating.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		EBC0C48F41CE43DC31C5DD3647C0F709 /* CountlyViewTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F67D0BF6BA26215852B45F594209CFF /* CountlyViewTracking.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		EEAC484513C5940E68D7E4AE0F2350F7 /* CountlyViewTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 5ED9F6FBDAB46DA7E33358D70BDA993B /* CountlyViewTracking.m */; };
-		F437950FCEEB2794E94B42BA97425C0C /* CountlyPersistency.m in Sources */ = {isa = PBXBuildFile; fileRef = 764C9AC0B7CBCB16A16B5EB696788CC5 /* CountlyPersistency.m */; };
-		FCDCABAAC16ADF918FC6D8B0A1D62C0F /* Countly-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 07F565459051A16295D7BD444A3DD45E /* Countly-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0002D455C6F5BB9AE96AB721884C3FA5 /* CountlyPushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = E8719BBFDC7BDD71109B47D5C5C0DDDC /* CountlyPushNotifications.m */; };
+		178EF0F9E3C6D71F651A94D49A1A8409 /* CountlyStarRating.h in Headers */ = {isa = PBXBuildFile; fileRef = D80CC47D578F7640933C3CB71E04CDF1 /* CountlyStarRating.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		180999A3B9924D79AD3581FE27F0F0B7 /* CountlyDeviceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 39B3CA4A12841D7AB529AA9595ED1861 /* CountlyDeviceInfo.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		184DE4F2F181FF2E08007C1EC8051B77 /* Countly.m in Sources */ = {isa = PBXBuildFile; fileRef = 701ACCEDCE358E41ECA84B881EE53F5F /* Countly.m */; };
+		18F2A3735047297C8816134B348F2C35 /* CountlyRemoteConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 681DCA47D0BD9FD69AEC5E9EEE441D6C /* CountlyRemoteConfig.m */; };
+		32056D407C2356CB4E7427479FDE8E5A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		33BD3F7BCFD05E620374EEF0FD5987C4 /* CountlyPerformanceMonitoring.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C07396B53AE9A42452D850F44B04F0D /* CountlyPerformanceMonitoring.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		3AC537B61DEBDFBD8357EB7C828F80B5 /* CountlyConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CFB1E6F8BE6B413071315189C5634CE /* CountlyConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CDA1FEB2610EEF711AEB9A5F23D6935 /* CountlyPerformanceMonitoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 018DBF635339A22C21EBBAE998C8CC61 /* CountlyPerformanceMonitoring.m */; };
+		3FC571533F9384D0E06F91D40FDA032B /* CountlyNotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = AB77B2D40C4039F8BAEC2FC35D1B7585 /* CountlyNotificationService.m */; };
+		4280D91B8AB25B7F0E434CC38DE2D65E /* CountlyPersistency.m in Sources */ = {isa = PBXBuildFile; fileRef = 96369E0CE1726E7C32FFFF23C1B52924 /* CountlyPersistency.m */; };
+		4895D40D2C88F00FCCCC04E5077B6519 /* CountlyConnectionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F29268046345C8C87BFB87321448E52A /* CountlyConnectionManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		48E11E043D613D724B96C3D5435BBECD /* CountlyViewTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF4AAEB74BCDC55B76D1CE464C011D8 /* CountlyViewTracking.m */; };
+		4A6823B8DF82E937380459E43CAE3E88 /* Countly.h in Headers */ = {isa = PBXBuildFile; fileRef = F68D848B35836199DC730FB935B8CA81 /* Countly.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		51FD906F304B7FA1B01F54BC1FA333B5 /* CountlyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB93466E6D297D578A992F7D5CD35A1 /* CountlyEvent.m */; };
+		54D45332AE659FE1CFC881725FD039D4 /* CountlyNotificationService.h in Headers */ = {isa = PBXBuildFile; fileRef = 62AF56A67A63AC7F9CBEDBBC0A1BC40B /* CountlyNotificationService.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		54DC99C38B2F50D93BAE00FFCECF0B05 /* CountlyConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE8240CE68B49771C5DF6D90593C3C9 /* CountlyConnectionManager.m */; };
+		5BFC2C7B2FFD4899644E5F3A51C185D6 /* CountlyCrashReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D9C46ED47F4F514AE5BB04481F0FE7D /* CountlyCrashReporter.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		68A06934E51E7219ECF71CF2F98127F9 /* CountlyRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = D223C87AE367EF19BBC8F6B8A42525EE /* CountlyRemoteConfig.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		6E292B2AE62ABC9674040D1AB132C592 /* CountlyConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BEAECC5FE048C7290BF1215D760B1D9 /* CountlyConfig.m */; };
+		7EA7AFF753FCADE678D9B6114256EADF /* CountlyViewTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = D21C1FE3A5644B62039904657B2F8331 /* CountlyViewTracking.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		82F705F999E4AD6AC692BDD0CA68854D /* CountlyStarRating.m in Sources */ = {isa = PBXBuildFile; fileRef = 37DE92C38CDCC11B332D265EA8F8DF62 /* CountlyStarRating.m */; };
+		84600F721FC852130A2F4B6E0C34E868 /* CountlyPushNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = CB7DE8514338F2E1D3FEA5B776F1BBA6 /* CountlyPushNotifications.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		8468F67009CD27301B4E7EE0DF410292 /* Pods-countly-demo-js-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CA54B663ECF5732016E8728835F862B3 /* Pods-countly-demo-js-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		88C8B511F9E2D473DF37B9690099521B /* CountlyCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = D75D7478AC31CC864AADCB080FAF9580 /* CountlyCommon.m */; };
+		8A1D7CB9ADC3591B6FD13E1466D2C623 /* CountlyLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 12040539DB84E6FB1B087720444E5174 /* CountlyLocationManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		8B79EB1871538FB848D3D640E6EC5B1C /* Countly-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6AC818D2DFF5C4DAC4FBC78445DF05 /* Countly-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C60130DB9E824CF933C5E8565CE24AA /* CountlyCrashReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1A4CE54E981D072DFB83296DAF9401 /* CountlyCrashReporter.m */; };
+		9C83E23B574876E522312FA49A72D508 /* Countly-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CA658EBC06C0A89F0E2B24C0DB20E18 /* Countly-dummy.m */; };
+		A5F973B1E2CFCA131A753B8A6CD79B03 /* CountlyDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F19EEB84E23B075B8F3F66FADE6C4F27 /* CountlyDeviceInfo.m */; };
+		AECC9D86A465AD9E6E302BDAA1DC5C53 /* CountlyLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 97FDD3CA5ED1955A6A6642692E3593EF /* CountlyLocationManager.m */; };
+		B009311DF93E862BE2AF45CE8CC1B0FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		C25349B705F161D8E065C0A7C20D135B /* CountlyConsentManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5172CDFACC931CDF7DBA3FD513A18104 /* CountlyConsentManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		CAFA62397EDFAAB1ACDB2C8C13030113 /* CountlyPersistency.h in Headers */ = {isa = PBXBuildFile; fileRef = 0937749BB82BC17AA884D556618BB21A /* CountlyPersistency.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		CB1B2C89272F6901D59BEA180EF06748 /* CountlyConsentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD94D032AC26F0C38D6093F037CF1571 /* CountlyConsentManager.m */; };
+		E6165D947A4972DE65E9909BFBC66D79 /* CountlyCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F033DD0D6C428B1F23D1C2B7715B80C /* CountlyCommon.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		EB9E6AA13638C1E3FBFCFC19C5F47C6C /* CountlyUserDetails.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A5C4DA7773AB52396D3BB4A05E8557A /* CountlyUserDetails.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EE3002EAA939D32F8F6E24FE78D43A77 /* CountlyUserDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A4BFA5440FE5F8377F5912F5A1EB9F /* CountlyUserDetails.m */; };
+		F7D413BFE29FE3FE07E19E5959AACA23 /* CountlyEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 985FE01AB6F40BF506D797124B7C0C4E /* CountlyEvent.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		FC12BDEEB76B0F03115E314A445C6B24 /* Pods-countly-demo-js-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D099E838B1E358D7561D875FA0E6BE /* Pods-countly-demo-js-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E716493091E15F4A5ED4E53B5DB1BF46 /* PBXContainerItemProxy */ = {
+		5E5BDEB2873B5F0C5A1990F90FAB173A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -58,93 +60,130 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		01EF64B5651A90BEF41FFBDB1B620676 /* Pods-countly-demo-js.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-countly-demo-js.release.xcconfig"; sourceTree = "<group>"; };
-		072E2EAA4CDA11F6C567F15764C15C34 /* Pods-countly-demo-js-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-countly-demo-js-Info.plist"; sourceTree = "<group>"; };
-		07F565459051A16295D7BD444A3DD45E /* Countly-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Countly-umbrella.h"; sourceTree = "<group>"; };
-		0EFC2FB1FB6446EF40EF90076FCA1A25 /* CountlyEvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyEvent.h; sourceTree = "<group>"; };
-		15B56B96530035022BA1BF828341F146 /* CountlyUserDetails.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyUserDetails.h; sourceTree = "<group>"; };
-		17414E3B58164D3E622A8CEEE35CE4B5 /* CountlyConnectionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyConnectionManager.h; sourceTree = "<group>"; };
-		174DC516C567F24C82EFAE1FDD09678D /* CountlyPushNotifications.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyPushNotifications.m; sourceTree = "<group>"; };
-		1F66487DA9841B8F14D40894CEB7D5BF /* Countly-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Countly-Info.plist"; sourceTree = "<group>"; };
-		202C83BA01ED3FD2BF7D554A4C6AFFCE /* CountlyUserDetails.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyUserDetails.m; sourceTree = "<group>"; };
-		23810CCD6B01FB6C5C21588DA024D662 /* Pods-countly-demo-js.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-countly-demo-js.debug.xcconfig"; sourceTree = "<group>"; };
+		018DBF635339A22C21EBBAE998C8CC61 /* CountlyPerformanceMonitoring.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyPerformanceMonitoring.m; sourceTree = "<group>"; };
+		0937749BB82BC17AA884D556618BB21A /* CountlyPersistency.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyPersistency.h; sourceTree = "<group>"; };
+		0B18E15D9FD4662592766BFA8E0C7304 /* Countly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Countly.debug.xcconfig; sourceTree = "<group>"; };
+		0CFB1E6F8BE6B413071315189C5634CE /* CountlyConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyConfig.h; sourceTree = "<group>"; };
+		12040539DB84E6FB1B087720444E5174 /* CountlyLocationManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyLocationManager.h; sourceTree = "<group>"; };
+		1F033DD0D6C428B1F23D1C2B7715B80C /* CountlyCommon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyCommon.h; sourceTree = "<group>"; };
+		27A4BFA5440FE5F8377F5912F5A1EB9F /* CountlyUserDetails.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyUserDetails.m; sourceTree = "<group>"; };
+		27E3213D44D9B70C9B607FDC5AE0EA79 /* Countly.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Countly.modulemap; sourceTree = "<group>"; };
+		2CA658EBC06C0A89F0E2B24C0DB20E18 /* Countly-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Countly-dummy.m"; sourceTree = "<group>"; };
 		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		3B6F9F5212A9186BD708AED987782710 /* CountlyCrashReporter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyCrashReporter.m; sourceTree = "<group>"; };
-		3D5216653C3288927D159B3A4D75D72B /* CountlyLocationManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyLocationManager.h; sourceTree = "<group>"; };
-		456E92CB4A452671E164AE69D7830C63 /* CountlyConfig.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyConfig.m; sourceTree = "<group>"; };
-		48C29B7B3EB92E65CB728F549C3EE21F /* Countly.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Countly.modulemap; sourceTree = "<group>"; };
-		4B9FEA5D54D682E52EE3B0C85CE60996 /* Pods-countly-demo-js-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-countly-demo-js-acknowledgements.plist"; sourceTree = "<group>"; };
-		4E00CAC368D8368CED1AF65F800B234E /* CountlyCrashReporter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyCrashReporter.h; sourceTree = "<group>"; };
-		55D9BBAB5467539E28840DEAE997B65F /* CountlyStarRating.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyStarRating.m; sourceTree = "<group>"; };
-		5ED9F6FBDAB46DA7E33358D70BDA993B /* CountlyViewTracking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyViewTracking.m; sourceTree = "<group>"; };
-		633E5D9405910D8A5EE2F6E425A4B521 /* CountlyStarRating.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyStarRating.h; sourceTree = "<group>"; };
-		67CF8AB7C735E16DF52E45E394C34F5B /* Countly-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Countly-prefix.pch"; sourceTree = "<group>"; };
-		6C0544B82D23E181FC222BA4A76A016E /* CountlyNotificationService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyNotificationService.h; sourceTree = "<group>"; };
-		701815583C206ABE3DAFD07DDCF77C53 /* CountlyEvent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyEvent.m; sourceTree = "<group>"; };
-		748D6DE8B9188A95C86995DF80240B5A /* CountlyConnectionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyConnectionManager.m; sourceTree = "<group>"; };
-		764C9AC0B7CBCB16A16B5EB696788CC5 /* CountlyPersistency.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyPersistency.m; sourceTree = "<group>"; };
-		77D55670A0F27D5DA9FE75D84D0659F3 /* CountlyConsentManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyConsentManager.m; sourceTree = "<group>"; };
-		789CC94609E09BD35DDEE847F5E00938 /* Countly-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Countly-dummy.m"; sourceTree = "<group>"; };
-		7F67D0BF6BA26215852B45F594209CFF /* CountlyViewTracking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyViewTracking.h; sourceTree = "<group>"; };
-		96A733E62D7F988D9EAB017FE48E4CC0 /* CountlyRemoteConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyRemoteConfig.h; sourceTree = "<group>"; };
+		37DE92C38CDCC11B332D265EA8F8DF62 /* CountlyStarRating.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyStarRating.m; sourceTree = "<group>"; };
+		39B3CA4A12841D7AB529AA9595ED1861 /* CountlyDeviceInfo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyDeviceInfo.h; sourceTree = "<group>"; };
+		3A6AC818D2DFF5C4DAC4FBC78445DF05 /* Countly-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Countly-umbrella.h"; sourceTree = "<group>"; };
+		40D099E838B1E358D7561D875FA0E6BE /* Pods-countly-demo-js-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-countly-demo-js-dummy.m"; sourceTree = "<group>"; };
+		4C6310621225D615F6444F2377BCEF1B /* Countly-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Countly-prefix.pch"; sourceTree = "<group>"; };
+		4D9C46ED47F4F514AE5BB04481F0FE7D /* CountlyCrashReporter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyCrashReporter.h; sourceTree = "<group>"; };
+		4EBE2C3D68AEF59E0B13833E68E2640F /* Countly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Countly.release.xcconfig; sourceTree = "<group>"; };
+		5172CDFACC931CDF7DBA3FD513A18104 /* CountlyConsentManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyConsentManager.h; sourceTree = "<group>"; };
+		5A5C4DA7773AB52396D3BB4A05E8557A /* CountlyUserDetails.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyUserDetails.h; sourceTree = "<group>"; };
+		5B1A4CE54E981D072DFB83296DAF9401 /* CountlyCrashReporter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyCrashReporter.m; sourceTree = "<group>"; };
+		62AF56A67A63AC7F9CBEDBBC0A1BC40B /* CountlyNotificationService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyNotificationService.h; sourceTree = "<group>"; };
+		681DCA47D0BD9FD69AEC5E9EEE441D6C /* CountlyRemoteConfig.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyRemoteConfig.m; sourceTree = "<group>"; };
+		6C07396B53AE9A42452D850F44B04F0D /* CountlyPerformanceMonitoring.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyPerformanceMonitoring.h; sourceTree = "<group>"; };
+		701ACCEDCE358E41ECA84B881EE53F5F /* Countly.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Countly.m; sourceTree = "<group>"; };
+		7BF4AAEB74BCDC55B76D1CE464C011D8 /* CountlyViewTracking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyViewTracking.m; sourceTree = "<group>"; };
+		7FEDFB8E19E920BACBE10CF23C9688C1 /* Pods-countly-demo-js.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-countly-demo-js.modulemap"; sourceTree = "<group>"; };
+		829C233D215B5A6653E0BCEF5E7A3660 /* Pods-countly-demo-js-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-countly-demo-js-acknowledgements.plist"; sourceTree = "<group>"; };
+		96369E0CE1726E7C32FFFF23C1B52924 /* CountlyPersistency.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyPersistency.m; sourceTree = "<group>"; };
 		9774F4E4033BF291BA0FD786D2468FCA /* Countly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Countly.framework; path = Countly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		99B5539D8F607F9EDE8521871514A70F /* CountlyDeviceInfo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyDeviceInfo.h; sourceTree = "<group>"; };
-		9ABD0A1FEFBD5CB2DE822975298C9D23 /* CountlyLocationManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyLocationManager.m; sourceTree = "<group>"; };
+		97FDD3CA5ED1955A6A6642692E3593EF /* CountlyLocationManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyLocationManager.m; sourceTree = "<group>"; };
+		985FE01AB6F40BF506D797124B7C0C4E /* CountlyEvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyEvent.h; sourceTree = "<group>"; };
+		9BEAECC5FE048C7290BF1215D760B1D9 /* CountlyConfig.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyConfig.m; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A05799AB037C5D588ADB78FF9C3720EA /* CountlyNotificationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyNotificationService.m; sourceTree = "<group>"; };
-		A06E0B4DC22936F514C888210DD490A5 /* Countly.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Countly.h; sourceTree = "<group>"; };
 		A520078EDD2A3D8BAE6E44875B3C0BE6 /* Pods_countly_demo_js.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_countly_demo_js.framework; path = "Pods-countly-demo-js.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7DD83C76223CEE44A137B2722CC839E /* CountlyPushNotifications.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyPushNotifications.h; sourceTree = "<group>"; };
-		A9D46E04DC0BAD4E0D27AD5B6FF4B752 /* Pods-countly-demo-js-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-countly-demo-js-frameworks.sh"; sourceTree = "<group>"; };
-		AEDC29C94BC99A613026699940685E60 /* Pods-countly-demo-js-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-countly-demo-js-acknowledgements.markdown"; sourceTree = "<group>"; };
-		B1661935E5C89ACCC42A6EE5A31F8E7A /* CountlyPersistency.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyPersistency.h; sourceTree = "<group>"; };
-		B1EC058FC1B5668EA03023863FC83A32 /* CountlyConsentManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyConsentManager.h; sourceTree = "<group>"; };
-		C013DF237713CC7703B3EB80C350B634 /* Countly.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = Countly.m; sourceTree = "<group>"; };
-		C8BC546C0B3E2DF3361B5DBF7B32A429 /* CountlyCommon.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyCommon.m; sourceTree = "<group>"; };
-		CC7BE623CF1B273DF08A15FBDE5F1A89 /* CountlyConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyConfig.h; sourceTree = "<group>"; };
-		D2ED767EAAA239548C928E52B28897F7 /* Pods-countly-demo-js-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-countly-demo-js-umbrella.h"; sourceTree = "<group>"; };
-		E6C31299B99D78D3A1BFF0232C7D8487 /* Countly.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Countly.xcconfig; sourceTree = "<group>"; };
-		E8FEF0F60D8E032B42427CCEDB9E3DA3 /* CountlyRemoteConfig.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyRemoteConfig.m; sourceTree = "<group>"; };
-		EDC67219F77A5FDE21C24CFA225F86A0 /* CountlyCommon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyCommon.h; sourceTree = "<group>"; };
-		FE66E02A0DC039B26637EEF33959FACF /* Pods-countly-demo-js-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-countly-demo-js-dummy.m"; sourceTree = "<group>"; };
-		FF0D5ADC9313B522CA6513CF9B06A3A5 /* Pods-countly-demo-js.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-countly-demo-js.modulemap"; sourceTree = "<group>"; };
-		FFFE5776D3BB92EE63B39396F94D0027 /* CountlyDeviceInfo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyDeviceInfo.m; sourceTree = "<group>"; };
+		AB77B2D40C4039F8BAEC2FC35D1B7585 /* CountlyNotificationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyNotificationService.m; sourceTree = "<group>"; };
+		B686C9C3018EDC28642F41180A37239C /* Pods-countly-demo-js.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-countly-demo-js.debug.xcconfig"; sourceTree = "<group>"; };
+		BAB93466E6D297D578A992F7D5CD35A1 /* CountlyEvent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyEvent.m; sourceTree = "<group>"; };
+		BEE8240CE68B49771C5DF6D90593C3C9 /* CountlyConnectionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyConnectionManager.m; sourceTree = "<group>"; };
+		C159F28F411216A4FCC717A5DB5A526E /* Pods-countly-demo-js-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-countly-demo-js-Info.plist"; sourceTree = "<group>"; };
+		CA54B663ECF5732016E8728835F862B3 /* Pods-countly-demo-js-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-countly-demo-js-umbrella.h"; sourceTree = "<group>"; };
+		CB279227BC5E7B809AE7731D10449C5C /* Pods-countly-demo-js.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-countly-demo-js.release.xcconfig"; sourceTree = "<group>"; };
+		CB7DE8514338F2E1D3FEA5B776F1BBA6 /* CountlyPushNotifications.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyPushNotifications.h; sourceTree = "<group>"; };
+		D21C1FE3A5644B62039904657B2F8331 /* CountlyViewTracking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyViewTracking.h; sourceTree = "<group>"; };
+		D223C87AE367EF19BBC8F6B8A42525EE /* CountlyRemoteConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyRemoteConfig.h; sourceTree = "<group>"; };
+		D75D7478AC31CC864AADCB080FAF9580 /* CountlyCommon.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyCommon.m; sourceTree = "<group>"; };
+		D80CC47D578F7640933C3CB71E04CDF1 /* CountlyStarRating.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyStarRating.h; sourceTree = "<group>"; };
+		DBCA2566597D4EF05AA2556B83F06915 /* Countly-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Countly-Info.plist"; sourceTree = "<group>"; };
+		E8719BBFDC7BDD71109B47D5C5C0DDDC /* CountlyPushNotifications.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyPushNotifications.m; sourceTree = "<group>"; };
+		F19EEB84E23B075B8F3F66FADE6C4F27 /* CountlyDeviceInfo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyDeviceInfo.m; sourceTree = "<group>"; };
+		F29268046345C8C87BFB87321448E52A /* CountlyConnectionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CountlyConnectionManager.h; sourceTree = "<group>"; };
+		F68D848B35836199DC730FB935B8CA81 /* Countly.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Countly.h; sourceTree = "<group>"; };
+		F897216BF2A5E1E3C5567F02D74E09FD /* Pods-countly-demo-js-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-countly-demo-js-acknowledgements.markdown"; sourceTree = "<group>"; };
+		FD94D032AC26F0C38D6093F037CF1571 /* CountlyConsentManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CountlyConsentManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		05E26746C0E8D2B3B08217FBBCA1F124 /* Frameworks */ = {
+		52DD417C9A717792A9DB85AD392EC65F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C6592C6A7E7D7FA9309AE982C911DD1C /* Foundation.framework in Frameworks */,
+				B009311DF93E862BE2AF45CE8CC1B0FE /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4DFA72A6DF124683B9B184B1906EEEE1 /* Frameworks */ = {
+		FCC221F9803D7D2BC95D3092741BABF5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36B3A206A7D7ADC068E26DE91FC653F9 /* Foundation.framework in Frameworks */,
+				32056D407C2356CB4E7427479FDE8E5A /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0FA298D293E66633FD676EAA2B29882D /* Targets Support Files */ = {
+		171408544D742C047A83F809C9807AF3 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				EAAA9DF8E75AF4E1EE4E777B834530B9 /* Pods-countly-demo-js */,
+				F68D848B35836199DC730FB935B8CA81 /* Countly.h */,
+				701ACCEDCE358E41ECA84B881EE53F5F /* Countly.m */,
+				1F033DD0D6C428B1F23D1C2B7715B80C /* CountlyCommon.h */,
+				D75D7478AC31CC864AADCB080FAF9580 /* CountlyCommon.m */,
+				0CFB1E6F8BE6B413071315189C5634CE /* CountlyConfig.h */,
+				9BEAECC5FE048C7290BF1215D760B1D9 /* CountlyConfig.m */,
+				F29268046345C8C87BFB87321448E52A /* CountlyConnectionManager.h */,
+				BEE8240CE68B49771C5DF6D90593C3C9 /* CountlyConnectionManager.m */,
+				5172CDFACC931CDF7DBA3FD513A18104 /* CountlyConsentManager.h */,
+				FD94D032AC26F0C38D6093F037CF1571 /* CountlyConsentManager.m */,
+				4D9C46ED47F4F514AE5BB04481F0FE7D /* CountlyCrashReporter.h */,
+				5B1A4CE54E981D072DFB83296DAF9401 /* CountlyCrashReporter.m */,
+				39B3CA4A12841D7AB529AA9595ED1861 /* CountlyDeviceInfo.h */,
+				F19EEB84E23B075B8F3F66FADE6C4F27 /* CountlyDeviceInfo.m */,
+				985FE01AB6F40BF506D797124B7C0C4E /* CountlyEvent.h */,
+				BAB93466E6D297D578A992F7D5CD35A1 /* CountlyEvent.m */,
+				12040539DB84E6FB1B087720444E5174 /* CountlyLocationManager.h */,
+				97FDD3CA5ED1955A6A6642692E3593EF /* CountlyLocationManager.m */,
+				62AF56A67A63AC7F9CBEDBBC0A1BC40B /* CountlyNotificationService.h */,
+				AB77B2D40C4039F8BAEC2FC35D1B7585 /* CountlyNotificationService.m */,
+				6C07396B53AE9A42452D850F44B04F0D /* CountlyPerformanceMonitoring.h */,
+				018DBF635339A22C21EBBAE998C8CC61 /* CountlyPerformanceMonitoring.m */,
+				0937749BB82BC17AA884D556618BB21A /* CountlyPersistency.h */,
+				96369E0CE1726E7C32FFFF23C1B52924 /* CountlyPersistency.m */,
+				CB7DE8514338F2E1D3FEA5B776F1BBA6 /* CountlyPushNotifications.h */,
+				E8719BBFDC7BDD71109B47D5C5C0DDDC /* CountlyPushNotifications.m */,
+				D223C87AE367EF19BBC8F6B8A42525EE /* CountlyRemoteConfig.h */,
+				681DCA47D0BD9FD69AEC5E9EEE441D6C /* CountlyRemoteConfig.m */,
+				D80CC47D578F7640933C3CB71E04CDF1 /* CountlyStarRating.h */,
+				37DE92C38CDCC11B332D265EA8F8DF62 /* CountlyStarRating.m */,
+				5A5C4DA7773AB52396D3BB4A05E8557A /* CountlyUserDetails.h */,
+				27A4BFA5440FE5F8377F5912F5A1EB9F /* CountlyUserDetails.m */,
+				D21C1FE3A5644B62039904657B2F8331 /* CountlyViewTracking.h */,
+				7BF4AAEB74BCDC55B76D1CE464C011D8 /* CountlyViewTracking.m */,
 			);
-			name = "Targets Support Files";
+			name = Core;
 			sourceTree = "<group>";
 		};
-		2BA41D9B49B234740FDA665F0017D158 /* Pods */ = {
+		328C09DF30E5985E017CB0AEC0E2312C /* Countly */ = {
 			isa = PBXGroup;
 			children = (
-				955B9D71469E084D9CFAFA13F3C0A1EF /* Countly */,
+				171408544D742C047A83F809C9807AF3 /* Core */,
+				945AED75BADEF214DC0643ABEAE5E276 /* Support Files */,
 			);
-			name = Pods;
+			name = Countly;
+			path = Countly;
 			sourceTree = "<group>";
 		};
 		597633EAB2B8464CD725598745D5461C /* Products */ = {
@@ -156,60 +195,35 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6CF126A1C9B4ABCCCA9756354DF24FDE /* Support Files */ = {
+		6573EBF49AF3EBAFFCC5FD47FAFF7424 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				48C29B7B3EB92E65CB728F549C3EE21F /* Countly.modulemap */,
-				E6C31299B99D78D3A1BFF0232C7D8487 /* Countly.xcconfig */,
-				789CC94609E09BD35DDEE847F5E00938 /* Countly-dummy.m */,
-				1F66487DA9841B8F14D40894CEB7D5BF /* Countly-Info.plist */,
-				67CF8AB7C735E16DF52E45E394C34F5B /* Countly-prefix.pch */,
-				07F565459051A16295D7BD444A3DD45E /* Countly-umbrella.h */,
+				E32046FF2DCF6C181B159EEA3E60FBFB /* Pods-countly-demo-js */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		945AED75BADEF214DC0643ABEAE5E276 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				27E3213D44D9B70C9B607FDC5AE0EA79 /* Countly.modulemap */,
+				2CA658EBC06C0A89F0E2B24C0DB20E18 /* Countly-dummy.m */,
+				DBCA2566597D4EF05AA2556B83F06915 /* Countly-Info.plist */,
+				4C6310621225D615F6444F2377BCEF1B /* Countly-prefix.pch */,
+				3A6AC818D2DFF5C4DAC4FBC78445DF05 /* Countly-umbrella.h */,
+				0B18E15D9FD4662592766BFA8E0C7304 /* Countly.debug.xcconfig */,
+				4EBE2C3D68AEF59E0B13833E68E2640F /* Countly.release.xcconfig */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/Countly";
 			sourceTree = "<group>";
 		};
-		955B9D71469E084D9CFAFA13F3C0A1EF /* Countly */ = {
+		AC76934447F8E7E54BFCA9683D00D6F9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A06E0B4DC22936F514C888210DD490A5 /* Countly.h */,
-				C013DF237713CC7703B3EB80C350B634 /* Countly.m */,
-				EDC67219F77A5FDE21C24CFA225F86A0 /* CountlyCommon.h */,
-				C8BC546C0B3E2DF3361B5DBF7B32A429 /* CountlyCommon.m */,
-				CC7BE623CF1B273DF08A15FBDE5F1A89 /* CountlyConfig.h */,
-				456E92CB4A452671E164AE69D7830C63 /* CountlyConfig.m */,
-				17414E3B58164D3E622A8CEEE35CE4B5 /* CountlyConnectionManager.h */,
-				748D6DE8B9188A95C86995DF80240B5A /* CountlyConnectionManager.m */,
-				B1EC058FC1B5668EA03023863FC83A32 /* CountlyConsentManager.h */,
-				77D55670A0F27D5DA9FE75D84D0659F3 /* CountlyConsentManager.m */,
-				4E00CAC368D8368CED1AF65F800B234E /* CountlyCrashReporter.h */,
-				3B6F9F5212A9186BD708AED987782710 /* CountlyCrashReporter.m */,
-				99B5539D8F607F9EDE8521871514A70F /* CountlyDeviceInfo.h */,
-				FFFE5776D3BB92EE63B39396F94D0027 /* CountlyDeviceInfo.m */,
-				0EFC2FB1FB6446EF40EF90076FCA1A25 /* CountlyEvent.h */,
-				701815583C206ABE3DAFD07DDCF77C53 /* CountlyEvent.m */,
-				3D5216653C3288927D159B3A4D75D72B /* CountlyLocationManager.h */,
-				9ABD0A1FEFBD5CB2DE822975298C9D23 /* CountlyLocationManager.m */,
-				6C0544B82D23E181FC222BA4A76A016E /* CountlyNotificationService.h */,
-				A05799AB037C5D588ADB78FF9C3720EA /* CountlyNotificationService.m */,
-				B1661935E5C89ACCC42A6EE5A31F8E7A /* CountlyPersistency.h */,
-				764C9AC0B7CBCB16A16B5EB696788CC5 /* CountlyPersistency.m */,
-				A7DD83C76223CEE44A137B2722CC839E /* CountlyPushNotifications.h */,
-				174DC516C567F24C82EFAE1FDD09678D /* CountlyPushNotifications.m */,
-				96A733E62D7F988D9EAB017FE48E4CC0 /* CountlyRemoteConfig.h */,
-				E8FEF0F60D8E032B42427CCEDB9E3DA3 /* CountlyRemoteConfig.m */,
-				633E5D9405910D8A5EE2F6E425A4B521 /* CountlyStarRating.h */,
-				55D9BBAB5467539E28840DEAE997B65F /* CountlyStarRating.m */,
-				15B56B96530035022BA1BF828341F146 /* CountlyUserDetails.h */,
-				202C83BA01ED3FD2BF7D554A4C6AFFCE /* CountlyUserDetails.m */,
-				7F67D0BF6BA26215852B45F594209CFF /* CountlyViewTracking.h */,
-				5ED9F6FBDAB46DA7E33358D70BDA993B /* CountlyViewTracking.m */,
-				C4B978FF3850E7A524E9A84EA0BD0DB3 /* NotificationService */,
-				6CF126A1C9B4ABCCCA9756354DF24FDE /* Support Files */,
+				328C09DF30E5985E017CB0AEC0E2312C /* Countly */,
 			);
-			name = Countly;
-			path = Countly;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
@@ -220,21 +234,14 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		C4B978FF3850E7A524E9A84EA0BD0DB3 /* NotificationService */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = NotificationService;
-			sourceTree = "<group>";
-		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				2BA41D9B49B234740FDA665F0017D158 /* Pods */,
+				AC76934447F8E7E54BFCA9683D00D6F9 /* Pods */,
 				597633EAB2B8464CD725598745D5461C /* Products */,
-				0FA298D293E66633FD676EAA2B29882D /* Targets Support Files */,
+				6573EBF49AF3EBAFFCC5FD47FAFF7424 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -246,18 +253,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EAAA9DF8E75AF4E1EE4E777B834530B9 /* Pods-countly-demo-js */ = {
+		E32046FF2DCF6C181B159EEA3E60FBFB /* Pods-countly-demo-js */ = {
 			isa = PBXGroup;
 			children = (
-				FF0D5ADC9313B522CA6513CF9B06A3A5 /* Pods-countly-demo-js.modulemap */,
-				AEDC29C94BC99A613026699940685E60 /* Pods-countly-demo-js-acknowledgements.markdown */,
-				4B9FEA5D54D682E52EE3B0C85CE60996 /* Pods-countly-demo-js-acknowledgements.plist */,
-				FE66E02A0DC039B26637EEF33959FACF /* Pods-countly-demo-js-dummy.m */,
-				A9D46E04DC0BAD4E0D27AD5B6FF4B752 /* Pods-countly-demo-js-frameworks.sh */,
-				072E2EAA4CDA11F6C567F15764C15C34 /* Pods-countly-demo-js-Info.plist */,
-				D2ED767EAAA239548C928E52B28897F7 /* Pods-countly-demo-js-umbrella.h */,
-				23810CCD6B01FB6C5C21588DA024D662 /* Pods-countly-demo-js.debug.xcconfig */,
-				01EF64B5651A90BEF41FFBDB1B620676 /* Pods-countly-demo-js.release.xcconfig */,
+				7FEDFB8E19E920BACBE10CF23C9688C1 /* Pods-countly-demo-js.modulemap */,
+				F897216BF2A5E1E3C5567F02D74E09FD /* Pods-countly-demo-js-acknowledgements.markdown */,
+				829C233D215B5A6653E0BCEF5E7A3660 /* Pods-countly-demo-js-acknowledgements.plist */,
+				40D099E838B1E358D7561D875FA0E6BE /* Pods-countly-demo-js-dummy.m */,
+				C159F28F411216A4FCC717A5DB5A526E /* Pods-countly-demo-js-Info.plist */,
+				CA54B663ECF5732016E8728835F862B3 /* Pods-countly-demo-js-umbrella.h */,
+				B686C9C3018EDC28642F41180A37239C /* Pods-countly-demo-js.debug.xcconfig */,
+				CB279227BC5E7B809AE7731D10449C5C /* Pods-countly-demo-js.release.xcconfig */,
 			);
 			name = "Pods-countly-demo-js";
 			path = "Target Support Files/Pods-countly-demo-js";
@@ -266,35 +272,36 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		8707D4C672DFF54FDF98B808A27C0725 /* Headers */ = {
+		7F8ACC42EA268FA26DE26CE730CC496C /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1AC3BB0E7D634BAED6E64F3E7DECB79 /* Pods-countly-demo-js-umbrella.h in Headers */,
+				8468F67009CD27301B4E7EE0DF410292 /* Pods-countly-demo-js-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9A37CE66E70E6989AFBAECE09BAAA4F7 /* Headers */ = {
+		B96A43D502B2ADE6E1C89859265D09D7 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FCDCABAAC16ADF918FC6D8B0A1D62C0F /* Countly-umbrella.h in Headers */,
-				174DE2CA25CC322E500EA10392E5E1F6 /* Countly.h in Headers */,
-				804B4F71EFA5009EC9D491FEDC0BDC62 /* CountlyCommon.h in Headers */,
-				A72EFE9FED886275EBF1D61ADB388DEA /* CountlyConfig.h in Headers */,
-				2A38E4723924C342C399FC1025D9F1FB /* CountlyConnectionManager.h in Headers */,
-				5511FF03661E176D5B7B195246D07A94 /* CountlyConsentManager.h in Headers */,
-				ABA15C417D0084409E1A64688E466F8A /* CountlyCrashReporter.h in Headers */,
-				A083DC465281B3F450CEF448526ACFFD /* CountlyDeviceInfo.h in Headers */,
-				860715FE0E785A3D940BCC1B02F3D5ED /* CountlyEvent.h in Headers */,
-				C77A3D32333EEA7E518D06E907E443D6 /* CountlyLocationManager.h in Headers */,
-				1E1004ED40C2A9FF3E7219A2474AA656 /* CountlyNotificationService.h in Headers */,
-				E767978F2E71DD9A3CB0DC8F3A2EB098 /* CountlyPersistency.h in Headers */,
-				A8003EBB14088B221111BFEFA7C19FF1 /* CountlyPushNotifications.h in Headers */,
-				E2FC73267474DA77B1248AEBB3E277C4 /* CountlyRemoteConfig.h in Headers */,
-				E7CDDBE789FFA97B923DA12FD9110C48 /* CountlyStarRating.h in Headers */,
-				B906AC4B0F1443647FDEAB2AD8B39EFF /* CountlyUserDetails.h in Headers */,
-				EBC0C48F41CE43DC31C5DD3647C0F709 /* CountlyViewTracking.h in Headers */,
+				8B79EB1871538FB848D3D640E6EC5B1C /* Countly-umbrella.h in Headers */,
+				4A6823B8DF82E937380459E43CAE3E88 /* Countly.h in Headers */,
+				E6165D947A4972DE65E9909BFBC66D79 /* CountlyCommon.h in Headers */,
+				3AC537B61DEBDFBD8357EB7C828F80B5 /* CountlyConfig.h in Headers */,
+				4895D40D2C88F00FCCCC04E5077B6519 /* CountlyConnectionManager.h in Headers */,
+				C25349B705F161D8E065C0A7C20D135B /* CountlyConsentManager.h in Headers */,
+				5BFC2C7B2FFD4899644E5F3A51C185D6 /* CountlyCrashReporter.h in Headers */,
+				180999A3B9924D79AD3581FE27F0F0B7 /* CountlyDeviceInfo.h in Headers */,
+				F7D413BFE29FE3FE07E19E5959AACA23 /* CountlyEvent.h in Headers */,
+				8A1D7CB9ADC3591B6FD13E1466D2C623 /* CountlyLocationManager.h in Headers */,
+				54D45332AE659FE1CFC881725FD039D4 /* CountlyNotificationService.h in Headers */,
+				33BD3F7BCFD05E620374EEF0FD5987C4 /* CountlyPerformanceMonitoring.h in Headers */,
+				CAFA62397EDFAAB1ACDB2C8C13030113 /* CountlyPersistency.h in Headers */,
+				84600F721FC852130A2F4B6E0C34E868 /* CountlyPushNotifications.h in Headers */,
+				68A06934E51E7219ECF71CF2F98127F9 /* CountlyRemoteConfig.h in Headers */,
+				178EF0F9E3C6D71F651A94D49A1A8409 /* CountlyStarRating.h in Headers */,
+				EB9E6AA13638C1E3FBFCFC19C5F47C6C /* CountlyUserDetails.h in Headers */,
+				7EA7AFF753FCADE678D9B6114256EADF /* CountlyViewTracking.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,12 +310,12 @@
 /* Begin PBXNativeTarget section */
 		683FFF0298D265E054F0588512DF7E99 /* Countly */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0255A55885A2B5394EC1474A48A87BE1 /* Build configuration list for PBXNativeTarget "Countly" */;
+			buildConfigurationList = 5AE6CEBA88886BAE1C6180E39759C594 /* Build configuration list for PBXNativeTarget "Countly" */;
 			buildPhases = (
-				9A37CE66E70E6989AFBAECE09BAAA4F7 /* Headers */,
-				CDBCDA0D63717A278298BE076765728A /* Sources */,
-				4DFA72A6DF124683B9B184B1906EEEE1 /* Frameworks */,
-				F6DE7963385CC3182417E4B668C5B66E /* Resources */,
+				B96A43D502B2ADE6E1C89859265D09D7 /* Headers */,
+				97B0B40909DDAC72068C7BE39E9A95E7 /* Sources */,
+				52DD417C9A717792A9DB85AD392EC65F /* Frameworks */,
+				0C6B8BD8533FD08B7F575E1152B55023 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -321,17 +328,17 @@
 		};
 		6B527D0C0EBB73B0B5B026F2C86CB419 /* Pods-countly-demo-js */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EC910E111701B4D980F26B27D67AFCA3 /* Build configuration list for PBXNativeTarget "Pods-countly-demo-js" */;
+			buildConfigurationList = 59F0D6CBE886D246D0AE7746FAC48459 /* Build configuration list for PBXNativeTarget "Pods-countly-demo-js" */;
 			buildPhases = (
-				8707D4C672DFF54FDF98B808A27C0725 /* Headers */,
-				516703DE7717338990E865CCBCF09479 /* Sources */,
-				05E26746C0E8D2B3B08217FBBCA1F124 /* Frameworks */,
-				7B6A702FE2C9FAA5E8F3C46541569AE6 /* Resources */,
+				7F8ACC42EA268FA26DE26CE730CC496C /* Headers */,
+				353F0E94E30BE74643613ACD7980A554 /* Sources */,
+				FCC221F9803D7D2BC95D3092741BABF5 /* Frameworks */,
+				689EBD3E2F25A2CA77E54AA9164BFC8C /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				51BAF0A0B427E791FC179C597F955C4E /* PBXTargetDependency */,
+				446FD4FC14B8A937B51E6E19733A4EA2 /* PBXTargetDependency */,
 			);
 			name = "Pods-countly-demo-js";
 			productName = "Pods-countly-demo-js";
@@ -348,7 +355,7 @@
 				LastUpgradeCheck = 1100;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -367,14 +374,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		7B6A702FE2C9FAA5E8F3C46541569AE6 /* Resources */ = {
+		0C6B8BD8533FD08B7F575E1152B55023 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F6DE7963385CC3182417E4B668C5B66E /* Resources */ = {
+		689EBD3E2F25A2CA77E54AA9164BFC8C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -384,51 +391,260 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		516703DE7717338990E865CCBCF09479 /* Sources */ = {
+		353F0E94E30BE74643613ACD7980A554 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA1671F7A2EBB273728DC4088D29AEC3 /* Pods-countly-demo-js-dummy.m in Sources */,
+				FC12BDEEB76B0F03115E314A445C6B24 /* Pods-countly-demo-js-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CDBCDA0D63717A278298BE076765728A /* Sources */ = {
+		97B0B40909DDAC72068C7BE39E9A95E7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DCEB2DC17F7DD186CBE06E2A02763A0 /* Countly-dummy.m in Sources */,
-				2308C608D0A116ABD3C6134320B5837E /* Countly.m in Sources */,
-				97365AF47F882674DF72182C92414C15 /* CountlyCommon.m in Sources */,
-				014B55947B7F3D2209FB3AC0D4E63438 /* CountlyConfig.m in Sources */,
-				E1BECB3BBBB6E2F9F3A39414F15EFA02 /* CountlyConnectionManager.m in Sources */,
-				B1BFAEB8A7252FD4BA241C05B7FB3083 /* CountlyConsentManager.m in Sources */,
-				2E23DCD50B6179D3DCD54C1E1697CCFC /* CountlyCrashReporter.m in Sources */,
-				6BAADDCDAB15008D2C295F621182823F /* CountlyDeviceInfo.m in Sources */,
-				4B6CF1F8531D0985BF1C043B7F1DB7A8 /* CountlyEvent.m in Sources */,
-				AD7BE639EBEC062E7E6AF1C77C3AD909 /* CountlyLocationManager.m in Sources */,
-				7A9C5AAE9EFE35E178F40FA4545B383B /* CountlyNotificationService.m in Sources */,
-				F437950FCEEB2794E94B42BA97425C0C /* CountlyPersistency.m in Sources */,
-				B327F439587E1EBEA6F92FAA1197B861 /* CountlyPushNotifications.m in Sources */,
-				69EA3B03D40C6B0D3EC80331A6491FD1 /* CountlyRemoteConfig.m in Sources */,
-				37EB401BA62014588B73A9D5CD40A25A /* CountlyStarRating.m in Sources */,
-				3CCE3A088D611C7B50CAE5CB9E5FB2D3 /* CountlyUserDetails.m in Sources */,
-				EEAC484513C5940E68D7E4AE0F2350F7 /* CountlyViewTracking.m in Sources */,
+				9C83E23B574876E522312FA49A72D508 /* Countly-dummy.m in Sources */,
+				184DE4F2F181FF2E08007C1EC8051B77 /* Countly.m in Sources */,
+				88C8B511F9E2D473DF37B9690099521B /* CountlyCommon.m in Sources */,
+				6E292B2AE62ABC9674040D1AB132C592 /* CountlyConfig.m in Sources */,
+				54DC99C38B2F50D93BAE00FFCECF0B05 /* CountlyConnectionManager.m in Sources */,
+				CB1B2C89272F6901D59BEA180EF06748 /* CountlyConsentManager.m in Sources */,
+				9C60130DB9E824CF933C5E8565CE24AA /* CountlyCrashReporter.m in Sources */,
+				A5F973B1E2CFCA131A753B8A6CD79B03 /* CountlyDeviceInfo.m in Sources */,
+				51FD906F304B7FA1B01F54BC1FA333B5 /* CountlyEvent.m in Sources */,
+				AECC9D86A465AD9E6E302BDAA1DC5C53 /* CountlyLocationManager.m in Sources */,
+				3FC571533F9384D0E06F91D40FDA032B /* CountlyNotificationService.m in Sources */,
+				3CDA1FEB2610EEF711AEB9A5F23D6935 /* CountlyPerformanceMonitoring.m in Sources */,
+				4280D91B8AB25B7F0E434CC38DE2D65E /* CountlyPersistency.m in Sources */,
+				0002D455C6F5BB9AE96AB721884C3FA5 /* CountlyPushNotifications.m in Sources */,
+				18F2A3735047297C8816134B348F2C35 /* CountlyRemoteConfig.m in Sources */,
+				82F705F999E4AD6AC692BDD0CA68854D /* CountlyStarRating.m in Sources */,
+				EE3002EAA939D32F8F6E24FE78D43A77 /* CountlyUserDetails.m in Sources */,
+				48E11E043D613D724B96C3D5435BBECD /* CountlyViewTracking.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		51BAF0A0B427E791FC179C597F955C4E /* PBXTargetDependency */ = {
+		446FD4FC14B8A937B51E6E19733A4EA2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Countly;
 			target = 683FFF0298D265E054F0588512DF7E99 /* Countly */;
-			targetProxy = E716493091E15F4A5ED4E53B5DB1BF46 /* PBXContainerItemProxy */;
+			targetProxy = 5E5BDEB2873B5F0C5A1990F90FAB173A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		196DFA3E4A09A28224918543529A1885 /* Debug */ = {
+		257497152829C177993B5EC99C1D227A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		3B7617EAA7553F6CF918516217595515 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB279227BC5E7B809AE7731D10449C5C /* Pods-countly-demo-js.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		8286CD0874D052D5B880289D503A5012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0B18E15D9FD4662592766BFA8E0C7304 /* Countly.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Countly/Countly-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Countly/Countly-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Countly/Countly.modulemap";
+				PRODUCT_MODULE_NAME = Countly;
+				PRODUCT_NAME = Countly;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		9A637CE09AC78A4AFC702647CBBF5590 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4EBE2C3D68AEF59E0B13833E68E2640F /* Countly.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Countly/Countly-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Countly/Countly-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Countly/Countly.modulemap";
+				PRODUCT_MODULE_NAME = Countly;
+				PRODUCT_NAME = Countly;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A4DC9B930337FFE2B6E5C31F77DD83D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B686C9C3018EDC28642F41180A37239C /* Pods-countly-demo-js.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DD8F832993327D1DD8046C3CBCBD97CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -479,7 +695,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -492,222 +708,32 @@
 			};
 			name = Debug;
 		};
-		831645859669B2B3F87F4212C1A6315E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 23810CCD6B01FB6C5C21588DA024D662 /* Pods-countly-demo-js.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		9DE58198AEB46FC8676AD56B297ED8E6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6C31299B99D78D3A1BFF0232C7D8487 /* Countly.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Countly/Countly-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Countly/Countly-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Countly/Countly.modulemap";
-				PRODUCT_MODULE_NAME = Countly;
-				PRODUCT_NAME = Countly;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		B01D14FDC83DCF9D4BE53066BEA96D05 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_RELEASE=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				SYMROOT = "${SRCROOT}/../build";
-			};
-			name = Release;
-		};
-		B89B4B986411B05ADC80100405958D62 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6C31299B99D78D3A1BFF0232C7D8487 /* Countly.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Countly/Countly-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Countly/Countly-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Countly/Countly.modulemap";
-				PRODUCT_MODULE_NAME = Countly;
-				PRODUCT_NAME = Countly;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		FC191FF9B965D5CA0F2270F3177F401D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 01EF64B5651A90BEF41FFBDB1B620676 /* Pods-countly-demo-js.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0255A55885A2B5394EC1474A48A87BE1 /* Build configuration list for PBXNativeTarget "Countly" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B89B4B986411B05ADC80100405958D62 /* Debug */,
-				9DE58198AEB46FC8676AD56B297ED8E6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				196DFA3E4A09A28224918543529A1885 /* Debug */,
-				B01D14FDC83DCF9D4BE53066BEA96D05 /* Release */,
+				DD8F832993327D1DD8046C3CBCBD97CD /* Debug */,
+				257497152829C177993B5EC99C1D227A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EC910E111701B4D980F26B27D67AFCA3 /* Build configuration list for PBXNativeTarget "Pods-countly-demo-js" */ = {
+		59F0D6CBE886D246D0AE7746FAC48459 /* Build configuration list for PBXNativeTarget "Pods-countly-demo-js" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				831645859669B2B3F87F4212C1A6315E /* Debug */,
-				FC191FF9B965D5CA0F2270F3177F401D /* Release */,
+				A4DC9B930337FFE2B6E5C31F77DD83D1 /* Debug */,
+				3B7617EAA7553F6CF918516217595515 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5AE6CEBA88886BAE1C6180E39759C594 /* Build configuration list for PBXNativeTarget "Countly" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8286CD0874D052D5B880289D503A5012 /* Debug */,
+				9A637CE09AC78A4AFC702647CBBF5590 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

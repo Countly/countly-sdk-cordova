@@ -14,10 +14,7 @@
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>COUNTLY MOBILE ANALYTICS COMMUNITY EDITION LICENSE
---------------------------------------------------
-
-Copyright (c) 2012, 2019 Countly
+			<string>Copyright (c) 2012, 2020 Countly
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +35,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 </string>
 			<key>License</key>
-			<string>COMMUNITY</string>
+			<string>MIT</string>
 			<key>Title</key>
 			<string>Countly</string>
 			<key>Type</key>

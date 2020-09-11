@@ -3,22 +3,28 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
+		127B0C47A07441ACA3FA8BA2 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B998673CD4623BC1DAAAF /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
-		2B6C1361A09A40D99F38EE9C /* CountlyNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BDD699D585410591DC327C /* CountlyNative.m */; };
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
-		57C2856CBC7542C7BC4138B9 /* CountlyCordova.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B2861D9A9E45F9990517AD /* CountlyCordova.m */; };
-		5E0BB42C4590B44F70590746 /* Pods_countly_demo_js.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8109D075E928F10631A28BB /* Pods_countly_demo_js.framework */; };
+		3130EBE77A5FEDF8CF47359C /* Pods_countly_demo_js.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93818AC7354FDF5CA64FB17B /* Pods_countly_demo_js.framework */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
-		CC25D9E767674503A8E5D1F0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E34F624033F49B99E0428AE /* OpenGLES.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		D32EEF271E944AB69B556140 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3411A1D11DA748F59B769044 /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		709F2A29EC1144E2B2FD45A1 /* CountlyNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 6075EF316D03466FAB368997 /* CountlyNative.m */; };
+		75B53F2E09B8423BAFA788F8 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB98C2F99DA0491A9B010FEF /* OpenGLES.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		D8304B1FD005470B96D04A43 /* CountlyCordova.m in Sources */ = {isa = PBXBuildFile; fileRef = 47797094CC4B4458B74C6602 /* CountlyCordova.m */; };
+		44D80DEB64864164BE9684BE /* NotificationService.h in Resources */ = {isa = PBXBuildFile; fileRef = 5DDA6BAEE9A54CF8A936C8DA /* NotificationService.h */; };
+		E2BC64609E1440D9A2D9088A /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BD59935EC54FB3BF48A589 /* NotificationService.m */; };
+		1BD946E3B62947C6AE7417C4 /* CountlyNSE-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C00F0897CE547A9885CFE5C /* CountlyNSE-Info.plist */; };
+		CF550E878F154A16937FB25F /* CountlyNotificationService.h in Resources */ = {isa = PBXBuildFile; fileRef = D23FAA8F23394CFDA82FC84D /* CountlyNotificationService.h */; };
+		54CD03C17AB1433F8D647E70 /* CountlyNotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EE03F85DF44D14ADEB01C8 /* CountlyNotificationService.m */; };
+		7D369886C66B49C4AE5927C6 /* CountlyNSE.appex in Copy Files */ = {isa = PBXBuildFile; fileRef = 93DC8786C609499692AC17EB /* CountlyNSE.appex */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,16 +49,21 @@
 			remoteGlobalIDString = C0C01EB21E3911D50056E6CB;
 			remoteInfo = Cordova;
 		};
+		BF0584FD5DF446588409E8B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B9F1A27FB6B140A2BA92A258;
+			remoteInfo = "CountlyNSE";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0207DA571B56EA530066E2B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "countly-demo-js/Images.xcassets"; sourceTree = SOURCE_ROOT; };
-		15BDD699D585410591DC327C /* CountlyNative.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CountlyNative.m; path = "countly-sdk-js/CountlyNative.m"; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* countly-demo-js.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "countly-demo-js.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2E34F624033F49B99E0428AE /* OpenGLES.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
 		301BF56E109A69640062928A /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = SOURCE_ROOT; };
 		302D95EE14D2391D003F00A1 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -62,19 +73,27 @@
 		3047A5101AB8059700498E2A /* build-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "build-release.xcconfig"; path = "cordova/build-release.xcconfig"; sourceTree = SOURCE_ROOT; };
 		3047A5111AB8059700498E2A /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = build.xcconfig; path = cordova/build.xcconfig; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* countly-demo-js-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "countly-demo-js-Prefix.pch"; sourceTree = "<group>"; };
-		33B2861D9A9E45F9990517AD /* CountlyCordova.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CountlyCordova.m; path = "countly-sdk-js/CountlyCordova.m"; sourceTree = "<group>"; };
-		3411A1D11DA748F59B769044 /* CoreTelephony.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		481F3043711647F4B86372F7 /* CountlyNative.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CountlyNative.h; path = "countly-sdk-js/CountlyNative.h"; sourceTree = "<group>"; };
-		4CAA05F9AD4E25F195FD3D62 /* Pods-countly-demo-js.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-countly-demo-js.debug.xcconfig"; path = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js.debug.xcconfig"; sourceTree = "<group>"; };
+		47797094CC4B4458B74C6602 /* CountlyCordova.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CountlyCordova.m; path = "countly-sdk-cordova/CountlyCordova.m"; sourceTree = "<group>"; };
+		5C73EDE47C5DCDBF1D4DC3B1 /* Pods-countly-demo-js.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-countly-demo-js.release.xcconfig"; path = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js.release.xcconfig"; sourceTree = "<group>"; };
+		6075EF316D03466FAB368997 /* CountlyNative.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CountlyNative.m; path = "countly-sdk-cordova/CountlyNative.m"; sourceTree = "<group>"; };
+		619B998673CD4623BC1DAAAF /* CoreTelephony.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		62C0C08C59334C58AA0489AC /* CountlyNative.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CountlyNative.h; path = "countly-sdk-cordova/CountlyNative.h"; sourceTree = "<group>"; };
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = "countly-demo-js/CDVLaunchScreen.storyboard"; sourceTree = SOURCE_ROOT; };
+		7365A7548C8863094871DD0A /* Pods-countly-demo-js.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-countly-demo-js.debug.xcconfig"; path = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js.debug.xcconfig"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* countly-demo-js-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "countly-demo-js-Info.plist"; path = "countly-demo-js/countly-demo-js-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = SOURCE_ROOT; };
-		A8109D075E928F10631A28BB /* Pods_countly_demo_js.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_countly_demo_js.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C5A986E8ABBD453DB7DBA3B8 /* CountlyCordova.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CountlyCordova.h; path = "countly-sdk-js/CountlyCordova.h"; sourceTree = "<group>"; };
+		93818AC7354FDF5CA64FB17B /* Pods_countly_demo_js.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_countly_demo_js.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
-		EC5ED95E6B4CB47B6FBAE58E /* Pods-countly-demo-js.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-countly-demo-js.release.xcconfig"; path = "Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js.release.xcconfig"; sourceTree = "<group>"; };
+		EB98C2F99DA0491A9B010FEF /* OpenGLES.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		F3684FF0D83A4B5A89FDF757 /* CountlyCordova.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CountlyCordova.h; path = "countly-sdk-cordova/CountlyCordova.h"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "countly-demo-js/config.xml"; sourceTree = "<group>"; };
+		5DDA6BAEE9A54CF8A936C8DA /* NotificationService.h */ = {isa = PBXFileReference; name = "NotificationService.h"; path = "NotificationService.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		44BD59935EC54FB3BF48A589 /* NotificationService.m */ = {isa = PBXFileReference; name = "NotificationService.m"; path = "NotificationService.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		4C00F0897CE547A9885CFE5C /* CountlyNSE-Info.plist */ = {isa = PBXFileReference; name = "CountlyNSE-Info.plist"; path = "CountlyNSE-Info.plist"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.xml; explicitFileType = undefined; includeInIndex = 0; };
+		D23FAA8F23394CFDA82FC84D /* CountlyNotificationService.h */ = {isa = PBXFileReference; name = "CountlyNotificationService.h"; path = "/Users/ijunaid/Documents/Work/Countly/countly-sdk-cordova/example/cordova/countly-demo-js/plugins/countly-sdk-cordova/hooks/../../../platforms/ios/Pods/Countly/CountlyNotificationService.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		A3EE03F85DF44D14ADEB01C8 /* CountlyNotificationService.m */ = {isa = PBXFileReference; name = "CountlyNotificationService.m"; path = "/Users/ijunaid/Documents/Work/Countly/countly-sdk-cordova/example/cordova/countly-demo-js/plugins/countly-sdk-cordova/hooks/../../../platforms/ios/Pods/Countly/CountlyNotificationService.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		93DC8786C609499692AC17EB /* CountlyNSE.appex */ = {isa = PBXFileReference; name = "CountlyNSE.appex"; path = "CountlyNSE.appex"; sourceTree = BUILT_PRODUCTS_DIR; fileEncoding = undefined; lastKnownFileType = undefined; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,9 +102,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
-				D32EEF271E944AB69B556140 /* CoreTelephony.framework in Frameworks */,
-				CC25D9E767674503A8E5D1F0 /* OpenGLES.framework in Frameworks */,
-				5E0BB42C4590B44F70590746 /* Pods_countly_demo_js.framework in Frameworks */,
+				127B0C47A07441ACA3FA8BA2 /* CoreTelephony.framework in Frameworks */,
+				75B53F2E09B8423BAFA788F8 /* OpenGLES.framework in Frameworks */,
+				3130EBE77A5FEDF8CF47359C /* Pods_countly_demo_js.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE3C8AD9CDD34CBFA2A1259B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,11 +135,12 @@
 			isa = PBXGroup;
 			children = (
 				1D6058910D05DD3D006BFB54 /* countly-demo-js.app */,
+				93DC8786C609499692AC17EB /* CountlyNSE.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+		29B97314FDCFA39411CA2CEA = {
 			isa = PBXGroup;
 			children = (
 				EB87FDF41871DAF40020F90C /* config.xml */,
@@ -126,7 +153,8 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				FE60A4F87581915F88EB43AE /* Pods */,
+				7166756A0F7EDCA703447845 /* Pods */,
+				E46B7F9366B24F8981287873 /* CountlyNSE */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -157,9 +185,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3411A1D11DA748F59B769044 /* CoreTelephony.framework */,
-				2E34F624033F49B99E0428AE /* OpenGLES.framework */,
-				A8109D075E928F10631A28BB /* Pods_countly_demo_js.framework */,
+				619B998673CD4623BC1DAAAF /* CoreTelephony.framework */,
+				EB98C2F99DA0491A9B010FEF /* OpenGLES.framework */,
+				93818AC7354FDF5CA64FB17B /* Pods_countly_demo_js.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -186,14 +214,24 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				33B2861D9A9E45F9990517AD /* CountlyCordova.m */,
-				15BDD699D585410591DC327C /* CountlyNative.m */,
-				C5A986E8ABBD453DB7DBA3B8 /* CountlyCordova.h */,
-				481F3043711647F4B86372F7 /* CountlyNative.h */,
+				47797094CC4B4458B74C6602 /* CountlyCordova.m */,
+				6075EF316D03466FAB368997 /* CountlyNative.m */,
+				F3684FF0D83A4B5A89FDF757 /* CountlyCordova.h */,
+				62C0C08C59334C58AA0489AC /* CountlyNative.h */,
 			);
 			name = Plugins;
 			path = "countly-demo-js/Plugins";
 			sourceTree = SOURCE_ROOT;
+		};
+		7166756A0F7EDCA703447845 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7365A7548C8863094871DD0A /* Pods-countly-demo-js.debug.xcconfig */,
+				5C73EDE47C5DCDBF1D4DC3B1 /* Pods-countly-demo-js.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
 		};
 		EB87FDF11871DA420020F90C /* Staging */ = {
 			isa = PBXGroup;
@@ -204,13 +242,17 @@
 			name = Staging;
 			sourceTree = "<group>";
 		};
-		FE60A4F87581915F88EB43AE /* Pods */ = {
+		E46B7F9366B24F8981287873 /* CountlyNSE */ = {
 			isa = PBXGroup;
 			children = (
-				4CAA05F9AD4E25F195FD3D62 /* Pods-countly-demo-js.debug.xcconfig */,
-				EC5ED95E6B4CB47B6FBAE58E /* Pods-countly-demo-js.release.xcconfig */,
+				5DDA6BAEE9A54CF8A936C8DA /* NotificationService.h */,
+				44BD59935EC54FB3BF48A589 /* NotificationService.m */,
+				4C00F0897CE547A9885CFE5C /* CountlyNSE-Info.plist */,
+				D23FAA8F23394CFDA82FC84D /* CountlyNotificationService.h */,
+				A3EE03F85DF44D14ADEB01C8 /* CountlyNotificationService.m */,
 			);
-			path = Pods;
+			name = CountlyNSE;
+			path = CountlyNSE;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,22 +262,40 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "countly-demo-js" */;
 			buildPhases = (
-				D3ABBD07ADD34FEE651A46AB /* [CP] Check Pods Manifest.lock */,
+				76172798D619C3F3432AEAE7 /* [CP] Check Pods Manifest.lock */,
 				304B58A110DAC018002A0835 /* Copy www directory */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
-				AA627064EA6238C308FB3C5C /* [CP] Embed Pods Frameworks */,
+				D60528C680364D09858D142E /* Copy Files */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				301BF551109A68C00062928A /* PBXTargetDependency */,
+				9CCEB33AE2D74F359A334923 /* PBXTargetDependency */,
 			);
 			name = "countly-demo-js";
 			productName = "countly-demo-js";
 			productReference = 1D6058910D05DD3D006BFB54 /* countly-demo-js.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B9F1A27FB6B140A2BA92A258 /* "CountlyNSE" */ = {
+			isa = PBXNativeTarget;
+			name = "CountlyNSE";
+			productName = "CountlyNSE";
+			productReference = 93DC8786C609499692AC17EB;
+			productType = "com.apple.product-type.app-extension";
+			buildConfigurationList = C363FDEA68E1406187255B8D;
+			buildPhases = (
+				CC5273DBB2504DE6BD0E34B0 /* Sources */,
+				DE72A6214AB7464DA81E530F /* Resources */,
+				BE3C8AD9CDD34CBFA2A1259B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
 		};
 /* End PBXNativeTarget section */
 
@@ -243,24 +303,22 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 510;
+				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = KC5QY59X92;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "countly-demo-js" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			compatibilityVersion = "Xcode 11.0";
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -272,6 +330,7 @@
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* countly-demo-js */,
+				B9F1A27FB6B140A2BA92A258 /* "CountlyNSE" */,
 			);
 		};
 /* End PBXProject section */
@@ -304,6 +363,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DE72A6214AB7464DA81E530F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -322,25 +388,7 @@
 			shellScript = "\"$SRCROOT/countly-demo-js/Scripts/copy-www-build-step.sh\"";
 			showEnvVarsInLog = 0;
 		};
-		AA627064EA6238C308FB3C5C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Countly/Countly.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Countly.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-countly-demo-js/Pods-countly-demo-js-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D3ABBD07ADD34FEE651A46AB /* [CP] Check Pods Manifest.lock */ = {
+		76172798D619C3F3432AEAE7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -372,8 +420,18 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				57C2856CBC7542C7BC4138B9 /* CountlyCordova.m in Sources */,
-				2B6C1361A09A40D99F38EE9C /* CountlyNative.m in Sources */,
+				D8304B1FD005470B96D04A43 /* CountlyCordova.m in Sources */,
+				709F2A29EC1144E2B2FD45A1 /* CountlyNative.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC5273DBB2504DE6BD0E34B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2BC64609E1440D9A2D9088A /* "NotificationService.m" in Sources */,
+				CF550E878F154A16937FB25F /* CountlyNotificationService.h" in Resources */,
+				54CD03C17AB1433F8D647E70 /* CountlyNotificationService.m" in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +443,11 @@
 			name = CordovaLib;
 			targetProxy = 301BF550109A68C00062928A /* PBXContainerItemProxy */;
 		};
+		9CCEB33AE2D74F359A334923 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B9F1A27FB6B140A2BA92A258 /* "CountlyNSE" */;
+			targetProxy = BF0584FD5DF446588409E8B6 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -394,13 +457,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = KC5QY59X92;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -408,11 +467,10 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "countly-demo-js/countly-demo-js-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.countly.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -423,23 +481,18 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = KC5QY59X92;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "countly-demo-js/countly-demo-js-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "countly-demo-js/countly-demo-js-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.countly.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -448,6 +501,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3047A5111AB8059700498E2A /* build.xcconfig */;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -480,10 +534,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.countly.demo;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
-				WK_WEB_VIEW_ONLY = 0;
+				WK_WEB_VIEW_ONLY = 1;
 			};
 			name = Debug;
 		};
@@ -491,6 +544,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3047A5111AB8059700498E2A /* build.xcconfig */;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -521,12 +575,35 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.countly.demo;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
-				WK_WEB_VIEW_ONLY = 0;
+				WK_WEB_VIEW_ONLY = 1;
 			};
 			name = Release;
+		};
+		2C051823FFE34E3DB95A330A /* Debug */ = {
+			name = Debug;
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "CountlyNSE/CountlyNSE-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "CountlyNSE";
+				SKIP_INSTALL = YES;
+			};
+		};
+		A732DAC866D84227B2A91153 /* Release */ = {
+			name = Release;
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "CountlyNSE/CountlyNSE-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "CountlyNSE";
+				SKIP_INSTALL = YES;
+			};
 		};
 /* End XCBuildConfiguration section */
 
@@ -549,7 +626,30 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		C363FDEA68E1406187255B8D /* Build configuration list for PBXNativeTarget "CountlyNSE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C051823FFE34E3DB95A330A /* Debug */,
+				A732DAC866D84227B2A91153 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D60528C680364D09858D142E /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D369886C66B49C4AE5927C6 /* CountlyNSE.appex in Copy Files */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Copy Files";
+			dstPath = "";
+			dstSubfolderSpec = 13;
+		};
+/* End PBXCopyFilesBuildPhase section */
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
 }

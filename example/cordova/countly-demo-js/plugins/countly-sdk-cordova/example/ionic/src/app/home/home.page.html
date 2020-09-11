@@ -1,0 +1,134 @@
+<ion-content>
+	<div class="ui container">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+		<h1 class="ui center aligned header">Countly ionic Demo App</h1>
+		<img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
+		<button (click)="init()" class="fluid ui green button">Init</button>
+        <button (click)="start()" class="fluid ui green button">Start</button>
+        <button (click)="stop()" class="fluid ui red button">Stop</button>
+        <button (click)="halt()" class="fluid ui red button">Halt</button>
+
+        <!-- <button (click)="manualSessionHandling()" class="fluid ui CornflowerBlue button">Manual Session Handling</button>
+        <button (click)="updateSessionPeriod()" class="fluid ui CornflowerBlue button">Update Session Period</button>
+        <button (click)="eventSendThreshold()" class="fluid ui CornflowerBlue button">Event Send Threshold</button>
+        <button (click)="storedRequestsLimit()" class="fluid ui CornflowerBlue button">Stored Requests Limit</button> -->
+
+        <div class="ui horizontal divider">Events Start</div>
+        <button (click)="basicEvent()" class="fluid ui button">Basic Events</button>
+        <button (click)="eventWithSum()" class="fluid ui button">Event with Sum</button>
+        <button (click)="eventWithSegment()" class="fluid ui button">Event with Segment</button>
+        <button (click)="eventWithSumSegment()" class="fluid ui button">Even with Sum and Segment</button>
+        <button (click)="event()" class="fluid ui black button">All Events</button>
+        <button (click)="endEventBasic()" class="fluid ui button">Timed event: Start / Stop</button>
+        <button (click)="endEventWithSum()" class="fluid ui button">Timed event Sum: Start / Stop</button>
+        <button (click)="endEventWithSegment()" class="fluid ui button">Timed event Segment: Start / Stop</button>
+        <button (click)="endEventWithSumSegment()" class="fluid ui button">Timed event Sum Segment: Start / Stop</button>
+        <button (click)="startEventX()" class="fluid ui button">Start Event X</button>
+        <button (click)="cancelEventX()" class="fluid ui button">Cancel Event X</button>
+        <div class="ui horizontal divider">Events End</div>
+        <button (click)="recordView('HomePage')" class="fluid ui button">Record View: "HomePage"</button>
+        <button (click)="recordView('Dashboard')" class="fluid ui button">Record View: "Dashboard"</button>
+        <div class="ui horizontal divider">2017</div>
+        <div class="ui horizontal divider">User Methods Start</div>
+
+        <button (click)="setCaptianAmericaData()" class="fluid ui button teal">Send Captian America Data</button>
+        <button (click)="setIronManData()" class="fluid ui button teal">Send Iron Man Data</button>
+        <button (click)="setSpiderManData()" class="fluid ui button teal">Send Spider-Man Data</button>
+
+        <button (click)="setUserData()" class="fluid ui button teal">Send Users Data</button>
+        <button (click)="userData.setProperty()" class="fluid ui button teal">UserData.setProperty</button>
+        <button (click)="userData.increment()" class="fluid ui button teal">UserData.increment</button>
+        <button (click)="userData.incrementBy()" class="fluid ui button teal">UserData.incrementBy</button>
+        <button (click)="userData.multiply()" class="fluid ui button teal">UserData.multiply</button>
+        <button (click)="userData.saveMax()" class="fluid ui button teal">UserData.saveMax</button>
+        <button (click)="userData.saveMin()" class="fluid ui button teal">UserData.saveMin</button>
+        <button (click)="userData.setOnce()" class="fluid ui button teal">UserData.setOnce</button>
+        <button (click)="userData.pushUniqueValue()" class="fluid ui button teal">UserData.pushUniqueValue</button>
+        <button (click)="userData.pushValue()" class="fluid ui button teal">UserData.pushValue</button>
+        <button (click)="userData.pullValue()" class="fluid ui button teal">UserData.pullValue</button>
+        <!-- Consent Button -->
+
+        <button (click)="setRequiresConsent()" class="fluid ui button blue">Init Consent</button>
+        <button (click)="giveMultipleConsent()" class="fluid ui button blue">Give multiple consent</button>
+        <button (click)="removeMultipleConsent()" class="fluid ui button blue">Remove multiple consent</button>
+        <button (click)="giveAllConsent()" class="fluid ui button blue">Give all Consent</button>
+        <button (click)="removeAllConsent()" class="fluid ui button blue">Remove all Consent</button>
+
+        <button (click)="giveConsentSessions()" class="fluid ui button blue">Give Consent Sessions</button>
+        <button (click)="giveConsentEvents()" class="fluid ui button blue">Give Consent Events</button>
+        <button (click)="giveConsentViews()" class="fluid ui button blue">Give Consent Views</button>
+        <button (click)="giveConsentLocation()" class="fluid ui button blue">Give Consent Location</button>
+        <button (click)="giveConsentCrashes()" class="fluid ui button blue">Give Consent Crashes</button>
+        <button (click)="giveConsentAttribution()" class="fluid ui button blue">Give Consent Attribution</button>
+        <button (click)="giveConsentUsers()" class="fluid ui button blue">Give Consent Users</button>
+        <button (click)="giveConsentPush()" class="fluid ui button blue">Give Consent Push</button>
+        <button (click)="giveConsentStarRating()" class="fluid ui button blue">Give Consent starRating</button>
+        <button (click)="giveConsentAppleWatch()" class="fluid ui button blue">Give Consent AppleWatch</button>
+        <button (click)="giveConsentAPM()" class="fluid ui button blue">Give Consent Performance</button>
+
+        <button (click)="removeConsentSessions()" class="fluid ui button blue">Remove Consent Sessions</button>
+        <button (click)="removeConsentEvents()" class="fluid ui button blue">Remove Consent Events</button>
+        <button (click)="removeConsentViews()" class="fluid ui button blue">Remove Consent Views</button>
+        <button (click)="removeConsentLocation()" class="fluid ui button blue">Remove Consent Location</button>
+        <button (click)="removeConsentCrashes()" class="fluid ui button blue">Remove Consent Crashes</button>
+        <button (click)="removeConsentAttribution()" class="fluid ui button blue">Remove Consent Attribution</button>
+        <button (click)="removeConsentUsers()" class="fluid ui button blue">Remove Consent Users</button>
+        <button (click)="removeConsentPush()" class="fluid ui button blue">Remove Consent Push</button>
+        <button (click)="removeConsentStarRating()" class="fluid ui button blue">Remove Consent starRating</button>
+        <button (click)="removeConsentAppleWatch()" class="fluid ui button blue">Remove Consent AppleWatch</button>
+        <button (click)="removeConsentAPM()" class="fluid ui button blue">Remove Consent Performance</button>
+
+        <!-- Consent Button -->
+        <div class="ui horizontal divider">User Methods End</div>
+        <div class="ui horizontal divider">Remote Config Methods Start</div>
+        <button (click)="setRemoteConfigAutomaticDownload()" class="fluid ui button blue">Countly.setRemoteConfigAutomaticDownload</button>
+        <button (click)="remoteConfigUpdate()" class="fluid ui button blue">Countly.remoteConfigUpdate</button>
+        <button (click)="updateRemoteConfigForKeysOnly()" class="fluid ui button blue">Countly.updateRemoteConfigForKeysOnly</button>
+        <button (click)="updateRemoteConfigExceptKeys()" class="fluid ui button blue">Countly.updateRemoteConfigExceptKeys</button>
+        <button (click)="remoteConfigClearValues()" class="fluid ui button blue">Countly.remoteConfigClearValues</button>
+
+        <button (click)="updateRemoteConfigForbooleanValueOnly()" class="fluid ui button blue">Boolean Test</button>
+        <button (click)="updateRemoteConfigForfloatValueOnly()" class="fluid ui button blue">Float Test</button>
+        <button (click)="updateRemoteConfigForintegerValueOnly()" class="fluid ui button blue">Integer Test</button>
+        <button (click)="updateRemoteConfigForstringValueOnly()" class="fluid ui button blue">String Test</button>
+        <button (click)="updateRemoteConfigForjsonValueOnly()" class="fluid ui button blue">JSON Test</button>
+        <button (click)="updateRemoteConfigForjsonStringValueOnly()" class="fluid ui button blue">Array String Test</button>
+        <button (click)="updateRemoteConfigForjsonNumberValueOnly()" class="fluid ui button blue">Array Number Test</button>
+
+        <div class="ui horizontal divider">Remote Config Methods End</div>
+        <div class="ui horizontal divider">Other Methods Start</div>
+        <button (click)="setloggingenabled()" class="fluid ui button teal">Enable Debug Mode</button>
+        <button (click)="setloggingdisabled()" class="fluid ui button teal">Disable Debug Mode</button>
+        <button (click)="askForNotificationPermission()" class="fluid ui button yellow">askForNotificationPermission</button>
+        <button (click)="sendPushToken()" class="fluid ui button teal">Send Push Token</button>
+        <button (click)="setHttpPostForced()" class="fluid ui button teal">SetHttpPostForced</button>
+        <!-- <button (click)="testAndroidPush()" class="fluid ui button teal">Push Test Android</button> -->
+        <!-- <button (click)="testiOSPush()" class="fluid ui button teal">Push Test iOS</button> -->
+        <button (click)="changeDeviceId()" class="fluid ui button yellow">Change Device ID</button>
+        <button (click)="enableParameterTamperingProtection('123456')" class="fluid ui button yellow">Enable Parameter Tapmering Protection</button>
+        <button (click)="setOptionalParametersForInitialization()" class="fluid ui button yellow">City, State, and Location</button>
+        <button (click)="setLocation()" class="fluid ui button yellow">SetLocation</button>
+        <button (click)="addCrashLog()" class="fluid ui button yellow">Send Crash Report</button>
+        <div class="ui horizontal divider">Other Methods End</div>
+        <div class="ui horizontal divider">Rating Methods Start</div>
+        <!-- <button (click)="sendRating()" class="fluid ui button">Send 5 star rating!!</button> -->
+        <button (click)="askForStarRating()" class="fluid ui button orange">Open rating modal</button>
+        <button (click)="askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
+        <div class="ui horizontal divider">Rating Methods End</div>
+
+        <div class="ui horizontal divider">Performance Methods Start</div>
+        <button (click)="startTrace()" class="fluid ui black button">Start Trace</button>
+        <button (click)="endTrace()" class="fluid ui black button">End Trace</button>
+        <button (click)="recordNetworkTraceSuccess()" class="fluid ui black button">Record Network Trace Success</button>
+        <button (click)="recordNetworkTraceFailure()" class="fluid ui black button">Record Network Trace Failure</button>
+        <button (click)="enableApm()" class="fluid ui black button">Enable APM</button>
+        <div class="ui horizontal divider">Performance Methods End</div>
+
+	</div>
+  <style type="text/css">
+    button {
+			margin-top: 20px !important;
+			margin-bottom: 20px !important;
+		}
+	</style>
+</ion-content>

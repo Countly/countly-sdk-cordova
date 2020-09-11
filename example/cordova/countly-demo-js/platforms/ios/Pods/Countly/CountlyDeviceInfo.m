@@ -12,23 +12,25 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
+#elif (TARGET_OS_OSX)
+#import <IOKit/ps/IOPowerSources.h>
 #endif
 
-NSString* const kCountlyMetricKeyDevice             = @"_device";
-NSString* const kCountlyMetricKeyOS                 = @"_os";
-NSString* const kCountlyMetricKeyOSVersion          = @"_os_version";
-NSString* const kCountlyMetricKeyAppVersion         = @"_app_version";
-NSString* const kCountlyMetricKeyCarrier            = @"_carrier";
-NSString* const kCountlyMetricKeyResolution         = @"_resolution";
-NSString* const kCountlyMetricKeyDensity            = @"_density";
-NSString* const kCountlyMetricKeyLocale             = @"_locale";
-NSString* const kCountlyMetricKeyHasWatch           = @"_has_watch";
-NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
+CLYMetricKey const CLYMetricKeyDevice             = @"_device";
+CLYMetricKey const CLYMetricKeyOS                 = @"_os";
+CLYMetricKey const CLYMetricKeyOSVersion          = @"_os_version";
+CLYMetricKey const CLYMetricKeyAppVersion         = @"_app_version";
+CLYMetricKey const CLYMetricKeyCarrier            = @"_carrier";
+CLYMetricKey const CLYMetricKeyResolution         = @"_resolution";
+CLYMetricKey const CLYMetricKeyDensity            = @"_density";
+CLYMetricKey const CLYMetricKeyLocale             = @"_locale";
+CLYMetricKey const CLYMetricKeyHasWatch           = @"_has_watch";
+CLYMetricKey const CLYMetricKeyInstalledWatchApp  = @"_installed_watch_app";
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 @interface CountlyDeviceInfo ()
 @property (nonatomic) CTTelephonyNetworkInfo* networkInfo;
 @end
@@ -49,7 +51,7 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
     if (self = [super init])
     {
         self.deviceID = [CountlyPersistency.sharedInstance retrieveDeviceID];
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
         self.networkInfo = CTTelephonyNetworkInfo.new;
 #endif
     }
@@ -92,7 +94,7 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
 
 + (NSString *)device
 {
-#if TARGET_OS_OSX
+#if (TARGET_OS_OSX)
     char *modelKey = "hw.model";
 #else
     char *modelKey = "hw.machine";
@@ -108,94 +110,92 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
 
 + (NSString *)architecture
 {
-    NSString* architecture = nil;
-
-#if TARGET_OS_IOS
-    size_t size;
     cpu_type_t type;
-
-    size = sizeof(type);
+    size_t size = sizeof(type);
     sysctlbyname("hw.cputype", &type, &size, NULL, 0);
 
     if (type == CPU_TYPE_ARM64)
-        architecture = @"arm64";
-    else if (type == CPU_TYPE_ARM)
-    {
-        NSString* device = CountlyDeviceInfo.device;
-        NSInteger modelNo = [[device substringFromIndex:device.length - 1] integerValue];
-        if (([device hasPrefix:@"iPhone5,"] && modelNo >= 1 && modelNo <= 4)  ||
-           ([device hasPrefix:@"iPad3,"]   && modelNo >= 4 && modelNo <= 6))
-            architecture = @"armv7s";
-        else
-            architecture = @"armv7";
-    }
-#endif
-    return architecture;
+        return @"arm64";
+
+    if (type == CPU_TYPE_ARM)
+        return @"armv7";
+
+    if (type == CPU_TYPE_ARM64_32)
+        return @"arm64_32";
+
+    if (type == CPU_TYPE_X86)
+        return @"x86_64";
+
+    return nil;
 }
 
 + (NSString *)osName
 {
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
     return @"iOS";
-#elif TARGET_OS_WATCH
+#elif (TARGET_OS_WATCH)
     return @"watchOS";
-#elif TARGET_OS_TV
+#elif (TARGET_OS_TV)
     return @"tvOS";
-#else
+#elif (TARGET_OS_OSX)
     return @"macOS";
 #endif
+
+    return nil;
 }
 
 + (NSString *)osVersion
 {
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS || TARGET_OS_TV)
     return UIDevice.currentDevice.systemVersion;
-#elif TARGET_OS_WATCH
+#elif (TARGET_OS_WATCH)
     return WKInterfaceDevice.currentDevice.systemVersion;
-#elif TARGET_OS_TV
-    return UIDevice.currentDevice.systemVersion;
-#else
+#elif (TARGET_OS_OSX)
     return [NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"][@"ProductVersion"];
 #endif
+
+    return nil;
 }
 
 + (NSString *)carrier
 {
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
     return CountlyDeviceInfo.sharedInstance.networkInfo.subscriberCellularProvider.carrierName;
 #endif
+    //NOTE: it is not possible to get carrier info on Apple Watches as CoreTelephony is not available.
     return nil;
 }
 
 + (NSString *)resolution
 {
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS || TARGET_OS_TV)
     CGRect bounds = UIScreen.mainScreen.bounds;
     CGFloat scale = UIScreen.mainScreen.scale;
-#elif TARGET_OS_WATCH
+#elif (TARGET_OS_WATCH)
     CGRect bounds = WKInterfaceDevice.currentDevice.screenBounds;
     CGFloat scale = WKInterfaceDevice.currentDevice.screenScale;
-#elif TARGET_OS_TV
-    CGRect bounds = (CGRect){0,0,1920,1080};
-    CGFloat scale = 1.0;
-#else
+#elif (TARGET_OS_OSX)
     NSRect bounds = NSScreen.mainScreen.frame;
     CGFloat scale = NSScreen.mainScreen.backingScaleFactor;
+#else
+    return nil;
 #endif
+
     return [NSString stringWithFormat:@"%gx%g", bounds.size.width * scale, bounds.size.height * scale];
 }
 
 + (NSString *)density
 {
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS || TARGET_OS_TV)
     CGFloat scale = UIScreen.mainScreen.scale;
-#elif TARGET_OS_WATCH
+#elif (TARGET_OS_WATCH)
     CGFloat scale = WKInterfaceDevice.currentDevice.screenScale;
-#elif TARGET_OS_TV
-    CGFloat scale = 1.0;
-#else
+#elif (TARGET_OS_OSX)
     CGFloat scale = NSScreen.mainScreen.backingScaleFactor;
+#else
+    return nil;
 #endif
+
     return [NSString stringWithFormat:@"@%dx", (int)scale];
 }
 
@@ -214,7 +214,7 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
     return [NSBundle.mainBundle objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
 }
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 + (NSInteger)hasWatch
 {
     if (@available(iOS 9.0, *))
@@ -235,29 +235,38 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
 + (NSString *)metrics
 {
     NSMutableDictionary* metricsDictionary = NSMutableDictionary.new;
-    metricsDictionary[kCountlyMetricKeyDevice] = CountlyDeviceInfo.device;
-    metricsDictionary[kCountlyMetricKeyOS] = CountlyDeviceInfo.osName;
-    metricsDictionary[kCountlyMetricKeyOSVersion] = CountlyDeviceInfo.osVersion;
-    metricsDictionary[kCountlyMetricKeyAppVersion] = CountlyDeviceInfo.appVersion;
+    metricsDictionary[CLYMetricKeyDevice] = CountlyDeviceInfo.device;
+    metricsDictionary[CLYMetricKeyOS] = CountlyDeviceInfo.osName;
+    metricsDictionary[CLYMetricKeyOSVersion] = CountlyDeviceInfo.osVersion;
+    metricsDictionary[CLYMetricKeyAppVersion] = CountlyDeviceInfo.appVersion;
 
     NSString *carrier = CountlyDeviceInfo.carrier;
     if (carrier)
-        metricsDictionary[kCountlyMetricKeyCarrier] = carrier;
+        metricsDictionary[CLYMetricKeyCarrier] = carrier;
 
-    metricsDictionary[kCountlyMetricKeyResolution] = CountlyDeviceInfo.resolution;
-    metricsDictionary[kCountlyMetricKeyDensity] = CountlyDeviceInfo.density;
-    metricsDictionary[kCountlyMetricKeyLocale] = CountlyDeviceInfo.locale;
+    metricsDictionary[CLYMetricKeyResolution] = CountlyDeviceInfo.resolution;
+    metricsDictionary[CLYMetricKeyDensity] = CountlyDeviceInfo.density;
+    metricsDictionary[CLYMetricKeyLocale] = CountlyDeviceInfo.locale;
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
     if (CountlyCommon.sharedInstance.enableAppleWatch)
     {
         if (CountlyConsentManager.sharedInstance.consentForAppleWatch)
         {
-            metricsDictionary[kCountlyMetricKeyHasWatch] = @(CountlyDeviceInfo.hasWatch);
-            metricsDictionary[kCountlyMetricKeyInstalledWatchApp] = @(CountlyDeviceInfo.installedWatchApp);
+            metricsDictionary[CLYMetricKeyHasWatch] = @(CountlyDeviceInfo.hasWatch);
+            metricsDictionary[CLYMetricKeyInstalledWatchApp] = @(CountlyDeviceInfo.installedWatchApp);
         }
     }
 #endif
+
+    if (CountlyDeviceInfo.sharedInstance.customMetrics)
+    {
+        [CountlyDeviceInfo.sharedInstance.customMetrics enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSString* value, BOOL* stop)
+        {
+            if ([value isKindOfClass:NSString.class])
+                metricsDictionary[key] = value;
+        }];
+    }
 
     return [metricsDictionary cly_JSONify];
 }
@@ -294,7 +303,7 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
                     {
                         connType = CLYConnectionCellNetwork;
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
                         NSDictionary* connectionTypes =
                         @{
                             CTRadioAccessTechnologyGPRS: @(CLYConnectionCellNetwork2G),
@@ -354,20 +363,22 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
 
 + (unsigned long long)freeDisk
 {
-    return [[NSFileManager.defaultManager attributesOfFileSystemForPath:NSHomeDirectory() error:nil][NSFileSystemFreeSize] longLongValue];
+     NSDictionary *homeDirectory = [NSFileManager.defaultManager attributesOfFileSystemForPath:NSHomeDirectory() error:nil];
+    return [homeDirectory[NSFileSystemFreeSize] longLongValue];
 }
 
 + (unsigned long long)totalDisk
 {
-    return [[NSFileManager.defaultManager attributesOfFileSystemForPath:NSHomeDirectory() error:nil][NSFileSystemSize] longLongValue];
+    NSDictionary *homeDirectory = [NSFileManager.defaultManager attributesOfFileSystemForPath:NSHomeDirectory() error:nil];
+    return [homeDirectory[NSFileSystemSize] longLongValue];
 }
 
 + (NSInteger)batteryLevel
 {
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
     UIDevice.currentDevice.batteryMonitoringEnabled = YES;
     return abs((int)(UIDevice.currentDevice.batteryLevel * 100));
-#elif TARGET_OS_WATCH
+#elif (TARGET_OS_WATCH)
     if (@available(watchOS 4.0, *))
     {
         return abs((int)(WKInterfaceDevice.currentDevice.batteryLevel * 100));
@@ -376,42 +387,40 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
     {
         return 100;
     }
-#else
-    return 100;
+#elif (TARGET_OS_OSX)
+    CFTypeRef sourcesInfo = IOPSCopyPowerSourcesInfo();
+    NSArray *sources = (__bridge NSArray*)IOPSCopyPowerSourcesList(sourcesInfo);
+    NSDictionary *source = sources.firstObject;
+    if (!source)
+        return 100;
+
+    NSInteger currentLevel = ((NSNumber *)(source[@kIOPSCurrentCapacityKey])).integerValue;
+    NSInteger maxLevel = ((NSNumber *)(source[@kIOPSMaxCapacityKey])).integerValue;
+    return (currentLevel / (float)maxLevel) * 100;
 #endif
+
+    return 100;
 }
 
 + (NSString *)orientation
 {
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
     NSArray *orientations = @[@"Unknown", @"Portrait", @"PortraitUpsideDown", @"LandscapeLeft", @"LandscapeRight", @"FaceUp", @"FaceDown"];
-    return orientations[UIDevice.currentDevice.orientation];
-#else
-    return @"Unknown";
+    UIDeviceOrientation orientation = UIDevice.currentDevice.orientation;
+    if (orientation >= 0 && orientation < orientations.count)
+        return orientations[orientation];
+#elif (TARGET_OS_WATCH)
+    if (@available(watchOS 3.0, *))
+    {
+        NSArray *orientations = @[@"CrownLeft", @"CrownRight"];
+        WKInterfaceDeviceCrownOrientation orientation = WKInterfaceDevice.currentDevice.crownOrientation;
+        if (orientation >= 0 && orientation < orientations.count)
+            return orientations[orientation];
+    }
 #endif
 
+    return nil;
 }
-
-
-+ (NSString *)OpenGLESversion
-{
-#if TARGET_OS_IOS
-    EAGLContext *aContext;
-
-    aContext = [EAGLContext.alloc initWithAPI:kEAGLRenderingAPIOpenGLES3];
-    if (aContext)
-        return @"3.0";
-
-    aContext = [EAGLContext.alloc initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    if (aContext)
-        return @"2.0";
-
-    return @"1.0";
-#else
-    return @"1.0";
-#endif
-}
-
 
 + (BOOL)isJailbroken
 {
@@ -423,7 +432,7 @@ NSString* const kCountlyMetricKeyInstalledWatchApp  = @"_installed_watch_app";
 
 + (BOOL)isInBackground
 {
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS || TARGET_OS_TV)
     return UIApplication.sharedApplication.applicationState == UIApplicationStateBackground;
 #else
     return NO;

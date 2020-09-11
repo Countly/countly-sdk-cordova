@@ -15,7 +15,16 @@
 }
 @end
 
+long long appLoadStartTime;
+
 @implementation Countly
+
++ (void)load
+{
+    [super load];
+
+    appLoadStartTime = floor(NSDate.date.timeIntervalSince1970 * 1000);
+}
 
 + (instancetype)sharedInstance
 {
@@ -31,20 +40,20 @@
     {
 #if (TARGET_OS_IOS  || TARGET_OS_TV)
         [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(didEnterBackgroundCallBack:)
+                                               selector:@selector(applicationDidEnterBackground:)
                                                    name:UIApplicationDidEnterBackgroundNotification
                                                  object:nil];
         [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(willEnterForegroundCallBack:)
+                                               selector:@selector(applicationWillEnterForeground:)
                                                    name:UIApplicationWillEnterForegroundNotification
                                                  object:nil];
         [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(willTerminateCallBack:)
+                                               selector:@selector(applicationWillTerminate:)
                                                    name:UIApplicationWillTerminateNotification
                                                  object:nil];
-#elif TARGET_OS_OSX
+#elif (TARGET_OS_OSX)
         [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(willTerminateCallBack:)
+                                               selector:@selector(applicationWillTerminate:)
                                                    name:NSApplicationWillTerminateNotification
                                                  object:nil];
 #endif
@@ -57,7 +66,7 @@
 
 - (void)startWithConfig:(CountlyConfig *)config
 {
-    if (CountlyCommon.sharedInstance.hasStarted)
+    if (CountlyCommon.sharedInstance.hasStarted_)
         return;
 
     CountlyCommon.sharedInstance.hasStarted = YES;
@@ -70,14 +79,13 @@
     if (!config.host.length || [config.host isEqualToString:@"https://YOUR_COUNTLY_SERVER"])
         [NSException raise:@"CountlyHostNotSetException" format:@"host property on CountlyConfig object is not set"];
 
-    COUNTLY_LOG(@"Initializing with %@ SDK v%@", kCountlySDKName, kCountlySDKVersion);
+    COUNTLY_LOG(@"Initializing with %@ SDK v%@", CountlyCommon.sharedInstance.SDKName, CountlyCommon.sharedInstance.SDKVersion);
 
     if (!CountlyDeviceInfo.sharedInstance.deviceID || config.resetStoredDeviceID)
         [CountlyDeviceInfo.sharedInstance initializeDeviceID:config.deviceID];
 
     CountlyConnectionManager.sharedInstance.appKey = config.appKey;
-    BOOL hostHasExtraSlash = [[config.host substringFromIndex:config.host.length - 1] isEqualToString:@"/"];
-    CountlyConnectionManager.sharedInstance.host = hostHasExtraSlash ? [config.host substringToIndex:config.host.length - 1] : config.host;
+    CountlyConnectionManager.sharedInstance.host = [config.host hasSuffix:@"/"] ? [config.host substringToIndex:config.host.length - 1] : config.host;
     CountlyConnectionManager.sharedInstance.alwaysUsePOST = config.alwaysUsePOST;
     CountlyConnectionManager.sharedInstance.pinnedCertificates = config.pinnedCertificates;
     CountlyConnectionManager.sharedInstance.customHeaderFieldName = config.customHeaderFieldName;
@@ -89,35 +97,35 @@
     CountlyPersistency.sharedInstance.storedRequestsLimit = MAX(1, config.storedRequestsLimit);
 
     CountlyCommon.sharedInstance.manualSessionHandling = config.manualSessionHandling;
+
     CountlyCommon.sharedInstance.enableAppleWatch = config.enableAppleWatch;
-    CountlyCommon.sharedInstance.enableAttribution = config.enableAttribution;
 
-    if (!CountlyCommon.sharedInstance.manualSessionHandling)
-        [CountlyConnectionManager.sharedInstance beginSession];
+    CountlyCommon.sharedInstance.attributionID = config.attributionID;
 
-#if TARGET_OS_IOS
+    CountlyDeviceInfo.sharedInstance.customMetrics = config.customMetrics;
+
+#if (TARGET_OS_IOS)
     CountlyStarRating.sharedInstance.message = config.starRatingMessage;
     CountlyStarRating.sharedInstance.sessionCount = config.starRatingSessionCount;
     CountlyStarRating.sharedInstance.disableAskingForEachAppVersion = config.starRatingDisableAskingForEachAppVersion;
     CountlyStarRating.sharedInstance.ratingCompletionForAutoAsk = config.starRatingCompletion;
     [CountlyStarRating.sharedInstance checkForAutoAsk];
 
-    CountlyLocationManager.sharedInstance.location = CLLocationCoordinate2DIsValid(config.location) ? [NSString stringWithFormat:@"%f,%f", config.location.latitude, config.location.longitude] : nil;
-    CountlyLocationManager.sharedInstance.city = config.city;
-    CountlyLocationManager.sharedInstance.ISOCountryCode = config.ISOCountryCode;
-    CountlyLocationManager.sharedInstance.IP = config.IP;
-    [CountlyLocationManager.sharedInstance sendLocationInfo];
-
-    CountlyCrashReporter.sharedInstance.crashSegmentation = config.crashSegmentation;
-    CountlyCrashReporter.sharedInstance.crashLogLimit = MAX(1, config.crashLogLimit);
-    if ([config.features containsObject:CLYCrashReporting])
-    {
-        CountlyCrashReporter.sharedInstance.isEnabledOnInitialConfig = YES;
-        [CountlyCrashReporter.sharedInstance startCrashReporting];
-    }
+    [CountlyLocationManager.sharedInstance updateLocation:config.location city:config.city ISOCountryCode:config.ISOCountryCode IP:config.IP];
 #endif
 
+    if (!CountlyCommon.sharedInstance.manualSessionHandling)
+        [CountlyConnectionManager.sharedInstance beginSession];
+
+    //NOTE: If there is no consent for sessions, location info and attribution should be sent separately, as they cannot be sent with begin_session request.
+    if (!CountlyConsentManager.sharedInstance.consentForSessions)
+    {
+        [CountlyLocationManager.sharedInstance sendLocationInfo];
+        [CountlyConnectionManager.sharedInstance sendAttribution];
+    }
+
 #if (TARGET_OS_IOS || TARGET_OS_OSX)
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
     if ([config.features containsObject:CLYPushNotifications])
     {
         CountlyPushNotifications.sharedInstance.isEnabledOnInitialConfig = YES;
@@ -128,6 +136,20 @@
         [CountlyPushNotifications.sharedInstance startPushNotifications];
     }
 #endif
+#endif
+
+    CountlyCrashReporter.sharedInstance.crashSegmentation = config.crashSegmentation;
+    CountlyCrashReporter.sharedInstance.crashLogLimit = MAX(1, config.crashLogLimit);
+    CountlyCrashReporter.sharedInstance.crashFilter = config.crashFilter;
+    CountlyCrashReporter.sharedInstance.shouldUsePLCrashReporter = config.shouldUsePLCrashReporter;
+    CountlyCrashReporter.sharedInstance.shouldUseMachSignalHandler = config.shouldUseMachSignalHandler;
+    CountlyCrashReporter.sharedInstance.crashOccuredOnPreviousSessionCallback = config.crashOccuredOnPreviousSessionCallback;
+    CountlyCrashReporter.sharedInstance.shouldSendCrashReportCallback = config.shouldSendCrashReportCallback;
+    if ([config.features containsObject:CLYCrashReporting])
+    {
+        CountlyCrashReporter.sharedInstance.isEnabledOnInitialConfig = YES;
+        [CountlyCrashReporter.sharedInstance startCrashReporting];
+    }
 
 #if (TARGET_OS_IOS || TARGET_OS_TV)
     if ([config.features containsObject:CLYAutoViewTracking])
@@ -137,16 +159,19 @@
     }
 #endif
 
-    timer = [NSTimer scheduledTimerWithTimeInterval:config.updateSessionPeriod target:self selector:@selector(onTimer:) userInfo:nil repeats:YES];
+    timer = [NSTimer timerWithTimeInterval:config.updateSessionPeriod target:self selector:@selector(onTimer:) userInfo:nil repeats:YES];
     [NSRunLoop.mainRunLoop addTimer:timer forMode:NSRunLoopCommonModes];
 
     [CountlyCommon.sharedInstance startAppleWatchMatching];
 
-    [CountlyCommon.sharedInstance startAttribution];
-
     CountlyRemoteConfig.sharedInstance.isEnabledOnInitialConfig = config.enableRemoteConfig;
     CountlyRemoteConfig.sharedInstance.remoteConfigCompletionHandler = config.remoteConfigCompletionHandler;
     [CountlyRemoteConfig.sharedInstance startRemoteConfig];
+    
+    CountlyPerformanceMonitoring.sharedInstance.isEnabledOnInitialConfig = config.enablePerformanceMonitoring;
+    [CountlyPerformanceMonitoring.sharedInstance startPerformanceMonitoring];
+
+    [CountlyCommon.sharedInstance observeDeviceOrientationChanges];
 
     [CountlyConnectionManager.sharedInstance proceedOnQueue];
 }
@@ -217,6 +242,8 @@
         return;
 
     [self suspend];
+
+    [CountlyPerformanceMonitoring.sharedInstance clearAllCustomTraces];
 
     CountlyConnectionManager.sharedInstance.appKey = newAppKey;
 
@@ -295,7 +322,7 @@
     if (!CountlyCommon.sharedInstance.hasStarted)
         return;
 
-#if TARGET_OS_WATCH
+#if (TARGET_OS_WATCH)
     //NOTE: Skip first time to prevent double begin session because of applicationDidBecomeActive call on launch of watchOS apps
     static BOOL isFirstCall = YES;
 
@@ -316,25 +343,31 @@
 
 #pragma mark ---
 
-- (void)didEnterBackgroundCallBack:(NSNotification *)notification
+- (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     COUNTLY_LOG(@"App did enter background.");
     [self suspend];
 }
 
-- (void)willEnterForegroundCallBack:(NSNotification *)notification
+- (void)applicationWillEnterForeground:(NSNotification *)notification
 {
     COUNTLY_LOG(@"App will enter foreground.");
     [self resume];
 }
 
-- (void)willTerminateCallBack:(NSNotification *)notification
+- (void)applicationWillTerminate:(NSNotification *)notification
 {
     COUNTLY_LOG(@"App will terminate.");
 
+    CountlyConnectionManager.sharedInstance.isTerminating = YES;
+
     [CountlyViewTracking.sharedInstance endView];
 
-    [self suspend];
+    [CountlyConnectionManager.sharedInstance sendEvents];
+
+    [CountlyPerformanceMonitoring.sharedInstance endBackgroundTrace];
+
+    [CountlyPersistency.sharedInstance saveToFileSync];
 }
 
 - (void)dealloc
@@ -536,6 +569,7 @@
 
 #pragma mark - Push Notifications
 #if (TARGET_OS_IOS || TARGET_OS_OSX)
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
 
 - (void)askForNotificationPermission
 {
@@ -562,24 +596,42 @@
     [CountlyPushNotifications.sharedInstance clearToken];
 }
 #endif
+#endif
 
 
 
 #pragma mark - Location
 
+- (void)recordLocation:(CLLocationCoordinate2D)location city:(NSString * _Nullable)city ISOCountryCode:(NSString * _Nullable)ISOCountryCode IP:(NSString * _Nullable)IP
+{
+    [CountlyLocationManager.sharedInstance recordLocation:location city:city ISOCountryCode:ISOCountryCode IP:IP];
+}
+
 - (void)recordLocation:(CLLocationCoordinate2D)location
 {
-    [CountlyLocationManager.sharedInstance recordLocationInfo:location city:nil ISOCountryCode:nil andIP:nil];
+    COUNTLY_LOG(@"recordLocation: method is deprecated. Please use recordLocation:city:countryCode:IP: method instead.");
+
+    [CountlyLocationManager.sharedInstance recordLocation:location city:nil ISOCountryCode:nil IP:nil];
 }
 
 - (void)recordCity:(NSString *)city andISOCountryCode:(NSString *)ISOCountryCode
 {
-    [CountlyLocationManager.sharedInstance recordLocationInfo:kCLLocationCoordinate2DInvalid city:city ISOCountryCode:ISOCountryCode andIP:nil];
+    COUNTLY_LOG(@"recordCity:andISOCountryCode: method is deprecated. Please use recordLocation:city:countryCode:IP: method instead.");
+
+    if (!city.length && !ISOCountryCode.length)
+        return;
+
+    [CountlyLocationManager.sharedInstance recordLocation:kCLLocationCoordinate2DInvalid city:city ISOCountryCode:ISOCountryCode IP:nil];
 }
 
 - (void)recordIP:(NSString *)IP
 {
-    [CountlyLocationManager.sharedInstance recordLocationInfo:kCLLocationCoordinate2DInvalid city:nil ISOCountryCode:nil andIP:IP];
+    COUNTLY_LOG(@"recordIP: method is deprecated. Please use recordLocation:city:countryCode:IP: method instead.");
+
+    if (!IP.length)
+        return;
+
+    [CountlyLocationManager.sharedInstance recordLocation:kCLLocationCoordinate2DInvalid city:nil ISOCountryCode:nil IP:IP];
 }
 
 - (void)disableLocationInfo
@@ -591,7 +643,6 @@
 
 #pragma mark - Crash Reporting
 
-#if TARGET_OS_IOS
 - (void)recordHandledException:(NSException *)exception
 {
     [CountlyCrashReporter.sharedInstance recordException:exception withStackTrace:nil isFatal:NO];
@@ -616,7 +667,6 @@
 {
 
 }
-#endif
 
 
 
@@ -632,7 +682,7 @@
     [CountlyViewTracking.sharedInstance startView:viewName customSegmentation:segmentation];
 }
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 - (void)addExceptionForAutoViewTracking:(NSString *)exception
 {
     [CountlyViewTracking.sharedInstance addExceptionForAutoViewTracking:exception.copy];
@@ -676,7 +726,7 @@
 
 
 #pragma mark - Star Rating
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 
 - (void)askForStarRating:(void(^)(NSInteger rating))completion
 {
@@ -689,6 +739,20 @@
 }
 
 #endif
+
+
+
+#pragma mark - Attribution
+
+- (void)recordAttributionID:(NSString *)attributionID
+{
+    if (!CountlyConsentManager.sharedInstance.consentForAttribution)
+        return;
+
+    CountlyCommon.sharedInstance.attributionID = attributionID;
+
+    [CountlyConnectionManager.sharedInstance sendAttribution];
+}
 
 
 
@@ -714,5 +778,40 @@
     [CountlyRemoteConfig.sharedInstance updateRemoteConfigForKeys:nil omitKeys:omitKeys completionHandler:completionHandler];
 }
 
+
+
+#pragma mark - Performance Monitoring
+
+- (void)recordNetworkTrace:(NSString *)traceName requestPayloadSize:(NSInteger)requestPayloadSize responsePayloadSize:(NSInteger)responsePayloadSize responseStatusCode:(NSInteger)responseStatusCode startTime:(long long)startTime endTime:(long long)endTime
+{
+    [CountlyPerformanceMonitoring.sharedInstance recordNetworkTrace:traceName requestPayloadSize:requestPayloadSize responsePayloadSize:responsePayloadSize responseStatusCode:responseStatusCode startTime:startTime endTime:endTime];
+}
+
+- (void)startCustomTrace:(NSString *)traceName
+{
+    [CountlyPerformanceMonitoring.sharedInstance startCustomTrace:traceName];
+}
+
+- (void)endCustomTrace:(NSString *)traceName metrics:(NSDictionary * _Nullable)metrics
+{
+    [CountlyPerformanceMonitoring.sharedInstance endCustomTrace:traceName metrics:metrics];
+}
+
+- (void)cancelCustomTrace:(NSString *)traceName
+{
+    [CountlyPerformanceMonitoring.sharedInstance cancelCustomTrace:traceName];
+}
+
+- (void)clearAllCustomTraces
+{
+    [CountlyPerformanceMonitoring.sharedInstance clearAllCustomTraces];
+}
+
+- (void)appLoadingFinished
+{
+    long long appLoadEndTime = floor(NSDate.date.timeIntervalSince1970 * 1000);
+
+    [CountlyPerformanceMonitoring.sharedInstance recordAppStartDurationTraceWithStartTime:appLoadStartTime endTime:appLoadEndTime];
+}
 
 @end

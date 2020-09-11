@@ -1,18 +1,18 @@
 PODS:
-  - Countly (19.08):
-    - Countly/NotificationService (= 19.08)
-  - Countly/NotificationService (19.08)
+  - Countly (20.04.3):
+    - Countly/Core (= 20.04.3)
+  - Countly/Core (20.04.3)
 
 DEPENDENCIES:
-  - Countly (~> 19.08)
+  - Countly
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Countly
 
 SPEC CHECKSUMS:
-  Countly: 7c596e00a90a35b7978713a384455fe9a18f28aa
+  Countly: 6e4af408faaa26192227f06d27899532c4c2317b
 
-PODFILE CHECKSUM: 80a038174e8b12fe390c4b5c43b3d6ff003078d7
+PODFILE CHECKSUM: c406f8899d1741f04acfc659e23d4b21cde2aaa8
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3

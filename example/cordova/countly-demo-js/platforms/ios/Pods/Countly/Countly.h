@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * Flushes request and event queues.
- * @discussion Flushes persistenly stored request queue and events recorded but not converted to a request so far.
+ * @discussion Flushes persistently stored request queue and events recorded but not converted to a request so far.
  * @discussion Started timed events will not be affected.
  */
 - (void)flushQueues;
@@ -86,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)endSession;
 
-#if TARGET_OS_WATCH
+#if (TARGET_OS_WATCH)
 /**
  * Suspends Countly, adds recorded events to request queue and ends current session.
  * @discussion This method needs to be called manually only on @c watchOS, on other platforms it will be called automatically.
@@ -112,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @discussion If @c requiresConsent flag is not set on initial configuration, calling this method will have no effect.
  * @param featureName Feature name to give consent to
  */
-- (void)giveConsentForFeature:(NSString *)featureName;
+- (void)giveConsentForFeature:(CLYConsent)featureName;
 
 /**
  * Grants consent to given features and starts them.
@@ -120,7 +120,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @discussion Inner workings of @c giveConsentForFeature: method applies for this method as well.
  * @param features Array of feature names to give consent to
  */
-- (void)giveConsentForFeatures:(NSArray *)features;
+- (void)giveConsentForFeatures:(NSArray<CLYConsent> *)features;
 
 /**
  * Grants consent to all features and starts them.
@@ -136,7 +136,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @discussion If @c requiresConsent flag is not set on initial configuration, calling this method will have no effect.
  * @param featureName Feature name to cancel consent to
  */
-- (void)cancelConsentForFeature:(NSString *)featureName;
+- (void)cancelConsentForFeature:(CLYConsent)featureName;
 
 /**
  * Cancels consent to given features and stops them.
@@ -144,7 +144,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @discussion Inner workings of @c cancelConsentForFeature: method applies for this method as well.
  * @param features Array of feature names to cancel consent to
  */
-- (void)cancelConsentForFeatures:(NSArray *)features;
+- (void)cancelConsentForFeatures:(NSArray<CLYConsent> *)features;
 
 /**
  * Cancels consent to all features and stops them.
@@ -202,7 +202,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Records event with given key and segmentation.
  * @discussion Segmentation should be an @c NSDictionary, with keys and values are both @c NSString's only.
  * @discussion Custom objects in segmentation will cause events not to be sent to Countly Server.
- * @discussion Nested values in segmentation will be ignored by Counly Server event segmentation section.
+ * @discussion Nested values in segmentation will be ignored by Countly Server event segmentation section.
  * @param key Event key, a non-zero length valid string
  * @param segmentation Segmentation key-value pairs of event
  */
@@ -212,7 +212,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Records event with given key, segmentation and count.
  * @discussion Segmentation should be an @c NSDictionary, with keys and values are both @c NSString's only.
  * @discussion Custom objects in segmentation will cause events not to be sent to Countly Server.
- * @discussion Nested values in segmentation will be ignored by Counly Server event segmentation section.
+ * @discussion Nested values in segmentation will be ignored by Countly Server event segmentation section.
  * @param key Event key, a non-zero length valid string
  * @param segmentation Segmentation key-value pairs of event
  * @param count Count of event occurrences
@@ -223,7 +223,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Records event with given key, segmentation, count and sum.
  * @discussion Segmentation should be an @c NSDictionary, with keys and values are both @c NSString's only.
  * @discussion Custom objects in segmentation will cause events not to be sent to Countly Server.
- * @discussion Nested values in segmentation will be ignored by Counly Server event segmentation section.
+ * @discussion Nested values in segmentation will be ignored by Countly Server event segmentation section.
  * @param key Event key, a non-zero length valid string
  * @param segmentation Segmentation key-value pairs of event
  * @param count Count of event occurrences
@@ -235,7 +235,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Records event with given key, segmentation, count, sum and duration.
  * @discussion Segmentation should be an @c NSDictionary, with keys and values are both @c NSString's only.
  * @discussion Custom objects in segmentation will cause events not to be sent to Countly Server.
- * @discussion Nested values in segmentation will be ignored by Counly Server event segmentation section.
+ * @discussion Nested values in segmentation will be ignored by Countly Server event segmentation section.
  * @param key Event key, a non-zero length valid string
  * @param segmentation Segmentation key-value pairs of event
  * @param count Count of event occurrences
@@ -263,7 +263,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @discussion Trying to end an event with already ended (or not yet started) key will have no effect.
  * @discussion Segmentation should be an @c NSDictionary, with keys and values are both @c NSString's only.
  * @discussion Custom objects in segmentation will cause events not to be sent to Countly Server.
- * @discussion Nested values in segmentation will be ignored by Counly Server event segmentation section.
+ * @discussion Nested values in segmentation will be ignored by Countly Server event segmentation section.
  * @param key Event key, a non-zero length valid string
  * @param segmentation Segmentation key-value pairs of event
  * @param count Count of event occurrences
@@ -282,6 +282,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Push Notification
 #if (TARGET_OS_IOS || TARGET_OS_OSX)
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
 /**
  * Shows default system dialog that asks for user's permission to display notifications.
  * @discussion A unified convenience method that handles asking for notification permission on both iOS10 and older iOS versions with badge, sound and alert notification types.
@@ -321,10 +322,26 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)clearPushNotificationToken;
 #endif
+#endif
 
 
 
 #pragma mark - Location
+
+/**
+ * Records user's location, city, country and IP address to be used for geo-location based push notifications and advanced user segmentation.
+ * @discussion By default, Countly Server uses a geo-ip database for acquiring user's location.
+ * @discussion If the app uses Core Location services and granted permission, a location with better accuracy can be provided using this method.
+ * @discussion If the app has information about user's city and/or country, these information can be provided using this method.
+ * @discussion If the app needs to explicitly specify the IP address due to network requirements, it can be provided using this method.
+ * @discussion This method overrides all location related properties specified on initial configuration or on a previous call to this method, and sends an immediate request.
+ * @discussion City and country code information should be provided together. If one of them is missing while the other one is present, there will be a warning logged.
+ * @param location User's location with latitude and longitude
+ * @param city User's city
+ * @param ISOCountryCode User's country code in ISO 3166-1 alpha-2 format
+ * @param IP User's explicit IP address
+ */
+- (void)recordLocation:(CLLocationCoordinate2D)location city:(NSString * _Nullable)city ISOCountryCode:(NSString * _Nullable)ISOCountryCode IP:(NSString * _Nullable)IP;
 
 /**
  * Records user's location info to be used for geo-location based push notifications and advanced user segmentation.
@@ -333,7 +350,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @discussion This method overrides @c location property specified on initial configuration, and sends an immediate request.
  * @param location User's location with latitude and longitude
  */
-- (void)recordLocation:(CLLocationCoordinate2D)location;
+- (void)recordLocation:(CLLocationCoordinate2D)location DEPRECATED_MSG_ATTRIBUTE("Use 'recordLocation:city:ISOCountryCode:IP:' method instead!");
 
 /**
  * Records user's city and country info to be used for geo-location based push notifications and advanced user segmentation.
@@ -343,7 +360,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param city User's city
  * @param ISOCountryCode User's ISO country code in ISO 3166-1 alpha-2 format
  */
-- (void)recordCity:(NSString *)city andISOCountryCode:(NSString *)ISOCountryCode;
+- (void)recordCity:(NSString *)city andISOCountryCode:(NSString *)ISOCountryCode DEPRECATED_MSG_ATTRIBUTE("Use 'recordLocation:city:ISOCountryCode:IP:' method instead!");
 
 /**
  * Records user's IP address to be used for geo-location based push notifications and advanced user segmentation.
@@ -352,10 +369,10 @@ NS_ASSUME_NONNULL_BEGIN
  * @discussion This method overrides @c IP property specified on initial configuration, and sends an immediate request.
  * @param IP User's explicit IP address
  */
-- (void)recordIP:(NSString *)IP;
+- (void)recordIP:(NSString *)IP DEPRECATED_MSG_ATTRIBUTE("Use 'recordLocation:city:ISOCountryCode:IP:' method instead!");
 
 /**
- * Disables geo-location based push notifications by clearing all exsisting location info.
+ * Disables geo-location based push notifications by clearing all existing location info.
  * @discussion Once disabled, geo-location based push notifications can be enabled again by calling @c recordLocation: or @c recordCity:andISOCountryCode: or @c recordIP: method.
  */
 - (void)disableLocationInfo;
@@ -369,7 +386,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - Crash Reporting
-#if TARGET_OS_IOS
+
 /**
  * Records a handled exception manually.
  * @param exception Exception to be recorded
@@ -400,12 +417,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * @c crashLog: method is deprecated. Please use @c recordCrashLog: method instead.
- * @discussion Be advised, parameter type chenged to plain @c NSString from string format, for better Swift compatibility.
+ * @discussion Be advised, parameter type changed to plain @c NSString from string format, for better Swift compatibility.
  * @discussion Calling this method will have no effect.
  */
 - (void)crashLog:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2) DEPRECATED_MSG_ATTRIBUTE("Use 'recordCrashLog:' method instead!");
-
-#endif
 
 
 
@@ -421,18 +436,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * Records a visited view with given name and custom segmentation.
- * @discussion This is an extendened version of @c recordView: method.
+ * @discussion This is an extended version of @c recordView: method.
  * @discussion If segmentation has any of Countly reserved keys, they will be ignored:
  * @discussion @c name, @c segment, @c visit, @c start, @c bounce, @c exit, @c view, @c domain, @c dur
  * @discussion Segmentation should be an @c NSDictionary, with keys and values are both @c NSString's only.
  * @discussion Custom objects in segmentation will cause events not to be sent to Countly Server.
- * @discussion Nested values in segmentation will be ignored by Counly Server event segmentation section.
+ * @discussion Nested values in segmentation will be ignored by Countly Server event segmentation section.
  * @param viewName Name of the view visited, a non-zero length valid string
  * @param segmentation Custom segmentation key-value pairs
  */
 - (void)recordView:(NSString *)viewName segmentation:(NSDictionary<NSString *, NSString *> *)segmentation;
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 /**
  * Adds exception for AutoViewTracking.
  * @discussion @c UIViewControllers with specified title or class name will be ignored by AutoViewTracking and their appearances and disappearances will not be recorded.
@@ -490,7 +505,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - Star Rating
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 /**
  * Shows star-rating dialog manually and executes completion block after user's action.
  * @discussion Completion block has a single NSInteger parameter that indicates 1 to 5 star-rating given by user.
@@ -515,6 +530,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)presentFeedbackWidgetWithID:(NSString *)widgetID completionHandler:(void (^)(NSError * error))completionHandler;
 
 #endif
+
+
+
+#pragma mark - Attribution
+
+/**
+ * Records attribution ID (IDFA) for campaign attribution.
+ * @discussion This method overrides @c attributionID property specified on initial configuration, and sends an immediate request.
+ * @discussion Also, this attribution ID will be sent with all @c begin_session requests.
+ * @param attributionID Attribution ID (IDFA)
+ */
+- (void)recordAttributionID:(NSString *)attributionID;
 
 
 
@@ -559,6 +586,64 @@ NS_ASSUME_NONNULL_BEGIN
  * @param completionHandler A completion handler block to be executed when updating of remote config is completed, either with success or failure
  */
 - (void)updateRemoteConfigExceptForKeys:(NSArray *)omitKeys completionHandler:(void (^)(NSError * error))completionHandler;
+
+
+
+#pragma mark - Performance Monitoring
+
+/**
+ * Manually records a network trace for performance monitoring.
+ * @discussion A network trace is a collection of measured information about a network request.
+ * @discussion When a network request is completed, a network trace can be recorded manually to be analyzed in Performance Monitoring feature.
+ * @discussion Trace name needs to be a non-zero length string, otherwise it is ignored.
+ * @param traceName Trace name, a non-zero length valid string
+ * @param requestPayloadSize Size of the request's payload in bytes
+ * @param responsePayloadSize Size of the received response's payload in bytes
+ * @param responseStatusCode HTTP status code of the received response
+ * @param startTime UNIX time stamp in milliseconds for the starting time of the request
+ * @param endTime UNIX time stamp in milliseconds for the ending time of the request
+ */
+- (void)recordNetworkTrace:(NSString *)traceName requestPayloadSize:(NSInteger)requestPayloadSize responsePayloadSize:(NSInteger)responsePayloadSize responseStatusCode:(NSInteger)responseStatusCode startTime:(long long)startTime endTime:(long long)endTime;
+
+/**
+ * Starts a performance monitoring custom trace with given name to be ended later.
+ * @discussion Duration of custom trace will be calculated on ending.
+ * @discussion Trying to start a custom trace with already started name will have no effect.
+ * @param traceName Trace name, a non-zero length valid string
+ */
+- (void)startCustomTrace:(NSString *)traceName;
+
+/**
+ * Ends a previously started performance monitoring custom trace with given name and metrics.
+ * @discussion Trying to end a custom trace with already ended (or not yet started) name will have no effect.
+ * @param traceName Trace name, a non-zero length valid string
+ * @param metrics Metrics key-value pairs
+ */
+- (void)endCustomTrace:(NSString *)traceName metrics:(NSDictionary * _Nullable)metrics;
+
+/**
+ * Cancels a previously started performance monitoring custom trace with given name.
+ * @discussion Trying to cancel a custom trace with already cancelled (or ended or not yet started) name will have no effect.
+ * @param traceName Trace name, a non-zero length valid string
+ */
+- (void)cancelCustomTrace:(NSString *)traceName;
+
+/**
+ * Clears all previously started performance monitoring custom traces.
+ * @discussion All previously started performance monitoring custom traces are automatically cleaned when:
+ * @discussion - Consent for @c CLYConsentPerformanceMonitoring is cancelled
+ * @discussion - A new app key is set using @c setNewAppKey: method
+ */
+- (void)clearAllCustomTraces;
+
+/**
+ * Calculates and records app launch time for performance monitoring.
+ * @discussion This method should be called when the app is loaded and displayed its first user facing view successfully.
+ * @discussion e.g. @c viewDidAppear: method of the root view controller or whatever place is suitable for the app's flow.
+ * @discussion Time passed since the app started to launch will be automatically calculated and recorded for performance monitoring.
+ * @discussion App launch time can be recorded only once per app launch. So, second and following calls to this method will be ignored.
+ */
+- (void)appLoadingFinished;
 
 NS_ASSUME_NONNULL_END
 

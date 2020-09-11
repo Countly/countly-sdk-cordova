@@ -9,14 +9,23 @@
 NS_ASSUME_NONNULL_BEGIN
 
 //NOTE: Countly features
-#if TARGET_OS_IOS
-extern NSString* const CLYPushNotifications;
-extern NSString* const CLYCrashReporting;
-extern NSString* const CLYAutoViewTracking;
-#elif TARGET_OS_TV
-extern NSString* const CLYAutoViewTracking;
-#elif TARGET_OS_OSX
-extern NSString* const CLYPushNotifications;
+typedef NSString* CLYFeature NS_EXTENSIBLE_STRING_ENUM;
+#if (TARGET_OS_IOS)
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
+extern CLYFeature const CLYPushNotifications;
+#endif
+extern CLYFeature const CLYCrashReporting;
+extern CLYFeature const CLYAutoViewTracking;
+#elif (TARGET_OS_WATCH)
+extern CLYFeature const CLYCrashReporting;
+#elif (TARGET_OS_TV)
+extern CLYFeature const CLYCrashReporting;
+extern CLYFeature const CLYAutoViewTracking;
+#elif (TARGET_OS_OSX)
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
+extern CLYFeature const CLYPushNotifications;
+#endif
+extern CLYFeature const CLYCrashReporting;
 #endif
 
 
@@ -24,8 +33,8 @@ extern NSString* const CLYPushNotifications;
 /**
  * Can be used as device ID to switch back to default device ID, if a custom device ID is set before.
  * @discussion It can be used as @c deviceID on initial configuration, or passed as an argument for @c deviceID parameter on @c setNewDeviceID:onServer: method.
- * @discussion On iOS and tvOS, it will be identifierForVendor.
- * @discussion On watchOS and macOS, it will be a persistently stored random NSUUID string.
+ * @discussion On iOS and tvOS, default device ID is Identifier For Vendor (IDFV).
+ * @discussion On watchOS and macOS, default device ID is a persistently stored random NSUUID string.
  */
 extern NSString* const CLYDefaultDeviceID;
 
@@ -44,20 +53,36 @@ extern NSString* const CLYIDFA DEPRECATED_MSG_ATTRIBUTE("Please use CLYDefaultDe
 extern NSString* const CLYOpenUDID DEPRECATED_MSG_ATTRIBUTE("Please use CLYDefaultDeviceID instead!");
 
 //NOTE: Available consents
-extern NSString* const CLYConsentSessions;
-extern NSString* const CLYConsentEvents;
-extern NSString* const CLYConsentUserDetails;
-extern NSString* const CLYConsentCrashReporting;
-extern NSString* const CLYConsentPushNotifications;
-extern NSString* const CLYConsentLocation;
-extern NSString* const CLYConsentViewTracking;
-extern NSString* const CLYConsentAttribution;
-extern NSString* const CLYConsentStarRating;
-extern NSString* const CLYConsentAppleWatch;
+typedef NSString* CLYConsent NS_EXTENSIBLE_STRING_ENUM;
+extern CLYConsent const CLYConsentSessions;
+extern CLYConsent const CLYConsentEvents;
+extern CLYConsent const CLYConsentUserDetails;
+extern CLYConsent const CLYConsentCrashReporting;
+extern CLYConsent const CLYConsentPushNotifications;
+extern CLYConsent const CLYConsentLocation;
+extern CLYConsent const CLYConsentViewTracking;
+extern CLYConsent const CLYConsentAttribution;
+extern CLYConsent const CLYConsentStarRating;
+extern CLYConsent const CLYConsentAppleWatch;
+extern CLYConsent const CLYConsentPerformanceMonitoring;
 
 //NOTE: Push Notification Test Modes
-extern NSString* const CLYPushTestModeDevelopment;
-extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
+typedef NSString* CLYPushTestMode NS_EXTENSIBLE_STRING_ENUM;
+extern CLYPushTestMode const CLYPushTestModeDevelopment;
+extern CLYPushTestMode const CLYPushTestModeTestFlightOrAdHoc;
+
+//NOTE: Default metrics
+typedef NSString* CLYMetricKey NS_EXTENSIBLE_STRING_ENUM;
+extern CLYMetricKey const CLYMetricKeyDevice;
+extern CLYMetricKey const CLYMetricKeyOS;
+extern CLYMetricKey const CLYMetricKeyOSVersion;
+extern CLYMetricKey const CLYMetricKeyAppVersion;
+extern CLYMetricKey const CLYMetricKeyCarrier;
+extern CLYMetricKey const CLYMetricKeyResolution;
+extern CLYMetricKey const CLYMetricKeyDensity;
+extern CLYMetricKey const CLYMetricKeyLocale;
+extern CLYMetricKey const CLYMetricKeyHasWatch;
+extern CLYMetricKey const CLYMetricKeyInstalledWatchApp;
 
 @interface CountlyConfig : NSObject
 
@@ -87,12 +112,30 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
 
 /**
  * For specifying which features Countly will start with.
- * @discussion Available features:
- * @discussion @c CLYPushNotifications for push notifications,
- * @discussion @c CLYCrashReporting for crash reporting,
- * @discussion @c CLYAutoViewTracking for auto view tracking and
+ * @discussion Available features for each platform:
+ * @discussion @b iOS:
+ * @discussion @c CLYPushNotifications for push notifications
+ * @discussion @c CLYCrashReporting for crash reporting
+ * @discussion @c CLYAutoViewTracking for auto view tracking
+ * @discussion @b watchOS:
+ * @discussion @c CLYCrashReporting for crash reporting
+ * @discussion @b tvOS:
+ * @discussion @c CLYCrashReporting for crash reporting
+ * @discussion @c CLYAutoViewTracking for auto view tracking
+ * @discussion @b macOS:
+ * @discussion @c CLYPushNotifications for push notifications
+ * @discussion @c CLYCrashReporting for crash reporting
  */
-@property (nonatomic, copy) NSArray* features;
+@property (nonatomic, copy) NSArray<CLYFeature>* features;
+
+#pragma mark -
+
+/**
+ * For overriding default metrics (or adding extra ones) sent with @c begin_session requests.
+ * @discussion Custom metrics should be an @c NSDictionary, with keys and values are both @c NSString 's only.
+ * @discussion For overriding default metrics, keys should be @c CLYMetricKey 's.
+ */
+@property (nonatomic, copy) NSDictionary<NSString *, NSString *>* customMetrics;
 
 #pragma mark -
 
@@ -108,7 +151,7 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
  * @c isTestDevice property is deprecated. Please use @c pushTestMode property instead.
  * @discussion Using this property will have no effect.
  */
-@property (nonatomic) BOOL isTestDevice DEPRECATED_MSG_ATTRIBUTE("Use 'pushTestMode' property instead!");;
+@property (nonatomic) BOOL isTestDevice DEPRECATED_MSG_ATTRIBUTE("Use 'pushTestMode' property instead!");
 
 /**
  * For specifying which test mode Countly Server should use for sending push notifications.
@@ -118,7 +161,7 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
  * @discussion If set, Test Users mark should be selected on Create Push Notification screen of Countly Server to send push notifications.
  * @discussion If not set, Countly Server will use Production APNs by default.
  */
-@property (nonatomic) NSString* pushTestMode;
+@property (nonatomic, copy) CLYPushTestMode pushTestMode;
 
 /**
  * For sending push tokens to Countly Server even for users who have not granted permission to display notifications.
@@ -134,9 +177,9 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
 
 /**
  * For handling push notifications for macOS apps on launch.
- * @discussion Needs to be set in @c applicationDidFinishLaunching: method of macOS apps that uses @c CLYPushNotifications feature, in order to handle app launches by push notification click.
+ * @discussion Needs to be set in @c applicationDidFinishLaunching: method of macOS apps that use @c CLYPushNotifications feature, in order to handle app launches by push notification click.
  */
-@property (nonatomic) NSNotification* launchNotification;
+@property (nonatomic, copy) NSNotification* launchNotification;
 
 #pragma mark -
 
@@ -171,9 +214,10 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
 #pragma mark -
 
 /**
- * @discussion Custom or system generated device ID.
- * @discussion If not set, Identifier For Vendor (IDFV) will be used by default on iOS.
- * @discussion If not set, a random NSUUID will be used by default on watchOS, tvOS and macOS.
+ * @discussion Custom device ID.
+ * @discussion If not set, default device ID will be used.
+ * @discussion On iOS and tvOS, default device ID is Identifier For Vendor (IDFV).
+ * @discussion On watchOS and macOS, default device ID is a persistently stored random NSUUID string.
  * @discussion Once set, device ID will be stored persistently and will not change even if another device ID is set on next start, unless @c resetStoredDeviceID flag is set.
  */
 @property (nonatomic, copy) NSString* deviceID;
@@ -235,16 +279,25 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
 @property (nonatomic) BOOL manualSessionHandling;
 
 /**
- * For enabling automatic handling of Apple Watch related features.
- * @discussion If set, Apple Watch related features such as parent device matching, pairing status, and watch app installing status will be handled automatically. Required for using Countly on Apple Watch apps.
+ * For enabling automatic handling of Apple Watch related features for iOS apps with a watchOS counterpart app.
+ * @discussion If set on both iOS and watchOS app, Apple Watch related features such as parent device matching, pairing status, and watch app installing status will be handled automatically.
+ * @discussion This flag should not be set on independent watchOS apps.
  */
 @property (nonatomic) BOOL enableAppleWatch;
 
+#pragma mark -
+
 /**
- * For enabling campaign attribution.
- * @discussion If set, IDFA (Identifier For Advertising) will be sent with @c begin_session request, unless user has limited ad tracking.
+ * For specifying attribution ID (IDFA) for campaign attribution.
+ * @discussion If set, this attribution ID will be sent with all @c begin_session requests.
  */
-@property (nonatomic) BOOL enableAttribution;
+@property (nonatomic, copy) NSString* attributionID;
+
+/**
+ * @c enableAttribution property is deprecated. Please use @c recordAttributionID method instead.
+ * @discussion Using this property will have no effect.
+ */
+@property (nonatomic) BOOL enableAttribution DEPRECATED_MSG_ATTRIBUTE("Use 'attributionID' property instead!");
 
 #pragma mark -
 
@@ -252,7 +305,7 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
  * For using custom crash segmentation with @c CLYCrashReporting feature.
  * @discussion Crash segmentation should be an @c NSDictionary, with keys and values are both @c NSString's only.
  * @discussion Custom objects in crash segmentation will cause crash report not to be sent to Countly Server.
- * @discussion Nested values in crash segmentation will be ignored by Counly Server.
+ * @discussion Nested values in crash segmentation will be ignored by Countly Server.
  */
 @property (nonatomic, copy) NSDictionary<NSString *, NSString *>* crashSegmentation;
 
@@ -262,6 +315,46 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
  * @discussion If not set, it will be 100 by default.
  */
 @property (nonatomic) NSUInteger crashLogLimit;
+
+/**
+ * Regular expression used for filtering crash reports and preventing them from being sent to Countly Server.
+ * @discussion If a crash's name, description or any line of stack trace matches given regular expression, it will not be sent to Countly Server.
+ */
+@property (nonatomic, copy) NSRegularExpression* crashFilter;
+
+/**
+ * For using PLCrashReporter instead of default crash handling mechanism.
+ * @discussion If set, SDK will be using PLCrashReporter (1.x.x series) dependency for creating crash reports.
+ * @discussion PLCrashReporter option is available only for iOS apps.
+ * @discussion For more information about PLCrashReporter please see: https://github.com/microsoft/plcrashreporter
+ */
+@property (nonatomic) BOOL shouldUsePLCrashReporter;
+
+/**
+ * For using Mach type signal handler with PLCrashReporter.
+ * @discussion PLCrashReporter has two different signal handling implementations with different traits:
+ * @discussion 1) BSD: PLCrashReporterSignalHandlerTypeBSD
+ * @discussion 2) Mach: PLCrashReporterSignalHandlerTypeMach
+ * @discussion For more information about PLCrashReporter please see: https://github.com/microsoft/plcrashreporter
+ * @discussion By default, BSD type will be used.
+ */
+@property (nonatomic) BOOL shouldUseMachSignalHandler;
+
+/**
+ * Callback block to be executed when the app is launched again following a crash which is detected by PLCrashReporter on the previous session.
+ * @discussion It has an @c NSDictionary parameter that represents crash report object.
+ * @discussion If @c shouldUsePLCrashReporter flag is not set on initial config, it will never be executed.
+ */
+@property (nonatomic, copy) void (^crashOccuredOnPreviousSessionCallback)(NSDictionary * crashReport);
+
+/**
+ * Callback block to decide whether the crash report detected by PLCrashReporter should be sent to Countly Server or not.
+ * @discussion If not set, crash report will be sent to Countly Server by default.
+ * @discussion If set, crash report will be sent to Countly Server only if `YES` is returned.
+ * @discussion It has an @c NSDictionary parameter that represents crash report object.
+ * @discussion If @c shouldUsePLCrashReporter flag is not set on initial config, it will never be executed.
+ */
+@property (nonatomic, copy) BOOL (^shouldSendCrashReportCallback)(NSDictionary * crashReport);
 
 #pragma mark -
 
@@ -342,6 +435,13 @@ extern NSString* const CLYPushTestModeTestFlightOrAdHoc;
  */
 @property (nonatomic, copy) void (^remoteConfigCompletionHandler)(NSError * _Nullable error);
 
+#pragma mark -
+
+/**
+ * For enabling automatic performance monitoring.
+ * @discussion If set, Performance Monitoring feature will be started automatically on SDK start.
+ */
+@property (nonatomic) BOOL enablePerformanceMonitoring;
 NS_ASSUME_NONNULL_END
 
 @end

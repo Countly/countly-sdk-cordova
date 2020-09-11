@@ -10,7 +10,7 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.countly.demo"
     },
-    "countly-sdk-js": {
+    "countly-sdk-cordova": {
       "PACKAGE_NAME": "com.countly.demo"
     }
   },

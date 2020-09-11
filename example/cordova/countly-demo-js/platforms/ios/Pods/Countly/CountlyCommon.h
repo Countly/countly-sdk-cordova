@@ -20,6 +20,7 @@
 #import "CountlyConsentManager.h"
 #import "CountlyLocationManager.h"
 #import "CountlyRemoteConfig.h"
+#import "CountlyPerformanceMonitoring.h"
 
 #if DEBUG
 #define COUNTLY_LOG(fmt, ...) CountlyInternalLog(fmt, ##__VA_ARGS__)
@@ -27,34 +28,21 @@
 #define COUNTLY_LOG(...)
 #endif
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 #import <UIKit/UIKit.h>
-#ifndef COUNTLY_EXCLUDE_IDFA
-#import <AdSupport/ASIdentifierManager.h>
-#endif
 #import "WatchConnectivity/WatchConnectivity.h"
 #endif
 
-#if TARGET_OS_WATCH
+#if (TARGET_OS_WATCH)
 #import <WatchKit/WatchKit.h>
 #import "WatchConnectivity/WatchConnectivity.h"
 #endif
 
-#if TARGET_OS_TV
+#if (TARGET_OS_TV)
 #import <UIKit/UIKit.h>
-#ifndef COUNTLY_EXCLUDE_IDFA
-#import <AdSupport/ASIdentifierManager.h>
-#endif
-#endif
-
-#if TARGET_OS_OSX
-#import <AppKit/AppKit.h>
 #endif
 
 #import <objc/runtime.h>
-
-extern NSString* const kCountlySDKVersion;
-extern NSString* const kCountlySDKName;
 
 extern NSString* const kCountlyErrorDomain;
 
@@ -67,13 +55,17 @@ NS_ERROR_ENUM(kCountlyErrorDomain)
 
 @interface CountlyCommon : NSObject
 
+@property (nonatomic, copy) NSString* SDKVersion;
+@property (nonatomic, copy) NSString* SDKName;
+
 @property (nonatomic) BOOL hasStarted;
 @property (nonatomic) BOOL enableDebug;
 @property (nonatomic) BOOL enableAppleWatch;
-@property (nonatomic) BOOL enableAttribution;
+@property (nonatomic, copy) NSString* attributionID;
 @property (nonatomic) BOOL manualSessionHandling;
 
 void CountlyInternalLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
+void CountlyPrint(NSString *stringToPrint);
 
 + (instancetype)sharedInstance;
 - (NSInteger)hourOfDay;
@@ -91,11 +83,14 @@ void CountlyInternalLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 #endif
 
 - (void)startAppleWatchMatching;
-- (void)startAttribution;
+
+- (void)observeDeviceOrientationChanges;
+
+- (BOOL)hasStarted_;
 @end
 
 
-#if TARGET_OS_IOS
+#if (TARGET_OS_IOS)
 @interface CLYInternalViewController : UIViewController
 @end
 

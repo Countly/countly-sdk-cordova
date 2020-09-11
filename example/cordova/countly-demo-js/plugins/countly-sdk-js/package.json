@@ -1,17 +1,17 @@
 {
-  "name": "countly-sdk-js",
+  "name": "countly-sdk-cordova",
   "description": "Analytics.",
   "version": "20.4.0",
-  "homepage": "https://github.com/Countly/countly-sdk-js#readme",
+  "homepage": "https://github.com/Countly/countly-sdk-cordova#readme",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Countly/countly-sdk-js.git"
+    "url": "git://github.com/Countly/countly-sdk-cordova.git"
   },
   "bugs": {
-    "url": "https://github.com/Countly/countly-sdk-js/issues"
+    "url": "https://github.com/Countly/countly-sdk-cordova/issues"
   },
   "cordova": {
-    "id": "countly-sdk-js",
+    "id": "countly-sdk-cordova",
     "platforms": [
       "ios",
       "android"

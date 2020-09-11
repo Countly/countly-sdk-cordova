@@ -3,10 +3,7 @@ This application makes use of the following third party libraries:
 
 ## Countly
 
-COUNTLY MOBILE ANALYTICS COMMUNITY EDITION LICENSE
---------------------------------------------------
-
-Copyright (c) 2012, 2019 Countly
+Copyright (c) 2012, 2020 Countly
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
