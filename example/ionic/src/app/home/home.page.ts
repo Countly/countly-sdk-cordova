@@ -40,9 +40,9 @@ export class HomePage {
         Countly.enableApm(); // Enable APM features, which includes the recording of app start time.
         Countly.enableAttribution(); // Enable to measure your marketing campaign performance by attributing installs from specific campaigns.
         Countly.setRemoteConfigAutomaticDownload(function (r) {
-          alert("onSuccess : " + r)
+          console.log("[CountlyCordova] setRemoteConfigAutomaticDownload onSuccess : " + r);
         }, function (r) {
-          alert("onError : " + r);
+          console.log("[CountlyCordova] setRemoteConfigAutomaticDownload onError : " + r);
         }); // Set Automatic value download happens when the SDK is initiated or when the device ID is changed.
 
         Countly.init("https://try.count.ly", "YOUR_API_KEY").then((result) => {
@@ -52,7 +52,7 @@ export class HomePage {
           */
           Countly.pushTokenType(Countly.messagingMode.TEST); // Set messaging mode for push notifications
           Countly.onNotification(function (theNotification) {
-            alert(JSON.stringify(theNotification));
+            console.log("[CountlyCordova] onNotification : " + JSON.stringify(theNotification));
           }); // Set callback to receive push notifications
           Countly.askForNotificationPermission(); // This method will ask for permission, enables push notification and send push token to countly server.
 
@@ -83,7 +83,7 @@ export class HomePage {
   };
 
   setLocation = function () {
-    Countly.setLocation("28.006324", "-82.7166183");
+    Countly.setLocation("TR", "Istanbul", "41.0082,28.9784", "10.2.33.12");
   };
 
   event = function () {
@@ -289,21 +289,6 @@ export class HomePage {
     Countly.setLoggingEnabled(false);
   }
 
-  // testAndroidPush = function () {
-  //   Countly.sendPushToken({
-  //     "token": "1234567890",
-  //     "messagingMode": Countly.messagingMode.DEVELOPMENT
-  //   });;
-  // };
-
-  // testiOSPush = function () {
-  //   Countly.sendPushToken({
-  //     "token": "1234567890",
-  //     "messagingMode": Countly.messagingMode.DEVELOPMENT
-  //   });
-  // };
-
-
   sendPushToken = function () {
 
     var push = PushNotification.init({
@@ -317,7 +302,7 @@ export class HomePage {
     });
 
     push.on('registration', function (data) {
-      alert('Token received: ' + data.registrationId);
+      console.log('[CountlyCordova] Token received: ' + data.registrationId);
       Countly.sendPushToken({
         "token": data.registrationId,
         "messagingMode": Countly.messagingMode.DEVELOPMENT
@@ -325,7 +310,7 @@ export class HomePage {
     });
 
     push.on('notification', function (data) {
-      alert(JSON.stringify(data));
+      console.log("[CountlyCordova] notification : " + JSON.stringify(data));
     });
 
     push.on('error', function (e) {
@@ -414,7 +399,7 @@ export class HomePage {
   }
   askForStarRating = function () {
     Countly.askForStarRating(function (ratingResult) {
-      console.log(ratingResult);
+      console.log("[CountlyCordova] askForStarRating : " + ratingResult);
     });
   }
 
@@ -576,94 +561,94 @@ export class HomePage {
   // Remote config usage
   setRemoteConfigAutomaticDownload = function () {
     Countly.setRemoteConfigAutomaticDownload(function (r) {
-      alert(r)
+      console.log("[CountlyCordova] setRemoteConfigAutomaticDownload onSuccess : " + r);
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] setRemoteConfigAutomaticDownload onError : " + r);
     });
   }
   remoteConfigUpdate = function () {
     Countly.remoteConfigUpdate(function (r) {
-      alert(r)
+      console.log("[CountlyCordova] remoteConfigUpdate onSuccess : " + r);
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] remoteConfigUpdate onError : " + r);
     });
   }
   updateRemoteConfigForKeysOnly = function () {
     Countly.updateRemoteConfigForKeysOnly(["name"], function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigForKeysOnly onSuccess : " + r)
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigForKeysOnly onError : " + r);
     });
   }
   updateRemoteConfigExceptKeys = function () {
     Countly.updateRemoteConfigExceptKeys(["url"], function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigExceptKeys onSuccess : " + r)
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigExceptKeys onError : " + r);
     });
   }
   remoteConfigClearValues = function () {
     Countly.remoteConfigClearValues(function (r) {
-      alert(r)
+      console.log("[CountlyCordova] remoteConfigClearValues onSuccess : " + r)
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] remoteConfigClearValues onError : " + r);
     });
   }
   getRemoteConfigValueForKey = function () {
     Countly.getRemoteConfigValueForKey("name", function (r) {
-      alert(r)
+      console.log("[CountlyCordova] getRemoteConfigValueForKey onSuccess : " + r)
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] getRemoteConfigValueForKey onError : " + r);
     });
   }
 
   updateRemoteConfigForbooleanValueOnly = function () {
     Countly.getRemoteConfigValueForKey("booleanValue", function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigForbooleanValueOnly onSuccess : " + r)
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigForbooleanValueOnly onError : " + r);
     });
   }
   updateRemoteConfigForfloatValueOnly = function () {
     Countly.getRemoteConfigValueForKey("floatValue", function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigForfloatValueOnly onSuccess : " + r)
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigForfloatValueOnly onError : " + r);
     });
   }
   updateRemoteConfigForintegerValueOnly = function () {
     Countly.getRemoteConfigValueForKey("integerValue", function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigForintegerValueOnly onSuccess : " + r);
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigForintegerValueOnly onError : " + r);
     });
   }
   updateRemoteConfigForstringValueOnly = function () {
     Countly.getRemoteConfigValueForKey("stringValue", function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigForstringValueOnly onSuccess : " + r);
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigForstringValueOnly onError : " + r);
     });
   }
   updateRemoteConfigForjsonValueOnly = function () {
     Countly.getRemoteConfigValueForKey("jsonValue", function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigForjsonValueOnly onSuccess : " + r);
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigForjsonValueOnly onError : " + r);
     });
   }
   updateRemoteConfigForjsonStringValueOnly = function () {
     Countly.getRemoteConfigValueForKey("arrayStringValue", function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigForjsonStringValueOnly onSuccess : " + r);
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigForjsonStringValueOnly onError : " + r);
     });
   }
   updateRemoteConfigForjsonNumberValueOnly = function () {
     Countly.getRemoteConfigValueForKey("arrayNumberValue", function (r) {
-      alert(r)
+      console.log("[CountlyCordova] updateRemoteConfigForjsonNumberValueOnly onSuccess : " + r);
     }, function (r) {
-      alert(r);
+      console.log("[CountlyCordova] updateRemoteConfigForjsonNumberValueOnly onError : " + r);
     });
   }
 
