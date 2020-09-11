@@ -16,7 +16,7 @@
     "cordova-android": "^9.0.0",
     "cordova-ios": "^6.1.1",
     "cordova-support-google-services": "^1.4.0",
-    "countly-sdk-cordova": "git+https://github.com/Countly/countly-sdk-cordova.git#dev-junaid"
+    "countly-sdk-cordova": "git+https://github.com/Countly/countly-sdk-cordova.git"
   },
   "cordova": {
     "plugins": {

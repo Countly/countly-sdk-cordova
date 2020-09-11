@@ -18,7 +18,7 @@
   "countly-sdk-cordova": {
     "source": {
       "type": "registry",
-      "id": "https://github.com/Countly/countly-sdk-cordova.git#dev-junaid"
+      "id": "https://github.com/Countly/countly-sdk-cordova.git"
     },
     "is_top_level": true,
     "variables": {}
