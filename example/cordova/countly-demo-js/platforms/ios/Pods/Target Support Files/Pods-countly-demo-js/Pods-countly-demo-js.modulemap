@@ -1,6 +1,0 @@
-framework module Pods_countly_demo_js {
-  umbrella header "Pods-countly-demo-js-umbrella.h"
-
-  export *
-  module * { export * }
-}

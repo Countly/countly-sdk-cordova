@@ -1,6 +1,0 @@
-framework module Countly {
-  umbrella header "Countly-umbrella.h"
-
-  export *
-  module * { export * }
-}
