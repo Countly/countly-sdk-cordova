@@ -212,8 +212,14 @@ Countly.setLocationInit = function(countryCode, city, location, ipAddress){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocationInit",args);
 }
 
-Countly.setLocation = function(latitude, longitude){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",[latitude, longitude]);
+Countly.setLocation = function(latitude, longitude, countryCode, city, ipAddress){
+    var args = [];
+    var location  = latitude + " , " + longitude;
+    args.push(countryCode || "null");
+    args.push(city || "null");
+    args.push(location || "null");
+    args.push(ipAddress || "null");
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",args);
 }
 
 /** 

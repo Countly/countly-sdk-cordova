@@ -521,13 +521,41 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
     }else if ([@"setLocation" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        NSString* latitudeString = [command objectAtIndex:0];
-        NSString* longitudeString = [command objectAtIndex:1];
+        NSString* countryCode = [command objectAtIndex:0];
+        NSString* city = [command objectAtIndex:1];
+        NSString* locationString = [command objectAtIndex:2];
+        NSString* ipAddress = [command objectAtIndex:3];
 
-        double latitudeDouble = [latitudeString doubleValue];
-        double longitudeDouble = [longitudeString doubleValue];
+        if([@"null" isEqualToString:city]){
+            city = nil;
+        }
+        if([@"null" isEqualToString:countryCode]){
+            countryCode = nil;
+        }
+        if([@"null" isEqualToString:locationString]){
+            locationString = nil;
+        }
+        if([@"null" isEqualToString:ipAddress]){
+            ipAddress = nil;
+        }
 
-        config.location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
+        if(locationString != nil && [locationString containsString:@","]){
+            @try{
+                NSArray *locationArray = [locationString componentsSeparatedByString:@","];
+                NSString* latitudeString = [locationArray objectAtIndex:0];
+                NSString* longitudeString = [locationArray objectAtIndex:1];
+
+                double latitudeDouble = [latitudeString doubleValue];
+                double longitudeDouble = [longitudeString doubleValue];
+                [Countly.sharedInstance recordLocation:(CLLocationCoordinate2D){latitudeDouble,longitudeDouble}];
+            }
+            @catch(NSException *exception){
+                COUNTLY_CORDOVA_LOG(@"Invalid location: %@", locationString);
+            }
+        }
+
+        [Countly.sharedInstance recordCity:city andISOCountryCode:countryCode];
+        [Countly.sharedInstance recordIP:ipAddress];
 
         result(@"setLocation!");
         });
@@ -998,7 +1026,7 @@ void CountlyCordovaInternalLog(NSString *format, ...)
     va_start(args, format);
 
     NSString* logString = [NSString.alloc initWithFormat:format arguments:args];
-    NSLog(@"[CountlyCordova] %@", logString);
+    NSLog(@"[CountlyCordovaPlugin] %@", logString);
 
     va_end(args);
 }
