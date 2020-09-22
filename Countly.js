@@ -143,7 +143,7 @@ Countly.onNotification = function(callback){
 /**
  *
  * Set Push notification messaging mode
- * Should be call after Countly init
+ * Should be call before Countly init
  */
 Countly.pushTokenType = function(tokenType){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","pushTokenType",[tokenType]);
