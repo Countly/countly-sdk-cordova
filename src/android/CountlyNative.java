@@ -3,6 +3,7 @@ import ly.count.android.sdk.Countly;
 import ly.count.android.sdk.DeviceId;
 import ly.count.android.sdk.RemoteConfig;
 import ly.count.android.sdk.CountlyStarRating;
+import ly.count.android.sdk.ModuleFeedback.*;
 //import ly.count.android.sdk.DeviceInfo;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +73,10 @@ public class CountlyNative {
     }
     public interface Callback {
         void callback(String result);
+    }
+    public interface JSONObjectCallback {
+        void success(JSONObject result);
+        void error(String error);
     }
 
     public String init(JSONArray args){
@@ -881,6 +886,29 @@ public class CountlyNative {
         this.log("askForStarRating", args);
         Countly.sharedInstance().ratings().showStarRating(activity, null);
         return "askForStarRating success.";
+    }
+
+    public String getAvailableFeedbackWidgets(JSONArray args, final JSONObjectCallback theCallback){
+        try {
+            Countly.sharedInstance().feedback().getAvailableFeedbackWidgets(new RetrieveFeedbackWidgets() {
+                @Override
+                public void onFinished(List<CountlyPresentableFeedback> retrievedWidgets, String error) {
+                    if(error != null) {
+                        theCallback.error(error);
+                        return error;
+                    }
+                    JSONObject retrievedWidgetsMap = new JSONObject();
+                    for (CountlyPresentableFeedback presentableFeedback : retrievedWidgets) {
+                        retrievedWidgetsMap.put(presentableFeedback.type.name(), presentableFeedback.widgetId);
+                    }
+                    theCallback.success(retrievedWidgetsMap);
+                }
+            });
+            return "getAvailableFeedbackWidgets success.";
+        }catch (JSONException jsonException){
+            theCallback.error(jsonException.toString());
+            return jsonException.toString();
+        }
     }
 
     public String sendPushToken(JSONArray args){

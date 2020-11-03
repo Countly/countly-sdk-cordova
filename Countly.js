@@ -505,7 +505,12 @@ Countly.askForStarRating = function(callback){
 Countly.askForFeedback = function(widgetId, buttonText){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForFeedback",[widgetId, buttonText || ""]);
 }
-// FEEDBACK-WORK
+
+Countly.getAvailableFeedbackWidgets = function(){
+    return new Promise((resolve,reject) => {
+        cordova.exec(resolve,reject,"CountlyCordova","getAvailableFeedbackWidgets",[]);
+    });
+}
 
 // Push Notification
 Countly.sendPushToken = function(options){

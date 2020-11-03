@@ -226,6 +226,22 @@ public class CountlyCordova extends CordovaPlugin {
                 }
             });
         }
+        else if ("getAvailableFeedbackWidgets".equals(action)) {
+            countlyNative.getAvailableFeedbackWidgets(args, new CountlyNative.JSONObjectCallback() {
+                @Override
+                public void success(JSONObject result) {
+                    PluginResult pluginResult = new  PluginResult(PluginResult.Status.OK,
+                    result);
+                    pluginResult.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pluginResult);
+
+                }
+                @Override
+                public void error(String error) {
+                    callbackContext.error(result);
+                }
+            });
+        }
         else if("sendPushToken".equals(action)){
             callbackContext.success(countlyNative.sendPushToken(args));
         }
