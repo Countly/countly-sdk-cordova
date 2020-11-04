@@ -512,6 +512,18 @@ Countly.getAvailableFeedbackWidgets = function(){
     });
 }
 
+Countly.presentFeedbackWidget = function(widgetType, widgetId, buttonText){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","presentFeedbackWidget",[widgetId, widgetType, buttonText || ""]);
+}
+
+Countly.requestQueueEraseAppKeysRequests = function() {
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","requestQueueEraseAppKeysRequests",[]);
+}
+
+Countly.requestQueueOverwriteAppKeys = function() {
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","requestQueueOverwriteAppKeys",[]);
+}
+
 // Push Notification
 Countly.sendPushToken = function(options){
     var args = [];

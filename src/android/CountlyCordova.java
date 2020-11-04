@@ -10,6 +10,7 @@ import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -238,9 +239,23 @@ public class CountlyCordova extends CordovaPlugin {
                 }
                 @Override
                 public void error(String error) {
-                    callbackContext.error(result);
+                    callbackContext.error(error);
                 }
             });
+        }
+        else if("presentFeedbackWidget".equals(action)){
+            countlyNative.presentFeedbackWidget(args, new CountlyNative.Callback() {
+                @Override
+                public void callback(String result) {
+                    callbackContext.success(result);
+                }
+            });
+        }
+        else if("requestQueueOverwriteAppKeys".equals(action)){
+            callbackContext.success(countlyNative.requestQueueOverwriteAppKeys(args));
+        }
+        else if("requestQueueEraseAppKeysRequests".equals(action)){
+            callbackContext.success(countlyNative.requestQueueEraseAppKeysRequests(args));
         }
         else if("sendPushToken".equals(action)){
             callbackContext.success(countlyNative.sendPushToken(args));

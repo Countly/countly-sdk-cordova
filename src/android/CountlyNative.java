@@ -889,26 +889,69 @@ public class CountlyNative {
     }
 
     public String getAvailableFeedbackWidgets(JSONArray args, final JSONObjectCallback theCallback){
-        try {
-            Countly.sharedInstance().feedback().getAvailableFeedbackWidgets(new RetrieveFeedbackWidgets() {
-                @Override
-                public void onFinished(List<CountlyPresentableFeedback> retrievedWidgets, String error) {
-                    if(error != null) {
-                        theCallback.error(error);
-                        return error;
-                    }
-                    JSONObject retrievedWidgetsMap = new JSONObject();
-                    for (CountlyPresentableFeedback presentableFeedback : retrievedWidgets) {
-                        retrievedWidgetsMap.put(presentableFeedback.type.name(), presentableFeedback.widgetId);
-                    }
-                    theCallback.success(retrievedWidgetsMap);
+        Countly.sharedInstance().feedback().getAvailableFeedbackWidgets(new RetrieveFeedbackWidgets() {
+            @Override
+            public void onFinished(List<CountlyPresentableFeedback> retrievedWidgets, String error) {
+                if(error != null) {
+                    theCallback.error(error);
+//                        return error;
                 }
-            });
-            return "getAvailableFeedbackWidgets success.";
+                JSONObject retrievedWidgetsMap = new JSONObject();
+
+                for (CountlyPresentableFeedback presentableFeedback : retrievedWidgets) {
+                    try {
+                        retrievedWidgetsMap.put(presentableFeedback.type.name(), presentableFeedback.widgetId);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                theCallback.success(retrievedWidgetsMap);
+            }
+        });
+        return "getAvailableFeedbackWidgets success.";
+    }
+
+    public String presentFeedbackWidget(JSONArray args, final Callback theCallback){
+        if (activity == null) {
+            if(Countly.sharedInstance().isLoggingEnabled()) {
+                log("presentFeedbackWidget failed : Activity is null", LogLevel.ERROR);
+            }
+            theCallback.callback("presentFeedbackWidget Failed, Activity is null");
+            return;
+        }
+        try {
+            this.log("presentFeedbackWidget", args);
+            String widgetId = args.getString(0);
+            String widgetType = args.getString(1);
+            String closeButtonText = args.getString(2);
+            CountlyPresentableFeedback presentableFeedback = new CountlyPresentableFeedback();
+              presentableFeedback.widgetId = widgetId;
+              presentableFeedback.type = SurveyType.valueOf(widgetType);
+              Countly.sharedInstance().feedback().presentFeedbackWidget(presentableFeedback, activity, closeButtonText, new FeedbackCallback() {
+                  @Override
+                  public void onFinished(String error) {
+                      if(error != null) {
+                        theCallback.callback(error);
+                      }
+                      else {
+                        theCallback.callback("presentFeedbackWidget success");
+                      }
+                  }
+              });
+            return "presentFeedbackWidget: success";
         }catch (JSONException jsonException){
-            theCallback.error(jsonException.toString());
+            theCallback.callback(jsonException.toString());
             return jsonException.toString();
         }
+    }
+    
+
+    public void requestQueueOverwriteAppKeys(){
+        Countly.sharedInstance().requestQueueOverwriteAppKeys();
+    }
+
+    public void requestQueueEraseAppKeysRequests(){
+        Countly.sharedInstance().requestQueueEraseAppKeysRequests();
     }
 
     public String sendPushToken(JSONArray args){

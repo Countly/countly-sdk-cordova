@@ -133,6 +133,8 @@
         <!-- <button onclick="app.sendRating()" class="fluid ui button">Send 5 star rating!!</button> -->
         <button onclick="app.askForStarRating()" class="fluid ui button orange">Open rating modal</button>
         <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
+        <button onclick="app.showSurvey()" class="fluid ui button orange">Show Survey</button>
+        <button onclick="app.showNPS()" class="fluid ui button orange">Show NPS</button>
         <div class="ui horizontal divider">Rating Methods End</div>
 
         <div class="ui horizontal divider">Performance Methods Start</div>
@@ -183,13 +185,13 @@
                 }, function(r){
                     console.log("[CountlyCordova] onError : " + r);
                 }); // Set Automatic value download happens when the SDK is initiated or when the device ID is changed.
+                Countly.pushTokenType(Countly.messagingMode.TEST); // Set messaging mode for push notifications
                 
                 Countly.init("https://try.count.ly", "YOUR_API_KEY").then((result) => {
                     /** 
                      * Push notifications settings 
                      * Should be call after init
                     */
-                    Countly.pushTokenType(Countly.messagingMode.TEST); // Set messaging mode for push notifications
                     Countly.onNotification(function(theNotification){
                         console.log("[CountlyCordova] onNotification : " + JSON.stringify(theNotification));
                     }); // Set callback to receive push notifications
@@ -516,6 +518,28 @@
             console.log("[CountlyCordova] askForStarRating : " + ratingResult);
         });
     }
+
+    app.showSurvey = function(){
+        Countly.getAvailableFeedbackWidgets().then((retrivedWidgets) => {
+            if("survey" in retrivedWidgets) {
+                Countly.presentFeedbackWidget("survey", retrivedWidgets.survey, "Close")
+            }
+        },(err) => {
+            console.error("[CountlyCordova] getAvailableFeedbackWidgets error : " +err);
+        });
+    }
+
+    app.showNPS = function(){
+        Countly.getAvailableFeedbackWidgets().then((retrivedWidgets) => {
+            if("nps" in retrivedWidgets) {
+                Countly.presentFeedbackWidget("nps", retrivedWidgets.survey, "Cancel")
+            }
+        },(err) => {
+            console.error("[CountlyCordova] getAvailableFeedbackWidgets error : " +err);
+        });
+    }
+
+    
 
     app.addCrashLog = function() {
         Countly.enableCrashReporting();
