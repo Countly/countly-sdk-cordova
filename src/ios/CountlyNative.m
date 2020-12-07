@@ -416,8 +416,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     else if ([@"getDeviceIdAuthor" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-            NSString *value = @"Not implemented for iOS";
-            result(value);
+            id value = [Countly.sharedInstance deviceIDType];
+            if(value){
+                callback(@[value]);
+            }
+            else{
+                NSString *value = @"deviceIDAuthorNotFound";
+                callback(@[value]);
+            }
         });
     }else if ([@"changeDeviceId" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
