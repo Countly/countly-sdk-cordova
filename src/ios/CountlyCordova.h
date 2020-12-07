@@ -67,8 +67,14 @@
 - (void)remoteConfigClearValues:(CDVInvokedUrlCommand*)command;
 - (void)getRemoteConfigValueForKey:(CDVInvokedUrlCommand*)command;
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command;
+- (void)setStarRatingDialogTexts:(CDVInvokedUrlCommand*)command;
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command;
+- (void)getAvailableFeedbackWidgets:(CDVInvokedUrlCommand*)command;
+- (void)presentFeedbackWidget:(CDVInvokedUrlCommand*)command;
+- (void)replaceAllAppKeysInQueueWithCurrentAppKey:(CDVInvokedUrlCommand*)command;
+- (void)removeDifferentAppKeysFromQueue:(CDVInvokedUrlCommand*)command;
 - (void)enableAttribution:(CDVInvokedUrlCommand*)command;
+- (void)recordAttributionID:(CDVInvokedUrlCommand*)command;
 
 - (void)startTrace:(CDVInvokedUrlCommand*)command;
 - (void)cancelTrace:(CDVInvokedUrlCommand*)command;

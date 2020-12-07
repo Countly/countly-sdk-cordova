@@ -215,6 +215,9 @@ public class CountlyCordova extends CordovaPlugin {
         else if("getRemoteConfigValueForKey".equals(action)){
             callbackContext.success(countlyNative.getRemoteConfigValueForKey(args));
         }
+        else if("setStarRatingDialogTexts".equals(action)){
+            callbackContext.success(countlyNative.setStarRatingDialogTexts(args));
+        }
         else if("askForStarRating".equals(action)){
             callbackContext.success(countlyNative.askForStarRating(args));
         }
@@ -225,6 +228,38 @@ public class CountlyCordova extends CordovaPlugin {
                     callbackContext.success(result);
                 }
             });
+        }
+        else if ("getAvailableFeedbackWidgets".equals(action)) {
+            countlyNative.getAvailableFeedbackWidgets(args, new CountlyNative.JSONObjectCallback() {
+                @Override
+                public void success(JSONObject result) {
+                    PluginResult pluginResult = new  PluginResult(PluginResult.Status.OK,
+                    result);
+                    pluginResult.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pluginResult);
+
+                }
+                @Override
+                public void error(String error) {
+                    callbackContext.error(error);
+                }
+            });
+        }
+        else if("presentFeedbackWidget".equals(action)){
+            countlyNative.presentFeedbackWidget(args, new CountlyNative.Callback() {
+                @Override
+                public void callback(String result) {
+                    callbackContext.success(result);
+                }
+            });
+        }
+        else if("replaceAllAppKeysInQueueWithCurrentAppKey".equals(action)){
+            countlyNative.replaceAllAppKeysInQueueWithCurrentAppKey();
+            callbackContext.success("replaceAllAppKeysInQueueWithCurrentAppKey : Success");
+        }
+        else if("removeDifferentAppKeysFromQueue".equals(action)){
+            countlyNative.removeDifferentAppKeysFromQueue();
+            callbackContext.success("removeDifferentAppKeysFromQueue : Success");
         }
         else if("sendPushToken".equals(action)){
             callbackContext.success(countlyNative.sendPushToken(args));

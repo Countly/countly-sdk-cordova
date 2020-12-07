@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.version = "20.04";
+Countly.version = "20.11.0";
 Countly.isDebug = false;
 var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 if (/android/i.test(userAgent)) {
@@ -496,6 +496,20 @@ Countly.rating = {
 //     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendRating",[rating.toString()]);
 // }
 
+/**
+ * Set's the text's for the different fields in the star rating dialog. Set value null if for some field you want to keep the old value
+ * 
+ * @param {String} starRatingTextTitle - dialog's title text (Only for Android)
+ * @param {String} starRatingTextMessage - dialog's message text 
+ * @param {String} starRatingTextDismiss - dialog's dismiss buttons text (Only for Android)
+ */
+Countly.setStarRatingDialogTexts = function(starRatingTextTitle, starRatingTextMessage, starRatingTextDismiss){
+    var args = [];
+    args.push(starRatingTextTitle);
+    args.push(starRatingTextMessage);
+    args.push(starRatingTextDismiss);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setStarRatingDialogTexts",args);
+}
 // ui related methods
 // opens the modal
 Countly.askForStarRating = function(callback){
@@ -505,7 +519,44 @@ Countly.askForStarRating = function(callback){
 Countly.askForFeedback = function(widgetId, buttonText){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForFeedback",[widgetId, buttonText || ""]);
 }
-// FEEDBACK-WORK
+
+/**
+ * Get a list of available feedback widgets for this device ID
+ */
+Countly.getAvailableFeedbackWidgets = function(){
+    return new Promise((resolve,reject) => {
+        cordova.exec(resolve,reject,"CountlyCordova","getAvailableFeedbackWidgets",[]);
+    });
+}
+
+/**
+ * Present a chosen feedback widget
+ * 
+ * @param {String} widgetType - type of widget : "nps" or "survey"
+ * @param {String} widgetId - id of widget to present
+ * @param {String} closeButtonText - text for cancel/close button
+ */ 
+Countly.presentFeedbackWidget = function(widgetType, widgetId, buttonText){
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","presentFeedbackWidget",[widgetId, widgetType, buttonText || ""]);
+}
+
+/**
+ * Replaces all requests with a different app key with the current app key.
+ * In request queue, if there are any request whose app key is different than the current app key,
+ * these requests' app key will be replaced with the current app key.
+ */
+Countly.replaceAllAppKeysInQueueWithCurrentAppKey = function() {
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","replaceAllAppKeysInQueueWithCurrentAppKey",[]);
+}
+
+/**
+ * Removes all requests with a different app key in request queue.
+ * In request queue, if there are any request whose app key is different than the current app key,
+ * these requests will be removed from request queue.
+ */
+Countly.removeDifferentAppKeysFromQueue = function() {
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeDifferentAppKeysFromQueue",[]);
+}
 
 // Push Notification
 Countly.sendPushToken = function(options){
@@ -527,10 +578,35 @@ Countly.setHttpPostForced = function(boolean){
 /**
  *
  * Enable campaign attribution reporting to Countly.
+ * For iOS use "recordAttributionID" instead of "enableAttribution"
  * Should be call before Countly init
  */
-Countly.enableAttribution = function() {
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableAttribution",[]);
+Countly.enableAttribution = function(attributionID = "") {
+    if (Countly.isiOS) {
+        if(attributionID == "") {
+            if(Countly.isDebug){
+                console.error("[CountlyReactNative] enableAttribution, attribution Id for iOS can't be empty string");
+            }
+            return "attribution Id for iOS can't be empty string";
+        }
+        Countly.recordAttributionID(attributionID);
+    }
+    else {
+        cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableAttribution",[]);
+    }
+}
+
+/**
+ * 
+ * set attribution Id for campaign attribution reporting.
+ * Currently implemented for iOS only
+ * For Android just call the enableAttribution to enable campaign attribution.
+ */
+Countly.recordAttributionID = function(attributionID){
+    if (!Countly.isiOS) return "recordAttributionID : To be implemented";
+    var args = [];
+    args.push(attributionID);
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordAttributionID",args);
 }
 
 Countly.startTrace = function(traceKey){

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="countly-sdk-cordova" version="20.4.0">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="countly-sdk-cordova" version="20.11.0">
 
   <name>Countly</name>
 
@@ -49,7 +49,7 @@
         <source url="https://github.com/CocoaPods/Specs.git"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="Countly" version="20.04.3"/>
+        <pod name="CountlyPod" version="20.11.0"/>
       </pods>
     </podspec>
     <!-- Push notification -->
@@ -92,7 +92,7 @@
 
     <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/CountlyNative.java" target-dir="src/ly/count/android/sdk"/>
-    <framework src="ly.count.android:sdk:20.04.5" />
+    <framework src="ly.count.android:sdk:20.11.1" />
 
     <!-- Push notification -->
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -102,8 +102,8 @@
             </intent-filter>
         </service>
     </config-file>
-    <dependency id="cordova-support-google-services" version="~1.4.0"/>
-    <framework src="com.google.firebase:firebase-messaging:20.1.7" />
+    <!-- <dependency id="cordova-support-google-services" version="~1.4.0"/> -->
+    <framework src="com.google.firebase:firebase-messaging:18.+" />
     <source-file src="src/android/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk"/>
   </platform>
 

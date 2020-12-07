@@ -695,6 +695,18 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
+- (void)setStarRatingDialogTexts:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"setStarRatingDialogTexts" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
@@ -707,12 +719,72 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
+- (void)getAvailableFeedbackWidgets:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"getAvailableFeedbackWidgets" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
+- (void)presentFeedbackWidget:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"presentFeedbackWidget" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
+- (void)replaceAllAppKeysInQueueWithCurrentAppKey:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"replaceAllAppKeysInQueueWithCurrentAppKey" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
+- (void)removeDifferentAppKeysFromQueue:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"removeDifferentAppKeysFromQueue" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
 - (void)enableAttribution:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
         countlyNative = CountlyNative.new;
     }
     [countlyNative onCall: @"enableAttribution" commandString: command.arguments callback: ^(NSString * theResult)
+     {
+         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
+- (void)recordAttributionID:(CDVInvokedUrlCommand*)command
+{
+    if(countlyNative == nil){
+        countlyNative = CountlyNative.new;
+    }
+    [countlyNative onCall: @"recordAttributionID" commandString: command.arguments callback: ^(NSString * theResult)
      {
          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
