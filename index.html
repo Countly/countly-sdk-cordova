@@ -22,7 +22,6 @@
     <div class="app">
         <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
         <img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
-        <button onclick="app.init()" class="fluid ui green button">Init</button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
         <button onclick="app.halt()" class="fluid ui red button">Halt</button>
@@ -150,6 +149,7 @@
             Countly.onNotification(function(theNotification){
                 console.log("[CountlyCordova] onNotification : " + JSON.stringify(theNotification));
             });
+            app.init();
         });
     app = {};
     function makeid() {
@@ -185,6 +185,7 @@
                 }); // Set Automatic value download happens when the SDK is initiated or when the device ID is changed.
                 
                 Countly.init("https://try.count.ly", "YOUR_API_KEY").then((result) => {
+                    Countly.appLoadingFinished();
                     /** 
                      * Push notifications settings 
                      * Should be call after init
