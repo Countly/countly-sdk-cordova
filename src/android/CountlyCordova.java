@@ -24,12 +24,23 @@ public class CountlyCordova extends CordovaPlugin {
         TEST,
         PRODUCTION,
     }
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
         Context context = this.cordova.getActivity().getApplicationContext();
         if(countlyNative == null){
             countlyNative = new CountlyNative( this.cordova.getActivity(), this.cordova.getActivity().getApplicationContext());
         }
+    }
 
+    @Override
+    public void pluginInitialize() {
+
+    }
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        Context context = this.cordova.getActivity().getApplicationContext();
+        
         if ("init".equals(action)) {
             callbackContext.success(countlyNative.init(args));
         }
@@ -226,6 +237,9 @@ public class CountlyCordova extends CordovaPlugin {
                 }
             });
         }
+        else if("appLoadingFinished".equals(action)){
+            callbackContext.success(countlyNative.appLoadingFinished(args));
+        }
         else if("sendPushToken".equals(action)){
             callbackContext.success(countlyNative.sendPushToken(args));
         }
@@ -256,4 +270,20 @@ public class CountlyCordova extends CordovaPlugin {
         return true;
   }
 
+    @Override
+    public void onResume(boolean multitasking) {
+        super.onResume(multitasking);
+        countlyNative.onHostResume();
+    }
+
+    @Override
+    public void onPause(boolean multitasking) {
+        super.onPause(multitasking);
+        countlyNative.onHostPause();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }
