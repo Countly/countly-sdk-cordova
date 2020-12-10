@@ -30,6 +30,7 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.FirebaseApp;
+import ly.count.android.sdk.ModuleFeedback.*;
 
 
 public class CountlyNative {
@@ -76,6 +77,11 @@ public class CountlyNative {
     public interface Callback {
         void callback(String result);
     }
+    public interface JSONObjectCallback {
+        void error(String result);
+        void success(JSONObject result);
+    }
+
 
     public String init(JSONArray args){
         try {
@@ -904,7 +910,6 @@ public class CountlyNative {
             public void onFinished(List<CountlyFeedbackWidget> retrievedWidgets, String error) {
                 if(error != null) {
                     theCallback.error(error);
-//                        return error;
                 }
                 JSONObject retrievedWidgetsMap = new JSONObject();
 

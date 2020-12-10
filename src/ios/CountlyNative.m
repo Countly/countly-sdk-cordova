@@ -418,11 +418,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         dispatch_async(dispatch_get_main_queue(), ^ {
             id value = [Countly.sharedInstance deviceIDType];
             if(value){
-                callback(@[value]);
+                result(@[value]);
             }
             else{
                 NSString *value = @"deviceIDAuthorNotFound";
-                callback(@[value]);
+                result(@[value]);
             }
         });
     }else if ([@"changeDeviceId" isEqualToString:method]) {

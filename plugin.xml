@@ -49,7 +49,7 @@
         <source url="https://github.com/CocoaPods/Specs.git"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="CountlyPod" version="20.11.0"/>
+        <pod name="CountlyPod" version="20.11.1"/>
       </pods>
     </podspec>
     <!-- Push notification -->
@@ -102,8 +102,8 @@
             </intent-filter>
         </service>
     </config-file>
-    <!-- <dependency id="cordova-support-google-services" version="~1.4.0"/> -->
-    <framework src="com.google.firebase:firebase-messaging:18.+" />
+    <!-- if any version higher than 18.0.0 is used then it forces AndroidX -->
+    <framework src="com.google.firebase:firebase-messaging:18.0.0" />
     <source-file src="src/android/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk"/>
   </platform>
 
