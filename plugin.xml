@@ -102,6 +102,11 @@
             </intent-filter>
         </service>
     </config-file>
+    <!-- Android Broadcast vulnerability fix-->>
+     <config-file target="AndroidManifest.xml" parent="/manifest">
+        <uses-permission android:name="${applicationId}.CountlyPush.BROADCAST_PERMISSION" />
+        <permission android:name="${applicationId}.CountlyPush.BROADCAST_PERMISSION" android:protectionLevel="signature" />
+    </config-file>
     <dependency id="cordova-support-google-services" version="~1.4.0"/>
     <framework src="com.google.firebase:firebase-messaging:20.1.7" />
     <source-file src="src/android/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk"/>
