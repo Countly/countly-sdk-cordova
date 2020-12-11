@@ -18,7 +18,7 @@
     <title>Countly Cordova Demo App</title>
 </head>
 
-<body>
+<body onload="onBodyLoad()">
     <div class="app">
         <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
         <img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
@@ -144,13 +144,18 @@
 
     </div>
     <script type="text/javascript">
-        document.addEventListener("deviceready", function(){
+        function onBodyLoad() {
+            console.log("[CountlyCordova] onBodyLoad");
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+        
+        function onDeviceReady() {
             console.log("[CountlyCordova] deviceready");
             Countly.onNotification(function(theNotification){
                 console.log("[CountlyCordova] onNotification : " + JSON.stringify(theNotification));
             });
             app.init();
-        });
+        }
     app = {};
     function makeid() {
         var text = "";
