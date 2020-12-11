@@ -75,6 +75,8 @@
       <feature name="CountlyCordova">
         <param name="android-package" value="ly.count.android.sdk.CountlyCordova" />
       </feature>
+      <preference name="GradlePluginGoogleServicesEnabled" value="true" />
+      <preference name="GradlePluginGoogleServicesVersion" value="4.2.0" />
     </config-file>
 
     <config-file target="AndroidManifest.xml" parent="/manifest">
