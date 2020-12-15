@@ -46,6 +46,7 @@ public class CountlyNative {
     private CountlyConfig config = new CountlyConfig();
     private static Callback notificationListener = null;
     private static String lastStoredNotification = null;
+
     private final Set<String> validConsentFeatureNames = new HashSet<String>(Arrays.asList(
             Countly.CountlyFeatureNames.sessions,
             Countly.CountlyFeatureNames.events,
@@ -63,6 +64,9 @@ public class CountlyNative {
     public CountlyNative(Activity _activity, Context _context){
         this.activity = _activity;
         this.context = _context;
+        Countly.sharedInstance();
+        this.config.enableManualAppLoadedTrigger();
+        this.config.enableManualForegroundBackgroundTriggerAPM();
     }
     public static void onNotification(Map<String, String>  notification){
         JSONObject json = new JSONObject(notification);
@@ -113,6 +117,8 @@ public class CountlyNative {
                 this.config.setApplication(activity.getApplication());
             }
             Countly.sharedInstance().init(this.config);
+            Countly.sharedInstance().apm().triggerForeground();
+
             return "initialized: success";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -904,6 +910,11 @@ public class CountlyNative {
         return "askForStarRating success.";
     }
 
+    public String appLoadingFinished(JSONArray args){
+        this.log("appLoadingFinished", args);
+        Countly.sharedInstance().apm().setAppIsLoaded();
+        return "appLoadingFinished success!";
+    }
     public String getFeedbackWidgets(JSONArray args, final JSONObjectCallback theCallback){
         Countly.sharedInstance().feedback().getAvailableFeedbackWidgets(new RetrieveFeedbackWidgets() {
             @Override
@@ -1066,7 +1077,7 @@ public class CountlyNative {
 
     public String enableApm(JSONArray args){
         this.log("enableApm", args);
-        this.config.setRecordAppStartTime(false);
+        this.config.setRecordAppStartTime(true);
         return "enableApm success.";
     }
 
@@ -1095,6 +1106,18 @@ public class CountlyNative {
             case VERBOSE:
                 Log.v(TAG, message, tr);
                 break;
+        }
+    }
+
+    public void onHostResume() {
+        if(Countly.sharedInstance().isInitialized()) {
+            Countly.sharedInstance().apm().triggerForeground();
+        }
+    }
+
+    public void onHostPause() {
+        if(Countly.sharedInstance().isInitialized()) {
+            Countly.sharedInstance().apm().triggerBackground();
         }
     }
 

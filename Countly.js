@@ -4,12 +4,11 @@ Countly.appKey = "";
 Countly.ready = false;
 Countly.version = "20.11.0";
 Countly.isDebug = false;
-var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-if (/android/i.test(userAgent)) {
+if (window.cordova.platformId == "android") {
     Countly.isAndroid = true;
     Countly.messagingMode = {"TEST": "2", "PRODUCTION": "0"};
 }
-if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+if (window.cordova.platformId == "ios") {
     Countly.isiOS = true;
     Countly.messagingMode = {"TEST": "1", "PRODUCTION": "0", "ADHOC": "2"};
 }
@@ -518,6 +517,22 @@ Countly.askForStarRating = function(callback){
 
 Countly.askForFeedback = function(widgetId, buttonText){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForFeedback",[widgetId, buttonText || ""]);
+}
+
+// Call this function when app is loaded, so that the app launch duration can be recorded.
+// Should be call after init.
+Countly.appLoadingFinished = async function(){
+    Countly.isInitialized().then((result) => {
+    if(result != "true") {
+        if(Countly.isDebug){
+            console.warn('[CountlyCordova] appLoadingFinished, init must be called before appLoadingFinished');
+        }
+        return;
+    }
+    },(err) => {
+        console.error(err);
+    });
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","appLoadingFinished",[]);
 }
 
 /**

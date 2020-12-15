@@ -82,5 +82,6 @@
 - (void)endTrace:(CDVInvokedUrlCommand*)command;
 - (void)recordNetworkTrace:(CDVInvokedUrlCommand*)command;
 - (void)enableApm:(CDVInvokedUrlCommand*)command;
+- (void)appLoadingFinished:(CDVInvokedUrlCommand*)command;
 
 @end

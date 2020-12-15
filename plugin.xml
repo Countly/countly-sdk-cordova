@@ -74,6 +74,7 @@
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="CountlyCordova">
         <param name="android-package" value="ly.count.android.sdk.CountlyCordova" />
+        <param name="onload" value="true" />
       </feature>
       <preference name="GradlePluginGoogleServicesEnabled" value="true" />
       <preference name="GradlePluginGoogleServicesVersion" value="4.2.0" />

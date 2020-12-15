@@ -18,11 +18,10 @@
     <title>Countly Cordova Demo App</title>
 </head>
 
-<body>
+<body onload="onBodyLoad()">
     <div class="app">
         <h1 class="ui center aligned header">Countly Cordova Demo App</h1>
         <img class="ui centered medium image" src="http://try.count.ly/images/dashboard/countly_logo.svg">
-        <button onclick="app.init()" class="fluid ui green button">Init</button>
         <button onclick="app.start()" class="fluid ui green button">Start</button>
         <button onclick="app.stop()" class="fluid ui red button">Stop</button>
         <button onclick="app.halt()" class="fluid ui red button">Halt</button>
@@ -147,12 +146,18 @@
 
     </div>
     <script type="text/javascript">
-        document.addEventListener("deviceready", function(){
+        function onBodyLoad() {
+            console.log("[CountlyCordova] onBodyLoad");
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+        
+        function onDeviceReady() {
             console.log("[CountlyCordova] deviceready");
             Countly.onNotification(function(theNotification){
                 console.log("[CountlyCordova] onNotification : " + JSON.stringify(theNotification));
             });
-        });
+            app.init();
+        }
     app = {};
     function makeid() {
         var text = "";
@@ -188,6 +193,7 @@
                 Countly.pushTokenType(Countly.messagingMode.TEST); // Set messaging mode for push notifications
                 
                 Countly.init("https://try.count.ly", "YOUR_API_KEY").then((result) => {
+                    Countly.appLoadingFinished();
                 Countly.setStarRatingDialogTexts("Title", "Message", "Dismiss");
                     /** 
                      * Push notifications settings 

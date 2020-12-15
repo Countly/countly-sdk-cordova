@@ -1042,6 +1042,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         config.enablePerformanceMonitoring = YES;
         result(@"enableApm!");
 
+    }else if ([@"appLoadingFinished" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [Countly.sharedInstance appLoadingFinished];
+        });
+        result(@"appLoadingFinished!");
+
     } else {
         COUNTLY_CORDOVA_LOG(@"Countly Bridge Method Not Implemented %@", method);
         result(@"Countly Bridge Method Not Implemented");
