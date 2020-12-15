@@ -533,7 +533,8 @@ Countly.appLoadingFinished = async function(){
         console.error(err);
     });
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","appLoadingFinished",[]);
-  
+}
+
 /**
  * Get a list of available feedback widgets for this device ID
  */
