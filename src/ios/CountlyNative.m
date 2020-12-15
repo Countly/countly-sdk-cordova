@@ -18,10 +18,14 @@ NSMutableArray *notificationIDs = nil;        // alloc here
 NSMutableArray<CLYFeature>* countlyFeatures = nil;
 Boolean isInitialized = false;
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
-NSArray *consents = nil;
 
-NSString* const kCountlyCordovaSDKVersion = @"20.4.0";
+NSString* const kCountlyCordovaSDKVersion = @"20.11.0";
 NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
+
+@interface CountlyFeedbackWidget ()
++ (CountlyFeedbackWidget *)createWithDictionary:(NSDictionary *)dictionary;
+@end
+
 @interface CountlyCommon
 - (CountlyCommon *)sharedInstance;
 - (void)setSDKName:(NSString *)SDKName;
@@ -284,9 +288,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             dispatch_async(dispatch_get_main_queue(), ^ {
             isInitialized = true;
             [[Countly sharedInstance] startWithConfig:config];
-            if(consents != nil) {
-                [Countly.sharedInstance giveConsentForFeatures:consents];
-            }
             [self recordPushAction];
             });
             result(@"initialized.");
@@ -415,8 +416,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     else if ([@"getDeviceIdAuthor" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-            NSString *value = @"Not implemented for iOS";
-            result(value);
+            id value = [Countly.sharedInstance deviceIDType];
+            if(value){
+                result(@[value]);
+            }
+            else{
+                NSString *value = @"deviceIDAuthorNotFound";
+                result(@[value]);
+            }
         });
     }else if ([@"changeDeviceId" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
@@ -750,7 +757,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
     }else if ([@"giveConsentInit" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        consents = command;
+        config.consents = command;
         result(@"giveConsentInit!");
         });
 
@@ -917,17 +924,63 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }];
         });
 
+    }else if ([@"setStarRatingDialogTexts" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            NSString* starRatingTextMessage = [command objectAtIndex:1];
+            config.starRatingMessage = starRatingTextMessage;
+        });
     }else if ([@"askForStarRating" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
             [Countly.sharedInstance askForStarRating:^(NSInteger rating){
                 result([NSString stringWithFormat: @"Rating:%d", (int)rating]);
             }];
         });
+    }else if ([@"getFeedbackWidgets" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [Countly.sharedInstance getFeedbackWidgets:^(NSArray<CountlyFeedbackWidget *> * _Nonnull feedbackWidgets, NSError * _Nonnull error) {
+                NSMutableArray* feedbackWidgetsArray = [NSMutableArray arrayWithCapacity:feedbackWidgets.count];
+                for (CountlyFeedbackWidget* retrievedWidget in feedbackWidgets) {
+                    NSMutableDictionary* feedbackWidget = [NSMutableDictionary dictionaryWithCapacity:3];
+                    feedbackWidget[@"id"] = retrievedWidget.ID;
+                    feedbackWidget[@"type"] = retrievedWidget.type;
+                    feedbackWidget[@"name"] = retrievedWidget.name;
+                    [feedbackWidgetsArray addObject:feedbackWidget];
+                }
+                result(feedbackWidgetsArray);
+            }];
+        });
+    }else if ([@"presentFeedbackWidget" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            NSString* widgetId = [command objectAtIndex:0];
+            NSString* widgetType = [command objectAtIndex:1];
+            NSMutableDictionary* feedbackWidgetsDict = [NSMutableDictionary dictionaryWithCapacity:3];
+            
+            feedbackWidgetsDict[@"_id"] = widgetId;
+            feedbackWidgetsDict[@"type"] = widgetType;
+            feedbackWidgetsDict[@"name"] = widgetType;
+            CountlyFeedbackWidget *feedback = [CountlyFeedbackWidget createWithDictionary:feedbackWidgetsDict];
+            [feedback present];
+        });
+    }else if ([@"replaceAllAppKeysInQueueWithCurrentAppKey" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [Countly.sharedInstance replaceAllAppKeysInQueueWithCurrentAppKey];
+        });
+    }else if ([@"removeDifferentAppKeysFromQueue" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [Countly.sharedInstance removeDifferentAppKeysFromQueue];
+        });
     }else if ([@"getPlatformVersion" isEqualToString:method]) {
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
     }else if ([@"enableAttribution" isEqualToString:method]) {
         config.enableAttribution = YES;
         result(@"enableAttribution");
+    }else if ([@"recordAttributionID" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+        NSString* attributionID = [command objectAtIndex:0];
+        [Countly.sharedInstance recordAttributionID: attributionID];
+        });
+        result(@"recordAttributionID!");
+
     }else if ([@"startTrace" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* traceKey = [command objectAtIndex:0];
