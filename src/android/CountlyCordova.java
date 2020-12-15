@@ -230,10 +230,10 @@ public class CountlyCordova extends CordovaPlugin {
                 }
             });
         }
-        else if ("getAvailableFeedbackWidgets".equals(action)) {
-            countlyNative.getAvailableFeedbackWidgets(args, new CountlyNative.JSONObjectCallback() {
+        else if ("getFeedbackWidgets".equals(action)) {
+            countlyNative.getFeedbackWidgets(args, new CountlyNative.JSONObjectCallback() {
                 @Override
-                public void success(JSONObject result) {
+                public void success(JSONArray result) {
                     PluginResult pluginResult = new  PluginResult(PluginResult.Status.OK,
                     result);
                     pluginResult.setKeepCallback(true);

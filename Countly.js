@@ -523,21 +523,42 @@ Countly.askForFeedback = function(widgetId, buttonText){
 /**
  * Get a list of available feedback widgets for this device ID
  */
-Countly.getAvailableFeedbackWidgets = function(){
+Countly.getFeedbackWidgets = function(){
     return new Promise((resolve,reject) => {
-        cordova.exec(resolve,reject,"CountlyCordova","getAvailableFeedbackWidgets",[]);
+        cordova.exec(resolve,reject,"CountlyCordova","getFeedbackWidgets",[]);
     });
 }
 
 /**
  * Present a chosen feedback widget
  * 
- * @param {String} widgetType - type of widget : "nps" or "survey"
- * @param {String} widgetId - id of widget to present
+ * @param {Object} feedbackWidget - feeback Widget with id, type and name
  * @param {String} closeButtonText - text for cancel/close button
  */ 
-Countly.presentFeedbackWidget = function(widgetType, widgetId, buttonText){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","presentFeedbackWidget",[widgetId, widgetType, buttonText || ""]);
+Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
+    if(!feedbackWidget) {
+        if(Countly.isDebug) {
+            console.error("[CountlyCordova] presentFeedbackWidget, feedbackWidget should not be null or undefined");
+        }
+        return "feedbackWidget should not be null or undefined";
+    }
+    if(!feedbackWidget.id) {
+        if(Countly.isDebug){
+            console.error("[CountlyCordova] presentFeedbackWidget, feedbackWidget id should not be null or empty");
+        }
+        return "FeedbackWidget id should not be null or empty";
+    }
+    if(!feedbackWidget.type) {
+        if(Countly.isDebug){
+            console.error("[CountlyCordova] presentFeedbackWidget, feedbackWidget type should not be null or empty");
+        }
+        return "FeedbackWidget type should not be null or empty";
+    }
+    var widgetId = feedbackWidget.id;
+    var widgetType = feedbackWidget.type;
+    var widgetName = feedbackWidget.name || "";
+    buttonText = buttonText || "";
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","presentFeedbackWidget",[widgetId, widgetType, widgetName, buttonText]);
 }
 
 /**

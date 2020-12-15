@@ -79,7 +79,7 @@ public class CountlyNative {
     }
     public interface JSONObjectCallback {
         void error(String result);
-        void success(JSONObject result);
+        void success(JSONArray result);
     }
 
 
@@ -904,23 +904,28 @@ public class CountlyNative {
         return "askForStarRating success.";
     }
 
-    public String getAvailableFeedbackWidgets(JSONArray args, final JSONObjectCallback theCallback){
+    public String getFeedbackWidgets(JSONArray args, final JSONObjectCallback theCallback){
         Countly.sharedInstance().feedback().getAvailableFeedbackWidgets(new RetrieveFeedbackWidgets() {
             @Override
             public void onFinished(List<CountlyFeedbackWidget> retrievedWidgets, String error) {
                 if(error != null) {
                     theCallback.error(error);
                 }
-                JSONObject retrievedWidgetsMap = new JSONObject();
 
+                JSONArray retrievedWidgetsArray = new JSONArray();
                 for (CountlyFeedbackWidget presentableFeedback : retrievedWidgets) {
                     try {
-                        retrievedWidgetsMap.put(presentableFeedback.type.name(), presentableFeedback.widgetId);
+                        JSONObject feedbackWidget = new JSONObject();
+                        feedbackWidget.put("id", presentableFeedback.widgetId);
+                        feedbackWidget.put("type", presentableFeedback.type.name());
+                        feedbackWidget.put("name", presentableFeedback.name);
+                        retrievedWidgetsArray.put(feedbackWidget);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                theCallback.success(retrievedWidgetsMap);
+                theCallback.success(retrievedWidgetsArray);
             }
         });
         return "getAvailableFeedbackWidgets success.";
@@ -938,10 +943,12 @@ public class CountlyNative {
             this.log("presentFeedbackWidget", args);
             String widgetId = args.getString(0);
             String widgetType = args.getString(1);
-            String closeButtonText = args.getString(2);
+            String widgetName = args.getString(2);
+            String closeButtonText = args.getString(3);
             CountlyFeedbackWidget presentableFeedback = new CountlyFeedbackWidget();
               presentableFeedback.widgetId = widgetId;
               presentableFeedback.type = FeedbackWidgetType.valueOf(widgetType);
+              presentableFeedback.name = widgetName;
               Countly.sharedInstance().feedback().presentFeedbackWidget(presentableFeedback, activity, closeButtonText, new FeedbackCallback() {
                   @Override
                   public void onFinished(String error) {

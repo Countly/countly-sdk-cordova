@@ -719,12 +719,12 @@ CountlyNative* countlyNative = nil;
      }];
 }
 
-- (void)getAvailableFeedbackWidgets:(CDVInvokedUrlCommand*)command
+- (void)getFeedbackWidgets:(CDVInvokedUrlCommand*)command
 {
     if(countlyNative == nil){
         countlyNative = CountlyNative.new;
     }
-    [countlyNative onCall: @"getAvailableFeedbackWidgets" commandString: command.arguments callback: ^(NSString * theResult)
+    [countlyNative onCall: @"getFeedbackWidgets" commandString: command.arguments callback: ^(NSString * theResult)
      {
          CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

@@ -935,14 +935,18 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 result([NSString stringWithFormat: @"Rating:%d", (int)rating]);
             }];
         });
-    }else if ([@"getAvailableFeedbackWidgets" isEqualToString:method]) {
+    }else if ([@"getFeedbackWidgets" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
             [Countly.sharedInstance getFeedbackWidgets:^(NSArray<CountlyFeedbackWidget *> * _Nonnull feedbackWidgets, NSError * _Nonnull error) {
-                NSMutableDictionary* feedbackWidgetsDict = [NSMutableDictionary dictionaryWithCapacity:feedbackWidgets.count];
-                for (CountlyFeedbackWidget* feedbackWidget in feedbackWidgets) {
-                    feedbackWidgetsDict[feedbackWidget.type] = feedbackWidget.ID;
+                NSMutableArray* feedbackWidgetsArray = [NSMutableArray arrayWithCapacity:feedbackWidgets.count];
+                for (CountlyFeedbackWidget* retrievedWidget in feedbackWidgets) {
+                    NSMutableDictionary* feedbackWidget = [NSMutableDictionary dictionaryWithCapacity:3];
+                    feedbackWidget[@"id"] = retrievedWidget.ID;
+                    feedbackWidget[@"type"] = retrievedWidget.type;
+                    feedbackWidget[@"name"] = retrievedWidget.name;
+                    [feedbackWidgetsArray addObject:feedbackWidget];
                 }
-                result(feedbackWidgetsDict);
+                result(feedbackWidgetsArray);
             }];
         });
     }else if ([@"presentFeedbackWidget" isEqualToString:method]) {

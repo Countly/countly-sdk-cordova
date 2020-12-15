@@ -521,22 +521,24 @@
     }
 
     app.showSurvey = function(){
-        Countly.getAvailableFeedbackWidgets().then((retrivedWidgets) => {
-            if("survey" in retrivedWidgets) {
-                Countly.presentFeedbackWidget("survey", retrivedWidgets.survey, "Close")
+        Countly.getFeedbackWidgets().then((retrivedWidgets) => {
+            var surveyWidget =  retrivedWidgets.find(x => x.type === 'survey')
+            if(surveyWidget) {
+                Countly.presentFeedbackWidget(surveyWidget, "Close")
             }
         },(err) => {
-            console.error("[CountlyCordova] getAvailableFeedbackWidgets error : " +err);
+            console.error("showSurvey getFeedbackWidgets error : " +err);
         });
     }
 
     app.showNPS = function(){
-        Countly.getAvailableFeedbackWidgets().then((retrivedWidgets) => {
-            if("nps" in retrivedWidgets) {
-                Countly.presentFeedbackWidget("nps", retrivedWidgets.survey, "Cancel")
+        Countly.getFeedbackWidgets().then((retrivedWidgets) => {
+            var npsWidget =  retrivedWidgets.find(x => x.type === 'nps')
+            if(npsWidget) {
+                Countly.presentFeedbackWidget(npsWidget, "Cancel")
             }
         },(err) => {
-            console.error("[CountlyCordova] getAvailableFeedbackWidgets error : " +err);
+            console.error("showNPS getFeedbackWidgets error : " +err);
         });
     }
 

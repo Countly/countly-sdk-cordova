@@ -69,7 +69,7 @@
 - (void)askForFeedback:(CDVInvokedUrlCommand*)command;
 - (void)setStarRatingDialogTexts:(CDVInvokedUrlCommand*)command;
 - (void)askForStarRating:(CDVInvokedUrlCommand*)command;
-- (void)getAvailableFeedbackWidgets:(CDVInvokedUrlCommand*)command;
+- (void)getFeedbackWidgets:(CDVInvokedUrlCommand*)command;
 - (void)presentFeedbackWidget:(CDVInvokedUrlCommand*)command;
 - (void)replaceAllAppKeysInQueueWithCurrentAppKey:(CDVInvokedUrlCommand*)command;
 - (void)removeDifferentAppKeysFromQueue:(CDVInvokedUrlCommand*)command;
