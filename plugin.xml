@@ -76,8 +76,6 @@
         <param name="android-package" value="ly.count.android.sdk.CountlyCordova" />
         <param name="onload" value="true" />
       </feature>
-      <preference name="GradlePluginGoogleServicesEnabled" value="true" />
-      <preference name="GradlePluginGoogleServicesVersion" value="4.2.0" />
     </config-file>
 
     <config-file target="AndroidManifest.xml" parent="/manifest">
@@ -110,7 +108,6 @@
         <uses-permission android:name="${applicationId}.CountlyPush.BROADCAST_PERMISSION" />
         <permission android:name="${applicationId}.CountlyPush.BROADCAST_PERMISSION" android:protectionLevel="signature" />
     </config-file>
-    <dependency id="cordova-support-google-services" version="~1.4.0"/>
     <!-- if any version higher than 18.0.0 is used then it forces AndroidX -->
     <framework src="com.google.firebase:firebase-messaging:18.0.0" />
     <source-file src="src/android/CountlyMessagingService.java" target-dir="src/ly/count/android/sdk"/>
