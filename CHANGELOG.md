@@ -8,4 +8,4 @@
 * Updated underlying android SDK to 20.11.2
 * Updated underlying ios SDK to 20.11.1
 
-## 20.4.0
+## 19.9.3
