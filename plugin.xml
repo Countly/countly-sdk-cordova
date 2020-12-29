@@ -18,9 +18,9 @@
   <issue>https://github.com/Countly/countly-sdk-cordova/issues</issue>
 
   <engines>
-    <engine name="cordova" version=">=3.0.0"/>
-    <engine name="cordova-android" version=">=3.0.0"/>
-    <engine name="cordova-ios" version=">=3.0.0"/>
+    <engine name="cordova" version=">=9.0.0"/>
+    <engine name="cordova-android" version=">=8.0.0"/>
+    <engine name="cordova-ios" version=">=5.0.0"/>
   </engines>
 
   <js-module src="Countly.js" name="Countly">
@@ -42,6 +42,55 @@
     <header-file src="src/ios/CountlyNative.h"/>
     <source-file src="src/ios/CountlyNative.m"/>
 
+    <source-file src="src/ios/CountlyiOS/Countly.m"/>
+    <header-file src="src/ios/CountlyiOS/Countly.h"/>
+    <header-file src="src/ios/CountlyiOS/CountlyCommon.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyCommon.m"/>
+
+    <header-file src="src/ios/CountlyiOS/CountlyConfig.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyConfig.m"/>
+    <header-file src="src/ios/CountlyiOS/CountlyConnectionManager.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyConnectionManager.m"/>
+
+    <header-file src="src/ios/CountlyiOS/CountlyConsentManager.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyConsentManager.m"/>
+    <header-file src="src/ios/CountlyiOS/CountlyCrashReporter.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyCrashReporter.m"/>
+
+    <header-file src="src/ios/CountlyiOS/CountlyDeviceInfo.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyDeviceInfo.m"/>
+    <header-file src="src/ios/CountlyiOS/CountlyEvent.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyEvent.m"/>
+
+    <header-file src="src/ios/CountlyiOS/CountlyFeedbacks.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyFeedbacks.m"/>
+    <header-file src="src/ios/CountlyiOS/CountlyFeedbackWidget.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyFeedbackWidget.m"/>
+
+    <header-file src="src/ios/CountlyiOS/CountlyLocationManager.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyLocationManager.m"/>
+    <header-file src="src/ios/CountlyiOS/CountlyNotificationService.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyNotificationService.m"/>
+
+    <header-file src="src/ios/CountlyiOS/CountlyPerformanceMonitoring.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyPerformanceMonitoring.m"/>
+    <header-file src="src/ios/CountlyiOS/CountlyPersistency.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyPersistency.m"/>
+
+
+    <header-file src="src/ios/CountlyiOS/CountlyPushNotifications.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyPushNotifications.m"/>
+    <header-file src="src/ios/CountlyiOS/CountlyRemoteConfig.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyRemoteConfig.m"/>
+
+
+    <header-file src="src/ios/CountlyiOS/CountlyUserDetails.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyUserDetails.m"/>
+    <header-file src="src/ios/CountlyiOS/CountlyViewTracking.h"/>
+    <source-file src="src/ios/CountlyiOS/CountlyViewTracking.m"/>
+
+    <!-- <source-file src="src/ios/CountlyiOS/CountlyiOS"/> -->
+
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="OpenGLES.framework" weak="true" />
     <podspec>
@@ -49,7 +98,6 @@
         <source url="https://github.com/CocoaPods/Specs.git"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="CountlyPod" version="20.11.1"/>
       </pods>
     </podspec>
     <!-- Push notification -->

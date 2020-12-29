@@ -41,8 +41,8 @@ module.exports = function(context) {
             });
 
             var countlyFiles = [
-                __dirname +'/../../../platforms/ios/Pods/CountlyPod/' +'CountlyNotificationService.h',
-                __dirname +'/../../../platforms/ios/Pods/CountlyPod/' +'CountlyNotificationService.m'
+                __dirname +`/../src/ios/CountlyiOS/` +'CountlyNotificationService.h',
+                __dirname +`/../src/ios/CountlyiOS/` +'CountlyNotificationService.m'
             ];
             extFiles.push(countlyFiles[0]);
             extFiles.push(countlyFiles[1]);
