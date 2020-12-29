@@ -1,32 +1,43 @@
 {
-  "name": "countly-sdk-cordova",
-  "description": "Countly is an innovative, real-time, open source mobile analytics and push notifications platform. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.",
+  "name": "countly-sdk-js",
   "version": "20.11.0",
-  "homepage": "https://github.com/Countly/countly-sdk-cordova#readme",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Countly/countly-sdk-cordova.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Countly/countly-sdk-cordova/issues"
-  },
+  "description": "Countly is an innovative, real-time, open source mobile analytics and push notifications platform. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.",
   "cordova": {
-    "id": "countly-sdk-cordova",
+    "id": "countly-sdk-js",
     "platforms": [
       "ios",
       "android"
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Countly/countly-sdk-cordova.git"
+  },
   "keywords": [
+    "Event",
+    "Mobile analytical",
     "ecosystem:cordova",
-    "ecosystem:phonegap",
     "cordova-ios",
     "cordova-android"
   ],
-  "engines": {},
-  "author": "Countly. Ltd.",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=9.0.0"
+    },
+    {
+      "name": "cordova-android",
+      "version": ">=8.0.0"
+    },
+    {
+      "name": "cordova-ios",
+      "version": ">=5.0.0"
+    }
+  ],
+  "author": "Countly <hello@count.ly> (https://count.ly/)",
   "license": "MIT",
-  "scripts": {},
-  "devDependencies": {},
-  "dependencies": {}
+  "bugs": {
+    "url": "https://github.com/Countly/countly-sdk-cordova/issues"
+  },
+  "homepage": "https://github.com/Countly/countly-sdk-cordova#readme"
 }
