@@ -9,21 +9,21 @@
 * Added "replaceAllAppKeysInQueueWithCurrentAppKey" method to replace all app keys in queue with the current app key
 * Added "removeDifferentAppKeysFromQueue" method to remove all different app keys from the queue
 * Added "setStarRatingDialogTexts" method to set text's for different fields of star rating dialog
-* Updated "init" call to async
 * Added "setLoggingEnabled" call
 * Added "setLocationInit" method to record Location before init, to prevent potential issues occurred when location is passed after init.
-* Fixed issues related to location tracking
 * Added "giveConsentInit" method to give Consents before init, some features needed consent before init to work properly.
 * Added APM calls
 * Added "isInitialised" call
 * Added functionality to enable attribution
 * Added "recordAttributionID" call to support changes in iOS 14 related to App Tracking Permission.
 * Added call to retrieve the currently used device ID and Author.
+* Updated "init" call to async
+* Segmentation added in recordView method
+* Fixed issues related to location tracking
 * Renamed countly-sdk-js to countly-sdk-cordova
-* Fixed SDK version and SDK name metrics to show not the bridged SDK values but the ones from the cordova SDK
 * Scripts added to create Cordova and Ionic Example app
 * Ionic example app removed
-* Segmentation added in recordView method
+* Fixed SDK version and SDK name metrics to show not the bridged SDK values but the ones from the cordova SDK
 * Updated underlying android SDK to 20.11.2
 * Updated underlying ios SDK to 20.11.1
 
