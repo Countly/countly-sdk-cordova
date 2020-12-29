@@ -19,10 +19,10 @@
 * Added call to retrieve the currently used device ID and Author.
 * Updated "init" call to async
 * Segmentation added in recordView method
-* Fixed issues related to location tracking
 * Renamed countly-sdk-js to countly-sdk-cordova
 * Scripts added to create Cordova and Ionic Example app
 * Ionic example app removed
+* Fixed issues related to location tracking
 * Fixed SDK version and SDK name metrics to show not the bridged SDK values but the ones from the cordova SDK
 * Updated underlying android SDK to 20.11.2
 * Updated underlying ios SDK to 20.11.1
