@@ -1,4 +1,9 @@
 ## 20.11.0
+* "setLoggingEnabled" call issues fixed.
+* Updated underlying android SDK to 20.11.8
+* Underlying iOS SDK version is 20.11.1
+
+## 20.11.0
 * !! Due to cocoapods issue with Xcode 12, we have added the iOS SDK as source code instead of Pod. Due to that change you may need to remove the ios platform and add it again.
 * !! Consent change !! To use remote config, you now need to give "remote-config" consent
 * !! Push breaking changes !! Google play vulnerability issue fixed due to broadcast receiver for android push notification
