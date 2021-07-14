@@ -1,4 +1,4 @@
-## 20.11.0
+## 20.11.1
 * "setLoggingEnabled" call issues fixed.
 * Updated underlying android SDK to 20.11.8
 * Underlying iOS SDK version is 20.11.1
