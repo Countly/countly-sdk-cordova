@@ -21,6 +21,10 @@ For more information about how to use this SDK inside your mobile app, [click th
 
 Security is very important to us. If you discover any issue regarding security, please disclose the information responsibly by sending an email to security@count.ly and **not by creating a GitHub issue**.
 
+## Acknowledgements
+This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr).<br>
+From 2014 to 2020 it was maintained by Trinisoft Technologies developers (trinisofttechnologies@gmail.com).
+
 ## Badges
 
 If you like Countly, [why not use one of our badges](https://count.ly/brand-assets) and give a link back to us, so others know about this wonderful platform? 
