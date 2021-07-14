@@ -2,8 +2,9 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.version = "20.11.0";
+Countly.version = "20.11.1";
 Countly.isDebug = false;
+Countly.isInitCalled = false;
 if (window.cordova.platformId == "android") {
     Countly.isAndroid = true;
     Countly.messagingMode = {"TEST": "2", "PRODUCTION": "0"};
@@ -23,6 +24,8 @@ Countly.init = function(serverUrl,appKey, deviceId){
     if(deviceId){
         args.push(deviceId || "");
     };
+
+    Countly.isInitCalled = true;
 
     return new Promise((resolve,reject) => {
         cordova.exec(resolve,reject,"CountlyCordova","init",args);
@@ -59,9 +62,16 @@ Countly.recordView = function(recordView, segments){
  * Set to true if you want to enable countly internal debugging logs
  * Should be call before Countly init
  */
-Countly.setLoggingEnabled = function(isDebug){
+Countly.setLoggingEnabled = function(isDebug = true){
+    isDebug = isDebug.toString() == "true" ? true : false;
+    if(this.isInitCalled) {
+        if(Countly.isDebug){
+            console.warn("setLoggingEnabled, should be call before init");
+        }
+        return;
+    }
     Countly.isDebug = isDebug;
-    var args = [isDebug?"true": "false"];
+    var args = [isDebug.toString()];
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLoggingEnabled",args);
 }
 
