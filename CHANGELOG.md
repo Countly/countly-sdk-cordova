@@ -1,3 +1,8 @@
+## 20.11.2
+* Moving a push related broadcast receiver declaration to the manifest to comply with 'PendingIntent' checks
+* Updated underlying android SDK to 20.11.9
+* Underlying iOS SDK version is 20.11.2
+
 ## 20.11.1
 * "setLoggingEnabled" call issues fixed.
 * Updated underlying android SDK to 20.11.8
