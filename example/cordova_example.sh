@@ -7,9 +7,9 @@ cordova create app_cordova com.countly.demo app_cordova
 cd app_cordova/www
 
 rm index.html
-curl https://raw.githubusercontent.com/Countly/countly-sdk-cordova-example/master/app_cordova/www/index.html --output index.html
+curl https://raw.githubusercontent.com/Countly/countly-sdk-cordova/master/index.html --output index.html
 
-cordova plugin add https://github.com/Countly/countly-sdk-cordova.git
+cordova plugin add https://github.com/Countly/countly-sdk-cordova.git#21.10.0
 
 read -p 'Enter your server URL: ' serverURL
 read -p 'Enter your App Key: ' appKey

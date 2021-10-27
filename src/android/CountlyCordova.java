@@ -41,7 +41,7 @@ public class CountlyCordova extends CordovaPlugin {
     }
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         Context context = this.cordova.getActivity().getApplicationContext();
-        
+
         if ("init".equals(action)) {
             callbackContext.success(countlyNative.init(args));
         }
@@ -249,7 +249,7 @@ public class CountlyCordova extends CordovaPlugin {
                 @Override
                 public void success(JSONArray result) {
                     PluginResult pluginResult = new  PluginResult(PluginResult.Status.OK,
-                    result);
+                            result);
                     pluginResult.setKeepCallback(true);
                     callbackContext.sendPluginResult(pluginResult);
 
@@ -273,7 +273,7 @@ public class CountlyCordova extends CordovaPlugin {
                 @Override
                 public void success(JSONObject result) {
                     PluginResult pluginResult = new  PluginResult(PluginResult.Status.OK,
-                    result);
+                            result);
                     pluginResult.setKeepCallback(true);
                     callbackContext.sendPluginResult(pluginResult);
 
@@ -281,6 +281,14 @@ public class CountlyCordova extends CordovaPlugin {
                 @Override
                 public void error(String error) {
                     callbackContext.error(error);
+                }
+            });
+        }
+        else if("reportFeedbackWidgetManually".equals(action)){
+            countlyNative.reportFeedbackWidgetManually(args, new CountlyNative.Callback() {
+                @Override
+                public void callback(String result) {
+                    callbackContext.success(result);
                 }
             });
         }
@@ -320,7 +328,7 @@ public class CountlyCordova extends CordovaPlugin {
             return false;
         }
         return true;
-  }
+    }
 
     @Override
     public void onResume(boolean multitasking) {

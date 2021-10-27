@@ -5,6 +5,7 @@ import ly.count.android.sdk.RemoteConfig;
 import ly.count.android.sdk.CountlyStarRating;
 //import ly.count.android.sdk.DeviceInfo;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
@@ -113,7 +114,7 @@ public class CountlyNative {
                 }else{
                     this.config.setDeviceId(yourDeviceID);
                 }
-            } 
+            }
 
             if (activity == null) {
                 if(Countly.sharedInstance().isLoggingEnabled()) {
@@ -135,12 +136,12 @@ public class CountlyNative {
     public String isInitialized(JSONArray args){
         this.log("isInitialized", args);
         Boolean isInitialized = Countly.sharedInstance().isInitialized();
-            if(isInitialized){
-                return "true";
+        if(isInitialized){
+            return "true";
 
-            }else{
-                return "false";
-            }
+        }else{
+            return "false";
+        }
     }
 
     public void log(String method, JSONArray args){
@@ -314,7 +315,7 @@ public class CountlyNative {
         }
     }
 
-   public String askForNotificationPermission(JSONArray args){
+    public String askForNotificationPermission(JSONArray args){
         this.log("askForNotificationPermission", args);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelName = "Default Name";
@@ -325,23 +326,23 @@ public class CountlyNative {
                 channel.setDescription(channelDescription);
                 notificationManager.createNotificationChannel(channel);
             }
-       }
-       CountlyPush.init(activity.getApplication(), pushTokenTypeVariable);
-       FirebaseApp.initializeApp(context);
-       FirebaseInstanceId.getInstance().getInstanceId()
-               .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                   @Override
-                   public void onComplete(Task<InstanceIdResult> task) {
-                       if (!task.isSuccessful()) {
-                           log("getInstanceId failed", task.getException(), LogLevel.WARNING);
-                           return;
-                       }
-                       String token = task.getResult().getToken();
-                       CountlyPush.onTokenRefresh(token);
-                   }
-               });
-       return "askForNotificationPermission";
-   }
+        }
+        CountlyPush.init(activity.getApplication(), pushTokenTypeVariable);
+        FirebaseApp.initializeApp(context);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            log("getInstanceId failed", task.getException(), LogLevel.WARNING);
+                            return;
+                        }
+                        String token = task.getResult().getToken();
+                        CountlyPush.onTokenRefresh(token);
+                    }
+                });
+        return "askForNotificationPermission";
+    }
     public String registerForNotification(JSONArray args, final Callback theCallback){
         notificationListener = theCallback;
         log("registerForNotification theCallback", LogLevel.INFO);
@@ -964,19 +965,19 @@ public class CountlyNative {
             String widgetType = args.getString(1);
             String widgetName = args.getString(2);
             String closeButtonText = args.getString(3);
-            
+
             CountlyFeedbackWidget presentableFeedback = getFeedbackWidget(widgetId, widgetType, widgetName);
-              Countly.sharedInstance().feedback().presentFeedbackWidget(presentableFeedback, activity, closeButtonText, new FeedbackCallback() {
-                  @Override
-                  public void onFinished(String error) {
-                      if(error != null) {
+            Countly.sharedInstance().feedback().presentFeedbackWidget(presentableFeedback, activity, closeButtonText, new FeedbackCallback() {
+                @Override
+                public void onFinished(String error) {
+                    if(error != null) {
                         theCallback.callback(error);
-                      }
-                      else {
+                    }
+                    else {
                         theCallback.callback("presentFeedbackWidget success");
-                      }
-                  }
-              });
+                    }
+                }
+            });
             return "presentFeedbackWidget: success";
         }catch (JSONException jsonException){
             theCallback.callback(jsonException.toString());
@@ -985,31 +986,33 @@ public class CountlyNative {
     }
 
     public String getFeedbackWidgetData(JSONArray args, final JSONObjectCallback theCallback){
+        try {
         String widgetId = args.getString(0);
         String widgetType = args.getString(1);
         String widgetName = args.getString(2);
-            
+
         CountlyFeedbackWidget feedbackWidget = getFeedbackWidget(widgetId, widgetType, widgetName);
 
         Countly.sharedInstance().feedback().getFeedbackWidgetData(feedbackWidget, new RetrieveFeedbackWidgetData() {
             @Override
             public void onFinished(JSONObject retrievedWidgetData, String error) {
                 if (error != null) {
-                    theCallback.callback(error);
+                    theCallback.error(error);
                 } else {
-                    try {
-                        theCallback.callback(retrievedWidgetData);
-                    } catch (JSONException e) {
-                        theCallback.callback(e.toString());
-                    }
+                        theCallback.success(retrievedWidgetData);
                 }
             }
         });
+        return "getFeedbackWidgetData: success";
+        }catch (JSONException jsonException){
+            theCallback.error(jsonException.toString());
+            return jsonException.toString();
+        }
     }
 
-    public String reportFeedbackWidgetManually(JSONArray args, final Callback theCallback{
+    public String reportFeedbackWidgetManually(JSONArray args, final Callback theCallback){
         try {
-            
+
             JSONArray widgetInfo = args.getJSONArray(0);
             JSONObject widgetData = args.getJSONObject(1);
             JSONObject widgetResult = args.getJSONObject(2);
@@ -1032,7 +1035,7 @@ public class CountlyNative {
             return e.toString();
         }
 
-        
+
     }
 
     CountlyFeedbackWidget getFeedbackWidget(String widgetId, String widgetType, String widgetName) {
