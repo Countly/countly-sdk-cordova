@@ -19,7 +19,7 @@ NSMutableArray<CLYFeature>* countlyFeatures = nil;
 Boolean isInitialized = false;
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 
-NSString* const kCountlyCordovaSDKVersion = @"20.11.2";
+NSString* const kCountlyCordovaSDKVersion = @"21.10.0";
 NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
 
 @interface CountlyFeedbackWidget ()
