@@ -83,9 +83,14 @@ public class CountlyNative {
     public interface Callback {
         void callback(String result);
     }
-    public interface JSONObjectCallback {
+    public interface JSONArrayCallback {
         void error(String result);
         void success(JSONArray result);
+    }
+
+    public interface JSONObjectCallback {
+        void error(String result);
+        void success(JSONObject result);
     }
 
 
@@ -917,7 +922,7 @@ public class CountlyNative {
         Countly.sharedInstance().apm().setAppIsLoaded();
         return "appLoadingFinished success!";
     }
-    public String getFeedbackWidgets(JSONArray args, final JSONObjectCallback theCallback){
+    public String getFeedbackWidgets(JSONArray args, final JSONArrayCallback theCallback){
         Countly.sharedInstance().feedback().getAvailableFeedbackWidgets(new RetrieveFeedbackWidgets() {
             @Override
             public void onFinished(List<CountlyFeedbackWidget> retrievedWidgets, String error) {
@@ -993,7 +998,7 @@ public class CountlyNative {
                     theCallback.callback(error);
                 } else {
                     try {
-                        theCallback.callback(toMap(retrievedWidgetData));
+                        theCallback.callback(retrievedWidgetData);
                     } catch (JSONException e) {
                         theCallback.callback(e.toString());
                     }
@@ -1002,7 +1007,7 @@ public class CountlyNative {
         });
     }
 
-    public String reportFeedbackWidgetManually(JSONArray args, final JSONObjectCallback theCallback){
+    public String reportFeedbackWidgetManually(JSONArray args, final Callback theCallback{
         try {
             
             JSONArray widgetInfo = args.getJSONArray(0);
