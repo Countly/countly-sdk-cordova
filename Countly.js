@@ -587,6 +587,41 @@ Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
 }
 
 /**
+ * Downloads widget info and returns
+ * @param {Object} widgetInfo - feeback Widget with id, type and name
+ */
+ Countly.getFeedbackWidgetData = async function(widgetInfo){
+    var args = [];
+    args.push(widgetInfo.id);
+    args.push(widgetInfo.type);
+    args.push(widgetInfo.name);
+    return new Promise((resolve,reject) => {
+        cordova.exec(resolve,reject,"CountlyCordova","getFeedbackWidgetData",args);
+    });
+}
+
+/**
+* Report widget info and do data validation
+* 
+* @param {Object} widgetInfo - identifies the specific widget for which the feedback is filled out
+* @param {Object} widgetData - widget data for this specific widget
+* @param {Object} widgetResult - segmentation of the filled out feedback. If this segmentation is null, it will be assumed that the survey was closed before completion and mark it appropriately
+*/  
+Countly.reportFeedbackWidgetManually = function(widgetInfo, widgetData, widgetResult){
+    var widgetInfoList = [];
+    widgetInfoList.push(widgetInfo.id);
+    widgetInfoList.push(widgetInfo.type);
+    widgetInfoList.push(widgetInfo.name);
+
+    var args = [];
+    args.push(widgetInfoList);
+    args.push(widgetData);
+    args.push(widgetResult);
+    
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","reportFeedbackWidgetManually", args);
+}
+
+/**
  * Replaces all requests with a different app key with the current app key.
  * In request queue, if there are any request whose app key is different than the current app key,
  * these requests' app key will be replaced with the current app key.

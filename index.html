@@ -548,6 +548,26 @@
         });
     }
 
+    app.reportNPSManually = function() {
+    Countly.getFeedbackWidgets().then((retrivedWidgets) => {
+      var npsWidget =  retrivedWidgets.find(x => x.type === 'nps')
+      if(npsWidget) {
+          Countly.getFeedbackWidgetData(npsWidget).then((retrievedWidgetData) => {
+                var segments = {
+                  "rating": 3,
+                  "comment": "Filled out comment"
+                };
+                Countly.reportFeedbackWidgetManually(
+                    npsWidget, retrievedWidgetData, segments);
+                },(err) => {
+                    console.error("reportNPSManually getFeedbackWidgetData error : " +err);
+                });
+      }
+      },(err) => {
+          console.error("reportNPSManually getFeedbackWidgets error : " +err);
+      });
+  }
+
     
 
     app.addCrashLog = function() {

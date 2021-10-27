@@ -47,6 +47,8 @@ public class CountlyNative {
     private static Callback notificationListener = null;
     private static String lastStoredNotification = null;
 
+    List<CountlyFeedbackWidget> retrievedWidgetList = null;
+
     private final Set<String> validConsentFeatureNames = new HashSet<String>(Arrays.asList(
             Countly.CountlyFeatureNames.sessions,
             Countly.CountlyFeatureNames.events,
@@ -923,6 +925,7 @@ public class CountlyNative {
                     theCallback.error(error);
                 }
 
+                retrievedWidgetList = new ArrayList(retrievedWidgets);
                 JSONArray retrievedWidgetsArray = new JSONArray();
                 for (CountlyFeedbackWidget presentableFeedback : retrievedWidgets) {
                     try {
@@ -956,10 +959,8 @@ public class CountlyNative {
             String widgetType = args.getString(1);
             String widgetName = args.getString(2);
             String closeButtonText = args.getString(3);
-            CountlyFeedbackWidget presentableFeedback = new CountlyFeedbackWidget();
-              presentableFeedback.widgetId = widgetId;
-              presentableFeedback.type = FeedbackWidgetType.valueOf(widgetType);
-              presentableFeedback.name = widgetName;
+            
+            CountlyFeedbackWidget presentableFeedback = getFeedbackWidget(widgetId, widgetType, widgetName);
               Countly.sharedInstance().feedback().presentFeedbackWidget(presentableFeedback, activity, closeButtonText, new FeedbackCallback() {
                   @Override
                   public void onFinished(String error) {
@@ -977,7 +978,86 @@ public class CountlyNative {
             return jsonException.toString();
         }
     }
-    
+
+    public String getFeedbackWidgetData(JSONArray args, final JSONObjectCallback theCallback){
+        String widgetId = args.getString(0);
+        String widgetType = args.getString(1);
+        String widgetName = args.getString(2);
+            
+        CountlyFeedbackWidget feedbackWidget = getFeedbackWidget(widgetId, widgetType, widgetName);
+
+        Countly.sharedInstance().feedback().getFeedbackWidgetData(feedbackWidget, new RetrieveFeedbackWidgetData() {
+            @Override
+            public void onFinished(JSONObject retrievedWidgetData, String error) {
+                if (error != null) {
+                    theCallback.callback(error);
+                } else {
+                    try {
+                        theCallback.callback(toMap(retrievedWidgetData));
+                    } catch (JSONException e) {
+                        theCallback.callback(e.toString());
+                    }
+                }
+            }
+        });
+    }
+
+    public String reportFeedbackWidgetManually(JSONArray args, final JSONObjectCallback theCallback){
+        try {
+            
+            JSONArray widgetInfo = args.getJSONArray(0);
+            JSONObject widgetData = args.getJSONObject(1);
+            JSONObject widgetResult = args.getJSONObject(2);
+            Map<String, Object> widgetResultMap = null;
+            if (widgetResult != null && widgetResult.length() > 0) {
+                widgetResultMap = toMap(widgetResult);
+            }
+
+            String widgetId = widgetInfo.getString(0);
+            String widgetType = widgetInfo.getString(1);
+            String widgetName = widgetInfo.getString(2);
+
+            CountlyFeedbackWidget feedbackWidget = getFeedbackWidget(widgetId, widgetType, widgetName);
+
+            Countly.sharedInstance().feedback().reportFeedbackWidgetManually(feedbackWidget, widgetData, widgetResultMap);
+            theCallback.callback("reportFeedbackWidgetManually success");
+            return "reportFeedbackWidgetManually: success";
+        } catch (JSONException e) {
+            theCallback.callback(e.toString());
+            return e.toString();
+        }
+
+        
+    }
+
+    CountlyFeedbackWidget getFeedbackWidget(String widgetId, String widgetType, String widgetName) {
+        CountlyFeedbackWidget feedbackWidget = getFeedbackWidget(widgetId);
+        if(feedbackWidget == null) {
+            log("No feedbackWidget is found against widget id : '" + widgetId + "' , always call 'getFeedbackWidgets' to get updated list of feedback widgets.", LogLevel.WARNING);
+            feedbackWidget = createFeedbackWidget(widgetId, widgetType, widgetName);
+        }
+        return  feedbackWidget;
+    }
+
+    CountlyFeedbackWidget getFeedbackWidget(String widgetId) {
+        if(retrievedWidgetList == null) {
+            return null;
+        }
+        for (CountlyFeedbackWidget feedbackWidget : retrievedWidgetList) {
+            if(feedbackWidget.widgetId.equals(widgetId)) {
+                return feedbackWidget;
+            }
+        }
+        return null;
+    }
+
+    CountlyFeedbackWidget createFeedbackWidget(String widgetId, String widgetType, String widgetName) {
+        CountlyFeedbackWidget feedbackWidget = new CountlyFeedbackWidget();
+        feedbackWidget.widgetId = widgetId;
+        feedbackWidget.type = FeedbackWidgetType.valueOf(widgetType);
+        feedbackWidget.name = widgetName;
+        return feedbackWidget;
+    }
 
     public void replaceAllAppKeysInQueueWithCurrentAppKey(){
         Countly.sharedInstance().requestQueueOverwriteAppKeys();
@@ -1107,6 +1187,36 @@ public class CountlyNative {
                 Log.v(TAG, message, tr);
                 break;
         }
+    }
+
+    public static Map<String, Object> toMap(JSONObject jsonobj) throws JSONException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Iterator<String> keys = jsonobj.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            Object value = jsonobj.get(key);
+            if (value instanceof JSONArray) {
+                value = toList((JSONArray) value);
+            } else if (value instanceof JSONObject) {
+                value = toMap((JSONObject) value);
+            }
+            map.put(key, value);
+        }
+        return map;
+    }
+
+    public static List<Object> toList(JSONArray array) throws JSONException {
+        List<Object> list = new ArrayList<Object>();
+        for (int i = 0; i < array.length(); i++) {
+            Object value = array.get(i);
+            if (value instanceof JSONArray) {
+                value = toList((JSONArray) value);
+            } else if (value instanceof JSONObject) {
+                value = toMap((JSONObject) value);
+            }
+            list.add(value);
+        }
+        return list;
     }
 
     public void onHostResume() {
