@@ -36,7 +36,7 @@ import ly.count.android.sdk.ModuleFeedback.*;
 public class CountlyNative {
 
     public static final String TAG = "CountlyCordovaPlugin";
-    private String COUNTLY_CORDOVA_SDK_VERSION_STRING = "21.10.0";
+    private String COUNTLY_CORDOVA_SDK_VERSION_STRING = "21.11.0";
     private String COUNTLY_CORDOVA_SDK_NAME = "js-cordovab-android";
 
     private Countly.CountlyMessagingMode pushTokenTypeVariable = Countly.CountlyMessagingMode.PRODUCTION;
