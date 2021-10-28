@@ -134,6 +134,8 @@
         <button onclick="app.askForFeedback()" class="fluid ui button orange">Open feedback modal</button>
         <button onclick="app.showSurvey()" class="fluid ui button orange">Show Survey</button>
         <button onclick="app.showNPS()" class="fluid ui button orange">Show NPS</button>
+        <button onclick="app.reportNPSManually()" class="fluid ui button orange">Report NPS Manually</button>
+        <button onclick="app.reportSurveyManually()" class="fluid ui button orange">Report Survey Manually</button>
         <div class="ui horizontal divider">Rating Methods End</div>
 
         <div class="ui horizontal divider">Performance Methods Start</div>
@@ -567,6 +569,68 @@
           console.error("reportNPSManually getFeedbackWidgets error : " +err);
       });
   }
+
+  app.reportSurveyManually = function() {
+        Countly.getFeedbackWidgets().then((retrivedWidgets) => {
+        var surveyWidget =  retrivedWidgets.find(x => x.type === 'survey')
+        if(surveyWidget) {
+            Countly.getFeedbackWidgetData(surveyWidget).then((retrievedWidgetData) => {
+        var segments = {};
+        if (retrievedWidgetData != null) {
+            var questions = retrievedWidgetData.questions;
+
+            if (questions != null) {
+            //iterate over all questions and set random answers
+            for (var a = 0; a < questions.length; a++) {
+                var question = questions[a];
+                var wType = question.type;
+                var questionId = question.id;
+                var answerKey = 'answ-' + questionId;
+                switch (wType) {
+                //multiple answer question
+                case 'multi':
+                    var choices = question.choices;
+                    var str = '';
+                    for (var b = 0; b < choices.length; b++) {
+                    if (b % 2 == 0) {
+                        if (b != 0) {
+                        str += ',';
+                        }
+                        str += choices[b].key;
+                    }
+                    }
+                    segments[answerKey] = str;
+                    break;
+                case 'radio':
+                //dropdown value selector
+                case 'dropdown':
+                    var choices = question.choices;
+                    var pick = this.random(choices.length);
+                    segments[answerKey] =
+                    choices[pick].key; //pick the key of random choice
+                    break;
+                //text input field
+                case 'text':
+                    segments[answerKey] = 'Some random text';
+                    break;
+                //rating picker
+                case 'rating':
+                    segments[answerKey] = this.random(11);
+                    break;
+                }
+            }
+            }
+        }
+            Countly.reportFeedbackWidgetManually(
+                surveyWidget, retrievedWidgetData, segments);
+            },(err) => {
+                console.error("reportSurveyManually getFeedbackWidgetData error : " +err);
+            });
+        }
+        },(err) => {
+            console.error("reportSurveyManually getFeedbackWidgets error : " +err);
+        });
+    }
 
     
 

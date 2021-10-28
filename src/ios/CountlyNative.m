@@ -17,6 +17,8 @@ NSDictionary *lastStoredNotification = nil;
 NSMutableArray *notificationIDs = nil;        // alloc here
 NSMutableArray<CLYFeature>* countlyFeatures = nil;
 Boolean isInitialized = false;
+NSArray<CountlyFeedbackWidget*>* feedbackWidgetList = nil;
+
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 
 NSString* const kCountlyCordovaSDKVersion = @"21.11.0";
@@ -938,6 +940,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"getFeedbackWidgets" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
             [Countly.sharedInstance getFeedbackWidgets:^(NSArray<CountlyFeedbackWidget *> * _Nonnull feedbackWidgets, NSError * _Nonnull error) {
+                feedbackWidgetList = [NSArray arrayWithArray:feedbackWidgets];
                 NSMutableArray* feedbackWidgetsArray = [NSMutableArray arrayWithCapacity:feedbackWidgets.count];
                 for (CountlyFeedbackWidget* retrievedWidget in feedbackWidgets) {
                     NSMutableDictionary* feedbackWidget = [NSMutableDictionary dictionaryWithCapacity:3];
@@ -953,15 +956,42 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         dispatch_async(dispatch_get_main_queue(), ^ {
             NSString* widgetId = [command objectAtIndex:0];
             NSString* widgetType = [command objectAtIndex:1];
-            NSMutableDictionary* feedbackWidgetsDict = [NSMutableDictionary dictionaryWithCapacity:3];
-            
-            feedbackWidgetsDict[@"_id"] = widgetId;
-            feedbackWidgetsDict[@"type"] = widgetType;
-            feedbackWidgetsDict[@"name"] = widgetType;
-            CountlyFeedbackWidget *feedback = [CountlyFeedbackWidget createWithDictionary:feedbackWidgetsDict];
-            [feedback present];
+            NSString* widgetName = [command objectAtIndex:2];
+            CountlyFeedbackWidget* feedbackWidget = [self getFeedbackWidget:widgetId widgetType:widgetType widgetName:widgetName];
+            [feedbackWidget present];
         });
-    }else if ([@"replaceAllAppKeysInQueueWithCurrentAppKey" isEqualToString:method]) {
+    }else if ([@"getFeedbackWidgetData" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            NSString* widgetId = [command objectAtIndex:0];
+            NSString* widgetType = [command objectAtIndex:1];
+            NSString* widgetName = [command objectAtIndex:2];
+            CountlyFeedbackWidget* feedbackWidget = [self getFeedbackWidget:widgetId widgetType:widgetType widgetName:widgetName];
+            [feedbackWidget getWidgetData:^(NSDictionary * _Nullable widgetData, NSError * _Nullable error) {
+                if (error){
+                    NSString *theError = [@"getFeedbackWidgetData failed: " stringByAppendingString: error.localizedDescription];
+                    result(theError);
+                }
+                else{
+                    result(widgetData);
+                }
+            }];
+        });
+    }else if ([@"reportFeedbackWidgetManually" isEqualToString:method]) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            NSArray* widgetInfo = [command objectAtIndex:0];
+        //        NSDictionary* widgetData = [arguments objectAtIndex:1];
+            NSDictionary* widgetResult = [command objectAtIndex:2];
+                
+            NSString* widgetId = [widgetInfo objectAtIndex:0];
+            NSString* widgetType = [widgetInfo objectAtIndex:1];
+            NSString* widgetName = [widgetInfo objectAtIndex:2];
+                
+            CountlyFeedbackWidget* feedbackWidget = [self getFeedbackWidget:widgetId widgetType:widgetType widgetName:widgetName];
+
+            [feedbackWidget recordResult:widgetResult];
+        });
+    }
+    else if ([@"replaceAllAppKeysInQueueWithCurrentAppKey" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
             [Countly.sharedInstance replaceAllAppKeysInQueueWithCurrentAppKey];
         });
@@ -1088,6 +1118,40 @@ void CountlyCordovaInternalLog(NSString *format, ...)
     NSLog(@"[CountlyCordovaPlugin] %@", logString);
 
     va_end(args);
+}
+
+- (CountlyFeedbackWidget*)getFeedbackWidget:(NSString*)widgetId widgetType:(NSString *)widgetType widgetName:(NSString *)widgetName
+{
+    CountlyFeedbackWidget* feedbackWidget = [self getFeedbackWidget:widgetId];
+
+    if(feedbackWidget == nil) {
+        COUNTLY_RN_LOG(@"No feedbackWidget is found against widget Id : '%@', always call 'getFeedbackWidgets' to get updated list of feedback widgets.", widgetId);
+      feedbackWidget = [self createFeedbackWidget:widgetId widgetType:widgetType widgetName:widgetName];
+    }
+    return feedbackWidget;
+}
+
+- (CountlyFeedbackWidget*)getFeedbackWidget:(NSString*)widgetId
+{
+  if(feedbackWidgetList == nil) {
+    return nil;
+  }
+  for (CountlyFeedbackWidget* feedbackWidget in feedbackWidgetList) {
+    if([feedbackWidget.ID isEqual:widgetId]) {
+      return feedbackWidget;
+    }
+  }
+  return nil;
+}
+
+- (CountlyFeedbackWidget*)createFeedbackWidget:(NSString*)widgetId widgetType:(NSString *)widgetType widgetName:(NSString *)widgetName
+{
+  NSMutableDictionary* feedbackWidgetsDict = [NSMutableDictionary dictionaryWithCapacity:3];
+  feedbackWidgetsDict[@"_id"] = widgetId;
+  feedbackWidgetsDict[@"type"] = widgetType;
+  feedbackWidgetsDict[@"name"] = widgetName;
+  CountlyFeedbackWidget *feedbackWidget = [CountlyFeedbackWidget createWithDictionary:feedbackWidgetsDict];
+  return feedbackWidget;  
 }
 
 @end

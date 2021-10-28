@@ -591,6 +591,30 @@ Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
  * @param {Object} widgetInfo - feeback Widget with id, type and name
  */
  Countly.getFeedbackWidgetData = async function(widgetInfo){
+    if(!widgetInfo) {
+        if(Countly.isDebug) {
+            console.error("[CountlyCordova] getFeedbackWidgetData, widgetInfo should not be null or undefined");
+        }
+        return "Widget Info should not be null or undefined";
+    }
+    if(!widgetInfo.id) {
+        if(Countly.isDebug){
+            console.error("[CountlyCordova] getFeedbackWidgetData, widgetInfo id should not be null or empty");
+        }
+        return "Widget Info id should not be null or empty";
+    }
+    if(!widgetInfo.type) {
+        if(Countly.isDebug){
+            console.error("[CountlyCordova] getFeedbackWidgetData, widgetInfo type should not be null or empty");
+        }
+        return "Widget Info type should not be null or empty";
+    }
+    if(!widgetInfo.name) {
+        if(Countly.isDebug){
+            console.error("[CountlyCordova] getFeedbackWidgetData, widgetInfo name should not be null or empty");
+        }
+        return "Widget Info name should not be null or empty";
+    }
     var args = [];
     args.push(widgetInfo.id);
     args.push(widgetInfo.type);
@@ -608,6 +632,30 @@ Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
 * @param {Object} widgetResult - segmentation of the filled out feedback. If this segmentation is null, it will be assumed that the survey was closed before completion and mark it appropriately
 */  
 Countly.reportFeedbackWidgetManually = function(widgetInfo, widgetData, widgetResult){
+    if(!widgetInfo) {
+        if(Countly.isDebug) {
+            console.error("[CountlyCordova] reportFeedbackWidgetManually, widgetInfo should not be null or undefined");
+        }
+        return "Widget Info should not be null or undefined";
+    }
+    if(!widgetInfo.id) {
+        if(Countly.isDebug){
+            console.error("[CountlyCordova] reportFeedbackWidgetManually, widgetInfo id should not be null or empty");
+        }
+        return "Widget Info id should not be null or empty";
+    }
+    if(!widgetInfo.type) {
+        if(Countly.isDebug){
+            console.error("[CountlyCordova] reportFeedbackWidgetManually, widgetInfo type should not be null or empty");
+        }
+        return "Widget Info type should not be null or empty";
+    }
+    if(!widgetInfo.name) {
+        if(Countly.isDebug){
+            console.error("[CountlyCordova] reportFeedbackWidgetManually, widgetInfo name should not be null or empty");
+        }
+        return "Widget Info name should not be null or empty";
+    }
     var widgetInfoList = [];
     widgetInfoList.push(widgetInfo.id);
     widgetInfoList.push(widgetInfo.type);
