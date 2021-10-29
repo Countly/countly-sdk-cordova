@@ -611,7 +611,7 @@
                 //dropdown value selector
                 case 'dropdown':
                     var choices = question.choices;
-                    var pick = this.random(choices.length);
+                    var pick = random(choices.length);
                     segments[answerKey] =
                     choices[pick].key; //pick the key of random choice
                     break;
@@ -621,7 +621,7 @@
                     break;
                 //rating picker
                 case 'rating':
-                    segments[answerKey] = this.random(11);
+                    segments[answerKey] = random(11);
                     break;
                 }
             }
