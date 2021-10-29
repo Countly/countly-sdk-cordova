@@ -261,10 +261,18 @@ public class CountlyCordova extends CordovaPlugin {
             });
         }
         else if("presentFeedbackWidget".equals(action)){
+            PluginResult pluginResult = new  PluginResult(PluginResult.Status.NO_RESULT);
+            pluginResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(pluginResult);
             countlyNative.presentFeedbackWidget(args, new CountlyNative.Callback() {
                 @Override
                 public void callback(String result) {
-                    callbackContext.success(result);
+                    if(result.equals("appearCallback") || result.equals("dismissCallback")) {
+                        callbackContext.success(result);
+                    }
+                    else {
+                        callbackContext.error(result);
+                    }
                 }
             });
         }

@@ -13,6 +13,8 @@ void CountlyCordovaInternalLog(NSString *format, ...);
 static char launchNotificationKey;
 static char coldstartKey;
 Result notificationListener = nil;
+
+Result widgetCallback = nil;
 NSDictionary *lastStoredNotification = nil;
 NSMutableArray *notificationIDs = nil;        // alloc here
 NSMutableArray<CLYFeature>* countlyFeatures = nil;
@@ -954,11 +956,22 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
     }else if ([@"presentFeedbackWidget" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
+            widgetCallback = result;
             NSString* widgetId = [command objectAtIndex:0];
             NSString* widgetType = [command objectAtIndex:1];
             NSString* widgetName = [command objectAtIndex:2];
             CountlyFeedbackWidget* feedbackWidget = [self getFeedbackWidget:widgetId widgetType:widgetType widgetName:widgetName];
+            
             [feedbackWidget present];
+            [feedbackWidget presentWithAppearBlock:^{
+                if(widgetCallback != nil){
+                    widgetCallback([NSString stringWithFormat:@"appearCallback"]);
+                }
+            } andDismissBlock:^{
+                if(widgetCallback != nil){
+                    widgetCallback([NSString stringWithFormat:@"dismissCallback"]);
+                }
+            }];
         });
     }else if ([@"getFeedbackWidgetData" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {

@@ -395,7 +395,6 @@ CountlyNative* countlyNative = nil;
     }
     [countlyNative onCall: @"registerForNotification" commandString: command.arguments callback: ^(NSString * theResult)
      {
-        
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
         [pluginResult setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -738,7 +737,14 @@ CountlyNative* countlyNative = nil;
     }
     [countlyNative onCall: @"presentFeedbackWidget" commandString: command.arguments callback: ^(NSString * theResult)
      {
-         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+         CDVPluginResult* pluginResult = nil;
+         if([theResult isEqualToString: @"appearCallback"] || [theResult isEqualToString: @"dismissCallback"]){
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: theResult];
+            [pluginResult setKeepCallbackAsBool:YES];
+         }
+         else {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: theResult];
+         }
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }];
 }

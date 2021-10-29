@@ -974,7 +974,7 @@ public class CountlyNative {
                         theCallback.callback(error);
                     }
                     else {
-                        theCallback.callback("presentFeedbackWidget success");
+                        theCallback.callback("appearCallback");
                     }
                 }
             });

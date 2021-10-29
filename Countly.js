@@ -5,6 +5,16 @@ Countly.ready = false;
 Countly.version = "21.11.0";
 Countly.isDebug = false;
 Countly.isInitCalled = false;
+Countly._appearCallback = Countly.onSuccess;
+Countly._dismissCallback = Countly.onSuccess;
+Countly.widgetCallback = function(result){
+    if(result == "appearCallback"){
+        Countly._appearCallback();
+    }
+    else if(result == "dismissCallback"){
+        Countly._dismissCallback();
+    }
+}
 if (window.cordova.platformId == "android") {
     Countly.isAndroid = true;
     Countly.messagingMode = {"TEST": "2", "PRODUCTION": "0"};
@@ -560,7 +570,7 @@ Countly.getFeedbackWidgets = function(){
  * @param {Object} feedbackWidget - feeback Widget with id, type and name
  * @param {String} closeButtonText - text for cancel/close button
  */ 
-Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
+Countly.presentFeedbackWidget = function(feedbackWidget, buttonText, appearCallback, dismissCallback){
     if(!feedbackWidget) {
         if(Countly.isDebug) {
             console.error("[CountlyCordova] presentFeedbackWidget, feedbackWidget should not be null or undefined");
@@ -579,11 +589,17 @@ Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
         }
         return "FeedbackWidget type should not be null or empty";
     }
+    if (appearCallback && (typeof appearCallback == "function")) {
+        Countly._appearCallback = appearCallback;   
+    }
+    if (dismissCallback && (typeof dismissCallback == "function")) {
+        Countly._dismissCallback = dismissCallback;   
+    }
     var widgetId = feedbackWidget.id;
     var widgetType = feedbackWidget.type;
     var widgetName = feedbackWidget.name || "";
     buttonText = buttonText || "";
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","presentFeedbackWidget",[widgetId, widgetType, widgetName, buttonText]);
+    cordova.exec(Countly.widgetCallback , Countly.onError,"CountlyCordova","presentFeedbackWidget",[widgetId, widgetType, widgetName, buttonText]);
 }
 
 /**
