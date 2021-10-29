@@ -1138,7 +1138,7 @@ void CountlyCordovaInternalLog(NSString *format, ...)
     CountlyFeedbackWidget* feedbackWidget = [self getFeedbackWidget:widgetId];
 
     if(feedbackWidget == nil) {
-        COUNTLY_RN_LOG(@"No feedbackWidget is found against widget Id : '%@', always call 'getFeedbackWidgets' to get updated list of feedback widgets.", widgetId);
+        COUNTLY_CORDOVA_LOG(@"No feedbackWidget is found against widget Id : '%@', always call 'getFeedbackWidgets' to get updated list of feedback widgets.", widgetId);
       feedbackWidget = [self createFeedbackWidget:widgetId widgetType:widgetType widgetName:widgetName];
     }
     return feedbackWidget;

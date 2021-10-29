@@ -532,7 +532,13 @@
         Countly.getFeedbackWidgets().then((retrivedWidgets) => {
             var surveyWidget =  retrivedWidgets.find(x => x.type === 'survey')
             if(surveyWidget) {
-                Countly.presentFeedbackWidget(surveyWidget, "Close")
+                Countly.presentFeedbackWidget(surveyWidget, "Close", function(event){
+              console.log("appearWidgetCallback");
+              },
+              function(event){
+                console.log("dismissWidgetCallback");
+                },
+              )
             }
         },(err) => {
             console.error("showSurvey getFeedbackWidgets error : " +err);
