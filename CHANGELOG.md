@@ -1,8 +1,13 @@
 ## 21.11.0
-* Added a way to retrieve feedback widget data and manually report them
+* Added a way to retrieve feedback widget data and manually report them for iOS also
 * Appear and dismiss callback implemented for nps/survey widgets
-* Updated underlying android SDK to 20.11.10
-* Updated underlying iOS SDK to 20.11.3
+* Added "recordIndirectAttribution" method
+* Added "recordDirectAttribution" method for Android
+* Deprecated recordAttributionID method
+* Deprecated enableAttribution method
+* Updated minimum supported iOS versions to 10.0
+* Updated underlying android SDK to 21.11.0
+* Updated underlying iOS SDK to 21.11.1
 
 ## 20.11.2
 * Moving a push related broadcast receiver declaration to the manifest to comply with 'PendingIntent' checks
