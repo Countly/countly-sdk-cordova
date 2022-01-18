@@ -19,7 +19,7 @@ NSMutableArray<CLYFeature>* countlyFeatures = nil;
 Boolean isInitialized = false;
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 
-NSString* const kCountlyCordovaSDKVersion = @"20.11.2";
+NSString* const kCountlyCordovaSDKVersion = @"20.11.3";
 NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
 
 @interface CountlyFeedbackWidget ()
@@ -72,6 +72,8 @@ NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
     dispatch_once(&onceToken, ^{
         Class class = [self class];
 
+
+        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         SEL originalSelector = @selector(init);
         SEL swizzledSelector = @selector(pushPluginSwizzledInit);
 
@@ -92,9 +94,11 @@ NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
         } else {
             method_exchangeImplementations(original, swizzled);
         }
+        #endif
     });
 }
 
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
 - (AppDelegate *)pushPluginSwizzledInit
 {
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
@@ -209,6 +213,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [CountlyNative onNotification: self.launchNotification];
     [[NSNotificationCenter defaultCenter] postNotificationName:pushPluginApplicationDidBecomeActiveNotification object:nil];
 }
+#endif
 @end
 
 
@@ -223,6 +228,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     CountlyConfig* config = nil;
     Boolean isDebug = false;
 
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
 + (void)onNotification: (NSDictionary *) notificationMessage{
     COUNTLY_CORDOVA_LOG(@"Notification received");
     COUNTLY_CORDOVA_LOG(@"The notification %@", notificationMessage);
@@ -253,6 +259,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     notificationIDs = nil;
 }
+#endif
 
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
     if(isDebug == true){
@@ -277,7 +284,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         CountlyCommon.sharedInstance.SDKVersion = kCountlyCordovaSDKVersion;
 
         Countly.sharedInstance.isAutoViewTrackingActive = NO;
+        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         [self addCountlyFeature:CLYPushNotifications];
+        #endif
 
         if(command.count == 3){
             deviceID = [command objectAtIndex:2];
@@ -288,7 +297,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             dispatch_async(dispatch_get_main_queue(), ^ {
             isInitialized = true;
             [[Countly sharedInstance] startWithConfig:config];
+
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
             [self recordPushAction];
+#endif
             });
             result(@"initialized.");
         } else {
@@ -598,6 +610,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
 
     }else if ([@"sendPushToken" isEqualToString:method]) {
+        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         if(config != nil){
             NSString* token = [command objectAtIndex:0];
             int messagingMode = 1;
@@ -609,22 +622,29 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             [request setHTTPMethod:@"GET"];
             [request setURL:[NSURL URLWithString:urlString]];
         }
+        #endif
         result(@"sendPushToken!");
 
     }else if ([@"askForNotificationPermission" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
+            #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
             [Countly.sharedInstance askForNotificationPermission];
+            #endif
             result(@"askForNotificationPermission!");
         });
     }else if ([@"registerForNotification" isEqualToString:method]) {
+        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         COUNTLY_CORDOVA_LOG(@"registerForNotification");
         notificationListener = result;
         if(lastStoredNotification != nil){
             result([lastStoredNotification description]);
             lastStoredNotification = nil;
         }
+        #endif
     }else if ([@"pushTokenType" isEqualToString:method]) {
+
         dispatch_async(dispatch_get_main_queue(), ^ {
+        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         NSString* tokenType = [command objectAtIndex:0];
         if([tokenType isEqualToString: @"1"]){
             config.pushTestMode = @"CLYPushTestModeDevelopment";
@@ -633,6 +653,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             config.pushTestMode = @"CLYPushTestModeTestFlightOrAdHoc";
         }else{
         }
+        #endif
         result(@"pushTokenType!");
         });
     }else if ([@"userData_setProperty" isEqualToString:method]) {

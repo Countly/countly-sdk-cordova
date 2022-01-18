@@ -1,3 +1,8 @@
+## 20.11.3
+* Added COUNTLY_EXCLUDE_PUSHNOTIFICATIONS flag to disable push notifications altogether in order to avoid App Store Connect warnings.
+* Underlying android SDK is 20.11.9
+* Updated underlying iOS SDK version is 20.11.3
+
 ## 20.11.2
 * Moving a push related broadcast receiver declaration to the manifest to comply with 'PendingIntent' checks
 * Updated underlying android SDK to 20.11.9
