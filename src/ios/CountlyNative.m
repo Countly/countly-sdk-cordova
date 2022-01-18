@@ -226,19 +226,33 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 + (void)onNotification: (NSDictionary *) notificationMessage{
     COUNTLY_CORDOVA_LOG(@"Notification received");
     COUNTLY_CORDOVA_LOG(@"The notification %@", notificationMessage);
-    if(notificationMessage && notificationListener != nil){
+    if(!notificationMessage) {
+        COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. No valid message");
+        return;
+    
+    }
+    NSDictionary* countlyPayload = notificationMessage[@"c"];
+    if(!countlyPayload) {
+        COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. Countly payload not found in notification dictionary!");
+        return;
+    }
+    NSString *notificationID = countlyPayload[@"i"];
+    if(!notificationID) {
+        COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. Countly payload does not contains a valid notification ID!");
+        return;
+    }
+    COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. The notification %@", notificationMessage);
+    
+    if(notificationListener != nil){
         notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
     }else{
         lastStoredNotification = notificationMessage;
     }
-    if(notificationMessage){
-        if(notificationIDs == nil){
-            notificationIDs = [[NSMutableArray alloc] init];
-        }
-        NSDictionary* countlyPayload = notificationMessage[@"c"];
-        NSString *notificationID = countlyPayload[@"i"];
-        [notificationIDs insertObject:notificationID atIndex:[notificationIDs count]];
+    if(notificationIDs == nil){
+        notificationIDs = [[NSMutableArray alloc] init];
     }
+    [notificationIDs insertObject:notificationID atIndex:[notificationIDs count]];
+    [self recordPushAction];
 }
 - (void)recordPushAction
 {
@@ -251,6 +265,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         };
         [Countly.sharedInstance recordEvent:@"[CLY]_push_action" segmentation: segmentation];
     }
+
+    [notificationIDs removeAllObjects];
     notificationIDs = nil;
 }
 
