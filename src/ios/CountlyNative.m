@@ -243,16 +243,20 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. The notification %@", notificationMessage);
     
-    if(notificationListener != nil){
-        notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
-    }else{
-        lastStoredNotification = notificationMessage;
-    }
     if(notificationIDs == nil){
         notificationIDs = [[NSMutableArray alloc] init];
     }
     [notificationIDs insertObject:notificationID atIndex:[notificationIDs count]];
-    [self recordPushAction];
+    if(isInitialized){
+        if(notificationListener != nil){
+            notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
+        }
+        [self recordPushAction];
+    }
+    else{
+        // Notification is cached if SDK is not initialized and send in callback when 'registerForNotification' is call.
+        lastStoredNotification = notificationMessage;
+    }
 }
 - (void)recordPushAction
 {
@@ -265,9 +269,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         };
         [Countly.sharedInstance recordEvent:@"[CLY]_push_action" segmentation: segmentation];
     }
-
     [notificationIDs removeAllObjects];
-    notificationIDs = nil;
 }
 
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
