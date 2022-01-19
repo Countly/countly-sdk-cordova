@@ -70,10 +70,9 @@ NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         Class class = [self class];
-
-
-        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         SEL originalSelector = @selector(init);
         SEL swizzledSelector = @selector(pushPluginSwizzledInit);
 
@@ -94,7 +93,7 @@ NSString* const kCountlyCordovaSDKName = @"js-cordovab-ios";
         } else {
             method_exchangeImplementations(original, swizzled);
         }
-        #endif
+#endif
     });
 }
 
@@ -284,9 +283,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         CountlyCommon.sharedInstance.SDKVersion = kCountlyCordovaSDKVersion;
 
         Countly.sharedInstance.isAutoViewTrackingActive = NO;
-        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         [self addCountlyFeature:CLYPushNotifications];
-        #endif
+#endif
 
         if(command.count == 3){
             deviceID = [command objectAtIndex:2];
@@ -610,7 +609,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
 
     }else if ([@"sendPushToken" isEqualToString:method]) {
-        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         if(config != nil){
             NSString* token = [command objectAtIndex:0];
             int messagingMode = 1;
@@ -622,29 +621,29 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             [request setHTTPMethod:@"GET"];
             [request setURL:[NSURL URLWithString:urlString]];
         }
-        #endif
+#endif
         result(@"sendPushToken!");
 
     }else if ([@"askForNotificationPermission" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-            #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
             [Countly.sharedInstance askForNotificationPermission];
-            #endif
+#endif
             result(@"askForNotificationPermission!");
         });
     }else if ([@"registerForNotification" isEqualToString:method]) {
-        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         COUNTLY_CORDOVA_LOG(@"registerForNotification");
         notificationListener = result;
         if(lastStoredNotification != nil){
             result([lastStoredNotification description]);
             lastStoredNotification = nil;
         }
-        #endif
+#endif
     }else if ([@"pushTokenType" isEqualToString:method]) {
 
         dispatch_async(dispatch_get_main_queue(), ^ {
-        #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
+#ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
         NSString* tokenType = [command objectAtIndex:0];
         if([tokenType isEqualToString: @"1"]){
             config.pushTestMode = @"CLYPushTestModeDevelopment";
@@ -653,7 +652,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             config.pushTestMode = @"CLYPushTestModeTestFlightOrAdHoc";
         }else{
         }
-        #endif
+#endif
         result(@"pushTokenType!");
         });
     }else if ([@"userData_setProperty" isEqualToString:method]) {
@@ -1112,5 +1111,3 @@ void CountlyCordovaInternalLog(NSString *format, ...)
 }
 
 @end
-
-
