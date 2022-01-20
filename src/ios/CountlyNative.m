@@ -229,8 +229,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     if(!notificationMessage) {
         COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. No valid message");
         return;
-    
     }
+    COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. The notification %@", notificationMessage);
+    
     NSDictionary* countlyPayload = notificationMessage[@"c"];
     if(!countlyPayload) {
         COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. Countly payload not found in notification dictionary!");
@@ -241,7 +242,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. Countly payload does not contains a valid notification ID!");
         return;
     }
-    COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. The notification %@", notificationMessage);
     
     if(notificationIDs == nil){
         notificationIDs = [[NSMutableArray alloc] init];
