@@ -224,20 +224,36 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     Boolean isDebug = false;
 
 + (void)onNotification: (NSDictionary *) notificationMessage{
-    COUNTLY_CORDOVA_LOG(@"Notification received");
-    COUNTLY_CORDOVA_LOG(@"The notification %@", notificationMessage);
-    if(notificationMessage && notificationListener != nil){
-        notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
-    }else{
-        lastStoredNotification = notificationMessage;
+    if(!notificationMessage) {
+        COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. No valid message");
+        return;
     }
-    if(notificationMessage){
-        if(notificationIDs == nil){
-            notificationIDs = [[NSMutableArray alloc] init];
+    COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. The notification %@", notificationMessage);
+    
+    NSDictionary* countlyPayload = notificationMessage[@"c"];
+    if(!countlyPayload) {
+        COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. Countly payload not found in notification dictionary!");
+        return;
+    }
+    NSString *notificationID = countlyPayload[@"i"];
+    if(!notificationID) {
+        COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. Countly payload does not contains a valid notification ID!");
+        return;
+    }
+    
+    if(notificationIDs == nil){
+        notificationIDs = [[NSMutableArray alloc] init];
+    }
+    [notificationIDs insertObject:notificationID atIndex:[notificationIDs count]];
+    if(isInitialized){
+        if(notificationListener != nil){
+            notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
         }
-        NSDictionary* countlyPayload = notificationMessage[@"c"];
-        NSString *notificationID = countlyPayload[@"i"];
-        [notificationIDs insertObject:notificationID atIndex:[notificationIDs count]];
+        [self recordPushAction];
+    }
+    else{
+        // Notification is cached if SDK is not initialized and send in callback when 'registerForNotification' is call.
+        lastStoredNotification = notificationMessage;
     }
 }
 - (void)recordPushAction
@@ -251,7 +267,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         };
         [Countly.sharedInstance recordEvent:@"[CLY]_push_action" segmentation: segmentation];
     }
-    notificationIDs = nil;
+    [notificationIDs removeAllObjects];
 }
 
 - (void) onCall:(NSString *)method commandString:(NSArray *)command callback:(Result) result{
