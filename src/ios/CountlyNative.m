@@ -224,8 +224,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     Boolean isDebug = false;
 
 + (void)onNotification: (NSDictionary *) notificationMessage{
-    COUNTLY_CORDOVA_LOG(@"Notification received");
-    COUNTLY_CORDOVA_LOG(@"The notification %@", notificationMessage);
     if(!notificationMessage) {
         COUNTLY_CORDOVA_LOG(@"onNotification, Notification received. No valid message");
         return;
