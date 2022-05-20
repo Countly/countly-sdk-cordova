@@ -1,6 +1,6 @@
 Package.describe({
   name: 'countly:countly-sdk-js',
-  version: '20.11.3', 
+  version: '21.11.0', 
   summary: 'Countly is an innovative, real-time, open source mobile analytics and push notifications platform. It collects data from mobile devices, and visualizes this information to analyze mobile application usage and end-user behavior. There are two parts of Countly: the server that collects and analyzes data, and mobile SDK that sends this data. Both parts are open source with different licensing terms.',
   git: 'https://github.com/Countly/countly-sdk-cordova.git',
   documentation: 'README.md'

@@ -1,3 +1,7 @@
+## 21.11.0
+* Updated underlying android SDK to 21.11.1
+* Updated underlying iOS SDK version to 21.11.2
+
 ## 20.11.3
 * Added COUNTLY_EXCLUDE_PUSHNOTIFICATIONS flag to disable push notifications altogether in order to avoid App Store Connect warnings.
 * Fixed issues related to Push notification crash when notification recieved from other SDK's/Plugins (not from Countly).

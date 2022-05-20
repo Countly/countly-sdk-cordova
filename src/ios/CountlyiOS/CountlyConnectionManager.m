@@ -19,7 +19,6 @@ NSString* const kCountlyQSKeyAppKey           = @"app_key";
 
 NSString* const kCountlyQSKeyDeviceID         = @"device_id";
 NSString* const kCountlyQSKeyDeviceIDOld      = @"old_device_id";
-NSString* const kCountlyQSKeyDeviceIDParent   = @"parent_device_id";
 
 NSString* const kCountlyQSKeyTimestamp        = @"timestamp";
 NSString* const kCountlyQSKeyTimeZone         = @"tz";
@@ -42,17 +41,25 @@ NSString* const kCountlyQSKeyLocationCity     = @"city";
 NSString* const kCountlyQSKeyLocationCountry  = @"country_code";
 NSString* const kCountlyQSKeyLocationIP       = @"ip_address";
 
+NSString* const kCountlyQSKeyAttributionID    = @"aid";
+NSString* const kCountlyQSKeyIDFA             = @"idfa";
+NSString* const kCountlyQSKeyADID             = @"adid";
+NSString* const kCountlyQSKeyCampaignID       = @"campaign_id";
+NSString* const kCountlyQSKeyCampaignUser     = @"campaign_user";
+NSString* const kCountlyQSKeyAttributionData  = @"attribution_data";
+
 NSString* const kCountlyQSKeyMetrics          = @"metrics";
 NSString* const kCountlyQSKeyEvents           = @"events";
 NSString* const kCountlyQSKeyUserDetails      = @"user_details";
 NSString* const kCountlyQSKeyCrash            = @"crash";
 NSString* const kCountlyQSKeyChecksum256      = @"checksum256";
-NSString* const kCountlyQSKeyAttributionID    = @"aid";
-NSString* const kCountlyQSKeyIDFA             = @"idfa";
 NSString* const kCountlyQSKeyConsent          = @"consent";
 NSString* const kCountlyQSKeyAPM              = @"apm";
 
 NSString* const kCountlyQSKeyMethod           = @"method";
+
+CLYAttributionKey const CLYAttributionKeyIDFA = kCountlyQSKeyIDFA;
+CLYAttributionKey const CLYAttributionKeyADID = kCountlyQSKeyADID;
 
 NSString* const kCountlyUploadBoundary = @"0cae04a8b698d63ff6ea55d168993f21";
 
@@ -88,6 +95,20 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
     return self;
 }
 
+- (void)setHost:(NSString *)host
+{
+    if ([host hasSuffix:@"/"])
+    {
+        CLY_LOG_W(@"Host has an extra \"/\" at the end! It will be removed by the SDK.\
+                  But please make sure you fix it to avoid this warning in the future.");
+        _host = [host substringToIndex:host.length - 1];
+    }
+    else
+    {
+        _host = host;
+    }
+}
+
 - (void)proceedOnQueue
 {
     CLY_LOG_D(@"Proceeding on queue...");
@@ -107,12 +128,6 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
     if (self.isTerminating)
     {
         CLY_LOG_D(@"Proceeding on queue is aborted: Application is terminating!");
-        return;
-    }
-
-    if (self.customHeaderFieldName && !self.customHeaderFieldValue)
-    {
-        CLY_LOG_D(@"Proceeding on queue is aborted: customHeaderFieldName specified on config, but customHeaderFieldValue not set yet!");
         return;
     }
 
@@ -160,9 +175,6 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
         request.HTTPMethod = @"POST";
         request.HTTPBody = [queryString cly_dataUTF8];
     }
-
-    if (self.customHeaderFieldName && self.customHeaderFieldValue)
-        [request setValue:self.customHeaderFieldValue forHTTPHeaderField:self.customHeaderFieldName];
 
     request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
 
@@ -365,15 +377,6 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
     if (!CountlyCommon.sharedInstance.manualSessionHandling)
         [self endSession];
 
-    if (self.customHeaderFieldName && !self.customHeaderFieldValue)
-    {
-        CLY_LOG_D(@"customHeaderFieldName specified on config, but customHeaderFieldValue not set! Crash report stored to be sent later!");
-
-        [CountlyPersistency.sharedInstance addToQueue:queryString];
-        [CountlyPersistency.sharedInstance saveToFileSync];
-        return;
-    }
-
     if (CountlyDeviceInfo.sharedInstance.isDeviceIDTemporary)
     {
         CLY_LOG_D(@"Device ID is set as CLYTemporaryDeviceID! Crash report stored to be sent later!");
@@ -389,9 +392,6 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:serverInputEndpoint]];
     request.HTTPMethod = @"POST";
     request.HTTPBody = [[self appendChecksum:queryString] cly_dataUTF8];
-
-    if (self.customHeaderFieldName && self.customHeaderFieldValue)
-        [request setValue:self.customHeaderFieldValue forHTTPHeaderField:self.customHeaderFieldName];
 
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
 
@@ -427,16 +427,6 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
     [self proceedOnQueue];
 }
 
-- (void)sendParentDeviceID:(NSString *)parentDeviceID
-{
-    NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@",
-                             kCountlyQSKeyDeviceIDParent, parentDeviceID.cly_URLEscaped];
-
-    [CountlyPersistency.sharedInstance addToQueue:queryString];
-
-    [self proceedOnQueue];
-}
-
 - (void)sendAttribution
 {
     NSString * attributionQueryString = [self attributionQueryString];
@@ -450,10 +440,45 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
     [self proceedOnQueue];
 }
 
-- (void)sendConsentChanges:(NSString *)consentChanges
+- (void)sendDirectAttributionWithCampaignID:(NSString *)campaignID andCampaignUserID:(NSString *)campaignUserID
+{
+    NSMutableString* queryString = [self queryEssentials].mutableCopy;
+    [queryString appendFormat:@"&%@=%@", kCountlyQSKeyCampaignID, campaignID];
+
+    if (campaignUserID.length)
+    {
+        [queryString appendFormat:@"&%@=%@", kCountlyQSKeyCampaignUser, campaignUserID];
+    }
+
+    [CountlyPersistency.sharedInstance addToQueue:queryString.copy];
+
+    [self proceedOnQueue];
+}
+
+- (void)sendAttributionData:(NSString *)attributionData
+{
+    NSMutableString* queryString = [self queryEssentials].mutableCopy;
+    [queryString appendFormat:@"&%@=%@", kCountlyQSKeyAttributionData, [attributionData cly_URLEscaped]];
+
+    [CountlyPersistency.sharedInstance addToQueue:queryString.copy];
+
+    [self proceedOnQueue];
+}
+
+- (void)sendIndirectAttribution:(NSDictionary *)attribution
+{
+    NSMutableString* queryString = [self queryEssentials].mutableCopy;
+    [queryString appendFormat:@"&%@=%@", kCountlyQSKeyAttributionID, [attribution cly_JSONify]];
+
+    [CountlyPersistency.sharedInstance addToQueue:queryString.copy];
+
+    [self proceedOnQueue];
+}
+
+- (void)sendConsents:(NSString *)consents
 {
     NSString* queryString = [[self queryEssentials] stringByAppendingFormat:@"&%@=%@",
-                             kCountlyQSKeyConsent, consentChanges];
+                             kCountlyQSKeyConsent, consents];
 
     [CountlyPersistency.sharedInstance addToQueue:queryString];
 
@@ -673,22 +698,48 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
 
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler
 {
-    SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
-    SecKeyRef serverKey = SecTrustCopyPublicKey(serverTrust);
     SecPolicyRef policy = SecPolicyCreateSSL(true, (__bridge CFStringRef)challenge.protectionSpace.host);
+    SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+    SecKeyRef serverKey = NULL;
+
+    if (@available(iOS 14.0, tvOS 14.0, macOS 11.0, watchOS 7.0, *))
+    {
+        serverKey = SecTrustCopyKey(serverTrust);
+    }
+    else
+    {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+        serverKey = SecTrustCopyPublicKey(serverTrust);
+#pragma GCC diagnostic pop
+    }
 
     __block BOOL isLocalAndServerCertMatch = NO;
 
-    for (NSString* certificate in self.pinnedCertificates )
+    for (NSString* certificate in self.pinnedCertificates)
     {
         NSString* localCertPath = [NSBundle.mainBundle pathForResource:certificate ofType:nil];
+
         if (!localCertPath)
            [NSException raise:@"CountlyCertificateNotFoundException" format:@"Bundled certificate can not be found for %@", certificate];
+
         NSData* localCertData = [NSData dataWithContentsOfFile:localCertPath];
         SecCertificateRef localCert = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)localCertData);
         SecTrustRef localTrust = NULL;
         SecTrustCreateWithCertificates(localCert, policy, &localTrust);
-        SecKeyRef localKey = SecTrustCopyPublicKey(localTrust);
+        SecKeyRef localKey = NULL;
+
+        if (@available(iOS 14.0, tvOS 14.0, macOS 11.0, watchOS 7.0, *))
+        {
+            localKey = SecTrustCopyKey(localTrust);
+        }
+        else
+        {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+            localKey = SecTrustCopyPublicKey(localTrust);
+#pragma GCC diagnostic pop
+        }
 
         CFRelease(localCert);
         CFRelease(localTrust);
@@ -702,11 +753,24 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
             break;
         }
 
-        if (localKey) CFRelease(localKey);
+        if (localKey)
+            CFRelease(localKey);
     }
-
+    
+#if DEBUG
+    if (CountlyCommon.sharedInstance.shouldIgnoreTrustCheck)
+    {
+        CFDataRef exceptions = SecTrustCopyExceptions(serverTrust);
+        SecTrustSetExceptions(serverTrust, exceptions);
+        CFRelease(exceptions);
+    }
+#endif
+    
     SecTrustResultType serverTrustResult;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     SecTrustEvaluate(serverTrust, &serverTrustResult);
+#pragma GCC diagnostic pop
     BOOL isServerCertValid = (serverTrustResult == kSecTrustResultUnspecified || serverTrustResult == kSecTrustResultProceed);
 
     if (isLocalAndServerCertMatch && isServerCertValid)
@@ -726,7 +790,9 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, NULL);
     }
 
-    if (serverKey) CFRelease(serverKey);
+    if (serverKey)
+        CFRelease(serverKey);
+
     CFRelease(policy);
 }
 
