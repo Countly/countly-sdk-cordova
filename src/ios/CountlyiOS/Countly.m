@@ -71,8 +71,12 @@ long long appLoadStartTime;
 
     CountlyCommon.sharedInstance.hasStarted = YES;
     CountlyCommon.sharedInstance.enableDebug = config.enableDebug;
+    CountlyCommon.sharedInstance.shouldIgnoreTrustCheck = config.shouldIgnoreTrustCheck;
     CountlyCommon.sharedInstance.loggerDelegate = config.loggerDelegate;
     CountlyCommon.sharedInstance.internalLogLevel = config.internalLogLevel;
+    CountlyCommon.sharedInstance.maxKeyLength = config.maxKeyLength;
+    CountlyCommon.sharedInstance.maxValueLength = config.maxValueLength;
+    CountlyCommon.sharedInstance.maxSegmentationValues = config.maxSegmentationValues;
 
     CountlyConsentManager.sharedInstance.requiresConsent = config.requiresConsent;
 
@@ -92,11 +96,9 @@ long long appLoadStartTime;
     }
 
     CountlyConnectionManager.sharedInstance.appKey = config.appKey;
-    CountlyConnectionManager.sharedInstance.host = [config.host hasSuffix:@"/"] ? [config.host substringToIndex:config.host.length - 1] : config.host;
+    CountlyConnectionManager.sharedInstance.host = config.host;
     CountlyConnectionManager.sharedInstance.alwaysUsePOST = config.alwaysUsePOST;
     CountlyConnectionManager.sharedInstance.pinnedCertificates = config.pinnedCertificates;
-    CountlyConnectionManager.sharedInstance.customHeaderFieldName = config.customHeaderFieldName;
-    CountlyConnectionManager.sharedInstance.customHeaderFieldValue = config.customHeaderFieldValue;
     CountlyConnectionManager.sharedInstance.secretSalt = config.secretSalt;
     CountlyConnectionManager.sharedInstance.URLSessionConfiguration = config.URLSessionConfiguration;
 
@@ -105,11 +107,9 @@ long long appLoadStartTime;
 
     CountlyCommon.sharedInstance.manualSessionHandling = config.manualSessionHandling;
 
-    CountlyCommon.sharedInstance.enableAppleWatch = config.enableAppleWatch;
-
     CountlyCommon.sharedInstance.attributionID = config.attributionID;
 
-    CountlyDeviceInfo.sharedInstance.customMetrics = config.customMetrics;
+    CountlyDeviceInfo.sharedInstance.customMetrics = [config.customMetrics cly_truncated:@"Custom metric"];
 
 #if (TARGET_OS_IOS)
     CountlyFeedbacks.sharedInstance.message = config.starRatingMessage;
@@ -145,7 +145,7 @@ long long appLoadStartTime;
 #endif
 #endif
 
-    CountlyCrashReporter.sharedInstance.crashSegmentation = config.crashSegmentation;
+    CountlyCrashReporter.sharedInstance.crashSegmentation = [config.crashSegmentation cly_truncated:@"Crash segmentation"];
     CountlyCrashReporter.sharedInstance.crashLogLimit = MAX(1, config.crashLogLimit);
     CountlyCrashReporter.sharedInstance.crashFilter = config.crashFilter;
     CountlyCrashReporter.sharedInstance.shouldUsePLCrashReporter = config.shouldUsePLCrashReporter;
@@ -169,8 +169,6 @@ long long appLoadStartTime;
     timer = [NSTimer timerWithTimeInterval:config.updateSessionPeriod target:self selector:@selector(onTimer:) userInfo:nil repeats:YES];
     [NSRunLoop.mainRunLoop addTimer:timer forMode:NSRunLoopCommonModes];
 
-    [CountlyCommon.sharedInstance startAppleWatchMatching];
-
     CountlyRemoteConfig.sharedInstance.isEnabledOnInitialConfig = config.enableRemoteConfig;
     CountlyRemoteConfig.sharedInstance.remoteConfigCompletionHandler = config.remoteConfigCompletionHandler;
     [CountlyRemoteConfig.sharedInstance startRemoteConfig];
@@ -178,12 +176,33 @@ long long appLoadStartTime;
     CountlyPerformanceMonitoring.sharedInstance.isEnabledOnInitialConfig = config.enablePerformanceMonitoring;
     [CountlyPerformanceMonitoring.sharedInstance startPerformanceMonitoring];
 
+    CountlyCommon.sharedInstance.enableOrientationTracking = config.enableOrientationTracking;
     [CountlyCommon.sharedInstance observeDeviceOrientationChanges];
 
     [CountlyConnectionManager.sharedInstance proceedOnQueue];
 
     if (config.consents)
         [self giveConsentForFeatures:config.consents];
+
+    if (config.campaignType && config.campaignData)
+        [self recordDirectAttributionWithCampaignType:config.campaignType andCampaignData:config.campaignData];
+
+    if (config.indirectAttribution)
+        [self recordIndirectAttribution:config.indirectAttribution];
+}
+
+
+- (void)setNewHost:(NSString *)newHost
+{
+    CLY_LOG_I(@"%s %@", __FUNCTION__, newHost);
+
+    if (!newHost.length)
+    {
+        CLY_LOG_W(@"New host is invalid!");
+        return;
+    }
+
+    CountlyConnectionManager.sharedInstance.host = newHost;
 }
 
 - (void)setNewAppKey:(NSString *)newAppKey
@@ -191,7 +210,10 @@ long long appLoadStartTime;
     CLY_LOG_I(@"%s %@", __FUNCTION__, newAppKey);
     
     if (!newAppKey.length)
+    {
+        CLY_LOG_W(@"New app key is invalid!");
         return;
+    }
 
     [self suspend];
 
@@ -204,10 +226,7 @@ long long appLoadStartTime;
 
 - (void)setCustomHeaderFieldValue:(NSString *)customHeaderFieldValue
 {
-    CLY_LOG_I(@"%s %@", __FUNCTION__, customHeaderFieldValue);
-
-    CountlyConnectionManager.sharedInstance.customHeaderFieldValue = customHeaderFieldValue.copy;
-    [CountlyConnectionManager.sharedInstance proceedOnQueue];
+    CLY_LOG_W(@"setCustomHeaderFieldValue: method is deprecated. Please use `URLSessionConfiguration` property on `CountlyConfig` instead.");
 }
 
 - (void)flushQueues
@@ -400,9 +419,11 @@ long long appLoadStartTime;
     if (!CountlyCommon.sharedInstance.hasStarted)
         return;
 
-    if (!CountlyConsentManager.sharedInstance.hasAnyConsent)
-        return;
-
+    if (!deviceID.length)
+    {
+        CLY_LOG_W(@"Passing `CLYDefaultDeviceID` or `nil` or empty string as devie ID is deprecated, and will not be allowed in the future.");
+    }
+    
     [self storeCustomDeviceIDState:deviceID];
 
     deviceID = [CountlyDeviceInfo.sharedInstance ensafeDeviceID:deviceID];
@@ -447,6 +468,8 @@ long long appLoadStartTime;
         [self suspend];
 
         [CountlyDeviceInfo.sharedInstance initializeDeviceID:deviceID];
+
+        [CountlyConsentManager.sharedInstance cancelConsentForAllFeaturesWithoutSendingConsentsRequest];
 
         [self resume];
 
@@ -559,8 +582,35 @@ long long appLoadStartTime;
 {
     CLY_LOG_I(@"%s %@ %@ %lu %f %f", __FUNCTION__, key, segmentation, (unsigned long)count, sum, duration);
 
-    if (!CountlyConsentManager.sharedInstance.consentForEvents)
+    NSDictionary <NSString *, NSNumber *>* reservedEvents =
+    @{
+        kCountlyReservedEventOrientation: @(CountlyConsentManager.sharedInstance.consentForUserDetails),
+        kCountlyReservedEventStarRating: @(CountlyConsentManager.sharedInstance.consentForFeedback),
+        kCountlyReservedEventSurvey: @(CountlyConsentManager.sharedInstance.consentForFeedback),
+        kCountlyReservedEventNPS: @(CountlyConsentManager.sharedInstance.consentForFeedback),
+        kCountlyReservedEventPushAction: @(CountlyConsentManager.sharedInstance.consentForPushNotifications),
+        kCountlyReservedEventView: @(CountlyConsentManager.sharedInstance.consentForViewTracking),
+    };
+
+    NSNumber* aReservedEvent = reservedEvents[key];
+
+    if (aReservedEvent)
+    {
+        CLY_LOG_V(@"A reserved event detected: %@", key);
+
+        if (!aReservedEvent.boolValue)
+        {
+            CLY_LOG_W(@"Specific consent not given for the reserved event! So, it will not be recorded.");
+            return;
+        }
+
+        CLY_LOG_V(@"Specific consent given for the reserved event! So, it will be recorded.");
+    }
+    else if (!CountlyConsentManager.sharedInstance.consentForEvents)
+    {
+        CLY_LOG_W(@"Events consent not given! Event will not be recorded.");
         return;
+    }
 
     [self recordEvent:key segmentation:segmentation count:count sum:sum duration:duration timestamp:CountlyCommon.sharedInstance.uniqueTimestamp];
 }
@@ -851,12 +901,16 @@ long long appLoadStartTime;
 {
     CLY_LOG_I(@"%s %@", __FUNCTION__, userID);
 
+    CLY_LOG_W(@"userLoggedIn: method is deprecated. Please directly use setNewDeviceID:onServer: method instead.");
+
     [self setNewDeviceID:userID onServer:YES];
 }
 
 - (void)userLoggedOut
 {
     CLY_LOG_I(@"%s", __FUNCTION__);
+
+    CLY_LOG_W(@"userLoggedOut method is deprecated. Please directly use setNewDeviceID:onServer: method instead.");
 
     [self setNewDeviceID:CLYDefaultDeviceID onServer:NO];
 }
@@ -878,6 +932,20 @@ long long appLoadStartTime;
     CLY_LOG_I(@"%s %@ %@", __FUNCTION__, widgetID, completionHandler);
 
     [CountlyFeedbacks.sharedInstance checkFeedbackWidgetWithID:widgetID completionHandler:completionHandler];
+}
+
+- (void)presentRatingWidgetWithID:(NSString *)widgetID completionHandler:(void (^)(NSError * error))completionHandler
+{
+    CLY_LOG_I(@"%s %@ %@", __FUNCTION__, widgetID, completionHandler);
+
+    [CountlyFeedbacks.sharedInstance checkFeedbackWidgetWithID:widgetID completionHandler:completionHandler];
+}
+
+- (void)recordRatingWidgetWithID:(NSString *)widgetID rating:(NSInteger)rating email:(NSString * _Nullable)email comment:(NSString * _Nullable)comment userCanBeContacted:(BOOL)userCanBeContacted
+{
+    CLY_LOG_I(@"%s %@ %ld %@ %@ %d", __FUNCTION__, widgetID, (long)rating, email, comment, userCanBeContacted);
+
+    [CountlyFeedbacks.sharedInstance recordRatingWidgetWithID:widgetID rating:rating email:email comment:comment userCanBeContacted:userCanBeContacted];
 }
 
 - (void)getFeedbackWidgets:(void (^)(NSArray <CountlyFeedbackWidget *> *feedbackWidgets, NSError * error))completionHandler
@@ -905,7 +973,80 @@ long long appLoadStartTime;
     [CountlyConnectionManager.sharedInstance sendAttribution];
 }
 
+- (void)recordDirectAttributionWithCampaignType:(NSString *)campaignType andCampaignData:(NSString *)campaignData
+{
+    CLY_LOG_I(@"%s %@ %@", __FUNCTION__, campaignType, campaignData);
 
+    if (!CountlyConsentManager.sharedInstance.consentForAttribution)
+        return;
+
+    if (!campaignType.length)
+    {
+        CLY_LOG_E(@"campaignType must be non-zero length valid string. Method execution will be aborted!");
+        return;
+    }
+
+    if (!campaignData.length)
+    {
+        CLY_LOG_E(@"campaignData must be non-zero length valid string. Method execution will be aborted!");
+        return;
+    }
+
+    if ([campaignType isEqualToString:@"_special_test"])
+    {
+        [CountlyConnectionManager.sharedInstance sendAttributionData:campaignData];
+        return;
+    }
+
+    if (![campaignType isEqualToString:@"countly"])
+    {
+        CLY_LOG_W(@"Recording direct attribution with a type other than 'countly' is currently not supported. Method execution will be aborted!");
+        return;
+    }
+
+    NSError* error = nil;
+    NSDictionary* campaignDataDictionary = [NSJSONSerialization JSONObjectWithData:[campaignData cly_dataUTF8] options:0 error:&error];
+    if (error)
+    {
+        CLY_LOG_E(@"Campaign data is not in expected format. Method execution will be aborted!");
+        return;
+    }
+
+    NSString* campaignID = campaignDataDictionary[@"cid"];
+    if (!campaignID.length)
+    {
+        CLY_LOG_E(@"Campaign ID must be non-zero length valid string. Method execution will be aborted!");
+        return;
+    }
+
+    NSString* campaignUserID = campaignDataDictionary[@"cuid"];
+    if (!campaignUserID.length)
+    {
+        CLY_LOG_W(@"Campaign User ID must be non-zero length valid string. It will be ignored!");
+    }
+
+    [CountlyConnectionManager.sharedInstance sendDirectAttributionWithCampaignID:campaignID andCampaignUserID:campaignUserID];
+}
+
+- (void)recordIndirectAttribution:(NSDictionary<NSString *, NSString *> *)attribution
+{
+    CLY_LOG_I(@"%s %@", __FUNCTION__, attribution);
+
+    if (!CountlyConsentManager.sharedInstance.consentForAttribution)
+        return;
+
+    NSMutableDictionary* filtered = attribution.mutableCopy;
+    [attribution enumerateKeysAndObjectsUsingBlock:^(NSString * key, NSString * value, BOOL * stop)
+    {
+        if (!value.length)
+            [filtered removeObjectForKey:key];
+    }];
+
+    NSDictionary* truncated = [filtered cly_truncated:@"Indirect attribution"];
+    NSDictionary* limited = [truncated cly_limited:@"Indirect attribution"];
+
+    [CountlyConnectionManager.sharedInstance sendIndirectAttribution:limited];
+}
 
 #pragma mark - Remote Config
 
