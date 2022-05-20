@@ -132,7 +132,7 @@
 
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-        <service android:name="org.openudid.OpenUDID_service">
+        <service android:name="org.openudid.OpenUDID_service" android:exported="true">
             <intent-filter>
                 <action android:name="org.openudid.GETUDID" />
             </intent-filter>
@@ -145,7 +145,7 @@
 
     <!-- Push notification -->
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-        <service android:name="ly.count.android.sdk.CountlyMessagingService">
+        <service android:name="ly.count.android.sdk.CountlyMessagingService" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
