@@ -402,7 +402,7 @@ Countly.askForNotificationPermission = function(){
 }
 
 Countly.userData = {};
-Countly.userData.setProperty = function(keyName, keyValue){
+Countly.userData.setProperty = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "setProperty");
     if(message) {
         return message;
@@ -418,7 +418,7 @@ Countly.userData.setProperty = function(keyName, keyValue){
         cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setProperty",[keyName, keyValue]);
     }
 };
-Countly.userData.increment = function(keyName){
+Countly.userData.increment = async function(keyName){
     var message = await Countly.validateString(keyName, "key", "setProperty");
     if(message) {
         return message;
@@ -428,7 +428,7 @@ Countly.userData.increment = function(keyName){
         cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_increment",[keyName]);
     }
 };
-Countly.userData.incrementBy = function(keyName, keyValue){
+Countly.userData.incrementBy = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "incrementBy");
     if(message) {
         return message;
@@ -440,7 +440,7 @@ Countly.userData.incrementBy = function(keyName, keyValue){
     var intValue = parseInt(keyValue).toString();
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_incrementBy",[keyName, intValue]);
 };
-Countly.userData.multiply = function(keyName, keyValue){
+Countly.userData.multiply = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "multiply");
     if(message) {
         return message;
@@ -452,7 +452,7 @@ Countly.userData.multiply = function(keyName, keyValue){
     var intValue = parseInt(keyValue).toString();
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_multiply",[keyName, intValue]);
 };
-Countly.userData.saveMax = function(keyName, keyValue){
+Countly.userData.saveMax = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "saveMax");
     if(message) {
         return message;
@@ -464,7 +464,7 @@ Countly.userData.saveMax = function(keyName, keyValue){
     var intValue = parseInt(keyValue).toString();
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMax",[keyName, intValue]);
 };
-Countly.userData.saveMin = function(keyName, keyValue){
+Countly.userData.saveMin = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "saveMin");
     if(message) {
         return message;
@@ -476,7 +476,7 @@ Countly.userData.saveMin = function(keyName, keyValue){
     var intValue = parseInt(keyValue).toString();
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMin",[keyName, intValue]);
 };
-Countly.userData.setOnce = function(keyName, keyValue){
+Countly.userData.setOnce = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "setOnce");
     if(message) {
         return message;
@@ -492,7 +492,7 @@ Countly.userData.setOnce = function(keyName, keyValue){
 };
 
 //pushUniqueValue
-Countly.userData.pushUniqueValue = function(keyName, keyValue){
+Countly.userData.pushUniqueValue = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "pushUniqueValue");
     if(message) {
         return message;
@@ -508,7 +508,7 @@ Countly.userData.pushUniqueValue = function(keyName, keyValue){
 };
 
 //pushValue
-Countly.userData.pushValue = function(keyName, keyValue){
+Countly.userData.pushValue = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "pushValue");
     if(message) {
         return message;
@@ -524,7 +524,7 @@ Countly.userData.pushValue = function(keyName, keyValue){
 };
 
 //pullValue
-Countly.userData.pullValue = function(keyName, keyValue){
+Countly.userData.pullValue = async function(keyName, keyValue){
     var message = await Countly.validateString(keyName, "key", "pullValue");
     if(message) {
         return message;
