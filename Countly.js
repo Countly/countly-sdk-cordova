@@ -402,22 +402,46 @@ Countly.askForNotificationPermission = function(){
 
 //expectedValueInfo - value from 1 to 3. 1 - no value, 2 - int value, 3 - other values
 userDataHandleCall = async function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
-    var valueArray = [providedKey];
+    var valueArray = [];
 
-    var message = await _validateUserDataKey(providedKey, callName);
+    var message = null;
+    if(!providedKey) {
+        message = "Key should not be null, undefined or empty";
+    }
+    else if (typeof providedKey !== "string") {
+        message = "skipping value for 'key', due to unsupported data type '" + (typeof providedKey) + "', its data type should be 'string'";
+    
+    }
     if(message) {
+        Countly.logError(callName, message);
         return message;
     }
+    valueArray.push(providedKey);
 
     if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
-        message = await _validateUserDataHasValue(providedValue, callName);
-        if(message) {
+        if (providedValue === null || providedValue === undefined) {
+            message = "Value should not be null or undefined";
+            Countly.logError(callName, message);
             return message;
         }
+        
         var keyValue = providedKey;
+
         if(expectedValueInfo == 2) {
-            message = await _validateUserDataValue(providedValue, callName);
-            if(message) {
+            
+            if (typeof providedValue == "string") {
+                Countly.logWarning(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'");
+            }
+            if (typeof providedValue != "number") {
+                message = "skipping value for 'value', due to unsupported data type '" + (typeof striprovidedValuengValue) + "', its data type should be 'number'";
+                Countly.logError(functionName, message);
+                return message;
+            }
+
+            var intValue = parseInt(providedValue);
+            if (isNaN(intValue)) {
+                message = "skipping value for 'value', due to unsupported data type '" + (typeof providedValue) + "', its data type should be 'number' or parseable to 'integer'";
+                Countly.logError(functionName, message);
                 return message;
             }
             keyValue = parseInt(keyValue).toString();
@@ -761,97 +785,6 @@ Countly.enableApm = function(){
 
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
-
-/**
- * Validate user data value, it should be 'number' or 'string' that is parseable to 'number'
- * and it should not be null or undefined
- * It will return message if any issue found related to data validation else return null.
- * @param {String} stringValue : value of data to validate
- * @param {String} stringName : name of that value string
- * @param {String} functionName : name of function from where value is validating.
- * @returns 
- */
- _validateUserDataValue = async (stringValue, functionName) => {
-    // validating that value should be 'number' or 'string'
-    message = await _validateUserDataValueType(stringValue, functionName);
-    if(message) {
-        return message;
-    }
-
-    // validating that value should be parceable to int.
-    var intValue = parseInt(stringValue);
-    if (isNaN(intValue)) {
-        message = "skipping value for 'value', due to unsupported data type '" + (typeof stringValue) + "', its data type should be 'number' or parseable to 'integer'";
-    }
-
-    Countly.logError(functionName, message);
-    return message;
-}
-
-/**
- * Validate user data value, it should be 'number' or 'string' that is parseable to 'number'
- * It will return message if any issue found related to data validation else return null.
- * @param {String} stringValue : value of data to validate
- * @param {String} stringName : name of that value string
- * @param {String} functionName : name of function from where value is validating.
- * @returns 
- */
-_validateUserDataValueType = async (stringValue, functionName) => {
-    var message = null;
-    if (typeof stringValue == "number") {
-        return null;
-    }
-    if (typeof stringValue == "string") {
-        message = "unsupported data type '" + (typeof stringValue) + "', its data type should be 'number'";
-        Countly.logWarning(functionName, message);
-        return null;
-    }
-
-    message = "skipping value for 'value', due to unsupported data type '" + (typeof stringValue) + "', its data type should be 'number'";
-    Countly.logError(functionName, message);
-    return message;
-};
-
-/**
- * Validate user data value, it should not be null or undefined
- * It will return message if any issue found related to data validation else return null.
- * @param {String} stringValue : value of data to validate
- * @param {String} stringName : name of that value string
- * @param {String} functionName : name of function from where value is validating.
- * @returns 
- */
-_validateUserDataHasValue = async (stringValue, functionName) => {
-    if (stringValue || stringValue == "") {
-        return null;
-    }
-
-    var message = "Value should not be null or undefined";
-    Countly.logError(functionName, message);
-    return message;
-};
-
-/**
- * Validate string, it should not be empty, null or undefined
- * It will return message if any issue found related to string validation else return null.
- * @param {String} stringValue : value of string to validate
- * @param {String} stringName : name of that value string
- * @param {String} functionName : name of function from where value is validating.
- * @returns 
- */
-_validateUserDataKey = async (stringValue, functionName) => {
-    var message = null;
-    if(!stringValue) {
-        message = "Key should not be null, undefined or empty";
-    }
-    else if (typeof stringValue !== "string") {
-        message = "skipping value for 'key', due to unsupported data type '" + (typeof stringValue) + "', its data type should be 'string'";
-    
-    }
-    if(message) {
-        Countly.logError(functionName, message);
-    }
-    return message;
-};
 
 logLevel = {"INFO": "1", "DEBUG": "2", "VERBOSE": "3", "WARNING": "4", "ERROR": "5"};
 /**
