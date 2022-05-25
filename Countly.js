@@ -104,7 +104,6 @@ Countly.setUserData = function(userData){
     }
 
     if(userData.byear) {
-        // Countly.validateParseInt(userData.byear, "key byear", "setUserData");
         userData.byear = userData.byear.toString();
     }
     args.push(userData);
