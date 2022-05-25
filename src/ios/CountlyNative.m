@@ -382,29 +382,46 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
     }else if ([@"setuserdata" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-        NSString* name = [command objectAtIndex:0];
-        NSString* username = [command objectAtIndex:1];
-        NSString* email = [command objectAtIndex:2];
-        NSString* organization = [command objectAtIndex:3];
-        NSString* phone = [command objectAtIndex:4];
-        NSString* picture = [command objectAtIndex:5];
-        //NSString* picturePath = [command objectAtIndex:6];
-        NSString* gender = [command objectAtIndex:7];
-        NSString* byear = [command objectAtIndex:8];
-
-        Countly.user.name = name;
-        Countly.user.username = username;
-        Countly.user.email = email;
-        Countly.user.organization = organization;
-        Countly.user.phone = phone;
-        Countly.user.pictureURL = picture;
-        Countly.user.gender = gender;
-        Countly.user.birthYear = @([byear integerValue]);
-
+        NSDictionary* userData = [command objectAtIndex:0];
+        NSString* name = [userData objectForKey:@"name"];
+        NSString* username = [userData objectForKey:@"username"];
+        NSString* email = [userData objectForKey:@"email"];
+        NSString* organization = [userData objectForKey:@"organization"];
+        NSString* phone = [userData objectForKey:@"phone"];
+        NSString* picture = [userData objectForKey:@"picture"];
+        NSString* pictureLocalPath = [userData objectForKey:@"pictureLocalPath"];
+        NSString* gender = [userData objectForKey:@"gender"];
+        NSString* byear = [userData objectForKey:@"byear"];
+            
+        if(name) {
+            Countly.user.name = name;
+        }
+        if(username) {
+            Countly.user.username = username;
+        }
+        if(email) {
+            Countly.user.email = email;
+        }
+        if(organization) {
+            Countly.user.organization = organization;
+        }
+        if(phone) {
+            Countly.user.phone = phone;
+        }
+        if(picture) {
+            Countly.user.pictureURL = picture;
+        }
+        if(pictureLocalPath) {
+            Countly.user.pictureLocalPath = pictureLocalPath;
+        }
+        if(gender) {
+            Countly.user.gender = gender;
+        }
+        if(byear) {
+            Countly.user.birthYear = @([byear integerValue]);
+        }
         [Countly.user save];
-        result(@"setuserdata!");
         });
-
     }else if ([@"getDeviceID" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* deviceID = Countly.sharedInstance.deviceID;

@@ -9,7 +9,7 @@ cd app_cordova/www
 rm index.html
 curl https://raw.githubusercontent.com/Countly/countly-sdk-cordova-example/master/app_cordova/www/index.html --output index.html
 
-cordova plugin add https://github.com/Countly/countly-sdk-cordova.git
+cordova plugin add /Users/muhammadjunaidakram/Documents/Work/Countly/SDKs/countly-sdk-cordova/countly-sdk-js-21.11.0.tgz
 
 read -p 'Enter your server URL: ' serverURL
 read -p 'Enter your App Key: ' appKey

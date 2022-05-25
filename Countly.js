@@ -76,17 +76,38 @@ Countly.setLoggingEnabled = function(isDebug = true){
 }
 
 // countly sending user data
-Countly.setUserData = function(options){
+Countly.setUserData = function(userData){
+    var message = null;
+    if(!userData) {
+        message = "User profile data should not be null or undefined";
+        log("setUserData", message, logLevel.ERROR);
+        return message;
+    }
+    if(typeof userData !== 'object'){
+        message = "unsupported data type of user data '" + (typeof userData) + "'";
+        log("setUserData", message, logLevel.WARNING);
+        return message;
+    }
     var args = [];
-    args.push(options.name || "");
-    args.push(options.username || "");
-    args.push(options.email || "");
-    args.push(options.organization || "");
-    args.push(options.phone || "");
-    args.push(options.picture || "");
-    args.push(options.picturePath || "");
-    args.push(options.gender || "");
-    args.push(options.byear || 0);
+    for(var key in userData){
+        if (typeof userData[key] != "string" && key.toString() != "byear") 
+        {
+            message = "skipping value for key '" + key.toString() + "', due to unsupported data type '" + (typeof userData[key]) + "', its data type should be 'string'";
+            log("setUserData", message, logLevel.WARNING);
+        }
+        
+    }
+
+    if(userData.org && !userData.organization) {
+        userData.organization = userData.org;
+        delete userData.org;
+    }
+
+    if(userData.byear) {
+        // Countly.validateParseInt(userData.byear, "key byear", "setUserData");
+        userData.byear = userData.byear.toString();
+    }
+    args.push(userData);
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setuserdata",args);
 }
@@ -706,3 +727,33 @@ Countly.enableApm = function(){
 
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
+
+logLevel = {"INFO": "1", "DEBUG": "2", "VERBOSE": "3", "WARNING": "4", "ERROR": "5"};
+/**
+ * Print log if logging is enabled
+ * @param {String} functionName : name of function from where value is validating.
+ * @param {String} message : log message
+ * @param {String} logLevel : log level (INFO, DEBUG, VERBOSE, WARNING, ERROR)
+ */
+ log = (functionName, message, logLevel = logLevel.DEBUG) => {
+    if(Countly.isDebug) {
+        var logMessage = "[CountlyCordova] " + functionName + ", " + message;
+        switch (logLevel) {
+            case logLevel.WARNING:
+                console.warn(logMessage);
+            break;
+            case logLevel.ERROR:
+                console.error(logMessage);
+            break;
+            case logLevel.DEBUG:
+                console.debug(logMessage);
+            break;
+            case logLevel.INFO:
+                console.info(logMessage);
+            break;
+            default:
+                console.log(logMessage);
+        }
+    }
+};
+
