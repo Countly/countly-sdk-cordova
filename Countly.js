@@ -401,7 +401,7 @@ Countly.askForNotificationPermission = function(){
 }
 
 //expectedValueInfo - value from 1 to 3. 1 - no value, 2 - int value, 3 - other values
-userDataHandleCall = function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
+userDataHandleCall = async function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
     var valueArray = [providedKey];
 
     var message = await _validateUserDataKey(providedKey, callName);
@@ -430,46 +430,46 @@ userDataHandleCall = function(callName, providedKey, providedValue = null, expec
 };
 
 Countly.userData = {};
-Countly.userData.setProperty = async function(keyName, keyValue){
+Countly.userData.setProperty = function(keyName, keyValue){
     userDataHandleCall("setProperty", keyName, keyValue, 3);
 };
 
-Countly.userData.increment = async function(keyName){
+Countly.userData.increment = function(keyName){
     userDataHandleCall("increment", keyName);
 };
 
-Countly.userData.incrementBy = async function(keyName, keyValue){
+Countly.userData.incrementBy = function(keyName, keyValue){
     userDataHandleCall("incrementBy", keyName, keyValue, 2);
 };
 
-Countly.userData.multiply = async function(keyName, keyValue){
+Countly.userData.multiply = function(keyName, keyValue){
     userDataHandleCall("multiply", keyName, keyValue, 2);
 };
 
-Countly.userData.saveMax = async function(keyName, keyValue){
+Countly.userData.saveMax = function(keyName, keyValue){
     userDataHandleCall("saveMax", keyName, keyValue, 2);
 };
 
-Countly.userData.saveMin = async function(keyName, keyValue){
+Countly.userData.saveMin = function(keyName, keyValue){
     userDataHandleCall("saveMin", keyName, keyValue, 2);
 };
 
-Countly.userData.setOnce = async function(keyName, keyValue){
+Countly.userData.setOnce = function(keyName, keyValue){
     userDataHandleCall("setOnce", keyName, keyValue, 3);
 };
 
 //pushUniqueValue
-Countly.userData.pushUniqueValue = async function(keyName, keyValue){
+Countly.userData.pushUniqueValue = function(keyName, keyValue){
     userDataHandleCall("pushUniqueValue", keyName, keyValue, 3);
 };
 
 //pushValue
-Countly.userData.pushValue = async function(keyName, keyValue){
+Countly.userData.pushValue = function(keyName, keyValue){
     userDataHandleCall("pushValue", keyName, keyValue, 3);
 };
 
 //pullValue
-Countly.userData.pullValue = async function(keyName, keyValue){
+Countly.userData.pullValue = function(keyName, keyValue){
     userDataHandleCall("pullValue", keyName, keyValue, 3);
 };
 
