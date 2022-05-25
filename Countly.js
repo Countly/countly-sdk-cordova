@@ -402,7 +402,7 @@ Countly.askForNotificationPermission = function(){
 
 Countly.userData = {};
 Countly.userData.setProperty = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "setProperty");
+    var message = await _validateStringHasValue(keyName, "key", "setProperty");
     if(message) {
         return message;
     }
@@ -418,7 +418,7 @@ Countly.userData.setProperty = async function(keyName, keyValue){
     }
 };
 Countly.userData.increment = async function(keyName){
-    var message = await Countly.validateString(keyName, "key", "setProperty");
+    var message = await _validateStringHasValue(keyName, "key", "setProperty");
     if(message) {
         return message;
     }
@@ -428,7 +428,7 @@ Countly.userData.increment = async function(keyName){
     }
 };
 Countly.userData.incrementBy = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "incrementBy");
+    var message = await _validateStringHasValue(keyName, "key", "incrementBy");
     if(message) {
         return message;
     }
@@ -440,7 +440,7 @@ Countly.userData.incrementBy = async function(keyName, keyValue){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_incrementBy",[keyName, intValue]);
 };
 Countly.userData.multiply = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "multiply");
+    var message = await _validateStringHasValue(keyName, "key", "multiply");
     if(message) {
         return message;
     }
@@ -452,7 +452,7 @@ Countly.userData.multiply = async function(keyName, keyValue){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_multiply",[keyName, intValue]);
 };
 Countly.userData.saveMax = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "saveMax");
+    var message = await _validateStringHasValue(keyName, "key", "saveMax");
     if(message) {
         return message;
     }
@@ -464,7 +464,7 @@ Countly.userData.saveMax = async function(keyName, keyValue){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMax",[keyName, intValue]);
 };
 Countly.userData.saveMin = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "saveMin");
+    var message = await _validateStringHasValue(keyName, "key", "saveMin");
     if(message) {
         return message;
     }
@@ -476,7 +476,7 @@ Countly.userData.saveMin = async function(keyName, keyValue){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMin",[keyName, intValue]);
 };
 Countly.userData.setOnce = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "setOnce");
+    var message = await _validateStringHasValue(keyName, "key", "setOnce");
     if(message) {
         return message;
     }
@@ -492,7 +492,7 @@ Countly.userData.setOnce = async function(keyName, keyValue){
 
 //pushUniqueValue
 Countly.userData.pushUniqueValue = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "pushUniqueValue");
+    var message = await _validateStringHasValue(keyName, "key", "pushUniqueValue");
     if(message) {
         return message;
     }
@@ -508,7 +508,7 @@ Countly.userData.pushUniqueValue = async function(keyName, keyValue){
 
 //pushValue
 Countly.userData.pushValue = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "pushValue");
+    var message = await _validateStringHasValue(keyName, "key", "pushValue");
     if(message) {
         return message;
     }
@@ -524,7 +524,7 @@ Countly.userData.pushValue = async function(keyName, keyValue){
 
 //pullValue
 Countly.userData.pullValue = async function(keyName, keyValue){
-    var message = await Countly.validateString(keyName, "key", "pullValue");
+    var message = await _validateStringHasValue(keyName, "key", "pullValue");
     if(message) {
         return message;
     }
@@ -850,7 +850,7 @@ document.addEventListener("deviceready", Countly.deviceready, false);
     }
 
     // validating that value should be parceable to int.
-    message = await Countly.validateParseInt(stringValue, stringName, functionName);
+    message = await _validateValueParsableToInt(stringValue, stringName, functionName);
     return message;
 }
 
@@ -886,7 +886,7 @@ Countly.validateUserDataType = async (stringValue, stringName, functionName) => 
  * @param {String} functionName : name of function from where value is validating.
  * @returns 
  */
-Countly.validateValidUserData = async (stringValue, stringName, functionName) => {
+Countly.validateUserData = async (stringValue, stringName, functionName) => {
     if (stringValue || stringValue == "") {
         return null;
     }
@@ -904,7 +904,7 @@ Countly.validateValidUserData = async (stringValue, stringName, functionName) =>
  * @param {String} functionName : name of function from where value is validating.
  * @returns 
  */
-Countly.validateParseInt = async (stringValue, stringName, functionName) => {
+_validateValueParsableToInt = async (stringValue, stringName, functionName) => {
     var intValue = parseInt(stringValue);
     if (!isNaN(intValue)) {
         return null;
@@ -923,7 +923,7 @@ Countly.validateParseInt = async (stringValue, stringName, functionName) => {
  * @param {String} functionName : name of function from where value is validating.
  * @returns 
  */
-Countly.validateString = async (stringValue, stringName, functionName) => {
+_validateStringHasValue = async (stringValue, stringName, functionName) => {
     var message = null;
     if(!stringValue) {
         message = stringName +" should not be null, undefined or empty";
