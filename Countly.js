@@ -400,23 +400,97 @@ Countly.askForNotificationPermission = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
 }
 
-Countly.userData = {};
-Countly.userData.setProperty = async function(keyName, keyValue){
-    var message = await _validateStringHasValue(keyName, "key", "setProperty");
+validateUserDataKeyValue = function(providedKey, providedValue, callName) {
+    var message = await validateUserDataKey(providedKey, callName);
     if(message) {
         return message;
     }
 
-    message = await Countly.validateValidUserData(keyValue, "value", "setProperty");
+    message = await Countly.validateUserDataValue(providedValue, callName);
     if(message) {
         return message;
     }
+}
+
+validateUserDataKey = function(stringValue, functionName) {
+
+}
+
+validateUserDataValue = function(stringValue, functionName) {
+
+}
+
+validateUserDataValueInt = function(stringValue, functionName) {
+
+}
+
+userDataHandleCall = function(internalFunctionName, callName, providedKey, providedValue, expectedValueInfo) {
+    var keyName;
+    var keyValue;
+    var keyValueInt;
+
+    //providedKey will never be null in normal circumstances. If it's null, fail
+    //expectedValueInfo - value from 1 to 3. 1 - no value, 2 - int value, 3 - other values
+
+    //validate key
+
+
+    if(expectedValueInfo == 1) {
+        //do nothing
+    } else if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
+        //validate for generic value propertie (null, undefined, empty)
+
+
+        if(expectedValueInfo == 2) {
+            //do final validation for int
+        }
+    } else {
+        //log error should never get here
+    }
+
+
+    var message = await validateUserDataKeyValue(keyName, keyValue, "setProperty");
+    if(message) {
+        return message;
+    }
+    
+    keyName = keyName.toString();
+    keyValue = keyValue.toString();
+    keyValueInt;
+    if(keyName && (keyValue || keyValue == "")) {
+        
+    }
+
+    var valueArray;
+
+    if(keyValue == null && keyValueInt == null) {
+        valueArray = [keyName]
+    } else if (keyValue != null) {
+        valueArray = [keyName, keyValue]
+    } else if(keyValueInt != null) {
+        valueArray = [keyName, keyValueInt]
+    }
+
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", internalFunctionName, valueArray);
+};
+
+Countly.userData = {};
+Countly.userData.setProperty = async function(keyName, keyValue){
+    userDataHandleCall("userData_setProperty");
+
+
+    var message = await validateUserDataKeyValue(keyName, keyValue, "setProperty");
+    if(message) {
+        return message;
+    }
+    
     keyName = keyName.toString();
     keyValue = keyValue.toString();
     if(keyName && (keyValue || keyValue == "")) {
         cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setProperty",[keyName, keyValue]);
     }
 };
+}
 Countly.userData.increment = async function(keyName){
     var message = await _validateStringHasValue(keyName, "key", "setProperty");
     if(message) {
