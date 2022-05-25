@@ -410,7 +410,6 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
     }
     else if (typeof providedKey !== "string") {
         message = "skipping value for 'key', due to unsupported data type '" + (typeof providedKey) + "', its data type should be 'string'";
-    
     }
     if(message) {
         Countly.logError(callName, message);
@@ -425,14 +424,13 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
             return message;
         }
         
-        var keyValue = providedKey;
+        var keyValue = providedValue;
 
         if(expectedValueInfo == 2) {
-            
             if (typeof providedValue == "string") {
                 Countly.logWarning(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'");
             }
-            if (typeof providedValue != "number") {
+            else if (typeof providedValue != "number") {
                 message = "skipping value for 'value', due to unsupported data type '" + (typeof striprovidedValuengValue) + "', its data type should be 'number'";
                 Countly.logError(functionName, message);
                 return message;
@@ -444,7 +442,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
                 Countly.logError(functionName, message);
                 return message;
             }
-            keyValue = parseInt(keyValue).toString();
+            keyValue = intValue.toString();
         }
 
         valueArray.pushValue(keyValue);
