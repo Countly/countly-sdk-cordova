@@ -886,7 +886,7 @@ Countly.validateUserDataType = async (stringValue, stringName, functionName) => 
  * @param {String} functionName : name of function from where value is validating.
  * @returns 
  */
-Countly.validateUserData = async (stringValue, stringName, functionName) => {
+Countly.validateValidUserData = async (stringValue, stringName, functionName) => {
     if (stringValue || stringValue == "") {
         return null;
     }
