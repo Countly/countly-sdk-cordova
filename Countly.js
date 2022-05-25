@@ -400,30 +400,6 @@ Countly.askForNotificationPermission = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
 }
 
-validateUserDataKeyValue = function(providedKey, providedValue, callName) {
-    var message = await validateUserDataKey(providedKey, callName);
-    if(message) {
-        return message;
-    }
-
-    message = await _validateUserDataValue(providedValue, callName);
-    if(message) {
-        return message;
-    }
-}
-
-validateUserDataKey = function(stringValue, functionName) {
-
-}
-
-validateUserDataValue = function(stringValue, functionName) {
-
-}
-
-validateUserDataValueInt = function(stringValue, functionName) {
-
-}
-
 //expectedValueInfo - value from 1 to 3. 1 - no value, 2 - int value, 3 - other values
 userDataHandleCall = function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
     var valueArray = [providedKey];
