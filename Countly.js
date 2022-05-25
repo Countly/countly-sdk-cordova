@@ -431,7 +431,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
                 Countly.logWarning(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'");
             }
             else if (typeof providedValue != "number") {
-                message = "skipping value for 'value', due to unsupported data type '" + (typeof striprovidedValuengValue) + "', its data type should be 'number'";
+                message = "skipping value for 'value', due to unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'";
                 Countly.logError(functionName, message);
                 return message;
             }
