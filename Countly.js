@@ -403,40 +403,140 @@ Countly.askForNotificationPermission = function(){
 
 Countly.userData = {};
 Countly.userData.setProperty = function(keyName, keyValue){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setProperty",[keyName.toString() || "", keyValue.toString() || ""]);
+    var message = await Countly.validateString(keyName, "key", "setProperty");
+    if(message) {
+        return message;
+    }
+
+    message = await Countly.validateValidUserData(keyValue, "value", "setProperty");
+    if(message) {
+        return message;
+    }
+    keyName = keyName.toString();
+    keyValue = keyValue.toString();
+    if(keyName && (keyValue || keyValue == "")) {
+        cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setProperty",[keyName, keyValue]);
+    }
 };
 Countly.userData.increment = function(keyName){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_increment",[keyName.toString() || ""]);
+    var message = await Countly.validateString(keyName, "key", "setProperty");
+    if(message) {
+        return message;
+    }
+    keyName = keyName.toString();
+    if(keyName) {
+        cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_increment",[keyName]);
+    }
 };
-Countly.userData.incrementBy = function(keyName, keyIncrement){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_incrementBy",[keyName.toString() || "", keyIncrement.toString() || ""]);
+Countly.userData.incrementBy = function(keyName, keyValue){
+    var message = await Countly.validateString(keyName, "key", "incrementBy");
+    if(message) {
+        return message;
+    }
+    message = await Countly.validateUserDataValue(keyValue, "value", "incrementBy");
+    if(message) {
+        return message;
+    }
+    var intValue = parseInt(keyValue).toString();
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_incrementBy",[keyName, intValue]);
 };
-Countly.userData.multiply = function(keyName, multiplyValue){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_multiply",[keyName.toString() || "", multiplyValue.toString() || ""]);
+Countly.userData.multiply = function(keyName, keyValue){
+    var message = await Countly.validateString(keyName, "key", "multiply");
+    if(message) {
+        return message;
+    }
+    message = await Countly.validateUserDataValue(keyValue, "value", "multiply");
+    if(message) {
+        return message;
+    }
+    var intValue = parseInt(keyValue).toString();
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_multiply",[keyName, intValue]);
 };
-Countly.userData.saveMax = function(keyName, saveMax){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMax",[keyName.toString() || "", saveMax.toString() || ""]);
+Countly.userData.saveMax = function(keyName, keyValue){
+    var message = await Countly.validateString(keyName, "key", "saveMax");
+    if(message) {
+        return message;
+    }
+    message = await Countly.validateUserDataValue(keyValue, "value", "saveMax");
+    if(message) {
+        return message;
+    }
+    var intValue = parseInt(keyValue).toString();
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMax",[keyName, intValue]);
 };
-Countly.userData.saveMin = function(keyName, saveMin){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMin",[keyName.toString() || "", saveMin.toString() || ""]);
+Countly.userData.saveMin = function(keyName, keyValue){
+    var message = await Countly.validateString(keyName, "key", "saveMin");
+    if(message) {
+        return message;
+    }
+    message = await Countly.validateUserDataValue(keyValue, "value", "saveMin");
+    if(message) {
+        return message;
+    }
+    var intValue = parseInt(keyValue).toString();
+    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMin",[keyName, intValue]);
 };
-Countly.userData.setOnce = function(keyName, setOnce){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
+Countly.userData.setOnce = function(keyName, keyValue){
+    var message = await Countly.validateString(keyName, "key", "setOnce");
+    if(message) {
+        return message;
+    }
+    message = await Countly.validateValidUserData(keyValue, "value", "setOnce");
+    if(message) {
+        return message;
+    }
+    keyValue = keyValue.toString();
+    if(keyValue || keyValue == "") {
+        cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName, keyValue]);
+    }
 };
 
 //pushUniqueValue
-Countly.userData.pushUniqueValue = function(key, value){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushUniqueValue",[key.toString() || "", value.toString() || ""]);
+Countly.userData.pushUniqueValue = function(keyName, keyValue){
+    var message = await Countly.validateString(keyName, "key", "pushUniqueValue");
+    if(message) {
+        return message;
+    }
+    message = await Countly.validateValidUserData(keyValue, "value", "pushUniqueValue");
+    if(message) {
+        return message;
+    }
+    keyValue = keyValue.toString();
+    if(keyValue || keyValue == "") {
+        cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushUniqueValue",[keyName, keyValue]);
+    }
 };
 
 //pushValue
-Countly.userData.pushValue = function(type, pushValue){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushValue",[type.toString() || "", pushValue.toString() || ""]);
+Countly.userData.pushValue = function(keyName, keyValue){
+    var message = await Countly.validateString(keyName, "key", "pushValue");
+    if(message) {
+        return message;
+    }
+    message = await Countly.validateValidUserData(keyValue, "value", "pushValue");
+    if(message) {
+        return message;
+    }
+    keyValue = keyValue.toString();
+    if(keyValue || keyValue == "") {
+        cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushValue",[keyName, keyValue]);
+    }
 };
 
 //pullValue
-Countly.userData.pullValue = function(type, pullValue){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pullValue",[type.toString() || "", pullValue.toString() || ""]);
+Countly.userData.pullValue = function(keyName, keyValue){
+    var message = await Countly.validateString(keyName, "key", "pullValue");
+    if(message) {
+        return message;
+    }
+    message = await Countly.validateValidUserData(keyValue, "value", "pullValue");
+    if(message) {
+        return message;
+    }
+    keyValue = keyValue.toString();
+    if(keyValue || keyValue == "") {
+        cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pullValue",[keyName, keyValue]);
+    }
 };
 
 Countly.consents = ["sessions", "events", "views", "location", "crashes", "attribution", "users", "push", "star-rating","AppleWatch"];
@@ -727,6 +827,117 @@ Countly.enableApm = function(){
 
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
+
+/**
+ * Validate user data value, it should be 'number' or 'string' that is parseable to 'number'
+ * and it should not be null or undefined
+ * It will return message if any issue found related to data validation else return null.
+ * @param {String} stringValue : value of data to validate
+ * @param {String} stringName : name of that value string
+ * @param {String} functionName : name of function from where value is validating.
+ * @returns 
+ */
+ Countly.validateUserDataValue = async (stringValue, stringName, functionName) => {
+    // validating that value should not be null or undefined
+    var message = await Countly.validateValidUserData(stringValue, stringName, functionName);
+    if(message) {
+        return message;
+    }
+    
+    // validating that value should be 'number' or 'string'
+    message = await Countly.validateUserDataType(stringValue, stringName, functionName);
+    if(message) {
+        return message;
+    }
+
+    // validating that value should be parceable to int.
+    message = await Countly.validateParseInt(stringValue, stringName, functionName);
+    return message;
+}
+
+/**
+ * Validate user data value, it should be 'number' or 'string' that is parseable to 'number'
+ * It will return message if any issue found related to data validation else return null.
+ * @param {String} stringValue : value of data to validate
+ * @param {String} stringName : name of that value string
+ * @param {String} functionName : name of function from where value is validating.
+ * @returns 
+ */
+Countly.validateUserDataType = async (stringValue, stringName, functionName) => {
+    var message = null;
+    if (typeof stringValue == "number") {
+        return null;
+    }
+    if (typeof stringValue == "string") {
+        message = "unsupported data type '" + (typeof stringValue) + "', its data type should be 'number'";
+        Countly.logWarning(functionName, message);
+        return null;
+    }
+
+    message = "skipping value for '" + stringName.toString() + "', due to unsupported data type '" + (typeof stringValue) + "', its data type should be 'number'";
+    Countly.logError(functionName, message);
+    return message;
+};
+
+/**
+ * Validate user data value, it should not be null or undefined
+ * It will return message if any issue found related to data validation else return null.
+ * @param {String} stringValue : value of data to validate
+ * @param {String} stringName : name of that value string
+ * @param {String} functionName : name of function from where value is validating.
+ * @returns 
+ */
+Countly.validateValidUserData = async (stringValue, stringName, functionName) => {
+    if (stringValue || stringValue == "") {
+        return null;
+    }
+
+    var message = stringName +" should not be null or undefined";
+    Countly.logError(functionName, message);
+    return message;
+};
+
+/**
+ * Validate user data value, it should be parseable to 'number'
+ * It will return message if any issue found related to data validation else return null.
+ * @param {String} stringValue : value of data to validate
+ * @param {String} stringName : name of that value string
+ * @param {String} functionName : name of function from where value is validating.
+ * @returns 
+ */
+Countly.validateParseInt = async (stringValue, stringName, functionName) => {
+    var intValue = parseInt(stringValue);
+    if (!isNaN(intValue)) {
+        return null;
+    }
+
+    var message = "skipping value for '" + stringName.toString() + "', due to unsupported data type '" + (typeof stringValue) + "', its data type should be 'number' or parseable to 'integer'";
+    Countly.logError(functionName, message);
+    return message;
+};
+
+/**
+ * Validate string, it should not be empty, null or undefined
+ * It will return message if any issue found related to string validation else return null.
+ * @param {String} stringValue : value of string to validate
+ * @param {String} stringName : name of that value string
+ * @param {String} functionName : name of function from where value is validating.
+ * @returns 
+ */
+Countly.validateString = async (stringValue, stringName, functionName) => {
+    var message = null;
+    if(!stringValue) {
+        message = stringName +" should not be null, undefined or empty";
+    }
+    else if (typeof stringValue !== "string") {
+        message = "skipping value for '" + stringName.toString() + "', due to unsupported data type '" + (typeof stringValue) + "', its data type should be 'string'";
+    
+    }
+    if(message) {
+        Countly.logError(functionName, message);
+    }
+    return message;
+};
 
 logLevel = {"INFO": "1", "DEBUG": "2", "VERBOSE": "3", "WARNING": "4", "ERROR": "5"};
 /**
