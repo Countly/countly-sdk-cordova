@@ -414,6 +414,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
         log(callName, "trying to interact with user data properties [ " + providedKey + "]", logLevel.info);
         var valueArray = [];
 
+        // First we try to validate the provided key value
         // Provided key should not be empty, null or undefined
         var message = null;
         if(!providedKey) {
@@ -426,9 +427,14 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
             log(callName, message, logLevel.ERROR);
             return message;
         }
+        //provided key is acceptable, store it in the value array and check values
         valueArray.push(providedKey);
 
+        // if info value is 1, we don't need any value and the validation can be skipped
         if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
+            // if info value is 2 we expected a parsable string or number to produce an int
+            // if info value is 3 we expect a non empty string
+
             // Provided value should not be null or undefined
             if (providedValue === null || providedValue === undefined) {
                 message = "Value should not be null or undefined";
@@ -436,10 +442,11 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
                 return message;
             }
             
+            // cache the currently provided value
             var keyValue = providedValue;
 
             if(expectedValueInfo == 2) {
-                // Provided value should be 'number' or 'string' that is parseable to 'number'
+                // Provided value should be 'number' or 'string' that is parsable to 'number'
                 if (typeof providedValue == "string") {
                     log(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'", logLevel.WARNING);
                 }
@@ -455,9 +462,11 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
                     log(callName, message, logLevel.ERROR);
                     return message;
                 }
+                //replace the cached value with the newly parsed int
                 keyValue = intValue.toString();
             }
 
+            //add the validated key value value array together with the key
             valueArray.pushValue(keyValue);
         } 
         cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "userData_"+callName, valueArray);
@@ -802,7 +811,7 @@ Countly.enableApm = function(){
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
 
-logLevel = {"INFO": "1", "DEBUG": "2", "VERBOSE": "3", "WARNING": "4", "ERROR": "5"};
+logLevel = {"VERBOSE": "1", "DEBUG": "2", "INFO": "3", "WARNING": "4", "ERROR": "5"};
 /**
  * Print log if logging is enabled
  * @param {String} functionName : name of function from where value is validating.
@@ -812,18 +821,21 @@ logLevel = {"INFO": "1", "DEBUG": "2", "VERBOSE": "3", "WARNING": "4", "ERROR": 
  log = (functionName, message, logLevel = logLevel.DEBUG) => {
     if(Countly.isDebug) {
         var logMessage = "[CountlyCordova] " + functionName + ", " + message;
-        switch (logLevel) {
-            case logLevel.WARNING:
-                console.warn(logMessage);
-            break;
-            case logLevel.ERROR:
-                console.error(logMessage);
+        switch (logLevel) {    
+            case logLevel.VERBOSE:
+                console.log(logMessage);
             break;
             case logLevel.DEBUG:
                 console.debug(logMessage);
             break;
             case logLevel.INFO:
                 console.info(logMessage);
+            break;
+            case logLevel.WARNING:
+                console.warn(logMessage);
+            break;
+            case logLevel.ERROR:
+                console.error(logMessage);
             break;
             default:
                 console.log(logMessage);
