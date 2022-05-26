@@ -2,9 +2,9 @@ package ly.count.android.sdk;
 import ly.count.android.sdk.Countly;
 import ly.count.android.sdk.DeviceId;
 import ly.count.android.sdk.RemoteConfig;
-import ly.count.android.sdk.CountlyStarRating;
 //import ly.count.android.sdk.DeviceInfo;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
@@ -177,9 +177,9 @@ public class CountlyNative {
             String newDeviceID = args.getString(0);
             String onServerString = args.getString(1);
             if ("1".equals(onServerString)) {
-                Countly.sharedInstance().changeDeviceId(newDeviceID);
+                Countly.sharedInstance().deviceId().changeWithMerge(newDeviceID);
             } else {
-                Countly.sharedInstance().changeDeviceId(DeviceId.Type.DEVELOPER_SUPPLIED, newDeviceID);
+                Countly.sharedInstance().deviceId().changeWithoutMerge(newDeviceID);
             }
             return "changeDeviceId success!";
         }catch (JSONException jsonException){
@@ -471,23 +471,12 @@ public class CountlyNative {
 
     public String setuserdata(JSONArray args){
         try {
-            // Bundle bundle = new Bundle();
-
             this.log("setuserdata", args);
-            Map<String, String> bundle = new HashMap<String, String>();
+            JSONObject userData = args.getJSONObject(0);
 
-            bundle.put("name", args.getString(0));
-            bundle.put("username", args.getString(1));
-            bundle.put("email", args.getString(2));
-            bundle.put("organization", args.getString(3));
-            bundle.put("phone", args.getString(4));
-            bundle.put("picture", args.getString(5));
-            bundle.put("picturePath", args.getString(6));
-            bundle.put("gender", args.getString(7));
-            bundle.put("byear", String.valueOf(args.getInt(8)));
-
-            Countly.userData.setUserData(bundle);
-            Countly.userData.save();
+            Map<String,Object> userDataMap = toMap(userData);
+            Countly.sharedInstance().userProfile().setProperties(userDataMap);
+            Countly.sharedInstance().userProfile().save();
             return "setuserdata success";
         }catch (JSONException jsonException){
             return jsonException.toString();
@@ -962,6 +951,11 @@ public class CountlyNative {
               presentableFeedback.name = widgetName;
               Countly.sharedInstance().feedback().presentFeedbackWidget(presentableFeedback, activity, closeButtonText, new FeedbackCallback() {
                   @Override
+                  public void onClosed() {
+                      // TODO : send on close result to react native JS side
+                  }
+
+                  @Override
                   public void onFinished(String error) {
                       if(error != null) {
                         theCallback.callback(error);
@@ -1119,6 +1113,36 @@ public class CountlyNative {
         if(Countly.sharedInstance().isInitialized()) {
             Countly.sharedInstance().apm().triggerBackground();
         }
+    }
+
+    public static Map<String, Object> toMap(JSONObject jsonobj) throws JSONException {
+        Map<String, Object> map = new HashMap<>();
+        Iterator<String> keys = jsonobj.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            Object value = jsonobj.get(key);
+            if (value instanceof JSONArray) {
+                value = toList((JSONArray) value);
+            } else if (value instanceof JSONObject) {
+                value = toMap((JSONObject) value);
+            }
+            map.put(key, value);
+        }
+        return map;
+    }
+
+    public static List<Object> toList(JSONArray array) throws JSONException {
+        List<Object> list = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            Object value = array.get(i);
+            if (value instanceof JSONArray) {
+                value = toList((JSONArray) value);
+            } else if (value instanceof JSONObject) {
+                value = toMap((JSONObject) value);
+            }
+            list.add(value);
+        }
+        return list;
     }
 
 

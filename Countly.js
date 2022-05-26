@@ -76,17 +76,37 @@ Countly.setLoggingEnabled = function(isDebug = true){
 }
 
 // countly sending user data
-Countly.setUserData = function(options){
+Countly.setUserData = function(userData){
+    var message = null;
+    if(!userData) {
+        message = "User profile data should not be null or undefined";
+        log("setUserData", message, logLevel.ERROR);
+        return message;
+    }
+    if(typeof userData !== 'object'){
+        message = "unsupported data type of user data '" + (typeof userData) + "'";
+        log("setUserData", message, logLevel.WARNING);
+        return message;
+    }
     var args = [];
-    args.push(options.name || "");
-    args.push(options.username || "");
-    args.push(options.email || "");
-    args.push(options.organization || "");
-    args.push(options.phone || "");
-    args.push(options.picture || "");
-    args.push(options.picturePath || "");
-    args.push(options.gender || "");
-    args.push(options.byear || 0);
+    for(var key in userData){
+        if (typeof userData[key] != "string" && key.toString() != "byear") 
+        {
+            message = "skipping value for key '" + key.toString() + "', due to unsupported data type '" + (typeof userData[key]) + "', its data type should be 'string'";
+            log("setUserData", message, logLevel.WARNING);
+        }
+        
+    }
+
+    if(userData.org && !userData.organization) {
+        userData.organization = userData.org;
+        delete userData.org;
+    }
+
+    if(userData.byear) {
+        userData.byear = userData.byear.toString();
+    }
+    args.push(userData);
 
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setuserdata",args);
 }
@@ -380,42 +400,126 @@ Countly.askForNotificationPermission = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
 }
 
+/**
+ * Common function to handle user data calls, print and return message if data is not valid.
+ * It will return message if any issue found related to data validation else return null.
+ * @param {String} callName : name of function from where value is validating.
+ * @param {String} providedKey : name of user data key.
+ * @param {String} providedValue : value against provided key
+ * @param {String} expectedValueInfo : value from 1 to 3. 1 - no value, 2 - int value, 3 - other values
+ * @returns 
+ */
+userDataHandleCall = async function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
+    try {
+        log(callName, "trying to interact with user data properties [ " + providedKey + "]", logLevel.info);
+        var valueArray = [];
+
+        // First we try to validate the provided key value
+        // Provided key should not be empty, null or undefined
+        var message = null;
+        if(!providedKey) {
+            message = "Key should not be null, undefined or empty";
+        }
+        else if (typeof providedKey !== "string") {
+            message = "skipping value for 'key', due to unsupported data type '" + (typeof providedKey) + "', its data type should be 'string'";
+        }
+        if(message) {
+            log(callName, message, logLevel.ERROR);
+            return message;
+        }
+        //provided key is acceptable, store it in the value array and check values
+        valueArray.push(providedKey);
+
+        // if info value is 1, we don't need any value and the validation can be skipped
+        if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
+            // if info value is 2 we expected a parsable string or number to produce an int
+            // if info value is 3 we expect a non empty string
+
+            // Provided value should not be null or undefined
+            if (providedValue === null || providedValue === undefined) {
+                message = "Value should not be null or undefined";
+                log(callName, message, logLevel.ERROR);
+                return message;
+            }
+            
+            // cache the currently provided value
+            var keyValue = providedValue;
+
+            if(expectedValueInfo == 2) {
+                // Provided value should be 'number' or 'string' that is parsable to 'number'
+                if (typeof providedValue == "string") {
+                    log(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'", logLevel.WARNING);
+                }
+                else if (typeof providedValue != "number") {
+                    message = "skipping value for 'value', due to unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'";
+                    log(callName, message, logLevel.ERROR);
+                    return message;
+                }
+
+                var intValue = parseInt(providedValue);
+                if (isNaN(intValue)) {
+                    message = "skipping value for 'value', due to unsupported data type '" + (typeof providedValue) + "', its data type should be 'number' or parseable to 'integer'";
+                    log(callName, message, logLevel.ERROR);
+                    return message;
+                }
+                //replace the cached value with the newly parsed int
+                keyValue = intValue.toString();
+            }
+
+            //add the validated key value value array together with the key
+            valueArray.pushValue(keyValue);
+        } 
+        cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "userData_"+callName, valueArray);
+    }
+    catch (e) {
+        log("userDataHandleCall", e.message, logLevel.ERROR);
+        return e.message;
+    }
+    
+};
+
 Countly.userData = {};
 Countly.userData.setProperty = function(keyName, keyValue){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setProperty",[keyName.toString() || "", keyValue.toString() || ""]);
+    userDataHandleCall("setProperty", keyName, keyValue, 3);
 };
+
 Countly.userData.increment = function(keyName){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_increment",[keyName.toString() || ""]);
+    userDataHandleCall("increment", keyName);
 };
-Countly.userData.incrementBy = function(keyName, keyIncrement){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_incrementBy",[keyName.toString() || "", keyIncrement.toString() || ""]);
+
+Countly.userData.incrementBy = function(keyName, keyValue){
+    userDataHandleCall("incrementBy", keyName, keyValue, 2);
 };
-Countly.userData.multiply = function(keyName, multiplyValue){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_multiply",[keyName.toString() || "", multiplyValue.toString() || ""]);
+
+Countly.userData.multiply = function(keyName, keyValue){
+    userDataHandleCall("multiply", keyName, keyValue, 2);
 };
-Countly.userData.saveMax = function(keyName, saveMax){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMax",[keyName.toString() || "", saveMax.toString() || ""]);
+
+Countly.userData.saveMax = function(keyName, keyValue){
+    userDataHandleCall("saveMax", keyName, keyValue, 2);
 };
-Countly.userData.saveMin = function(keyName, saveMin){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_saveMin",[keyName.toString() || "", saveMin.toString() || ""]);
+
+Countly.userData.saveMin = function(keyName, keyValue){
+    userDataHandleCall("saveMin", keyName, keyValue, 2);
 };
-Countly.userData.setOnce = function(keyName, setOnce){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_setOnce",[keyName.toString() || "", setOnce.toString() || ""]);
+
+Countly.userData.setOnce = function(keyName, keyValue){
+    userDataHandleCall("setOnce", keyName, keyValue, 3);
 };
 
 //pushUniqueValue
-Countly.userData.pushUniqueValue = function(key, value){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushUniqueValue",[key.toString() || "", value.toString() || ""]);
+Countly.userData.pushUniqueValue = function(keyName, keyValue){
+    userDataHandleCall("pushUniqueValue", keyName, keyValue, 3);
 };
 
 //pushValue
-Countly.userData.pushValue = function(type, pushValue){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pushValue",[type.toString() || "", pushValue.toString() || ""]);
+Countly.userData.pushValue = function(keyName, keyValue){
+    userDataHandleCall("pushValue", keyName, keyValue, 3);
 };
 
 //pullValue
-Countly.userData.pullValue = function(type, pullValue){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","userData_pullValue",[type.toString() || "", pullValue.toString() || ""]);
+Countly.userData.pullValue = function(keyName, keyValue){
+    userDataHandleCall("pullValue", keyName, keyValue, 3);
 };
 
 Countly.consents = ["sessions", "events", "views", "location", "crashes", "attribution", "users", "push", "star-rating","AppleWatch"];
@@ -706,3 +810,36 @@ Countly.enableApm = function(){
 
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
+
+logLevel = {"VERBOSE": "1", "DEBUG": "2", "INFO": "3", "WARNING": "4", "ERROR": "5"};
+/**
+ * Print log if logging is enabled
+ * @param {String} functionName : name of function from where value is validating.
+ * @param {String} message : log message
+ * @param {String} logLevel : log level (INFO, DEBUG, VERBOSE, WARNING, ERROR)
+ */
+ log = (functionName, message, logLevel = logLevel.DEBUG) => {
+    if(Countly.isDebug) {
+        var logMessage = "[CountlyCordova] " + functionName + ", " + message;
+        switch (logLevel) {    
+            case logLevel.VERBOSE:
+                console.log(logMessage);
+            break;
+            case logLevel.DEBUG:
+                console.debug(logMessage);
+            break;
+            case logLevel.INFO:
+                console.info(logMessage);
+            break;
+            case logLevel.WARNING:
+                console.warn(logMessage);
+            break;
+            case logLevel.ERROR:
+                console.error(logMessage);
+            break;
+            default:
+                console.log(logMessage);
+        }
+    }
+};
+
