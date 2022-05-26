@@ -400,10 +400,19 @@ Countly.askForNotificationPermission = function(){
     cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
 }
 
-//expectedValueInfo - value from 1 to 3. 1 - no value, 2 - int value, 3 - other values
+/**
+ * Common function to handle user data calls, print and return message if data is not valid.
+ * It will return message if any issue found related to data validation else return null.
+ * @param {String} callName : name of function from where value is validating.
+ * @param {String} providedKey : name of user data key.
+ * @param {String} providedValue : value against provided key
+ * @param {String} expectedValueInfo : value from 1 to 3. 1 - no value, 2 - int value, 3 - other values
+ * @returns 
+ */
 userDataHandleCall = async function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
     var valueArray = [];
 
+    // Provided key should not be null or undefined
     var message = null;
     if(!providedKey) {
         message = "Key should not be null, undefined or empty";
@@ -418,6 +427,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
     valueArray.push(providedKey);
 
     if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
+        // Provided value should not be empty, null or undefined
         if (providedValue === null || providedValue === undefined) {
             message = "Value should not be null or undefined";
             Countly.logError(callName, message);
@@ -427,6 +437,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
         var keyValue = providedValue;
 
         if(expectedValueInfo == 2) {
+            // Provided value should be 'number' or 'string' that is parseable to 'number'
             if (typeof providedValue == "string") {
                 Countly.logWarning(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'");
             }
