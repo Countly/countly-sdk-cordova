@@ -462,7 +462,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
         cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "userData_"+callName, valueArray);
     }
     catch (e) {
-        log(callName, e.message, logLevel.ERROR);
+        log("userDataHandleCall", e.message, logLevel.ERROR);
         return e.message;
     }
     
