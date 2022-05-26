@@ -811,7 +811,7 @@ Countly.enableApm = function(){
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
 
-logLevel = {"INFO": "1", "DEBUG": "2", "VERBOSE": "3", "WARNING": "4", "ERROR": "5"};
+logLevel = {"VERBOSE": "1", "DEBUG": "2", "INFO": "3", "WARNING": "4", "ERROR": "5"};
 /**
  * Print log if logging is enabled
  * @param {String} functionName : name of function from where value is validating.
@@ -821,18 +821,21 @@ logLevel = {"INFO": "1", "DEBUG": "2", "VERBOSE": "3", "WARNING": "4", "ERROR": 
  log = (functionName, message, logLevel = logLevel.DEBUG) => {
     if(Countly.isDebug) {
         var logMessage = "[CountlyCordova] " + functionName + ", " + message;
-        switch (logLevel) {
-            case logLevel.WARNING:
-                console.warn(logMessage);
-            break;
-            case logLevel.ERROR:
-                console.error(logMessage);
+        switch (logLevel) {    
+            case logLevel.VERBOSE:
+                console.log(logMessage);
             break;
             case logLevel.DEBUG:
                 console.debug(logMessage);
             break;
             case logLevel.INFO:
                 console.info(logMessage);
+            break;
+            case logLevel.WARNING:
+                console.warn(logMessage);
+            break;
+            case logLevel.ERROR:
+                console.error(logMessage);
             break;
             default:
                 console.log(logMessage);
