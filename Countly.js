@@ -414,7 +414,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
         log(callName, "trying to interact with user data properties [ " + providedKey + "]", logLevel.info);
         var valueArray = [];
 
-        // Provided key should not be null or undefined
+        // Provided key should not be empty, null or undefined
         var message = null;
         if(!providedKey) {
             message = "Key should not be null, undefined or empty";
@@ -429,7 +429,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
         valueArray.push(providedKey);
 
         if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
-            // Provided value should not be empty, null or undefined
+            // Provided value should not be null or undefined
             if (providedValue === null || providedValue === undefined) {
                 message = "Value should not be null or undefined";
                 log(callName, message, logLevel.ERROR);
