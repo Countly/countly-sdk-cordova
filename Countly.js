@@ -7,34 +7,34 @@ Countly.isDebug = false;
 Countly.isInitCalled = false;
 if (window.cordova.platformId == "android") {
     Countly.isAndroid = true;
-    Countly.messagingMode = {"TEST": "2", "PRODUCTION": "0"};
+    Countly.messagingMode = { "TEST": "2", "PRODUCTION": "0" };
 }
 if (window.cordova.platformId == "ios") {
     Countly.isiOS = true;
-    Countly.messagingMode = {"TEST": "1", "PRODUCTION": "0", "ADHOC": "2"};
+    Countly.messagingMode = { "TEST": "1", "PRODUCTION": "0", "ADHOC": "2" };
 }
 
 // countly initialization
-Countly.init = function(serverUrl,appKey, deviceId){
+Countly.init = function (serverUrl, appKey, deviceId) {
     var args = [];
     Countly.serverUrl = serverUrl;
     Countly.appKey = appKey;
     args.push(serverUrl || "");
     args.push(appKey || "");
-    if(deviceId){
+    if (deviceId) {
         args.push(deviceId || "");
     };
 
     Countly.isInitCalled = true;
 
-    return new Promise((resolve,reject) => {
-        cordova.exec(resolve,reject,"CountlyCordova","init",args);
+    return new Promise((resolve, reject) => {
+        cordova.exec(resolve, reject, "CountlyCordova", "init", args);
     });
 }
 
-Countly.isInitialized = function(){
-    return new Promise((resolve,reject) => {
-        cordova.exec(resolve,reject,"CountlyCordova","isInitialized",[]);
+Countly.isInitialized = function () {
+    return new Promise((resolve, reject) => {
+        cordova.exec(resolve, reject, "CountlyCordova", "isInitialized", []);
     });
 }
 
@@ -45,84 +45,83 @@ Countly.isInitialized = function(){
  * @param {Map} segments - allows to add optional segmentation,
  * Supported data type for segments values are String, int, double and bool
  */
-Countly.recordView = function(recordView, segments){
+Countly.recordView = function (recordView, segments) {
     var args = [];
     args.push(String(recordView) || "");
-    if(!segments){
+    if (!segments) {
         segments = {};
     }
-    for(var key in segments){
+    for (var key in segments) {
         args.push(key);
         args.push(segments[key]);
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordView",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "recordView", args);
 };
 
 /**
  * Set to true if you want to enable countly internal debugging logs
  * Should be call before Countly init
  */
-Countly.setLoggingEnabled = function(isDebug = true){
+Countly.setLoggingEnabled = function (isDebug = true) {
     isDebug = isDebug.toString() == "true" ? true : false;
-    if(this.isInitCalled) {
-        if(Countly.isDebug){
+    if (this.isInitCalled) {
+        if (Countly.isDebug) {
             console.warn("setLoggingEnabled, should be call before init");
         }
         return;
     }
     Countly.isDebug = isDebug;
     var args = [isDebug.toString()];
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLoggingEnabled",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setLoggingEnabled", args);
 }
 
 // countly sending user data
-Countly.setUserData = function(userData){
+Countly.setUserData = function (userData) {
     var message = null;
-    if(!userData) {
+    if (!userData) {
         message = "User profile data should not be null or undefined";
         log("setUserData", message, logLevel.ERROR);
         return message;
     }
-    if(typeof userData !== 'object'){
+    if (typeof userData !== 'object') {
         message = "unsupported data type of user data '" + (typeof userData) + "'";
         log("setUserData", message, logLevel.WARNING);
         return message;
     }
     var args = [];
-    for(var key in userData){
-        if (typeof userData[key] != "string" && key.toString() != "byear") 
-        {
+    for (var key in userData) {
+        if (typeof userData[key] != "string" && key.toString() != "byear") {
             message = "skipping value for key '" + key.toString() + "', due to unsupported data type '" + (typeof userData[key]) + "', its data type should be 'string'";
             log("setUserData", message, logLevel.WARNING);
         }
-        
+
     }
 
-    if(userData.org && !userData.organization) {
+    if (userData.org && !userData.organization) {
         userData.organization = userData.org;
         delete userData.org;
     }
 
-    if(userData.byear) {
+    if (userData.byear) {
         userData.byear = userData.byear.toString();
     }
     args.push(userData);
 
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setuserdata",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setuserdata", args);
 }
 
 // countly start for android
-Countly.start = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","start",[]);
+Countly.start = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "start", []);
 }
 
 // countly stop for android
-Countly.stop = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","stop",[]);
+Countly.stop = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "stop", []);
 }
 // countly halt for android
-Countly.halt = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","halt",[]);
+Countly.halt = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "halt", []);
 }
 
 // countly manualSessionHandling for android
@@ -156,8 +155,8 @@ Countly.halt = function(){
  * This method will ask for permission, enables push notification and send push token to countly server.
  * Should be call after Countly init
  */
-Countly.askForNotificationPermission = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
+Countly.askForNotificationPermission = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "askForNotificationPermission", []);
 }
 
 /**
@@ -165,8 +164,8 @@ Countly.askForNotificationPermission = function(){
  * Set callback to receive push notifications
  * @param {callback listner } callback 
  */
-Countly.onNotification = function(callback){
-    cordova.exec(callback,callback,"CountlyCordova","registerForNotification",[]);
+Countly.onNotification = function (callback) {
+    cordova.exec(callback, callback, "CountlyCordova", "registerForNotification", []);
 }
 
 /**
@@ -174,25 +173,25 @@ Countly.onNotification = function(callback){
  * Set Push notification messaging mode
  * Should be call after Countly init
  */
-Countly.pushTokenType = function(tokenType){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","pushTokenType",[tokenType]);
+Countly.pushTokenType = function (tokenType) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "pushTokenType", [tokenType]);
 }
 
 // countly deviceready for testing purpose
-Countly.deviceready = function(){
+Countly.deviceready = function () {
     Countly.ready = true;
     //testing
 }
 
 // countly dummy success and error event
-Countly.onSuccess = function(result){
-    if(Countly.isDebug){
+Countly.onSuccess = function (result) {
+    if (Countly.isDebug) {
         console.log("Countly.onSuccess");
         console.log(result);
     }
 }
-Countly.onError = function(error){
-    if(Countly.isDebug){
+Countly.onError = function (error) {
+    if (Countly.isDebug) {
         console.log("Countly.onError");
         console.log(error);
     }
@@ -201,17 +200,17 @@ Countly.onError = function(error){
 // 2017
 
 
-Countly.setOptionalParametersForInitialization = function(options){
+Countly.setOptionalParametersForInitialization = function (options) {
 
     var args = [];
 
     options.latitude = String(options.latitude);
     options.longitude = String(options.longitude);
-    if(options.latitude && !options.latitude.match('\\.')){
-        options.latitude +=  ".00";
+    if (options.latitude && !options.latitude.match('\\.')) {
+        options.latitude += ".00";
     }
-    if(options.longitude && !options.longitude.match('\\.')){
-        options.longitude +=  ".00";
+    if (options.longitude && !options.longitude.match('\\.')) {
+        options.longitude += ".00";
     }
 
     args.push(options.city || "");
@@ -220,7 +219,7 @@ Countly.setOptionalParametersForInitialization = function(options){
     args.push(options.longitude || "0.0");
     args.push(String(options.ipAddress) || "0.0.0.0");
 
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setOptionalParametersForInitialization",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setOptionalParametersForInitialization", args);
 }
 
 /**
@@ -232,23 +231,23 @@ Countly.setOptionalParametersForInitialization = function(options){
  * @param {IP address of user's} ipAddress 
  * */
 
-Countly.setLocationInit = function(countryCode, city, location, ipAddress){
+Countly.setLocationInit = function (countryCode, city, location, ipAddress) {
     var args = [];
     args.push(countryCode || "null");
     args.push(city || "null");
     args.push(location || "null");
     args.push(ipAddress || "null");
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocationInit",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setLocationInit", args);
 }
 
-Countly.setLocation = function(latitude, longitude, countryCode, city, ipAddress){
+Countly.setLocation = function (latitude, longitude, countryCode, city, ipAddress) {
     var args = [];
-    var location  = latitude + " , " + longitude;
+    var location = latitude + " , " + longitude;
     args.push(countryCode || "null");
     args.push(city || "null");
     args.push(location || "null");
     args.push(ipAddress || "null");
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setLocation",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setLocation", args);
 }
 
 /** 
@@ -256,28 +255,28 @@ Countly.setLocation = function(latitude, longitude, countryCode, city, ipAddress
  * Get currently used device Id.
  * Should be call after Countly init
  * */
-Countly.getCurrentDeviceId = function(onSuccess, onError){
+Countly.getCurrentDeviceId = function (onSuccess, onError) {
     Countly.isInitialized().then((result) => {
-        if(result  != "true") {
-            if(Countly.isDebug){
+        if (result != "true") {
+            if (Countly.isDebug) {
                 console.warn("'getCurrentDeviceId, init must be called before getCurrentDeviceId'");
             }
             return;
         }
-    },(err) => {
+    }, (err) => {
         console.error(err);
     });
-    cordova.exec(onSuccess, onError,"CountlyCordova","getCurrentDeviceId",[]);
+    cordova.exec(onSuccess, onError, "CountlyCordova", "getCurrentDeviceId", []);
 }
 
-Countly.changeDeviceId = function(newDeviceID, onServer){
-    if(onServer === false){
+Countly.changeDeviceId = function (newDeviceID, onServer) {
+    if (onServer === false) {
         onServer = "0";
-    }else{
+    } else {
         onServer = "1";
     }
     newDeviceID = newDeviceID.toString() || "";
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","changeDeviceId",[newDeviceID, onServer]);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "changeDeviceId", [newDeviceID, onServer]);
 };
 
 Countly.isCrashReportingEnabled = false;
@@ -286,24 +285,24 @@ Countly.isCrashReportingEnabled = false;
  * Enable crash reporting to report unhandled crashes to Countly
  * Should be call before Countly init
  */
-Countly.enableCrashReporting = function(){
+Countly.enableCrashReporting = function () {
     Countly.isCrashReportingEnabled = true;
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableCrashReporting",[]);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "enableCrashReporting", []);
 }
-Countly.addCrashLog = function(crashLog){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","addCrashLog",[crashLog || ""]);
+Countly.addCrashLog = function (crashLog) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "addCrashLog", [crashLog || ""]);
 };
-Countly.logException = function(exception, nonfatal, segments){
+Countly.logException = function (exception, nonfatal, segments) {
     var exceptionString = "";
     if (Array.isArray(exception)) {
-        for(var i=0, il=exception.length; i<il; i++){
+        for (var i = 0, il = exception.length; i < il; i++) {
             if (typeof exception[i] === 'string') {
                 exceptionString += exception[i] + "\n";
             } else {
-                exceptionString += "columnNumber: " +exception[i].columnNumber + "\n";
-                exceptionString += "fileName: " +exception[i].fileName + "\n";
-                exceptionString += "functionName: " +exception[i].functionName + "\n";
-                exceptionString += "lineNumber: " +exception[i].lineNumber + "\n";
+                exceptionString += "columnNumber: " + exception[i].columnNumber + "\n";
+                exceptionString += "fileName: " + exception[i].fileName + "\n";
+                exceptionString += "functionName: " + exception[i].functionName + "\n";
+                exceptionString += "lineNumber: " + exception[i].lineNumber + "\n";
             }
         }
     } else if (typeof exception === "string") {
@@ -313,11 +312,11 @@ Countly.logException = function(exception, nonfatal, segments){
     var args = [];
     args.push(exceptionString || "");
     args.push(nonfatal || false);
-    for(var key in segments){
+    for (var key in segments) {
         args.push(key);
         args.push(segments[key].toString());
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","logException",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "logException", args);
 };
 
 /**
@@ -325,79 +324,79 @@ Countly.logException = function(exception, nonfatal, segments){
  * Set the optional salt to be used for calculating the checksum of requested data which will be sent with each request, using the &checksum field
  * Should be call before Countly init
  */
-Countly.enableParameterTamperingProtection = function(salt){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableParameterTamperingProtection",[salt.toString() || ""]);
+Countly.enableParameterTamperingProtection = function (salt) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "enableParameterTamperingProtection", [salt.toString() || ""]);
 }
 
-Countly.startEvent = function(key){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startEvent",[key.toString() || ""]);
+Countly.startEvent = function (key) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "startEvent", [key.toString() || ""]);
 }
-Countly.cancelEvent = function(key){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","cancelEvent",[key.toString() || ""]);
+Countly.cancelEvent = function (key) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "cancelEvent", [key.toString() || ""]);
 }
-Countly.endEvent = function(options){
+Countly.endEvent = function (options) {
     var args = [];
-    if(!options.key){
+    if (!options.key) {
         options.key = "default";
     }
     args.push(options.key.toString());
 
-    if(!options.count){
+    if (!options.count) {
         options.count = 1;
     }
     args.push(options.count.toString());
 
-    if(!options.sum){
+    if (!options.sum) {
         options.sum = "0";
     }
     args.push(options.sum.toString());
 
-    if(options.segments){
-        for(var key in options.segments){
+    if (options.segments) {
+        for (var key in options.segments) {
             args.push(key);
             args.push(options.segments[key]);
         }
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endEvent",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "endEvent", args);
 };
 
-Countly.recordEvent = function(options){
-    if(typeof options === "string")
-        options = {key: options};
+Countly.recordEvent = function (options) {
+    if (typeof options === "string")
+        options = { key: options };
     var args = [];
 
-    if(!options.key){
+    if (!options.key) {
         options.key = "default";
     }
     args.push(options.key.toString());
 
-    if(!options.count){
+    if (!options.count) {
         options.count = 1;
     }
     args.push(options.count.toString());
 
-    if(!options.sum){
+    if (!options.sum) {
         options.sum = "0";
     }
     args.push(options.sum.toString());
 
-    if(!options.duration){
+    if (!options.duration) {
         options.duration = "0";
     }
     args.push(options.duration.toString());
 
-    if(options.segments){
-        for(var key in options.segments){
+    if (options.segments) {
+        for (var key in options.segments) {
             args.push(key);
             args.push(options.segments[key]);
         }
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordEvent",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "recordEvent", args);
 };
 
 //askForNotificationPermission
-Countly.askForNotificationPermission = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForNotificationPermission",[]);
+Countly.askForNotificationPermission = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "askForNotificationPermission", []);
 }
 
 /**
@@ -409,7 +408,7 @@ Countly.askForNotificationPermission = function(){
  * @param {String} expectedValueInfo : value from 1 to 3. 1 - no value, 2 - int value, 3 - other values
  * @returns 
  */
-userDataHandleCall = async function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
+userDataHandleCall = async function (callName, providedKey, providedValue = null, expectedValueInfo = 1) {
     try {
         log(callName, "trying to interact with user data properties [ " + providedKey + "]", logLevel.info);
         var valueArray = [];
@@ -417,13 +416,13 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
         // First we try to validate the provided key value
         // Provided key should not be empty, null or undefined
         var message = null;
-        if(!providedKey) {
+        if (!providedKey) {
             message = "Key should not be null, undefined or empty";
         }
         else if (typeof providedKey !== "string") {
             message = "skipping value for 'key', due to unsupported data type '" + (typeof providedKey) + "', its data type should be 'string'";
         }
-        if(message) {
+        if (message) {
             log(callName, message, logLevel.ERROR);
             return message;
         }
@@ -431,7 +430,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
         valueArray.push(providedKey);
 
         // if info value is 1, we don't need any value and the validation can be skipped
-        if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
+        if (expectedValueInfo == 2 || expectedValueInfo == 3) {
             // if info value is 2 we expected a parsable string or number to produce an int
             // if info value is 3 we expect a non empty string
 
@@ -441,11 +440,11 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
                 log(callName, message, logLevel.ERROR);
                 return message;
             }
-            
+
             // cache the currently provided value
             var keyValue = providedValue;
 
-            if(expectedValueInfo == 2) {
+            if (expectedValueInfo == 2) {
                 // Provided value should be 'number' or 'string' that is parsable to 'number'
                 if (typeof providedValue == "string") {
                     log(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'", logLevel.WARNING);
@@ -468,69 +467,69 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
 
             //add the validated key value value array together with the key
             valueArray.pushValue(keyValue);
-        } 
-        cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "userData_"+callName, valueArray);
+        }
+        cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "userData_" + callName, valueArray);
     }
     catch (e) {
         log("userDataHandleCall", e.message, logLevel.ERROR);
         return e.message;
     }
-    
+
 };
 
 Countly.userData = {};
-Countly.userData.setProperty = function(keyName, keyValue){
+Countly.userData.setProperty = function (keyName, keyValue) {
     userDataHandleCall("setProperty", keyName, keyValue, 3);
 };
 
-Countly.userData.increment = function(keyName){
+Countly.userData.increment = function (keyName) {
     userDataHandleCall("increment", keyName);
 };
 
-Countly.userData.incrementBy = function(keyName, keyValue){
+Countly.userData.incrementBy = function (keyName, keyValue) {
     userDataHandleCall("incrementBy", keyName, keyValue, 2);
 };
 
-Countly.userData.multiply = function(keyName, keyValue){
+Countly.userData.multiply = function (keyName, keyValue) {
     userDataHandleCall("multiply", keyName, keyValue, 2);
 };
 
-Countly.userData.saveMax = function(keyName, keyValue){
+Countly.userData.saveMax = function (keyName, keyValue) {
     userDataHandleCall("saveMax", keyName, keyValue, 2);
 };
 
-Countly.userData.saveMin = function(keyName, keyValue){
+Countly.userData.saveMin = function (keyName, keyValue) {
     userDataHandleCall("saveMin", keyName, keyValue, 2);
 };
 
-Countly.userData.setOnce = function(keyName, keyValue){
+Countly.userData.setOnce = function (keyName, keyValue) {
     userDataHandleCall("setOnce", keyName, keyValue, 3);
 };
 
 //pushUniqueValue
-Countly.userData.pushUniqueValue = function(keyName, keyValue){
+Countly.userData.pushUniqueValue = function (keyName, keyValue) {
     userDataHandleCall("pushUniqueValue", keyName, keyValue, 3);
 };
 
 //pushValue
-Countly.userData.pushValue = function(keyName, keyValue){
+Countly.userData.pushValue = function (keyName, keyValue) {
     userDataHandleCall("pushValue", keyName, keyValue, 3);
 };
 
 //pullValue
-Countly.userData.pullValue = function(keyName, keyValue){
+Countly.userData.pullValue = function (keyName, keyValue) {
     userDataHandleCall("pullValue", keyName, keyValue, 3);
 };
 
-Countly.consents = ["sessions", "events", "views", "location", "crashes", "attribution", "users", "push", "star-rating","AppleWatch"];
+Countly.consents = ["sessions", "events", "views", "location", "crashes", "attribution", "users", "push", "star-rating", "AppleWatch"];
 
 /**
  *
  * Set that consent should be required for features to work.
  * Should be call before Countly init
  */
-Countly.setRequiresConsent = function(boolean){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setRequiresConsent",[boolean == true?"1": "0"]);
+Countly.setRequiresConsent = function (boolean) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setRequiresConsent", [boolean == true ? "1" : "0"]);
 }
 
 /**
@@ -538,38 +537,38 @@ Countly.setRequiresConsent = function(boolean){
  * Give consent for specific features before init.
  * Should be call after Countly init
  */
-Countly.giveConsentInit = async function(consent){
+Countly.giveConsentInit = async function (consent) {
     var features = [];
     if (typeof consent == "string") {
         features.push(consent);
     }
-    else if(Array.isArray(consent)) {
+    else if (Array.isArray(consent)) {
         features = consent;
     }
     else {
-        if(Countly.isDebug) {
+        if (Countly.isDebug) {
             console.warn("[CountlyCordova] giveConsentInit, unsupported data type '" + (typeof consent) + "'");
         }
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsentInit",features);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "giveConsentInit", features);
 }
 
-Countly.giveConsent = function(consent){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveConsent",consent);
+Countly.giveConsent = function (consent) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "giveConsent", consent);
 }
-Countly.removeConsent = function(consent){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",consent);
+Countly.removeConsent = function (consent) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "removeConsent", consent);
 }
 /**
  * 
  * Give consent for all features
  * Should be call after Countly init
  */
-Countly.giveAllConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","giveAllConsent",[]);
+Countly.giveAllConsent = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "giveAllConsent", []);
 }
-Countly.removeAllConsent = function(){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeConsent",Countly.consents);
+Countly.removeAllConsent = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "removeConsent", Countly.consents);
 }
 
 /** 
@@ -577,23 +576,23 @@ Countly.removeAllConsent = function(){
  * Set Automatic value download happens when the SDK is initiated or when the device ID is changed.
  * Should be call before Countly init
  */
-Countly.setRemoteConfigAutomaticDownload = function(onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","setRemoteConfigAutomaticDownload",[]);
+Countly.setRemoteConfigAutomaticDownload = function (onSuccess, onError) {
+    cordova.exec(onSuccess, onError, "CountlyCordova", "setRemoteConfigAutomaticDownload", []);
 }
-Countly.remoteConfigUpdate = function(onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","remoteConfigUpdate",[]);
+Countly.remoteConfigUpdate = function (onSuccess, onError) {
+    cordova.exec(onSuccess, onError, "CountlyCordova", "remoteConfigUpdate", []);
 }
-Countly.updateRemoteConfigForKeysOnly = function(keys, onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigForKeysOnly",keys);
+Countly.updateRemoteConfigForKeysOnly = function (keys, onSuccess, onError) {
+    cordova.exec(onSuccess, onError, "CountlyCordova", "updateRemoteConfigForKeysOnly", keys);
 }
-Countly.updateRemoteConfigExceptKeys = function(keys, onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","updateRemoteConfigExceptKeys",keys);
+Countly.updateRemoteConfigExceptKeys = function (keys, onSuccess, onError) {
+    cordova.exec(onSuccess, onError, "CountlyCordova", "updateRemoteConfigExceptKeys", keys);
 }
-Countly.remoteConfigClearValues = function(onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","remoteConfigClearValues",[]);
+Countly.remoteConfigClearValues = function (onSuccess, onError) {
+    cordova.exec(onSuccess, onError, "CountlyCordova", "remoteConfigClearValues", []);
 }
-Countly.getRemoteConfigValueForKey = function(key, onSuccess, onError){
-    cordova.exec(onSuccess, onError,"CountlyCordova","getRemoteConfigValueForKey",[key]);
+Countly.getRemoteConfigValueForKey = function (key, onSuccess, onError) {
+    cordova.exec(onSuccess, onError, "CountlyCordova", "getRemoteConfigValueForKey", [key]);
 }
 // Remote config
 
@@ -616,45 +615,45 @@ Countly.rating = {
  * @param {String} starRatingTextMessage - dialog's message text 
  * @param {String} starRatingTextDismiss - dialog's dismiss buttons text (Only for Android)
  */
-Countly.setStarRatingDialogTexts = function(starRatingTextTitle, starRatingTextMessage, starRatingTextDismiss){
+Countly.setStarRatingDialogTexts = function (starRatingTextTitle, starRatingTextMessage, starRatingTextDismiss) {
     var args = [];
     args.push(starRatingTextTitle);
     args.push(starRatingTextMessage);
     args.push(starRatingTextDismiss);
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setStarRatingDialogTexts",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setStarRatingDialogTexts", args);
 }
 // ui related methods
 // opens the modal
-Countly.askForStarRating = function(callback){
-    cordova.exec(callback, callback,"CountlyCordova","askForStarRating",[]);
+Countly.askForStarRating = function (callback) {
+    cordova.exec(callback, callback, "CountlyCordova", "askForStarRating", []);
 }
 
-Countly.askForFeedback = function(widgetId, buttonText){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","askForFeedback",[widgetId, buttonText || ""]);
+Countly.askForFeedback = function (widgetId, buttonText) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "askForFeedback", [widgetId, buttonText || ""]);
 }
 
 // Call this function when app is loaded, so that the app launch duration can be recorded.
 // Should be call after init.
-Countly.appLoadingFinished = async function(){
+Countly.appLoadingFinished = async function () {
     Countly.isInitialized().then((result) => {
-    if(result != "true") {
-        if(Countly.isDebug){
-            console.warn('[CountlyCordova] appLoadingFinished, init must be called before appLoadingFinished');
+        if (result != "true") {
+            if (Countly.isDebug) {
+                console.warn('[CountlyCordova] appLoadingFinished, init must be called before appLoadingFinished');
+            }
+            return;
         }
-        return;
-    }
-    },(err) => {
+    }, (err) => {
         console.error(err);
     });
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","appLoadingFinished",[]);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "appLoadingFinished", []);
 }
 
 /**
  * Get a list of available feedback widgets for this device ID
  */
-Countly.getFeedbackWidgets = function(){
-    return new Promise((resolve,reject) => {
-        cordova.exec(resolve,reject,"CountlyCordova","getFeedbackWidgets",[]);
+Countly.getFeedbackWidgets = function () {
+    return new Promise((resolve, reject) => {
+        cordova.exec(resolve, reject, "CountlyCordova", "getFeedbackWidgets", []);
     });
 }
 
@@ -663,22 +662,22 @@ Countly.getFeedbackWidgets = function(){
  * 
  * @param {Object} feedbackWidget - feeback Widget with id, type and name
  * @param {String} closeButtonText - text for cancel/close button
- */ 
-Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
-    if(!feedbackWidget) {
-        if(Countly.isDebug) {
+ */
+Countly.presentFeedbackWidget = function (feedbackWidget, buttonText) {
+    if (!feedbackWidget) {
+        if (Countly.isDebug) {
             console.error("[CountlyCordova] presentFeedbackWidget, feedbackWidget should not be null or undefined");
         }
         return "feedbackWidget should not be null or undefined";
     }
-    if(!feedbackWidget.id) {
-        if(Countly.isDebug){
+    if (!feedbackWidget.id) {
+        if (Countly.isDebug) {
             console.error("[CountlyCordova] presentFeedbackWidget, feedbackWidget id should not be null or empty");
         }
         return "FeedbackWidget id should not be null or empty";
     }
-    if(!feedbackWidget.type) {
-        if(Countly.isDebug){
+    if (!feedbackWidget.type) {
+        if (Countly.isDebug) {
             console.error("[CountlyCordova] presentFeedbackWidget, feedbackWidget type should not be null or empty");
         }
         return "FeedbackWidget type should not be null or empty";
@@ -687,7 +686,7 @@ Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
     var widgetType = feedbackWidget.type;
     var widgetName = feedbackWidget.name || "";
     buttonText = buttonText || "";
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","presentFeedbackWidget",[widgetId, widgetType, widgetName, buttonText]);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "presentFeedbackWidget", [widgetId, widgetType, widgetName, buttonText]);
 }
 
 /**
@@ -695,8 +694,8 @@ Countly.presentFeedbackWidget = function(feedbackWidget, buttonText){
  * In request queue, if there are any request whose app key is different than the current app key,
  * these requests' app key will be replaced with the current app key.
  */
-Countly.replaceAllAppKeysInQueueWithCurrentAppKey = function() {
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","replaceAllAppKeysInQueueWithCurrentAppKey",[]);
+Countly.replaceAllAppKeysInQueueWithCurrentAppKey = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "replaceAllAppKeysInQueueWithCurrentAppKey", []);
 }
 
 /**
@@ -704,15 +703,15 @@ Countly.replaceAllAppKeysInQueueWithCurrentAppKey = function() {
  * In request queue, if there are any request whose app key is different than the current app key,
  * these requests will be removed from request queue.
  */
-Countly.removeDifferentAppKeysFromQueue = function() {
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","removeDifferentAppKeysFromQueue",[]);
+Countly.removeDifferentAppKeysFromQueue = function () {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "removeDifferentAppKeysFromQueue", []);
 }
 
 // Push Notification
-Countly.sendPushToken = function(options){
+Countly.sendPushToken = function (options) {
     var args = [];
     args.push(options.token || "");
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","sendPushToken",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "sendPushToken", args);
 }
 // Push Notification
 
@@ -721,8 +720,8 @@ Countly.sendPushToken = function(options){
  * Set to "true" if you want HTTP POST to be used for all requests
  * Should be call before Countly init
  */
-Countly.setHttpPostForced = function(boolean){
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","setHttpPostForced",[boolean == true?"1": "0"]);
+Countly.setHttpPostForced = function (boolean) {
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setHttpPostForced", [boolean == true ? "1" : "0"]);
 }
 
 /**
@@ -731,10 +730,10 @@ Countly.setHttpPostForced = function(boolean){
  * For iOS use "recordAttributionID" instead of "enableAttribution"
  * Should be call before Countly init
  */
-Countly.enableAttribution = function(attributionID = "") {
+Countly.enableAttribution = function (attributionID = "") {
     if (Countly.isiOS) {
-        if(attributionID == "") {
-            if(Countly.isDebug){
+        if (attributionID == "") {
+            if (Countly.isDebug) {
                 console.error("[CountlyReactNative] enableAttribution, attribution Id for iOS can't be empty string");
             }
             return "attribution Id for iOS can't be empty string";
@@ -742,7 +741,7 @@ Countly.enableAttribution = function(attributionID = "") {
         Countly.recordAttributionID(attributionID);
     }
     else {
-        cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableAttribution",[]);
+        cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "enableAttribution", []);
     }
 }
 
@@ -752,42 +751,42 @@ Countly.enableAttribution = function(attributionID = "") {
  * Currently implemented for iOS only
  * For Android just call the enableAttribution to enable campaign attribution.
  */
-Countly.recordAttributionID = function(attributionID){
+Countly.recordAttributionID = function (attributionID) {
     if (!Countly.isiOS) return "recordAttributionID : To be implemented";
     var args = [];
     args.push(attributionID);
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordAttributionID",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "recordAttributionID", args);
 }
 
-Countly.startTrace = function(traceKey){
+Countly.startTrace = function (traceKey) {
     var args = [];
     args.push(traceKey);
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","startTrace",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "startTrace", args);
 }
 
-Countly.cancelTrace = function(traceKey){
+Countly.cancelTrace = function (traceKey) {
     var args = [];
     args.push(traceKey);
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","cancelTrace",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "cancelTrace", args);
 }
 
-Countly.clearAllTraces = function(traceKey){
+Countly.clearAllTraces = function (traceKey) {
     var args = [];
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","clearAllTraces",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "clearAllTraces", args);
 }
 
-Countly.endTrace = function(traceKey, customMetric){
+Countly.endTrace = function (traceKey, customMetric) {
     var args = [];
     args.push(traceKey);
     customMetric = customMetric || {};
-    for(var key in customMetric){
+    for (var key in customMetric) {
         args.push(key.toString());
         args.push(customMetric[key].toString());
     }
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","endTrace",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "endTrace", args);
 }
 
-Countly.recordNetworkTrace = function(networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime){
+Countly.recordNetworkTrace = function (networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime) {
     var args = [];
     args.push(networkTraceKey);
     args.push(responseCode.toString());
@@ -795,7 +794,7 @@ Countly.recordNetworkTrace = function(networkTraceKey, responseCode, requestPayl
     args.push(responsePayloadSize.toString());
     args.push(startTime.toString());
     args.push(endTime.toString());
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","recordNetworkTrace",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "recordNetworkTrace", args);
 }
 
 /**
@@ -803,40 +802,40 @@ Countly.recordNetworkTrace = function(networkTraceKey, responseCode, requestPayl
  * Enable APM features, which includes the recording of app start time.
  * Should be call before Countly init
  */
-Countly.enableApm = function(){
+Countly.enableApm = function () {
     var args = [];
-    cordova.exec(Countly.onSuccess,Countly.onError,"CountlyCordova","enableApm",args);
+    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "enableApm", args);
 }
 
 window.Countly = Countly;
 document.addEventListener("deviceready", Countly.deviceready, false);
 
-logLevel = {"VERBOSE": "1", "DEBUG": "2", "INFO": "3", "WARNING": "4", "ERROR": "5"};
+logLevel = { "VERBOSE": "1", "DEBUG": "2", "INFO": "3", "WARNING": "4", "ERROR": "5" };
 /**
  * Print log if logging is enabled
  * @param {String} functionName : name of function from where value is validating.
  * @param {String} message : log message
  * @param {String} logLevel : log level (INFO, DEBUG, VERBOSE, WARNING, ERROR)
  */
- log = (functionName, message, logLevel = logLevel.DEBUG) => {
-    if(Countly.isDebug) {
+log = (functionName, message, logLevel = logLevel.DEBUG) => {
+    if (Countly.isDebug) {
         var logMessage = "[CountlyCordova] " + functionName + ", " + message;
-        switch (logLevel) {    
+        switch (logLevel) {
             case logLevel.VERBOSE:
                 console.log(logMessage);
-            break;
+                break;
             case logLevel.DEBUG:
                 console.debug(logMessage);
-            break;
+                break;
             case logLevel.INFO:
                 console.info(logMessage);
-            break;
+                break;
             case logLevel.WARNING:
                 console.warn(logMessage);
-            break;
+                break;
             case logLevel.ERROR:
                 console.error(logMessage);
-            break;
+                break;
             default:
                 console.log(logMessage);
         }
