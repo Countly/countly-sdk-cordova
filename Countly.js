@@ -415,7 +415,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
         var valueArray = [];
 
         // First we try to validate the provided key value
-        // Provided key should not be null or undefined
+        // Provided key should not be empty, null or undefined
         var message = null;
         if(!providedKey) {
             message = "Key should not be null, undefined or empty";
@@ -435,7 +435,7 @@ userDataHandleCall = async function(callName, providedKey, providedValue = null,
             // if info value is 2 we expected a parsable string or number to produce an int
             // if info value is 3 we expect a non empty string
 
-            // Provided value should not be empty, null or undefined
+            // Provided value should not be null or undefined
             if (providedValue === null || providedValue === undefined) {
                 message = "Value should not be null or undefined";
                 log(callName, message, logLevel.ERROR);
