@@ -411,6 +411,7 @@ Countly.askForNotificationPermission = function(){
  */
 userDataHandleCall = async function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
     try {
+        log(callName, "trying to interact with user data properties [ " + providedKey + "]", logLevel.info);
         var valueArray = [];
 
         // Provided key should not be null or undefined
