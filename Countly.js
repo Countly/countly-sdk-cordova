@@ -410,56 +410,62 @@ Countly.askForNotificationPermission = function(){
  * @returns 
  */
 userDataHandleCall = async function(callName, providedKey, providedValue = null, expectedValueInfo = 1) {
-    var valueArray = [];
+    try {
+        var valueArray = [];
 
-    // Provided key should not be null or undefined
-    var message = null;
-    if(!providedKey) {
-        message = "Key should not be null, undefined or empty";
-    }
-    else if (typeof providedKey !== "string") {
-        message = "skipping value for 'key', due to unsupported data type '" + (typeof providedKey) + "', its data type should be 'string'";
-    }
-    if(message) {
-        Countly.logError(callName, message);
-        return message;
-    }
-    valueArray.push(providedKey);
-
-    if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
-        // Provided value should not be empty, null or undefined
-        if (providedValue === null || providedValue === undefined) {
-            message = "Value should not be null or undefined";
-            Countly.logError(callName, message);
+        // Provided key should not be null or undefined
+        var message = null;
+        if(!providedKey) {
+            message = "Key should not be null, undefined or empty";
+        }
+        else if (typeof providedKey !== "string") {
+            message = "skipping value for 'key', due to unsupported data type '" + (typeof providedKey) + "', its data type should be 'string'";
+        }
+        if(message) {
+            log(callName, message, logLevel.ERROR);
             return message;
         }
-        
-        var keyValue = providedValue;
+        valueArray.push(providedKey);
 
-        if(expectedValueInfo == 2) {
-            // Provided value should be 'number' or 'string' that is parseable to 'number'
-            if (typeof providedValue == "string") {
-                Countly.logWarning(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'");
-            }
-            else if (typeof providedValue != "number") {
-                message = "skipping value for 'value', due to unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'";
-                Countly.logError(functionName, message);
+        if (expectedValueInfo == 2 || expectedValueInfo == 3){ 
+            // Provided value should not be empty, null or undefined
+            if (providedValue === null || providedValue === undefined) {
+                message = "Value should not be null or undefined";
+                log(callName, message, logLevel.ERROR);
                 return message;
             }
+            
+            var keyValue = providedValue;
 
-            var intValue = parseInt(providedValue);
-            if (isNaN(intValue)) {
-                message = "skipping value for 'value', due to unsupported data type '" + (typeof providedValue) + "', its data type should be 'number' or parseable to 'integer'";
-                Countly.logError(functionName, message);
-                return message;
+            if(expectedValueInfo == 2) {
+                // Provided value should be 'number' or 'string' that is parseable to 'number'
+                if (typeof providedValue == "string") {
+                    log(functionName, "unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'", logLevel.WARNING);
+                }
+                else if (typeof providedValue != "number") {
+                    message = "skipping value for 'value', due to unsupported data type '" + (typeof providedValue) + "', its data type should be 'number'";
+                    log(callName, message, logLevel.ERROR);
+                    return message;
+                }
+
+                var intValue = parseInt(providedValue);
+                if (isNaN(intValue)) {
+                    message = "skipping value for 'value', due to unsupported data type '" + (typeof providedValue) + "', its data type should be 'number' or parseable to 'integer'";
+                    log(callName, message, logLevel.ERROR);
+                    return message;
+                }
+                keyValue = intValue.toString();
             }
-            keyValue = intValue.toString();
-        }
 
-        valueArray.pushValue(keyValue);
-    } 
-
-    cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "userData_"+callName, valueArray);
+            valueArray.pushValue(keyValue);
+        } 
+        cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "userData_"+callName, valueArray);
+    }
+    catch (e) {
+        log(callName, e.message, logLevel.ERROR);
+        return e.message;
+    }
+    
 };
 
 Countly.userData = {};

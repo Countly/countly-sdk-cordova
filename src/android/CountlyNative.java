@@ -471,8 +471,6 @@ public class CountlyNative {
 
     public String setuserdata(JSONArray args){
         try {
-            // Bundle bundle = new Bundle();
-
             this.log("setuserdata", args);
             JSONObject userData = args.getJSONObject(0);
 
