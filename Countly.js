@@ -497,8 +497,8 @@ Countly.askForNotificationPermission = function () {
  */
 userDataHandleCall = async function (callName, providedKey, providedValue = null, expectedValueInfo = 1) {
     if(!_isInitialized) {
-        var message = "'init' must be called before '" +callName+ "'";
-        log(callName, message, logLevel.ERROR);
+        var msg = "'init' must be called before '" +callName+ "'";
+        log(callName, msg, logLevel.ERROR);
         return message;
     }
     try {
