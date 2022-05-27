@@ -207,9 +207,9 @@
                     }); // Set Automatic value download happens when the SDK is initiated or when the device ID is changed.
                     Countly.pushTokenType(Countly.messagingMode.TEST); // Set messaging mode for push notifications
 
+                    Countly.setStarRatingDialogTexts("Title", "Message", "Dismiss");
                     Countly.init("https://try.count.ly", "YOUR_API_KEY").then((result) => {
                         Countly.appLoadingFinished();
-                        Countly.setStarRatingDialogTexts("Title", "Message", "Dismiss");
                         /** 
                          * Push notifications settings 
                          * Should be call after init

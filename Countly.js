@@ -4,7 +4,7 @@ Countly.appKey = "";
 Countly.ready = false;
 Countly.version = "21.11.0";
 Countly.isDebug = false;
-Countly.isInitCalled = false;
+_isInitialized = false;
 if (window.cordova.platformId == "android") {
     Countly.isAndroid = true;
     Countly.messagingMode = { "TEST": "2", "PRODUCTION": "0" };
@@ -25,8 +25,7 @@ Countly.init = function (serverUrl, appKey, deviceId) {
         args.push(deviceId || "");
     };
 
-    Countly.isInitCalled = true;
-
+    _isInitialized = true;
     return new Promise((resolve, reject) => {
         cordova.exec(resolve, reject, "CountlyCordova", "init", args);
     });
@@ -46,6 +45,11 @@ Countly.isInitialized = function () {
  * Supported data type for segments values are String, int, double and bool
  */
 Countly.recordView = function (recordView, segments) {
+    if(!_isInitialized) {
+        var msg = "'init' must be called before 'recordView'";
+        log("recordView", msg, logLevel.ERROR);
+        return msg;
+    }
     var args = [];
     args.push(String(recordView) || "");
     if (!segments) {
@@ -64,11 +68,10 @@ Countly.recordView = function (recordView, segments) {
  */
 Countly.setLoggingEnabled = function (isDebug = true) {
     isDebug = isDebug.toString() == "true" ? true : false;
-    if (this.isInitCalled) {
-        if (Countly.isDebug) {
-            console.warn("setLoggingEnabled, should be call before init");
-        }
-        return;
+    if (_isInitialized) {
+        var msg = "'setLoggingEnabled' must be called before 'init'";
+        log("setLoggingEnabled", msg, logLevel.ERROR);
+        return msg;
     }
     Countly.isDebug = isDebug;
     var args = [isDebug.toString()];
@@ -77,6 +80,11 @@ Countly.setLoggingEnabled = function (isDebug = true) {
 
 // countly sending user data
 Countly.setUserData = function (userData) {
+    if(!_isInitialized) {
+        var msg = "'init' must be called before 'setUserData'";
+        log("setUserData", msg, logLevel.ERROR);
+        return msg;
+    }
     var message = null;
     if (!userData) {
         message = "User profile data should not be null or undefined";
@@ -112,15 +120,30 @@ Countly.setUserData = function (userData) {
 
 // countly start for android
 Countly.start = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'start'";
+        log("start", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "start", []);
 }
 
 // countly stop for android
 Countly.stop = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'stop'";
+        log("stop", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "stop", []);
 }
 // countly halt for android
 Countly.halt = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'halt'";
+        log("halt", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "halt", []);
 }
 
@@ -156,6 +179,11 @@ Countly.halt = function () {
  * Should be call after Countly init
  */
 Countly.askForNotificationPermission = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'askForNotificationPermission'";
+        log("askForNotificationPermission", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "askForNotificationPermission", []);
 }
 
@@ -201,7 +229,11 @@ Countly.onError = function (error) {
 
 
 Countly.setOptionalParametersForInitialization = function (options) {
-
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'setOptionalParametersForInitialization'";
+        log("setOptionalParametersForInitialization", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
 
     options.latitude = String(options.latitude);
@@ -232,6 +264,11 @@ Countly.setOptionalParametersForInitialization = function (options) {
  * */
 
 Countly.setLocationInit = function (countryCode, city, location, ipAddress) {
+    if(_isInitialized) {
+        var message = "'setLocationInit' must be called before 'init'";
+        log("setLocationInit", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     args.push(countryCode || "null");
     args.push(city || "null");
@@ -241,6 +278,11 @@ Countly.setLocationInit = function (countryCode, city, location, ipAddress) {
 }
 
 Countly.setLocation = function (latitude, longitude, countryCode, city, ipAddress) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'setLocation'";
+        log("setLocation", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     var location = latitude + " , " + longitude;
     args.push(countryCode || "null");
@@ -256,20 +298,20 @@ Countly.setLocation = function (latitude, longitude, countryCode, city, ipAddres
  * Should be call after Countly init
  * */
 Countly.getCurrentDeviceId = function (onSuccess, onError) {
-    Countly.isInitialized().then((result) => {
-        if (result != "true") {
-            if (Countly.isDebug) {
-                console.warn("'getCurrentDeviceId, init must be called before getCurrentDeviceId'");
-            }
-            return;
-        }
-    }, (err) => {
-        console.error(err);
-    });
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'getCurrentDeviceId'";
+        log("getCurrentDeviceId", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(onSuccess, onError, "CountlyCordova", "getCurrentDeviceId", []);
 }
 
 Countly.changeDeviceId = function (newDeviceID, onServer) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'changeDeviceId'";
+        log("changeDeviceId", message, logLevel.ERROR);
+        return message;
+    }
     if (onServer === false) {
         onServer = "0";
     } else {
@@ -286,13 +328,28 @@ Countly.isCrashReportingEnabled = false;
  * Should be call before Countly init
  */
 Countly.enableCrashReporting = function () {
+    if(_isInitialized) {
+        var message = "'enableCrashReporting' should be called before 'init'";
+        log("enableCrashReporting", message, logLevel.ERROR);
+        return message;
+    }
     Countly.isCrashReportingEnabled = true;
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "enableCrashReporting", []);
 }
 Countly.addCrashLog = function (crashLog) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'addCrashLog'";
+        log("addCrashLog", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "addCrashLog", [crashLog || ""]);
 };
 Countly.logException = function (exception, nonfatal, segments) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'logException'";
+        log("logException", message, logLevel.ERROR);
+        return message;
+    }
     var exceptionString = "";
     if (Array.isArray(exception)) {
         for (var i = 0, il = exception.length; i < il; i++) {
@@ -325,16 +382,36 @@ Countly.logException = function (exception, nonfatal, segments) {
  * Should be call before Countly init
  */
 Countly.enableParameterTamperingProtection = function (salt) {
+    if(_isInitialized) {
+        var message = "'enableParameterTamperingProtection' should be called before 'init'";
+        log("enableParameterTamperingProtection", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "enableParameterTamperingProtection", [salt.toString() || ""]);
 }
 
 Countly.startEvent = function (key) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'startEvent'";
+        log("startEvent", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "startEvent", [key.toString() || ""]);
 }
 Countly.cancelEvent = function (key) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'cancelEvent'";
+        log("cancelEvent", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "cancelEvent", [key.toString() || ""]);
 }
 Countly.endEvent = function (options) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'endEvent'";
+        log("endEvent", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     if (!options.key) {
         options.key = "default";
@@ -361,6 +438,11 @@ Countly.endEvent = function (options) {
 };
 
 Countly.recordEvent = function (options) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'recordEvent'";
+        log("recordEvent", message, logLevel.ERROR);
+        return message;
+    }
     if (typeof options === "string")
         options = { key: options };
     var args = [];
@@ -396,6 +478,11 @@ Countly.recordEvent = function (options) {
 
 //askForNotificationPermission
 Countly.askForNotificationPermission = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'askForNotificationPermission'";
+        log("askForNotificationPermission", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "askForNotificationPermission", []);
 }
 
@@ -409,6 +496,11 @@ Countly.askForNotificationPermission = function () {
  * @returns 
  */
 userDataHandleCall = async function (callName, providedKey, providedValue = null, expectedValueInfo = 1) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before '" +callName+ "'";
+        log(callName, message, logLevel.ERROR);
+        return message;
+    }
     try {
         log(callName, "trying to interact with user data properties [ " + providedKey + "]", logLevel.info);
         var valueArray = [];
@@ -529,15 +621,25 @@ Countly.consents = ["sessions", "events", "views", "location", "crashes", "attri
  * Should be call before Countly init
  */
 Countly.setRequiresConsent = function (boolean) {
+    if(_isInitialized) {
+        var message = "'setRequiresConsent' must be called before 'init'";
+        log("setRequiresConsent", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setRequiresConsent", [boolean == true ? "1" : "0"]);
 }
 
 /**
  * 
  * Give consent for specific features before init.
- * Should be call after Countly init
+ * Should be call before Countly init
  */
 Countly.giveConsentInit = async function (consent) {
+    if(_isInitialized) {
+        var message = "'giveConsentInit' must be called before 'init'";
+        log("giveConsentInit", message, logLevel.ERROR);
+        return message;
+    }
     var features = [];
     if (typeof consent == "string") {
         features.push(consent);
@@ -565,9 +667,19 @@ Countly.removeConsent = function (consent) {
  * Should be call after Countly init
  */
 Countly.giveAllConsent = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'giveAllConsent'";
+        log("giveAllConsent", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "giveAllConsent", []);
 }
 Countly.removeAllConsent = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'removeAllConsent'";
+        log("removeAllConsent", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "removeConsent", Countly.consents);
 }
 
@@ -577,21 +689,51 @@ Countly.removeAllConsent = function () {
  * Should be call before Countly init
  */
 Countly.setRemoteConfigAutomaticDownload = function (onSuccess, onError) {
+    if(_isInitialized) {
+        var message = "'setRemoteConfigAutomaticDownload' must be called before 'init'";
+        log("setRemoteConfigAutomaticDownload", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(onSuccess, onError, "CountlyCordova", "setRemoteConfigAutomaticDownload", []);
 }
 Countly.remoteConfigUpdate = function (onSuccess, onError) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'remoteConfigUpdate'";
+        log("remoteConfigUpdate", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(onSuccess, onError, "CountlyCordova", "remoteConfigUpdate", []);
 }
 Countly.updateRemoteConfigForKeysOnly = function (keys, onSuccess, onError) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'updateRemoteConfigForKeysOnly'";
+        log("updateRemoteConfigForKeysOnly", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(onSuccess, onError, "CountlyCordova", "updateRemoteConfigForKeysOnly", keys);
 }
 Countly.updateRemoteConfigExceptKeys = function (keys, onSuccess, onError) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'updateRemoteConfigExceptKeys'";
+        log("updateRemoteConfigExceptKeys", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(onSuccess, onError, "CountlyCordova", "updateRemoteConfigExceptKeys", keys);
 }
 Countly.remoteConfigClearValues = function (onSuccess, onError) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'remoteConfigClearValues'";
+        log("remoteConfigClearValues", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(onSuccess, onError, "CountlyCordova", "remoteConfigClearValues", []);
 }
 Countly.getRemoteConfigValueForKey = function (key, onSuccess, onError) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'getRemoteConfigValueForKey'";
+        log("getRemoteConfigValueForKey", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(onSuccess, onError, "CountlyCordova", "getRemoteConfigValueForKey", [key]);
 }
 // Remote config
@@ -616,6 +758,11 @@ Countly.rating = {
  * @param {String} starRatingTextDismiss - dialog's dismiss buttons text (Only for Android)
  */
 Countly.setStarRatingDialogTexts = function (starRatingTextTitle, starRatingTextMessage, starRatingTextDismiss) {
+    if(_isInitialized) {
+        var message = "'setStarRatingDialogTexts' must be called before 'init'";
+        log("setStarRatingDialogTexts", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     args.push(starRatingTextTitle);
     args.push(starRatingTextMessage);
@@ -625,16 +772,31 @@ Countly.setStarRatingDialogTexts = function (starRatingTextTitle, starRatingText
 // ui related methods
 // opens the modal
 Countly.askForStarRating = function (callback) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'askForStarRating'";
+        log("askForStarRating", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(callback, callback, "CountlyCordova", "askForStarRating", []);
 }
 
 Countly.askForFeedback = function (widgetId, buttonText) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'askForFeedback'";
+        log("askForFeedback", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "askForFeedback", [widgetId, buttonText || ""]);
 }
 
 // Call this function when app is loaded, so that the app launch duration can be recorded.
 // Should be call after init.
 Countly.appLoadingFinished = async function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'appLoadingFinished'";
+        log("appLoadingFinished", message, logLevel.ERROR);
+        return message;
+    }
     Countly.isInitialized().then((result) => {
         if (result != "true") {
             if (Countly.isDebug) {
@@ -652,6 +814,11 @@ Countly.appLoadingFinished = async function () {
  * Get a list of available feedback widgets for this device ID
  */
 Countly.getFeedbackWidgets = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'getFeedbackWidgets'";
+        log("getFeedbackWidgets", message, logLevel.ERROR);
+        return message;
+    }
     return new Promise((resolve, reject) => {
         cordova.exec(resolve, reject, "CountlyCordova", "getFeedbackWidgets", []);
     });
@@ -664,6 +831,11 @@ Countly.getFeedbackWidgets = function () {
  * @param {String} closeButtonText - text for cancel/close button
  */
 Countly.presentFeedbackWidget = function (feedbackWidget, buttonText) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'presentFeedbackWidget'";
+        log("presentFeedbackWidget", message, logLevel.ERROR);
+        return message;
+    }
     if (!feedbackWidget) {
         if (Countly.isDebug) {
             console.error("[CountlyCordova] presentFeedbackWidget, feedbackWidget should not be null or undefined");
@@ -695,6 +867,11 @@ Countly.presentFeedbackWidget = function (feedbackWidget, buttonText) {
  * these requests' app key will be replaced with the current app key.
  */
 Countly.replaceAllAppKeysInQueueWithCurrentAppKey = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'replaceAllAppKeysInQueueWithCurrentAppKey'";
+        log("replaceAllAppKeysInQueueWithCurrentAppKey", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "replaceAllAppKeysInQueueWithCurrentAppKey", []);
 }
 
@@ -704,6 +881,11 @@ Countly.replaceAllAppKeysInQueueWithCurrentAppKey = function () {
  * these requests will be removed from request queue.
  */
 Countly.removeDifferentAppKeysFromQueue = function () {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'removeDifferentAppKeysFromQueue'";
+        log("removeDifferentAppKeysFromQueue", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "removeDifferentAppKeysFromQueue", []);
 }
 
@@ -721,6 +903,11 @@ Countly.sendPushToken = function (options) {
  * Should be call before Countly init
  */
 Countly.setHttpPostForced = function (boolean) {
+    if(_isInitialized) {
+        var message = "'setHttpPostForced' must be called before 'init'";
+        log("setHttpPostForced", message, logLevel.ERROR);
+        return message;
+    }
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "setHttpPostForced", [boolean == true ? "1" : "0"]);
 }
 
@@ -731,6 +918,11 @@ Countly.setHttpPostForced = function (boolean) {
  * Should be call before Countly init
  */
 Countly.enableAttribution = function (attributionID = "") {
+    if(_isInitialized) {
+        var message = "'enableAttribution' must be called before 'init'";
+        log("enableAttribution", message, logLevel.ERROR);
+        return message;
+    }
     if (Countly.isiOS) {
         if (attributionID == "") {
             if (Countly.isDebug) {
@@ -752,6 +944,11 @@ Countly.enableAttribution = function (attributionID = "") {
  * For Android just call the enableAttribution to enable campaign attribution.
  */
 Countly.recordAttributionID = function (attributionID) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'recordAttributionID'";
+        log("recordAttributionID", message, logLevel.ERROR);
+        return message;
+    }
     if (!Countly.isiOS) return "recordAttributionID : To be implemented";
     var args = [];
     args.push(attributionID);
@@ -759,23 +956,43 @@ Countly.recordAttributionID = function (attributionID) {
 }
 
 Countly.startTrace = function (traceKey) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'startTrace'";
+        log("startTrace", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     args.push(traceKey);
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "startTrace", args);
 }
 
 Countly.cancelTrace = function (traceKey) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'cancelTrace'";
+        log("cancelTrace", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     args.push(traceKey);
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "cancelTrace", args);
 }
 
 Countly.clearAllTraces = function (traceKey) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'clearAllTraces'";
+        log("clearAllTraces", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "clearAllTraces", args);
 }
 
 Countly.endTrace = function (traceKey, customMetric) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'endTrace'";
+        log("endTrace", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     args.push(traceKey);
     customMetric = customMetric || {};
@@ -787,6 +1004,11 @@ Countly.endTrace = function (traceKey, customMetric) {
 }
 
 Countly.recordNetworkTrace = function (networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime) {
+    if(!_isInitialized) {
+        var message = "'init' must be called before 'recordNetworkTrace'";
+        log("recordNetworkTrace", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     args.push(networkTraceKey);
     args.push(responseCode.toString());
@@ -803,6 +1025,11 @@ Countly.recordNetworkTrace = function (networkTraceKey, responseCode, requestPay
  * Should be call before Countly init
  */
 Countly.enableApm = function () {
+    if(_isInitialized) {
+        var message = "'enableApm' must be called before 'init'";
+        log("enableApm", message, logLevel.ERROR);
+        return message;
+    }
     var args = [];
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "enableApm", args);
 }
