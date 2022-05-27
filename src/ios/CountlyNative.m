@@ -254,14 +254,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         if(notificationListener != nil){
             notificationListener([NSString stringWithFormat:@"%@",notificationMessage]);
         }
-        [self recordPushAction];
+        [CountlyNative recordPushAction];
     }
     else{
         // Notification is cached if SDK is not initialized and send in callback when 'registerForNotification' is call.
         lastStoredNotification = notificationMessage;
     }
 }
-- (void)recordPushAction
++ (void)recordPushAction
 {
     for(int i=0,il = (int) notificationIDs.count;i<il;i++){
         NSString *notificationID = notificationIDs[i];
@@ -314,7 +314,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             [[Countly sharedInstance] startWithConfig:config];
 
 #ifndef COUNTLY_EXCLUDE_PUSHNOTIFICATIONS
-            [self recordPushAction];
+            [CountlyNative recordPushAction];
 #endif
             });
             result(@"initialized.");
@@ -574,7 +574,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* countryCode = [command objectAtIndex:0];
         NSString* city = [command objectAtIndex:1];
-        NSString* locationString = [command objectAtIndex:2];
+        NSString* gpsCoordinate = [command objectAtIndex:2];
         NSString* ipAddress = [command objectAtIndex:3];
 
         if([@"null" isEqualToString:city]){
@@ -583,31 +583,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         if([@"null" isEqualToString:countryCode]){
             countryCode = nil;
         }
-        if([@"null" isEqualToString:locationString]){
-            locationString = nil;
+        if([@"null" isEqualToString:gpsCoordinate]){
+            gpsCoordinate = nil;
         }
         if([@"null" isEqualToString:ipAddress]){
             ipAddress = nil;
         }
 
-        if(locationString != nil && [locationString containsString:@","]){
-            @try{
-                NSArray *locationArray = [locationString componentsSeparatedByString:@","];
-                NSString* latitudeString = [locationArray objectAtIndex:0];
-                NSString* longitudeString = [locationArray objectAtIndex:1];
-
-                double latitudeDouble = [latitudeString doubleValue];
-                double longitudeDouble = [longitudeString doubleValue];
-                [Countly.sharedInstance recordLocation:(CLLocationCoordinate2D){latitudeDouble,longitudeDouble}];
-            }
-            @catch(NSException *exception){
-                COUNTLY_CORDOVA_LOG(@"Invalid location: %@", locationString);
-            }
-        }
-
-        [Countly.sharedInstance recordCity:city andISOCountryCode:countryCode];
-        [Countly.sharedInstance recordIP:ipAddress];
-
+        CLLocationCoordinate2D locationCoordinate = [self getCoordinate:gpsCoordinate];
+        [Countly.sharedInstance recordLocation:locationCoordinate city:city ISOCountryCode:countryCode IP:ipAddress];
+            
         result(@"setLocation!");
         });
 
@@ -848,12 +833,34 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         NSString* longitudeString = [command objectAtIndex:3];
         NSString* ipAddress = [command objectAtIndex:4];
 
-        double latitudeDouble = [latitudeString doubleValue];
-        double longitudeDouble = [longitudeString doubleValue];
-
-        [Countly.sharedInstance recordLocation:(CLLocationCoordinate2D){latitudeDouble,longitudeDouble}];
-        [Countly.sharedInstance recordCity:city andISOCountryCode:country];
-        [Countly.sharedInstance recordIP:ipAddress];
+        if([@"null" isEqualToString:city]){
+            city = nil;
+        }
+        if([@"null" isEqualToString:country]){
+            country = nil;
+        }
+        if([@"null" isEqualToString:latitudeString]){
+            latitudeString = nil;
+        }
+        if([@"null" isEqualToString:longitudeString]){
+            longitudeString = nil;
+        }
+        if([@"null" isEqualToString:ipAddress]){
+            ipAddress = nil;
+        }
+        CLLocationCoordinate2D location;
+        if(latitudeString != nil && longitudeString != nil){
+            @try{
+                double latitudeDouble = [latitudeString doubleValue];
+                double longitudeDouble = [longitudeString doubleValue];
+                
+                location = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
+            }
+            @catch(NSException *execption){
+                COUNTLY_CORDOVA_LOG(@"Invalid latitude or longitude.");
+            }
+        }
+        [Countly.sharedInstance recordLocation:location city:city ISOCountryCode:country IP:ipAddress];
         result(@"setOptionalParametersForInitialization!");
         });
 
@@ -966,7 +973,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }else if ([@"askForFeedback" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* widgetId = [command objectAtIndex:0];
-        [Countly.sharedInstance presentFeedbackWidgetWithID:widgetId completionHandler:^(NSError* error){
+        [Countly.sharedInstance presentRatingWidgetWithID:widgetId completionHandler:^(NSError* error){
             if (error){
                 NSString *theError = [@"Feedback widget presentation failed: " stringByAppendingString: error.localizedDescription];
                 result(theError);
@@ -1024,9 +1031,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         });
     }else if ([@"getPlatformVersion" isEqualToString:method]) {
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-    }else if ([@"enableAttribution" isEqualToString:method]) {
-        config.enableAttribution = YES;
-        result(@"enableAttribution");
     }else if ([@"recordAttributionID" isEqualToString:method]) {
         dispatch_async(dispatch_get_main_queue(), ^ {
         NSString* attributionID = [command objectAtIndex:0];
@@ -1141,6 +1145,38 @@ void CountlyCordovaInternalLog(NSString *format, ...)
     NSLog(@"[CountlyCordovaPlugin] %@", logString);
 
     va_end(args);
+}
+
+- (CLLocationCoordinate2D) getCoordinate:(NSString*) gpsCoordinate
+{
+    CLLocationCoordinate2D locationCoordinate = kCLLocationCoordinate2DInvalid;
+    if(gpsCoordinate){
+        if([gpsCoordinate containsString:@","]) {
+            @try{
+                NSArray *locationArray = [gpsCoordinate componentsSeparatedByString:@","];
+                if(locationArray.count > 2) {
+                    COUNTLY_CORDOVA_LOG(@"Invalid location Coordinates:[%@], it should contains only two comma seperated values", gpsCoordinate);
+                }
+                NSString* latitudeString = [locationArray objectAtIndex:0];
+                NSString* longitudeString = [locationArray objectAtIndex:1];
+                
+                double latitudeDouble = [latitudeString doubleValue];
+                double longitudeDouble = [longitudeString doubleValue];
+                if(latitudeDouble == 0 || longitudeDouble == 0) {
+                    COUNTLY_CORDOVA_LOG(@"Invalid location Coordinates, One of the values parsed to a 0, double check that given coordinates are correct:[%@]", gpsCoordinate);
+                }
+                locationCoordinate = (CLLocationCoordinate2D){latitudeDouble,longitudeDouble};
+            }
+            @catch(NSException *exception) {
+                COUNTLY_CORDOVA_LOG(@"Invalid location Coordinates:[%@], Exception occurred while parsing Coordinates:[%@]", gpsCoordinate, exception);
+            }
+        }
+        else {
+            COUNTLY_CORDOVA_LOG(@"Invalid location Coordinates:[%@], lat and long values should be comma separated", gpsCoordinate);
+        }
+        
+    }
+    return locationCoordinate;
 }
 
 @end
