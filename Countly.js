@@ -45,7 +45,7 @@ Countly.isInitialized = function () {
  * Supported data type for segments values are String, int, double and bool
  */
 Countly.recordView = function (recordView, segments) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var msg = "'init' must be called before 'recordView'";
         log("recordView", msg, logLevel.ERROR);
         return msg;
@@ -80,7 +80,7 @@ Countly.setLoggingEnabled = function (isDebug = true) {
 
 // countly sending user data
 Countly.setUserData = function (userData) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var msg = "'init' must be called before 'setUserData'";
         log("setUserData", msg, logLevel.ERROR);
         return msg;
@@ -120,7 +120,7 @@ Countly.setUserData = function (userData) {
 
 // countly start for android
 Countly.start = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'start'";
         log("start", message, logLevel.ERROR);
         return message;
@@ -130,7 +130,7 @@ Countly.start = function () {
 
 // countly stop for android
 Countly.stop = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'stop'";
         log("stop", message, logLevel.ERROR);
         return message;
@@ -139,7 +139,7 @@ Countly.stop = function () {
 }
 // countly halt for android
 Countly.halt = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'halt'";
         log("halt", message, logLevel.ERROR);
         return message;
@@ -179,7 +179,7 @@ Countly.halt = function () {
  * Should be call after Countly init
  */
 Countly.askForNotificationPermission = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'askForNotificationPermission'";
         log("askForNotificationPermission", message, logLevel.ERROR);
         return message;
@@ -229,7 +229,7 @@ Countly.onError = function (error) {
 
 
 Countly.setOptionalParametersForInitialization = function (options) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'setOptionalParametersForInitialization'";
         log("setOptionalParametersForInitialization", message, logLevel.ERROR);
         return message;
@@ -264,7 +264,7 @@ Countly.setOptionalParametersForInitialization = function (options) {
  * */
 
 Countly.setLocationInit = function (countryCode, city, location, ipAddress) {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'setLocationInit' must be called before 'init'";
         log("setLocationInit", message, logLevel.ERROR);
         return message;
@@ -278,7 +278,7 @@ Countly.setLocationInit = function (countryCode, city, location, ipAddress) {
 }
 
 Countly.setLocation = function (latitude, longitude, countryCode, city, ipAddress) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'setLocation'";
         log("setLocation", message, logLevel.ERROR);
         return message;
@@ -298,7 +298,7 @@ Countly.setLocation = function (latitude, longitude, countryCode, city, ipAddres
  * Should be call after Countly init
  * */
 Countly.getCurrentDeviceId = function (onSuccess, onError) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'getCurrentDeviceId'";
         log("getCurrentDeviceId", message, logLevel.ERROR);
         return message;
@@ -307,7 +307,7 @@ Countly.getCurrentDeviceId = function (onSuccess, onError) {
 }
 
 Countly.changeDeviceId = function (newDeviceID, onServer) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'changeDeviceId'";
         log("changeDeviceId", message, logLevel.ERROR);
         return message;
@@ -328,7 +328,7 @@ Countly.isCrashReportingEnabled = false;
  * Should be call before Countly init
  */
 Countly.enableCrashReporting = function () {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'enableCrashReporting' should be called before 'init'";
         log("enableCrashReporting", message, logLevel.ERROR);
         return message;
@@ -337,7 +337,7 @@ Countly.enableCrashReporting = function () {
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "enableCrashReporting", []);
 }
 Countly.addCrashLog = function (crashLog) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'addCrashLog'";
         log("addCrashLog", message, logLevel.ERROR);
         return message;
@@ -345,7 +345,7 @@ Countly.addCrashLog = function (crashLog) {
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "addCrashLog", [crashLog || ""]);
 };
 Countly.logException = function (exception, nonfatal, segments) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'logException'";
         log("logException", message, logLevel.ERROR);
         return message;
@@ -382,7 +382,7 @@ Countly.logException = function (exception, nonfatal, segments) {
  * Should be call before Countly init
  */
 Countly.enableParameterTamperingProtection = function (salt) {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'enableParameterTamperingProtection' should be called before 'init'";
         log("enableParameterTamperingProtection", message, logLevel.ERROR);
         return message;
@@ -391,7 +391,7 @@ Countly.enableParameterTamperingProtection = function (salt) {
 }
 
 Countly.startEvent = function (key) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'startEvent'";
         log("startEvent", message, logLevel.ERROR);
         return message;
@@ -399,7 +399,7 @@ Countly.startEvent = function (key) {
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "startEvent", [key.toString() || ""]);
 }
 Countly.cancelEvent = function (key) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'cancelEvent'";
         log("cancelEvent", message, logLevel.ERROR);
         return message;
@@ -407,7 +407,7 @@ Countly.cancelEvent = function (key) {
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "cancelEvent", [key.toString() || ""]);
 }
 Countly.endEvent = function (options) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'endEvent'";
         log("endEvent", message, logLevel.ERROR);
         return message;
@@ -438,7 +438,7 @@ Countly.endEvent = function (options) {
 };
 
 Countly.recordEvent = function (options) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'recordEvent'";
         log("recordEvent", message, logLevel.ERROR);
         return message;
@@ -478,7 +478,7 @@ Countly.recordEvent = function (options) {
 
 //askForNotificationPermission
 Countly.askForNotificationPermission = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'askForNotificationPermission'";
         log("askForNotificationPermission", message, logLevel.ERROR);
         return message;
@@ -496,8 +496,8 @@ Countly.askForNotificationPermission = function () {
  * @returns 
  */
 userDataHandleCall = async function (callName, providedKey, providedValue = null, expectedValueInfo = 1) {
-    if(!_isInitialized) {
-        var msg = "'init' must be called before '" +callName+ "'";
+    if (!_isInitialized) {
+        var msg = "'init' must be called before '" + callName + "'";
         log(callName, msg, logLevel.ERROR);
         return message;
     }
@@ -621,7 +621,7 @@ Countly.consents = ["sessions", "events", "views", "location", "crashes", "attri
  * Should be call before Countly init
  */
 Countly.setRequiresConsent = function (boolean) {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'setRequiresConsent' must be called before 'init'";
         log("setRequiresConsent", message, logLevel.ERROR);
         return message;
@@ -635,7 +635,7 @@ Countly.setRequiresConsent = function (boolean) {
  * Should be call before Countly init
  */
 Countly.giveConsentInit = async function (consent) {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'giveConsentInit' must be called before 'init'";
         log("giveConsentInit", message, logLevel.ERROR);
         return message;
@@ -667,7 +667,7 @@ Countly.removeConsent = function (consent) {
  * Should be call after Countly init
  */
 Countly.giveAllConsent = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'giveAllConsent'";
         log("giveAllConsent", message, logLevel.ERROR);
         return message;
@@ -675,7 +675,7 @@ Countly.giveAllConsent = function () {
     cordova.exec(Countly.onSuccess, Countly.onError, "CountlyCordova", "giveAllConsent", []);
 }
 Countly.removeAllConsent = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'removeAllConsent'";
         log("removeAllConsent", message, logLevel.ERROR);
         return message;
@@ -689,7 +689,7 @@ Countly.removeAllConsent = function () {
  * Should be call before Countly init
  */
 Countly.setRemoteConfigAutomaticDownload = function (onSuccess, onError) {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'setRemoteConfigAutomaticDownload' must be called before 'init'";
         log("setRemoteConfigAutomaticDownload", message, logLevel.ERROR);
         return message;
@@ -697,7 +697,7 @@ Countly.setRemoteConfigAutomaticDownload = function (onSuccess, onError) {
     cordova.exec(onSuccess, onError, "CountlyCordova", "setRemoteConfigAutomaticDownload", []);
 }
 Countly.remoteConfigUpdate = function (onSuccess, onError) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'remoteConfigUpdate'";
         log("remoteConfigUpdate", message, logLevel.ERROR);
         return message;
@@ -705,7 +705,7 @@ Countly.remoteConfigUpdate = function (onSuccess, onError) {
     cordova.exec(onSuccess, onError, "CountlyCordova", "remoteConfigUpdate", []);
 }
 Countly.updateRemoteConfigForKeysOnly = function (keys, onSuccess, onError) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'updateRemoteConfigForKeysOnly'";
         log("updateRemoteConfigForKeysOnly", message, logLevel.ERROR);
         return message;
@@ -713,7 +713,7 @@ Countly.updateRemoteConfigForKeysOnly = function (keys, onSuccess, onError) {
     cordova.exec(onSuccess, onError, "CountlyCordova", "updateRemoteConfigForKeysOnly", keys);
 }
 Countly.updateRemoteConfigExceptKeys = function (keys, onSuccess, onError) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'updateRemoteConfigExceptKeys'";
         log("updateRemoteConfigExceptKeys", message, logLevel.ERROR);
         return message;
@@ -721,7 +721,7 @@ Countly.updateRemoteConfigExceptKeys = function (keys, onSuccess, onError) {
     cordova.exec(onSuccess, onError, "CountlyCordova", "updateRemoteConfigExceptKeys", keys);
 }
 Countly.remoteConfigClearValues = function (onSuccess, onError) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'remoteConfigClearValues'";
         log("remoteConfigClearValues", message, logLevel.ERROR);
         return message;
@@ -729,7 +729,7 @@ Countly.remoteConfigClearValues = function (onSuccess, onError) {
     cordova.exec(onSuccess, onError, "CountlyCordova", "remoteConfigClearValues", []);
 }
 Countly.getRemoteConfigValueForKey = function (key, onSuccess, onError) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'getRemoteConfigValueForKey'";
         log("getRemoteConfigValueForKey", message, logLevel.ERROR);
         return message;
@@ -758,7 +758,7 @@ Countly.rating = {
  * @param {String} starRatingTextDismiss - dialog's dismiss buttons text (Only for Android)
  */
 Countly.setStarRatingDialogTexts = function (starRatingTextTitle, starRatingTextMessage, starRatingTextDismiss) {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'setStarRatingDialogTexts' must be called before 'init'";
         log("setStarRatingDialogTexts", message, logLevel.ERROR);
         return message;
@@ -772,7 +772,7 @@ Countly.setStarRatingDialogTexts = function (starRatingTextTitle, starRatingText
 // ui related methods
 // opens the modal
 Countly.askForStarRating = function (callback) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'askForStarRating'";
         log("askForStarRating", message, logLevel.ERROR);
         return message;
@@ -781,7 +781,7 @@ Countly.askForStarRating = function (callback) {
 }
 
 Countly.askForFeedback = function (widgetId, buttonText) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'askForFeedback'";
         log("askForFeedback", message, logLevel.ERROR);
         return message;
@@ -792,7 +792,7 @@ Countly.askForFeedback = function (widgetId, buttonText) {
 // Call this function when app is loaded, so that the app launch duration can be recorded.
 // Should be call after init.
 Countly.appLoadingFinished = async function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'appLoadingFinished'";
         log("appLoadingFinished", message, logLevel.ERROR);
         return message;
@@ -814,7 +814,7 @@ Countly.appLoadingFinished = async function () {
  * Get a list of available feedback widgets for this device ID
  */
 Countly.getFeedbackWidgets = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'getFeedbackWidgets'";
         log("getFeedbackWidgets", message, logLevel.ERROR);
         return message;
@@ -831,7 +831,7 @@ Countly.getFeedbackWidgets = function () {
  * @param {String} closeButtonText - text for cancel/close button
  */
 Countly.presentFeedbackWidget = function (feedbackWidget, buttonText) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'presentFeedbackWidget'";
         log("presentFeedbackWidget", message, logLevel.ERROR);
         return message;
@@ -867,7 +867,7 @@ Countly.presentFeedbackWidget = function (feedbackWidget, buttonText) {
  * these requests' app key will be replaced with the current app key.
  */
 Countly.replaceAllAppKeysInQueueWithCurrentAppKey = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'replaceAllAppKeysInQueueWithCurrentAppKey'";
         log("replaceAllAppKeysInQueueWithCurrentAppKey", message, logLevel.ERROR);
         return message;
@@ -881,7 +881,7 @@ Countly.replaceAllAppKeysInQueueWithCurrentAppKey = function () {
  * these requests will be removed from request queue.
  */
 Countly.removeDifferentAppKeysFromQueue = function () {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'removeDifferentAppKeysFromQueue'";
         log("removeDifferentAppKeysFromQueue", message, logLevel.ERROR);
         return message;
@@ -903,7 +903,7 @@ Countly.sendPushToken = function (options) {
  * Should be call before Countly init
  */
 Countly.setHttpPostForced = function (boolean) {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'setHttpPostForced' must be called before 'init'";
         log("setHttpPostForced", message, logLevel.ERROR);
         return message;
@@ -918,7 +918,7 @@ Countly.setHttpPostForced = function (boolean) {
  * Should be call before Countly init
  */
 Countly.enableAttribution = function (attributionID = "") {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'enableAttribution' must be called before 'init'";
         log("enableAttribution", message, logLevel.ERROR);
         return message;
@@ -944,7 +944,7 @@ Countly.enableAttribution = function (attributionID = "") {
  * For Android just call the enableAttribution to enable campaign attribution.
  */
 Countly.recordAttributionID = function (attributionID) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'recordAttributionID'";
         log("recordAttributionID", message, logLevel.ERROR);
         return message;
@@ -956,7 +956,7 @@ Countly.recordAttributionID = function (attributionID) {
 }
 
 Countly.startTrace = function (traceKey) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'startTrace'";
         log("startTrace", message, logLevel.ERROR);
         return message;
@@ -967,7 +967,7 @@ Countly.startTrace = function (traceKey) {
 }
 
 Countly.cancelTrace = function (traceKey) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'cancelTrace'";
         log("cancelTrace", message, logLevel.ERROR);
         return message;
@@ -978,7 +978,7 @@ Countly.cancelTrace = function (traceKey) {
 }
 
 Countly.clearAllTraces = function (traceKey) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'clearAllTraces'";
         log("clearAllTraces", message, logLevel.ERROR);
         return message;
@@ -988,7 +988,7 @@ Countly.clearAllTraces = function (traceKey) {
 }
 
 Countly.endTrace = function (traceKey, customMetric) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'endTrace'";
         log("endTrace", message, logLevel.ERROR);
         return message;
@@ -1004,7 +1004,7 @@ Countly.endTrace = function (traceKey, customMetric) {
 }
 
 Countly.recordNetworkTrace = function (networkTraceKey, responseCode, requestPayloadSize, responsePayloadSize, startTime, endTime) {
-    if(!_isInitialized) {
+    if (!_isInitialized) {
         var message = "'init' must be called before 'recordNetworkTrace'";
         log("recordNetworkTrace", message, logLevel.ERROR);
         return message;
@@ -1025,7 +1025,7 @@ Countly.recordNetworkTrace = function (networkTraceKey, responseCode, requestPay
  * Should be call before Countly init
  */
 Countly.enableApm = function () {
-    if(_isInitialized) {
+    if (_isInitialized) {
         var message = "'enableApm' must be called before 'init'";
         log("enableApm", message, logLevel.ERROR);
         return message;
