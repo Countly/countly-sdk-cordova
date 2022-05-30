@@ -499,7 +499,7 @@ userDataHandleCall = async function (callName, providedKey, providedValue = null
     if (!_isInitialized) {
         var msg = "'init' must be called before '" + callName + "'";
         log(callName, msg, logLevel.ERROR);
-        return message;
+        return msg;
     }
     try {
         log(callName, "trying to interact with user data properties [ " + providedKey + "]", logLevel.info);
