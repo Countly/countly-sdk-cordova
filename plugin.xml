@@ -141,7 +141,7 @@
 
     <source-file src="src/android/CountlyCordova.java" target-dir="src/ly/count/android/sdk"/>
     <source-file src="src/android/CountlyNative.java" target-dir="src/ly/count/android/sdk"/>
-    <framework src="ly.count.android:sdk:21.11.1" />
+    <framework src="ly.count.android:sdk:21.11.2" />
 
     <!-- Push notification -->
     <config-file target="AndroidManifest.xml" parent="/manifest/application">

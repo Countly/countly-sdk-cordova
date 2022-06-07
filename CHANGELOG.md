@@ -2,6 +2,7 @@
 * !! Major breaking change !! Deprecating "ADVERTISING_ID" as device ID generation strategy. SDK will fall back to 'OPEN_UDID'. All "ADVERTISING_ID" device ID's will have their type changed to "OPEN_UDID". If the device will have a "null" device ID, a random one will be generated.
 * !! Major breaking change !! Changing device ID without merging will now clear all consent. It has to be given again after this operation.
 * !! Major breaking change !! Entering temporary ID mode will now clear all consent. It has to be given again after this operation.
+* Fixed bug that caused crashes when migrating from older versions that don't have a device ID type stored. When migrating from no device ID and no type, SDK will fall back to a generated ID. When migrating from device ID and no type, SDK will set id type to 'DEVELOPER_SUPPLIED' if a custom ID was provided during init. Otherwise the new type will be 'OPEN_UDID'. Adding handling for additional edge cases.
 * User profile issue fixed, user data was deleted for key if no value, null or undefined value was provided against that key.
 * Device ID can now be changed when no consent is given
 * Push notification now display/use the sent badge number in Android. It's visualization depends on the launcher.
@@ -10,7 +11,7 @@
 * Added platform information to push actioned events
 * Fixed potential deadlock issue in Android.
 * Fixed possible SecTrustCopyExceptions leak in iOS
-* Updated underlying android SDK to 21.11.1
+* Updated underlying android SDK to 21.11.2
 * Updated underlying iOS SDK version to 21.11.2
 
 ## 20.11.3
