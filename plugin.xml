@@ -154,6 +154,7 @@
     <!-- Android Broadcast vulnerability fix-->>
      <config-file target="AndroidManifest.xml" parent="/manifest">
         <uses-permission android:name="${applicationId}.CountlyPush.BROADCAST_PERMISSION" />
+        <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" android:maxSdkVersion="30" />
         <permission android:name="${applicationId}.CountlyPush.BROADCAST_PERMISSION" android:protectionLevel="signature" />
     </config-file>
     <!-- if any version higher than 18.0.0 is used then it forces AndroidX -->
