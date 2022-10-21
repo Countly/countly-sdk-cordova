@@ -33,6 +33,7 @@ This SDK supports the following features:
 * [A/B Testing](https://support.count.ly/hc/en-us/articles/4416496362393-A-B-Testing-)
 * [Performance Monitoring](https://support.count.ly/hc/en-us/articles/4734457847705-Performance)
 * [Feedback Widgets](https://support.count.ly/hc/en-us/articles/4652903481753-Feedback-Surveys-NPS-and-Ratings-)
+
 ## Security
 Security is very important to us. If you discover any issue regarding security, please disclose the information responsibly by sending an email to security@count.ly and **not by creating a GitHub issue**.
 
