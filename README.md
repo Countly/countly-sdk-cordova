@@ -17,7 +17,7 @@ Track, measure, and take action - all without leaving Countly.
 
 ## Integrating Countly SDK in your projects
 
-Link to the script and call helper methods based on what you want to track: sessions, views, clicks, custom events, user data, etc. and for much more [check out our documentation](https://support.count.ly/hc/en-us/articles/360037813011-Cordova).
+For a detailed description on how to use this SDK [check out our documentation](https://support.count.ly/hc/en-us/articles/360037813011-Cordova).
 
 For information about how to add the SDK to your project, please check [this section of the documentation](https://support.count.ly/hc/en-us/articles/360037813011-Cordova#01G53TVS8V4YJPQ9V0MQFNRZ1Q).
 
