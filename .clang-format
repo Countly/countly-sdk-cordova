@@ -1,0 +1,13 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+
+ColumnLimit: 300
+IndentWidth: 4
+---
+Language: ObjC
+BasedOnStyle: LLVM
+
+ColumnLimit: 300
+IndentWidth: 4
+...
