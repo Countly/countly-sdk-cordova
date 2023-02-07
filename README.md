@@ -34,11 +34,6 @@ This SDK supports the following features:
 * [Performance Monitoring](https://support.count.ly/hc/en-us/articles/4734457847705-Performance)
 * [Feedback Widgets](https://support.count.ly/hc/en-us/articles/4652903481753-Feedback-Surveys-NPS-and-Ratings-)
 
-## Acknowledgements
-
-This SDK was initially written by Panteon Technologies (ufuk@panteon.com.tr).<br>
-From 2014 to 2020 it was maintained by Trinisoft Technologies developers (trinisofttechnologies@gmail.com).
-
 ## Security
 Security is very important to us. If you discover any issue regarding security, please disclose the information responsibly by sending an email to security@count.ly and **not by creating a GitHub issue**.
 
