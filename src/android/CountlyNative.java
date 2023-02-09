@@ -294,8 +294,8 @@ public class CountlyNative {
     public String askForNotificationPermission(JSONArray args) {
         this.log("askForNotificationPermission", args);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelName = "Default Name";
-            String channelDescription = "Default Description";
+            String channelName = "General Notifications";
+            String channelDescription = "Receive notifications about important updates and events.";
             NotificationManager notificationManager = (NotificationManager) context
                     .getSystemService(Context.NOTIFICATION_SERVICE);
             if (notificationManager != null) {
