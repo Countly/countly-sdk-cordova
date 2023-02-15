@@ -1,4 +1,7 @@
 ## 22.09.0
+* Fixed notification trampoline restrictions in Android 12 using reverse activity trampolining implementation.
+* Fixed a bug in Android SDK that would throw a null pointer exception when calling "CountlyPush.onTokenRefresh" and CountlyPush was not initialized
+* Fixed a bug in Android SDK that would throw a null pointer exception when calling "CountlyPush.displayNotification " and CountlyPush was not initialized
 * Updated underlying android SDK to 22.06.2
 * Updated underlying iOS SDK version to 22.09.0
 ## 21.11.0
