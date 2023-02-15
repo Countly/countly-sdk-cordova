@@ -8,6 +8,7 @@
 
 extern NSString* const kCountlyQSKeyAppKey;
 extern NSString* const kCountlyQSKeyDeviceID;
+extern NSString* const kCountlyQSKeyDeviceIDType;
 extern NSString* const kCountlyQSKeySDKVersion;
 extern NSString* const kCountlyQSKeySDKName;
 extern NSString* const kCountlyQSKeyMethod;
@@ -52,6 +53,8 @@ extern const NSInteger kCountlyGETRequestMaxLength;
 - (void)sendIndirectAttribution:(NSDictionary *)attribution;
 - (void)sendConsents:(NSString *)consents;
 - (void)sendPerformanceMonitoringTrace:(NSString *)trace;
+
+- (void)addDirectRequest:(NSDictionary<NSString *, NSString *> *)requestParameters;
 
 - (void)proceedOnQueue;
 

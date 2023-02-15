@@ -2,7 +2,7 @@ Countly = {};
 Countly.serverUrl = "";
 Countly.appKey = "";
 Countly.ready = false;
-Countly.version = "21.11.0";
+Countly.version = "22.09.0";
 Countly.isDebug = false;
 _isInitialized = false;
 if (window.cordova.platformId == "android") {

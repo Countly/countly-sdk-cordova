@@ -19,7 +19,7 @@ NSMutableArray<CLYFeature> *countlyFeatures = nil;
 Boolean isInitialized = false;
 NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginApplicationDidBecomeActiveNotification";
 
-NSString *const kCountlyCordovaSDKVersion = @"21.11.0";
+NSString *const kCountlyCordovaSDKVersion = @"22.09.0";
 NSString *const kCountlyCordovaSDKName = @"js-cordovab-ios";
 
 @interface CountlyFeedbackWidget ()
@@ -580,7 +580,8 @@ Boolean isDebug = false;
 
           NSException *myException = [NSException exceptionWithName:@"Exception" reason:execption userInfo:dict];
 
-          [Countly.sharedInstance recordHandledException:myException withStackTrace:nsException];
+          [Countly.sharedInstance recordException:myException isFatal:NO stackTrace:nsException segmentation:nil];
+          
           result(@"logException!");
         });
 
