@@ -14,8 +14,6 @@ CLYConsent const CLYConsentPushNotifications    = @"push";
 CLYConsent const CLYConsentLocation             = @"location";
 CLYConsent const CLYConsentViewTracking         = @"views";
 CLYConsent const CLYConsentAttribution          = @"attribution";
-CLYConsent const CLYConsentStarRating           = @"star-rating";
-CLYConsent const CLYConsentAppleWatch           = @"accessory-devices";
 CLYConsent const CLYConsentPerformanceMonitoring = @"apm";
 CLYConsent const CLYConsentFeedback             = @"feedback";
 CLYConsent const CLYConsentRemoteConfig         = @"remote-config";
@@ -81,15 +79,15 @@ CLYConsent const CLYConsentRemoteConfig         = @"remote-config";
     //NOTE: Otherwise, if location consent is given after sessions consent, begin_session request will be sent with an empty string as location.
     if ([features containsObject:CLYConsentLocation] && !self.consentForLocation)
         self.consentForLocation = YES;
+    
+    if ([features containsObject:CLYConsentUserDetails] && !self.consentForUserDetails)
+        self.consentForUserDetails = YES;
 
     if ([features containsObject:CLYConsentSessions] && !self.consentForSessions)
         self.consentForSessions = YES;
 
     if ([features containsObject:CLYConsentEvents] && !self.consentForEvents)
         self.consentForEvents = YES;
-
-    if ([features containsObject:CLYConsentUserDetails] && !self.consentForUserDetails)
-        self.consentForUserDetails = YES;
 
     if ([features containsObject:CLYConsentCrashReporting] && !self.consentForCrashReporting)
         self.consentForCrashReporting = YES;
@@ -106,7 +104,7 @@ CLYConsent const CLYConsentRemoteConfig         = @"remote-config";
     if ([features containsObject:CLYConsentPerformanceMonitoring] && !self.consentForPerformanceMonitoring)
         self.consentForPerformanceMonitoring = YES;
 
-    if ([self containsFeedbackOrStarRating:features] && !self.consentForFeedback)
+    if ([features containsObject:CLYConsentFeedback] && !self.consentForFeedback)
         self.consentForFeedback = YES;
 
     if ([features containsObject:CLYConsentRemoteConfig] && !self.consentForRemoteConfig)
@@ -166,7 +164,7 @@ CLYConsent const CLYConsentRemoteConfig         = @"remote-config";
     if ([features containsObject:CLYConsentPerformanceMonitoring] && self.consentForPerformanceMonitoring)
         self.consentForPerformanceMonitoring = NO;
 
-    if ([self containsFeedbackOrStarRating:features] && self.consentForFeedback)
+    if ([features containsObject:CLYConsentFeedback] && self.consentForFeedback)
         self.consentForFeedback = NO;
 
     if ([features containsObject:CLYConsentRemoteConfig] && self.consentForRemoteConfig)
@@ -191,6 +189,7 @@ CLYConsent const CLYConsentRemoteConfig         = @"remote-config";
         CLYConsentAttribution: @(self.consentForAttribution),
         CLYConsentPerformanceMonitoring: @(self.consentForPerformanceMonitoring),
         CLYConsentFeedback: @(self.consentForFeedback),
+        CLYConsentRemoteConfig: @(self.consentForRemoteConfig),
     };
 
     [CountlyConnectionManager.sharedInstance sendConsents:[consents cly_JSONify]];
@@ -211,17 +210,27 @@ CLYConsent const CLYConsentRemoteConfig         = @"remote-config";
         CLYConsentAttribution,
         CLYConsentPerformanceMonitoring,
         CLYConsentFeedback,
+        CLYConsentRemoteConfig,
     ];
 }
 
-- (BOOL)containsFeedbackOrStarRating:(NSArray *)features
+
+- (BOOL)hasAnyConsent
 {
-    //NOTE: StarRating consent is merged into new Feedback consent.
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    return [features containsObject:CLYConsentFeedback] || [features containsObject:CLYConsentStarRating];
-#pragma GCC diagnostic pop
+    return
+    self.consentForSessions ||
+    self.consentForEvents ||
+    self.consentForUserDetails ||
+    self.consentForCrashReporting ||
+    self.consentForPushNotifications ||
+    self.consentForLocation ||
+    self.consentForViewTracking ||
+    self.consentForAttribution ||
+    self.consentForPerformanceMonitoring ||
+    self.consentForFeedback ||
+    self.consentForRemoteConfig;
 }
+
 
 #pragma mark -
 
@@ -269,6 +278,7 @@ CLYConsent const CLYConsentRemoteConfig         = @"remote-config";
     if (consentForUserDetails)
     {
         CLY_LOG_D(@"Consent for UserDetails is given.");
+        [Countly.user save];
     }
     else
     {

@@ -1,3 +1,10 @@
+## 22.09.0
+* Fixed notification trampoline restrictions in Android 12 using reverse activity trampolining implementation.
+* Fixed a bug in Android SDK that would throw a null pointer exception when calling "CountlyPush.onTokenRefresh" and CountlyPush was not initialized
+* Fixed a bug in Android SDK that would throw a null pointer exception when calling "CountlyPush.displayNotification " and CountlyPush was not initialized
+* Updated underlying android SDK to 22.06.2
+* Updated underlying iOS SDK version to 22.09.0
+
 ## 21.11.0
 * !! Major breaking change !! Deprecating "ADVERTISING_ID" as device ID generation strategy. SDK will fall back to 'OPEN_UDID'. All "ADVERTISING_ID" device ID's will have their type changed to "OPEN_UDID". If the device will have a "null" device ID, a random one will be generated.
 * !! Major breaking change !! Changing device ID without merging will now clear all consent. It has to be given again after this operation.

@@ -19,6 +19,7 @@ NSString* const kCountlyQSKeyAppKey           = @"app_key";
 
 NSString* const kCountlyQSKeyDeviceID         = @"device_id";
 NSString* const kCountlyQSKeyDeviceIDOld      = @"old_device_id";
+NSString* const kCountlyQSKeyDeviceIDType     = @"t";
 
 NSString* const kCountlyQSKeyTimestamp        = @"timestamp";
 NSString* const kCountlyQSKeyTimeZone         = @"tz";
@@ -108,6 +109,16 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
         _host = host;
     }
 }
+
+- (void)setURLSessionConfiguration:(NSURLSessionConfiguration *)URLSessionConfiguration
+{
+    if (URLSessionConfiguration != nil)
+    {
+        _URLSessionConfiguration = URLSessionConfiguration;
+        _URLSession = nil;
+    }
+}
+
 
 - (void)proceedOnQueue
 {
@@ -497,18 +508,70 @@ const NSInteger kCountlyGETRequestMaxLength = 2048;
 
 #pragma mark ---
 
+- (void)addDirectRequest:(NSDictionary<NSString *, NSString *> *)requestParameters
+{
+    if (!CountlyConsentManager.sharedInstance.hasAnyConsent)
+        return;
+
+    NSMutableDictionary* mutableRequestParameters = requestParameters.mutableCopy;
+
+    for (NSString * reservedKey in self.reservedQueryStringKeys)
+    {
+        if (mutableRequestParameters[reservedKey])
+        {
+            CLY_LOG_W(@"A reserved query string key detected in direct request parameters and it will be removed: %@", reservedKey);
+            [mutableRequestParameters removeObjectForKey:reservedKey];
+        }
+    }
+
+    NSMutableString* queryString = [self queryEssentials].mutableCopy;
+
+    [mutableRequestParameters enumerateKeysAndObjectsUsingBlock:^(NSString * key, NSString * value, BOOL * stop)
+    {
+        [queryString appendFormat:@"&%@=%@", key, value];
+    }];
+
+    [CountlyPersistency.sharedInstance addToQueue:queryString.copy];
+
+    [self proceedOnQueue];
+}
+
+#pragma mark ---
+
 - (NSString *)queryEssentials
 {
-    return [NSString stringWithFormat:@"%@=%@&%@=%@&%@=%lld&%@=%d&%@=%d&%@=%d&%@=%@&%@=%@",
-                                        kCountlyQSKeyAppKey, self.appKey.cly_URLEscaped,
-                                        kCountlyQSKeyDeviceID, CountlyDeviceInfo.sharedInstance.deviceID.cly_URLEscaped,
-                                        kCountlyQSKeyTimestamp, (long long)(CountlyCommon.sharedInstance.uniqueTimestamp * 1000),
-                                        kCountlyQSKeyTimeHourOfDay, (int)CountlyCommon.sharedInstance.hourOfDay,
-                                        kCountlyQSKeyTimeDayOfWeek, (int)CountlyCommon.sharedInstance.dayOfWeek,
-                                        kCountlyQSKeyTimeZone, (int)CountlyCommon.sharedInstance.timeZone,
-                                        kCountlyQSKeySDKVersion, CountlyCommon.sharedInstance.SDKVersion,
-                                        kCountlyQSKeySDKName, CountlyCommon.sharedInstance.SDKName];
+    return [NSString stringWithFormat:@"%@=%@&%@=%@&%@=%d&%@=%lld&%@=%d&%@=%d&%@=%d&%@=%@&%@=%@",
+        kCountlyQSKeyAppKey, self.appKey.cly_URLEscaped,
+        kCountlyQSKeyDeviceID, CountlyDeviceInfo.sharedInstance.deviceID.cly_URLEscaped,
+        kCountlyQSKeyDeviceIDType, (int)CountlyDeviceInfo.sharedInstance.deviceIDTypeValue,
+        kCountlyQSKeyTimestamp, (long long)(CountlyCommon.sharedInstance.uniqueTimestamp * 1000),
+        kCountlyQSKeyTimeHourOfDay, (int)CountlyCommon.sharedInstance.hourOfDay,
+        kCountlyQSKeyTimeDayOfWeek, (int)CountlyCommon.sharedInstance.dayOfWeek,
+        kCountlyQSKeyTimeZone, (int)CountlyCommon.sharedInstance.timeZone,
+        kCountlyQSKeySDKVersion, CountlyCommon.sharedInstance.SDKVersion,
+        kCountlyQSKeySDKName, CountlyCommon.sharedInstance.SDKName];
 }
+
+
+- (NSArray *)reservedQueryStringKeys
+{
+    return
+    @[
+        kCountlyQSKeyAppKey,
+        kCountlyQSKeyDeviceID,
+        kCountlyQSKeyDeviceIDType,
+        kCountlyQSKeyTimestamp,
+        kCountlyQSKeyTimeHourOfDay,
+        kCountlyQSKeyTimeDayOfWeek,
+        kCountlyQSKeyTimeZone,
+        kCountlyQSKeySDKVersion,
+        kCountlyQSKeySDKName,
+        kCountlyQSKeyDeviceID,
+        kCountlyQSKeyDeviceIDOld,
+        kCountlyQSKeyChecksum256,
+    ];
+}
+
 
 - (NSString *)locationRelatedInfoQueryString
 {

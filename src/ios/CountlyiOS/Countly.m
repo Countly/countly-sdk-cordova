@@ -4,8 +4,6 @@
 //
 // Please visit www.count.ly for more information.
 
-#pragma mark - Core
-
 #import "CountlyCommon.h"
 
 @interface Countly ()
@@ -18,6 +16,8 @@
 long long appLoadStartTime;
 
 @implementation Countly
+
+#pragma mark - Core
 
 + (void)load
 {
@@ -62,8 +62,6 @@ long long appLoadStartTime;
     return self;
 }
 
-#pragma mark ---
-
 - (void)startWithConfig:(CountlyConfig *)config
 {
     if (CountlyCommon.sharedInstance.hasStarted_)
@@ -86,7 +84,12 @@ long long appLoadStartTime;
     if (!config.host.length || [config.host isEqualToString:@"https://YOUR_COUNTLY_SERVER"])
         [NSException raise:@"CountlyHostNotSetException" format:@"host property on CountlyConfig object is not set"];
 
-    CLY_LOG_I(@"Initializing with %@ SDK v%@", CountlyCommon.sharedInstance.SDKName, CountlyCommon.sharedInstance.SDKVersion);
+    CLY_LOG_I(@"Initializing with %@ SDK v%@ on %@ with %@ %@",
+        CountlyCommon.sharedInstance.SDKName,
+        CountlyCommon.sharedInstance.SDKVersion,
+        CountlyDeviceInfo.device,
+        CountlyDeviceInfo.osName,
+        CountlyDeviceInfo.osVersion);
 
     if (!CountlyDeviceInfo.sharedInstance.deviceID || config.resetStoredDeviceID)
     {
@@ -110,6 +113,8 @@ long long appLoadStartTime;
     CountlyCommon.sharedInstance.attributionID = config.attributionID;
 
     CountlyDeviceInfo.sharedInstance.customMetrics = [config.customMetrics cly_truncated:@"Custom metric"];
+
+    [Countly.user save];
 
 #if (TARGET_OS_IOS)
     CountlyFeedbacks.sharedInstance.message = config.starRatingMessage;
@@ -191,93 +196,7 @@ long long appLoadStartTime;
         [self recordIndirectAttribution:config.indirectAttribution];
 }
 
-
-- (void)setNewHost:(NSString *)newHost
-{
-    CLY_LOG_I(@"%s %@", __FUNCTION__, newHost);
-
-    if (!newHost.length)
-    {
-        CLY_LOG_W(@"New host is invalid!");
-        return;
-    }
-
-    CountlyConnectionManager.sharedInstance.host = newHost;
-}
-
-- (void)setNewAppKey:(NSString *)newAppKey
-{
-    CLY_LOG_I(@"%s %@", __FUNCTION__, newAppKey);
-    
-    if (!newAppKey.length)
-    {
-        CLY_LOG_W(@"New app key is invalid!");
-        return;
-    }
-
-    [self suspend];
-
-    [CountlyPerformanceMonitoring.sharedInstance clearAllCustomTraces];
-
-    CountlyConnectionManager.sharedInstance.appKey = newAppKey;
-
-    [self resume];
-}
-
-- (void)setCustomHeaderFieldValue:(NSString *)customHeaderFieldValue
-{
-    CLY_LOG_W(@"setCustomHeaderFieldValue: method is deprecated. Please use `URLSessionConfiguration` property on `CountlyConfig` instead.");
-}
-
-- (void)flushQueues
-{
-    CLY_LOG_I(@"%s", __FUNCTION__);
-
-    [CountlyPersistency.sharedInstance flushEvents];
-    [CountlyPersistency.sharedInstance flushQueue];
-}
-
-- (void)replaceAllAppKeysInQueueWithCurrentAppKey
-{
-    CLY_LOG_I(@"%s", __FUNCTION__);
-
-    [CountlyPersistency.sharedInstance replaceAllAppKeysInQueueWithCurrentAppKey];
-}
-
-- (void)removeDifferentAppKeysFromQueue
-{
-    CLY_LOG_I(@"%s", __FUNCTION__);
-
-    [CountlyPersistency.sharedInstance removeDifferentAppKeysFromQueue];
-}
-
-#pragma mark ---
-
-- (void)beginSession
-{
-    CLY_LOG_I(@"%s", __FUNCTION__);
-
-    if (CountlyCommon.sharedInstance.manualSessionHandling)
-        [CountlyConnectionManager.sharedInstance beginSession];
-}
-
-- (void)updateSession
-{
-    CLY_LOG_I(@"%s", __FUNCTION__);
-
-    if (CountlyCommon.sharedInstance.manualSessionHandling)
-        [CountlyConnectionManager.sharedInstance updateSession];
-}
-
-- (void)endSession
-{
-    CLY_LOG_I(@"%s", __FUNCTION__);
-
-    if (CountlyCommon.sharedInstance.manualSessionHandling)
-        [CountlyConnectionManager.sharedInstance endSession];
-}
-
-#pragma mark ---
+#pragma mark -
 
 - (void)onTimer:(NSTimer *)timer
 {
@@ -344,8 +263,6 @@ long long appLoadStartTime;
     isSuspended = NO;
 }
 
-#pragma mark ---
-
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     CLY_LOG_D(@"App did enter background.");
@@ -383,6 +300,110 @@ long long appLoadStartTime;
         timer = nil;
     }
 }
+
+
+#pragma mark - Override Configuration
+
+- (void)setNewHost:(NSString *)newHost
+{
+    CLY_LOG_I(@"%s %@", __FUNCTION__, newHost);
+
+    if (!newHost.length)
+    {
+        CLY_LOG_W(@"New host is invalid!");
+        return;
+    }
+
+    CountlyConnectionManager.sharedInstance.host = newHost;
+}
+
+- (void)setNewURLSessionConfiguration:(NSURLSessionConfiguration *)newURLSessionConfiguration
+{
+    CLY_LOG_I(@"%s %@", __FUNCTION__, newURLSessionConfiguration);
+
+    CountlyConnectionManager.sharedInstance.URLSessionConfiguration = newURLSessionConfiguration;
+}
+
+- (void)setNewAppKey:(NSString *)newAppKey
+{
+    CLY_LOG_I(@"%s %@", __FUNCTION__, newAppKey);
+    
+    if (!newAppKey.length)
+    {
+        CLY_LOG_W(@"New app key is invalid!");
+        return;
+    }
+
+    [self suspend];
+
+    [CountlyPerformanceMonitoring.sharedInstance clearAllCustomTraces];
+
+    CountlyConnectionManager.sharedInstance.appKey = newAppKey;
+
+    [self resume];
+}
+
+
+
+#pragma mark - Queue Operations
+
+- (void)flushQueues
+{
+    CLY_LOG_I(@"%s", __FUNCTION__);
+
+    [CountlyPersistency.sharedInstance flushEvents];
+    [CountlyPersistency.sharedInstance flushQueue];
+}
+
+- (void)replaceAllAppKeysInQueueWithCurrentAppKey
+{
+    CLY_LOG_I(@"%s", __FUNCTION__);
+
+    [CountlyPersistency.sharedInstance replaceAllAppKeysInQueueWithCurrentAppKey];
+}
+
+- (void)removeDifferentAppKeysFromQueue
+{
+    CLY_LOG_I(@"%s", __FUNCTION__);
+
+    [CountlyPersistency.sharedInstance removeDifferentAppKeysFromQueue];
+}
+
+- (void)addDirectRequest:(NSDictionary<NSString *, NSString *> * _Nullable)requestParameters
+{
+    CLY_LOG_I(@"%s %@", __FUNCTION__, requestParameters);
+
+    [CountlyConnectionManager.sharedInstance addDirectRequest:requestParameters];
+}
+
+
+
+#pragma mark - Sessions
+
+- (void)beginSession
+{
+    CLY_LOG_I(@"%s", __FUNCTION__);
+
+    if (CountlyCommon.sharedInstance.manualSessionHandling)
+        [CountlyConnectionManager.sharedInstance beginSession];
+}
+
+- (void)updateSession
+{
+    CLY_LOG_I(@"%s", __FUNCTION__);
+
+    if (CountlyCommon.sharedInstance.manualSessionHandling)
+        [CountlyConnectionManager.sharedInstance updateSession];
+}
+
+- (void)endSession
+{
+    CLY_LOG_I(@"%s", __FUNCTION__);
+
+    if (CountlyCommon.sharedInstance.manualSessionHandling)
+        [CountlyConnectionManager.sharedInstance endSession];
+}
+
 
 
 
@@ -647,7 +668,7 @@ long long appLoadStartTime;
     [CountlyPersistency.sharedInstance recordEvent:event];
 }
 
-#pragma mark ---
+#pragma mark -
 
 - (void)startEvent:(NSString *)key
 {
@@ -764,33 +785,6 @@ long long appLoadStartTime;
     [CountlyLocationManager.sharedInstance recordLocation:location city:city ISOCountryCode:ISOCountryCode IP:IP];
 }
 
-- (void)recordLocation:(CLLocationCoordinate2D)location
-{
-    CLY_LOG_W(@"recordLocation: method is deprecated. Please use recordLocation:city:countryCode:IP: method instead.");
-
-    [CountlyLocationManager.sharedInstance recordLocation:location city:nil ISOCountryCode:nil IP:nil];
-}
-
-- (void)recordCity:(NSString *)city andISOCountryCode:(NSString *)ISOCountryCode
-{
-    CLY_LOG_W(@"recordCity:andISOCountryCode: method is deprecated. Please use recordLocation:city:countryCode:IP: method instead.");
-
-    if (!city.length && !ISOCountryCode.length)
-        return;
-
-    [CountlyLocationManager.sharedInstance recordLocation:kCLLocationCoordinate2DInvalid city:city ISOCountryCode:ISOCountryCode IP:nil];
-}
-
-- (void)recordIP:(NSString *)IP
-{
-    CLY_LOG_W(@"recordIP: method is deprecated. Please use recordLocation:city:countryCode:IP: method instead.");
-
-    if (!IP.length)
-        return;
-
-    [CountlyLocationManager.sharedInstance recordLocation:kCLLocationCoordinate2DInvalid city:nil ISOCountryCode:nil IP:IP];
-}
-
 - (void)disableLocationInfo
 {
     CLY_LOG_I(@"%s", __FUNCTION__);
@@ -802,25 +796,60 @@ long long appLoadStartTime;
 
 #pragma mark - Crash Reporting
 
+- (void)recordException:(NSException *)exception
+{
+    CLY_LOG_I(@"%s %@", __FUNCTION__, exception);
+
+    [CountlyCrashReporter.sharedInstance recordException:exception isFatal:NO stackTrace:nil segmentation:nil];
+}
+
+- (void)recordException:(NSException *)exception isFatal:(BOOL)isFatal
+{
+    CLY_LOG_I(@"%s %@ %d", __FUNCTION__, exception, isFatal);
+
+    [CountlyCrashReporter.sharedInstance recordException:exception isFatal:isFatal stackTrace:nil segmentation:nil];
+}
+
+- (void)recordException:(NSException *)exception isFatal:(BOOL)isFatal stackTrace:(NSArray *)stackTrace segmentation:(NSDictionary<NSString *, NSString *> *)segmentation
+{
+    CLY_LOG_I(@"%s %@ %d %@ %@", __FUNCTION__, exception, isFatal, stackTrace, segmentation);
+
+    [CountlyCrashReporter.sharedInstance recordException:exception isFatal:isFatal stackTrace:stackTrace segmentation:segmentation];
+}
+
+- (void)recordError:(NSString *)errorName stackTrace:(NSArray * _Nullable)stackTrace
+{
+    CLY_LOG_I(@"%s %@ %@", __FUNCTION__, errorName, stackTrace);
+
+    [CountlyCrashReporter.sharedInstance recordError:errorName isFatal:NO stackTrace:stackTrace segmentation:nil];
+}
+
+- (void)recordError:(NSString *)errorName isFatal:(BOOL)isFatal stackTrace:(NSArray * _Nullable)stackTrace segmentation:(NSDictionary<NSString *, NSString *> * _Nullable)segmentation
+{
+    CLY_LOG_I(@"%s %@ %d %@ %@", __FUNCTION__, errorName, isFatal, stackTrace, segmentation);
+
+    [CountlyCrashReporter.sharedInstance recordError:errorName isFatal:isFatal stackTrace:stackTrace segmentation:segmentation];
+}
+
 - (void)recordHandledException:(NSException *)exception
 {
     CLY_LOG_I(@"%s %@", __FUNCTION__, exception);
 
-    [CountlyCrashReporter.sharedInstance recordException:exception withStackTrace:nil isFatal:NO];
+    [CountlyCrashReporter.sharedInstance recordException:exception isFatal:NO stackTrace:nil segmentation:nil];
 }
 
 - (void)recordHandledException:(NSException *)exception withStackTrace:(NSArray *)stackTrace
 {
     CLY_LOG_I(@"%s %@ %@", __FUNCTION__, exception, stackTrace);
 
-    [CountlyCrashReporter.sharedInstance recordException:exception withStackTrace:stackTrace isFatal:NO];
+    [CountlyCrashReporter.sharedInstance recordException:exception isFatal:NO stackTrace:stackTrace segmentation:nil];
 }
 
 - (void)recordUnhandledException:(NSException *)exception withStackTrace:(NSArray * _Nullable)stackTrace
 {
     CLY_LOG_I(@"%s %@ %@", __FUNCTION__, exception, stackTrace);
 
-    [CountlyCrashReporter.sharedInstance recordException:exception withStackTrace:stackTrace isFatal:YES];
+    [CountlyCrashReporter.sharedInstance recordException:exception isFatal:YES stackTrace:stackTrace segmentation:nil];
 }
 
 - (void)recordCrashLog:(NSString *)log
@@ -895,24 +924,6 @@ long long appLoadStartTime;
 + (CountlyUserDetails *)user
 {
     return CountlyUserDetails.sharedInstance;
-}
-
-- (void)userLoggedIn:(NSString *)userID
-{
-    CLY_LOG_I(@"%s %@", __FUNCTION__, userID);
-
-    CLY_LOG_W(@"userLoggedIn: method is deprecated. Please directly use setNewDeviceID:onServer: method instead.");
-
-    [self setNewDeviceID:userID onServer:YES];
-}
-
-- (void)userLoggedOut
-{
-    CLY_LOG_I(@"%s", __FUNCTION__);
-
-    CLY_LOG_W(@"userLoggedOut method is deprecated. Please directly use setNewDeviceID:onServer: method instead.");
-
-    [self setNewDeviceID:CLYDefaultDeviceID onServer:NO];
 }
 
 
