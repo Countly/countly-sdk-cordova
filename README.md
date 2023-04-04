@@ -1,4 +1,4 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ae9420bcec304cf8ac842dcebfbb4085)](https://www.codacy.com/gh/Countly/countly-sdk-cordova/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Countly/countly-sdk-cordova&amp;utm_campaign=Badge_Grade)
+## This SDK has been sunsetted. This repo has been archived and will not be maintained anymore. 
 
 # Countly Cordova SDK
 
